@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
+import Registration from "./components/screen/Registration";
+import Home from "./components/screen/Home";
+import Rootlayout from "./components/common/Rootlayout";
+import Login from "./components/screen/login/Login";
+import AboutUs from "./components/screen/AboutUs";
+import MailUs from "./components/screen/MailUs";
+import CallUs from "./components/screen/CallUs";
+import ContactUsLayout from "./components/screen/ContactUsLayout";
+import PageNotFound from "./components/screen/PageNotFound";
+import ClientList from "./components/screen/list/ClientList";
+
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Rootlayout />}>
+      <Route index element={<Home />} />
+      <Route path="purchase" element={<Registration />} />
+      <Route path="purchase:id" element={<Registration />} />
+      <Route path="about" element={<AboutUs />} />
+      <Route path="contactus" element={<ContactUsLayout />}>
+        <Route path="mail-us" element={<MailUs />} /> {/* Nested Route */}
+        <Route path="call-us" element={<CallUs />} /> {/* Nested Route */}
+      </Route>
+      <Route path="client-list" element={<ClientList />} />
+      <Route
+        path="login"   element={<Login />} 
+      />
+      <Route path="*" element={<PageNotFound />} />
+    </Route>
+  )
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return <RouterProvider router={router} />;
+    
 }
 
 export default App;
