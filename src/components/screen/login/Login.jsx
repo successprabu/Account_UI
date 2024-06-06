@@ -62,8 +62,8 @@ const [errors,serErrors]=useState({
           <div className="d-grid">
             <button className="btn btn-primary m-2">Sign In</button>
           </div>
-          <p className="text-right">
-            Forgot <a href=""> Password</a><Link to="/purchase" className="m-2">Sign Up</Link>
+          <p className="text-center">
+             <a href="">Forgot Password</a><Link to="/purchase" className="m-2">Sign Up</Link>
           </p>
         </form>
       </div>

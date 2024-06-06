@@ -87,15 +87,16 @@ const Registration = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        console.log(SAVE_NEW_CUSTOMER_API, "url");
         const response = await axios.post(SAVE_NEW_CUSTOMER_API, formData);
-        console.log(response.data.result,'cons')
-        console.log(response,'res')
-   if(response.data.result)
+     if(response.data.result)
     {     
-      toast.success("Registration successful!");   
-      setFormData({});   
+      toast.success("Registration successful!");
+
+      setFormData({}); // Reset form data
       navigate("/login");
+      // setTimeout(() => {
+      //   navigate("/login");
+      // }, 2000); // Adjust the delay time as needed
     
     }
     else{
