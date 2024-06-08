@@ -92,11 +92,8 @@ const Registration = () => {
     {     
       toast.success("Registration successful!");
 
-      setFormData({}); // Reset form data
+      setFormData({}); 
       navigate("/login");
-      // setTimeout(() => {
-      //   navigate("/login");
-      // }, 2000); // Adjust the delay time as needed
     
     }
     else{

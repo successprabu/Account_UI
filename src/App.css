@@ -1,3 +1,5 @@
+
+
 .form_container{
   width: 30%;
 
@@ -11,4 +13,12 @@
   .form_container{
     width: 65%;
   }
+}
+/* App.css or any relevant CSS file */
+.root-container {
+  display: flex;
+}
+
+.content-container {
+  flex: 1; /* Take up remaining space */
 }

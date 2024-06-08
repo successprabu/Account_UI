@@ -19,6 +19,7 @@ import CallUs from "./components/screen/CallUs";
 import ContactUsLayout from "./components/screen/ContactUsLayout";
 import PageNotFound from "./components/screen/PageNotFound";
 import ClientList from "./components/screen/list/ClientList";
+import SideBar from "./components/common/SideBar";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,8 +42,9 @@ const router = createBrowserRouter(
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
-       <ToastContainer />
+  
+      <RouterProvider router={router} />      
+      <ToastContainer />
     </>
   );
 }
