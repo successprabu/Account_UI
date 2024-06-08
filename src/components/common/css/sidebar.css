@@ -92,12 +92,20 @@ body {
 a.sidebar-link {
     padding: .625rem 1.625rem;
     color: #FFF;
-    display: flex; /* Changed from block to flex */
-    align-items: center; /* Center align icons and text */
+    display: flex;
+    align-items: center;
     font-size: 0.9rem;
     white-space: nowrap;
     border-left: 3px solid transparent;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
+    transition: background-color 0.3s ease, border-left 0.3s ease, color 0.3s ease;
+}
+
+a.sidebar-link:hover,
+a.sidebar-link:focus {
+    background-color: #3b7ddd;
+    border-left: 3px solid #fff;
+    color: #fff;
 }
 
 .sidebar-link i {
@@ -105,13 +113,19 @@ a.sidebar-link {
     margin-right: .75rem;
 }
 
-a.sidebar-link:hover {
-    background-color: rgba(255, 255, 255, .075);
-    border-left: 3px solid #3b7ddd;
-}
-
 .sidebar-item {
     position: relative;
+}
+
+.sidebar-item.has-dropdown .sidebar-link::after {
+    content: "▼"; /* Arrow down icon */
+    font-size: 0.7rem;
+    margin-left: auto;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-item.has-dropdown.expanded .sidebar-link::after {
+    content: "▲"; /* Arrow up icon when expanded */
 }
 
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
@@ -152,4 +166,5 @@ a.sidebar-link:hover {
 .sidebar-footer {
     margin-top: auto;
     padding: 1rem 1.625rem;
+    border-top: 1px solid white; /* Horizontal line above logout button */
 }

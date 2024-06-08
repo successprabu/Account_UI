@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Collapse, Nav } from 'react-bootstrap';
 import { BiGridAlt, BiUser, BiMenu, BiShield, BiLayout, BiNotification, BiCog, BiExit } from 'react-icons/bi';
-import { NavLink } from 'react-router-dom'; // Assuming you are using React Router
-import './css/sidebar.css'; // Adjust the path as needed
+import { NavLink } from 'react-router-dom';
+import './css/sidebar.css';
 
 const SideBar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -24,7 +24,7 @@ const SideBar = () => {
                         <BiMenu />
                     </button>
                     <div className="sidebar-logo">
-                        <a href="#">CodzSword</a>
+                        <a href="#">My Success</a>
                     </div>
                 </div>
                 <ul className="sidebar-nav">
@@ -40,7 +40,7 @@ const SideBar = () => {
                             <span>Task</span>
                         </NavLink>
                     </li>
-                    <li className="sidebar-item">
+                    <li className={`sidebar-item has-dropdown ${authOpen ? 'expanded' : ''}`}>
                         <NavLink
                             className="sidebar-link"
                             onClick={() => setAuthOpen(!authOpen)}
@@ -61,7 +61,7 @@ const SideBar = () => {
                             </ul>
                         </Collapse>
                     </li>
-                    <li className="sidebar-item">
+                    <li className={`sidebar-item has-dropdown ${multiOpen ? 'expanded' : ''}`}>
                         <NavLink
                             className="sidebar-link"
                             onClick={() => setMultiOpen(!multiOpen)}
@@ -73,7 +73,7 @@ const SideBar = () => {
                         </NavLink>
                         <Collapse in={multiOpen}>
                             <ul id="multi" className="sidebar-dropdown list-unstyled">
-                                <li className="sidebar-item">
+                                <li className={`sidebar-item has-dropdown ${multiTwoOpen ? 'expanded' : ''}`}>
                                     <Nav.Link
                                         className="sidebar-link"
                                         onClick={() => setMultiTwoOpen(!multiTwoOpen)}
