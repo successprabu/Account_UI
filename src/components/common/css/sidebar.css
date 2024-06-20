@@ -52,8 +52,8 @@ body {
 }
 
 #sidebar.expand {
-    width: 260px;
-    min-width: 260px;
+    width: 200px;
+    min-width: 180px;
 }
 
 .toggle-btn {
@@ -124,6 +124,10 @@ a.sidebar-link:focus {
     transition: transform 0.2s ease;
 }
 
+#sidebar:not(.expand) .sidebar-item.has-dropdown .sidebar-link::after {
+    display: none; /* Hide the arrow when not expanded */
+}
+
 .sidebar-item.has-dropdown.expanded .sidebar-link::after {
     content: "▲"; /* Arrow up icon when expanded */
 }
@@ -167,4 +171,26 @@ a.sidebar-link:focus {
     margin-top: auto;
     padding: 1rem 1.625rem;
     border-top: 1px solid white; /* Horizontal line above logout button */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+}
+
+#sidebar:not(.expand) .sidebar-footer .sidebar-link span {
+    display: none;
+}
+
+#sidebar.expand .sidebar-footer .sidebar-link span {
+    display: inline;
+}
+
+.sidebar-footer .sidebar-link {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+}
+
+.sidebar-footer .sidebar-link i {
+    font-size: 1.1rem;
+    margin-right: .75rem;
 }

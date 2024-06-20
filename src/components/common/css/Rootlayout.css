@@ -1,0 +1,13 @@
+.content-container {
+    display: flex;
+  }
+  
+  .SideBar {
+    width: 250px; /* Adjust the width as necessary */
+  }
+  
+  .outlet {
+    flex: 1;
+    padding: 20px; /* Adjust padding as necessary */
+  }
+  

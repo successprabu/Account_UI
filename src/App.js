@@ -19,13 +19,14 @@ import CallUs from "./components/screen/CallUs";
 import ContactUsLayout from "./components/screen/ContactUsLayout";
 import PageNotFound from "./components/screen/PageNotFound";
 import ClientList from "./components/screen/list/ClientList";
-import SideBar from "./components/common/SideBar";
+import Dashboard from "./components/screen/Dashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Rootlayout />}>
       <Route index element={<Home />} />
       <Route path="purchase" element={<Registration />} />
+      <Route path="dashboard" element={<Dashboard />} />
       <Route path="purchase:id" element={<Registration />} />
       <Route path="about" element={<AboutUs />} />
       <Route path="contactus" element={<ContactUsLayout />}>
@@ -42,8 +43,7 @@ const router = createBrowserRouter(
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
-      
+      <RouterProvider router={router} />      
       <ToastContainer />
     </>
   );
