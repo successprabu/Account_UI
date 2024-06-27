@@ -1,45 +1,38 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-
+import { useTranslation } from "react-i18next";
 import {
   Form,
-  FormSelect,
-  Button,
-  Col,
-  Row,
-  FormLabel,
   FormGroup,
   FormControl,
-  FormCheck,
+  FormLabel,
+  Button,
   Card,
   CardHeader,
   CardBody,
+  Col,
+  Row,
+  FormCheck,
+  FormSelect
 } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import { SAVE_NEW_CUSTOMER_API } from "../common/CommonApiURL";
+import i18n from "../../language/i18n";
 
 const Registration = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    id: 0,
     name: "",
     primary_phone: "",
     secondary_phone: "",
-    state: "",
-    district: "",
-    address_line1: " ",
-    address_line2: " ",
     is_primary_phone_whatsup: false,
     is_secondary_phone_whatsup: false,
-    otp: 0,
+    otp: "",
     password: "",
-    pincode: 0,
-    createdBy: "SYSTEM",
-    createdDt: "2024-05-22T12:58:08.513Z",
-    updateddBy: "",
-    updatedDt: "2024-05-22T12:58:08.513Z",
-    isActive: true,
-    password:''
+    conpassword: "",
+    address_line1: "",
+    address_line2: "",
+    country: "",
+    state: "",
+    city: "",
+    pincode: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -52,66 +45,28 @@ const Registration = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = {};
-
-    if (!formData.name.trim()) {
-      validationErrors.name = "Please Enter Your Name";
-    }
-
-    if (!formData.primary_phone.trim()) {
-      validationErrors.primary_phone =
-        "Please Enter valid 10 digit Mobile Number";
-    } else if (!/^\d{10}$/.test(formData.primary_phone)) {
-      validationErrors.primary_phone = "Mobile number must be 10 digits";
-    }
-
-    // if (!formData.email.trim()) {
-    //   validationErrors.email = "Email is required";
-    // } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-    //   validationErrors.email = "Email is not valid";
-    // }
-
-    if (!formData.password.trim()) {
-      validationErrors.password = "Password is required";
-     } else if (formData.password.length < 6) {
-      validationErrors.password = "Password should be at least 6 characters";
-     }
-
-     if (formData.conpassword !== formData.password) {
-       validationErrors.conpassword = "Passwords do not match";
-    }
-
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        const response = await axios.post(SAVE_NEW_CUSTOMER_API, formData);
-     if(response.data.result)
-    {     
-      toast.success("Registration successful!");
-
-      setFormData({}); 
-      navigate("/login");
-    
-    }
-    else{
-      toast.error("Something Went Wrong on Registration");
-    }
-        
-      } catch (error) {
-        toast.error("Something Went Wrong on Registration");
-      }
-    }
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: checked,
+    });
   };
 
-  const navigate = useNavigate();
+  const handleLanguageChange = (e) => {
+    const language = e.target.value;
+    i18n.changeLanguage(language);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // form validation and submission logic
+  };
 
   return (
     <Card className="mt-1">
       <CardHeader>
-        <h4 className="mb-0 text-primary">Registration</h4>
+        <h4 className="mb-0 text-primary">{t('registration')}</h4>
       </CardHeader>
       <CardBody>
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
@@ -119,50 +74,42 @@ const Registration = () => {
             <Col xs={12} md={4}>
               <FormGroup controlId="txtname">
                 <FormLabel>
-                  Name<span className="text-danger">*</span>
+                  {t('name')}<span className="text-danger">*</span>
                 </FormLabel>
                 <FormControl
                   type="text"
-                  placeholder="Please Enter Your Name"
+                  placeholder={t('enter_name')}
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  inputMode="numeric"
                 />
-                {errors.name && (
-                  <div className="text-danger">{errors.name}</div>
-                )}
+                {errors.name && <div className="text-danger">{errors.name}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
               <FormGroup controlId="primary_phone">
                 <FormLabel>
-                  Mobile Number<span className="text-danger">*</span>
+                  {t('primary_phone')}<span className="text-danger">*</span>
                 </FormLabel>
                 <FormControl
                   type="text"
-                  placeholder="Please Enter Your Mobile Number"
+                  placeholder={t('enter_primary_phone')}
                   name="primary_phone"
                   value={formData.primary_phone}
                   onChange={handleChange}
                 />
-                {errors.primary_phone && (
-                  <div className="text-danger">{errors.primary_phone}</div>
-                )}
+                {errors.primary_phone && <div className="text-danger">{errors.primary_phone}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4} className="d-flex align-items-center">
               <FormGroup id="is_primary_phone_whatsup">
                 <FormCheck
                   type="checkbox"
-                  label="WhatsApp Yes/No"
+                  label={t('is_primary_phone_whatsup')}
                   name="is_primary_phone_whatsup"
                   checked={formData.is_primary_phone_whatsup}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      is_primary_phone_whatsup: e.target.checked,
-                    })
-                  }
+                  onChange={handleCheckboxChange}
                 />
               </FormGroup>
             </Col>
@@ -170,62 +117,39 @@ const Registration = () => {
 
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="txtemail">
-                <FormLabel>Email</FormLabel>
+              <FormGroup controlId="secondary_phone">
+                <FormLabel>
+                  {t('secondary_phone')}
+                </FormLabel>
                 <FormControl
                   type="text"
-                  placeholder="Please Enter Your Email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <div className="text-danger">{errors.email}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="mobile2">
-                <FormLabel>Alternative Mobile Number</FormLabel>
-                <FormControl
-                  type="text"
-                  placeholder="Please Enter Your Mobile Number"
+                  placeholder={t('enter_secondary_phone')}
                   name="secondary_phone"
                   value={formData.secondary_phone}
                   onChange={handleChange}
                 />
-                {errors.secondary_phone && (
-                  <div className="text-danger">{errors.secondary_phone}</div>
-                )}
+                {errors.secondary_phone && <div className="text-danger">{errors.secondary_phone}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4} className="d-flex align-items-center">
               <FormGroup id="is_secondary_phone_whatsup">
                 <FormCheck
                   type="checkbox"
-                  label="WhatsApp Yes/No"
+                  label={t('is_secondary_phone_whatsup')}
                   name="is_secondary_phone_whatsup"
                   checked={formData.is_secondary_phone_whatsup}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      is_secondary_phone_whatsup: e.target.checked,
-                    })
-                  }
+                  onChange={handleCheckboxChange}
                 />
               </FormGroup>
             </Col>
-          </Row>
-
-          <Row className="mb-3">
             <Col xs={12} md={4}>
               <FormGroup controlId="txtotp">
                 <FormLabel>
-                  OTP <span className="text-danger">*</span>
+                  {t('otp')} <span className="text-danger">*</span>
                 </FormLabel>
                 <FormControl
                   type="text"
-                  placeholder="Please Enter OTP Which was sent to Mobile/email"
+                  placeholder={t('enter_otp')}
                   name="otp"
                   value={formData.otp}
                   onChange={handleChange}
@@ -233,146 +157,149 @@ const Registration = () => {
                 {errors.otp && <div className="text-danger">{errors.otp}</div>}
               </FormGroup>
             </Col>
+          </Row>
+
+          <Row className="mb-3">
             <Col xs={12} md={4}>
               <FormGroup controlId="password">
                 <FormLabel>
-                  password <span className="text-danger">*</span>
+                  {t('password')} <span className="text-danger">*</span>
                 </FormLabel>
                 <FormControl
                   type="password"
-                  placeholder="Please Enter password"
+                  placeholder={t('enter_password')}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                 />
-                {errors.password && (
-                  <div className="text-danger">{errors.password}</div>
-                )}
+                {errors.password && <div className="text-danger">{errors.password}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
               <FormGroup controlId="conpassword">
                 <FormLabel>
-                  Confirm Password <span className="text-danger">*</span>
+                  {t('conpassword')} <span className="text-danger">*</span>
                 </FormLabel>
                 <FormControl
                   type="password"
-                  placeholder="Please Enter password"
+                  placeholder={t('enter_conpassword')}
                   name="conpassword"
                   value={formData.conpassword}
                   onChange={handleChange}
                 />
-                {errors.conpassword && (
-                  <div className="text-danger">{errors.conpassword}</div>
-                )}
+                {errors.conpassword && <div className="text-danger">{errors.conpassword}</div>}
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={4}>
+              <FormGroup controlId="address1">
+                <FormLabel>
+                  {t('address_line1')}
+                </FormLabel>
+                <FormControl
+                  type="text"
+                  placeholder={t('enter_address_line1')}
+                  name="address_line1"
+                  value={formData.address_line1}
+                  onChange={handleChange}
+                />
+                {errors.address_line1 && <div className="text-danger">{errors.address_line1}</div>}
               </FormGroup>
             </Col>
           </Row>
 
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="address1">
-                <FormLabel>Address Line 1</FormLabel>
-                <FormControl
-                  type="text"
-                  placeholder="Please Enter Your Address"
-                  name="address_line1"
-                  value={formData.address_line1}
-                  onChange={handleChange}
-                />
-                {errors.address_line1 && (
-                  <div className="text-danger">{errors.address_line1}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
               <FormGroup controlId="address2">
-                <FormLabel>Address Line 2</FormLabel>
+                <FormLabel>
+                  {t('address_line2')}
+                </FormLabel>
                 <FormControl
                   type="text"
-                  placeholder="Please Enter Your Address"
+                  placeholder={t('enter_address_line2')}
                   name="address_line2"
                   value={formData.address_line2}
                   onChange={handleChange}
                 />
-                {errors.address_line2 && (
-                  <div className="text-danger">{errors.address_line2}</div>
-                )}
+                {errors.address_line2 && <div className="text-danger">{errors.address_line2}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
               <FormGroup controlId="country">
-                <FormLabel>Country</FormLabel>
+                <FormLabel>
+                  {t('country')}
+                </FormLabel>
                 <FormSelect
                   name="country"
                   value={formData.country}
                   onChange={handleChange}
                 >
-                  <option>Select Country</option>
-                  <option value="1">India</option>
-                  <option value="2">Singapore</option>
-                  <option value="3">USA</option>
+                  <option value="">{t('select_country')}</option>
+                  <option value="1">{t('india')}</option>
+                  <option value="2">{t('singapore')}</option>
+                  <option value="3">{t('usa')}</option>
                 </FormSelect>
-                {errors.country && (
-                  <div className="text-danger">{errors.country}</div>
-                )}
+                {errors.country && <div className="text-danger">{errors.country}</div>}
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={4}>
+              <FormGroup controlId="state">
+                <FormLabel>
+                  {t('state')}
+                </FormLabel>
+                <FormSelect
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                >
+                  <option value="">{t('select_state')}</option>
+                  <option>{t('tamil_nadu')}</option>
+                  <option>{t('karnataka')}</option>
+                  <option>{t('kerala')}</option>
+                </FormSelect>
+                {errors.state && <div className="text-danger">{errors.state}</div>}
               </FormGroup>
             </Col>
           </Row>
 
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="drpstate">
-                <FormLabel>State</FormLabel>
-                <FormSelect
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                >
-                  <option>Select State</option>
-                  <option>Tamilnadu</option>
-                  <option>Karnataka</option>
-                  <option>Kerala</option>
-                </FormSelect>
-                {errors.state && (
-                  <div className="text-danger">{errors.state}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="txtcity">
-                <FormLabel>City</FormLabel>
+              <FormGroup controlId="city">
+                <FormLabel>
+                  {t('city')}
+                </FormLabel>
                 <FormControl
+                  type="text"
+                  placeholder={t('enter_city')}
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
                 />
-                {errors.city && (
-                  <div className="text-danger">{errors.city}</div>
-                )}
+                {errors.city && <div className="text-danger">{errors.city}</div>}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="txtpin">
-                <FormLabel>Pincode</FormLabel>
+              <FormGroup controlId="pincode">
+                <FormLabel>
+                  {t('pincode')}
+                </FormLabel>
                 <FormControl
+                  type="text"
+                  placeholder={t('enter_pincode')}
                   name="pincode"
                   value={formData.pincode}
                   onChange={handleChange}
                 />
-                {errors.pincode && (
-                  <div className="text-danger">{errors.pincode}</div>
-                )}
+                {errors.pincode && <div className="text-danger">{errors.pincode}</div>}
               </FormGroup>
             </Col>
           </Row>
 
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-end">
             <Button variant="success" type="submit" className="me-3">
-              Save
+              {t('save')}
             </Button>
             <Button variant="danger" type="button">
-              Cancel
+              {t('cancel')}
             </Button>
           </div>
         </Form>

@@ -41,7 +41,7 @@ body {
 }
 
 #sidebar {
-    height: 100vh;
+    height: 100dvh;
     width: 70px;
     min-width: 70px;
     z-index: 1000;
@@ -110,7 +110,7 @@ a.sidebar-link:focus {
 
 .sidebar-link i {
     font-size: 1.1rem;
-    margin-right: .75rem;
+    margin-right: .05rem;
 }
 
 .sidebar-item {
@@ -138,7 +138,7 @@ a.sidebar-link:focus {
     left: 70px;
     background-color: #0e2238;
     padding: 0;
-    min-width: 15rem;
+    min-width: 30rem;
     display: none;
 }
 
@@ -156,7 +156,7 @@ a.sidebar-link:focus {
     display: inline-block;
     padding: 2px;
     position: absolute;
-    right: 1.5rem;
+    right: 1 rem;
     top: 1.4rem;
     transform: rotate(-135deg);
     transition: all .2s ease-out;

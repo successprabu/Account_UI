@@ -47,15 +47,15 @@ const SideBar = () => {
         </div>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
-            <NavLink to="#" className="sidebar-link">
+            <NavLink to="/client-list" className="sidebar-link">
               <BiUser />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Profile</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>Clients</span>
             </NavLink>
           </li>
           <li className="sidebar-item">
             <NavLink to="#" className="sidebar-link">
               <BiGridAlt />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Task</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>Masters</span>
             </NavLink>
           </li>
           <li
@@ -70,18 +70,23 @@ const SideBar = () => {
               aria-expanded={authOpen}
             >
               <BiShield />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Auth</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}> Masters</span>
             </NavLink>
             <Collapse in={authOpen}>
               <ul id="auth" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link">
-                    Login
+                    Name Master
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link">
-                    Register
+                    Village Master
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link">
+                   Client Master
                   </Nav.Link>
                 </li>
               </ul>

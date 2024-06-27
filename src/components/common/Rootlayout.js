@@ -1,5 +1,5 @@
 import React from 'react';
-import AppHeader from './header';
+import AppHeader from './AppHeader';
 import { Outlet, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
