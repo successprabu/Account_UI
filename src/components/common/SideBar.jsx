@@ -11,14 +11,18 @@ import {
   BiExit,
 } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import "./css/sidebar.css";
+import LanguageSelector from "../../language/LanguageSelector";
 
 const SideBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [multiOpen, setMultiOpen] = useState(false);
   const [multiTwoOpen, setMultiTwoOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
      const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -42,20 +46,21 @@ const SideBar = () => {
             <BiMenu />
           </button>
           <div className="sidebar-logo">
-            <a href="#">My Success</a>
+            <a href="#"> {t('my_accounts')}</a>
           </div>
         </div>
+        <LanguageSelector/>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
             <NavLink to="/client-list" className="sidebar-link">
               <BiUser />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Clients</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Clients')}</span>
             </NavLink>
           </li>
           <li className="sidebar-item">
             <NavLink to="#" className="sidebar-link">
               <BiGridAlt />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Masters</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Masters')}</span>
             </NavLink>
           </li>
           <li
@@ -70,23 +75,23 @@ const SideBar = () => {
               aria-expanded={authOpen}
             >
               <BiShield />
-              <span className={isExpanded ? "nav-text" : "hidden"}> Masters</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Masters')}</span>
             </NavLink>
             <Collapse in={authOpen}>
               <ul id="auth" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link">
-                    Name Master
+                    {t('Name Master')}
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link">
-                    Village Master
+                    {t('Village Master')}
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link">
-                   Client Master
+                   {t('Client Master')}
                   </Nav.Link>
                 </li>
               </ul>
@@ -104,7 +109,7 @@ const SideBar = () => {
               aria-expanded={multiOpen}
             >
               <BiLayout />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Multi Level</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Transactions')}</span>
             </NavLink>
             <Collapse in={multiOpen}>
               <ul id="multi" className="sidebar-dropdown list-unstyled">
@@ -119,7 +124,7 @@ const SideBar = () => {
                     aria-controls="multi-two"
                     aria-expanded={multiTwoOpen}
                   >
-                    Two Links
+                    {t('Two Links')}
                   </Nav.Link>
                   <Collapse in={multiTwoOpen}>
                     <ul
@@ -127,13 +132,13 @@ const SideBar = () => {
                       className="sidebar-dropdown list-unstyled"
                     >
                       <li className="sidebar-item">
-                        <Nav.Link href="#" className="sidebar-link">
-                          Link 1
+                        <Nav.Link href="/transaction" className="sidebar-link">
+                          {t('Link 1')}
                         </Nav.Link>
                       </li>
                       <li className="sidebar-item">
                         <Nav.Link href="#" className="sidebar-link">
-                          Link 2
+                          {t('Link 2')}
                         </Nav.Link>
                       </li>
                     </ul>
@@ -142,23 +147,51 @@ const SideBar = () => {
               </ul>
             </Collapse>
           </li>
-          <li className="sidebar-item">
-            <NavLink to="#" className="sidebar-link">
+          <li
+            className={`sidebar-item has-dropdown ${
+              reportOpen ? "expanded" : ""
+            }`}
+          >
+            <NavLink
+              className="sidebar-link"
+              onClick={() => setReportOpen(!reportOpen)}
+              aria-controls="report"
+              aria-expanded={reportOpen}
+            >
               <BiNotification />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Notification</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Reports')}</span>
             </NavLink>
+            <Collapse in={reportOpen}>
+              <ul id="report" className="sidebar-dropdown list-unstyled">
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link">
+                    {t('Name Reports')}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link">
+                    {t('Village Reports')}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link">
+                    {t('Transaction Report')}
+                  </Nav.Link>
+                </li>
+              </ul>
+            </Collapse>
           </li>
           <li className="sidebar-item">
             <NavLink to="#" className="sidebar-link">
               <BiCog />
-              <span className={isExpanded ? "nav-text" : "hidden"}>Setting</span>
+              <span className={isExpanded ? "nav-text" : "hidden"}>{t('Setting')}</span>
             </NavLink>
           </li>
         </ul>
         <div className="sidebar-footer">
           <NavLink to="#" onClick={handleLogout} className="sidebar-link">
             <BiExit />
-            <span className={isExpanded ? "nav-text" : "hidden"}> Logout</span>
+            <span className={isExpanded ? "nav-text" : "hidden"}>{t('Logout')}</span>
           </NavLink>
         </div>
       </aside>

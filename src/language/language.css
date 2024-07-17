@@ -1,0 +1,17 @@
+.language-selector {
+    display: inline-block;
+  }
+  
+  .language-icon {
+    font-size: 1.5rem;
+    vertical-align: middle;
+  }
+  
+  .language-selector .dropdown-menu {
+    min-width: 8rem;
+  }
+  
+  .language-selector .dropdown-item {
+    text-align: center;
+  }
+  

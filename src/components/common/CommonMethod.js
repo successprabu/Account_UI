@@ -1,11 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "./CommonApiURL";
 
-
+const user = localStorage.getItem('user');
 // Function to get the token from localStorage
 const getToken = () => {
-  const user = localStorage.getItem('user');
-  console.log(user ? JSON.parse(user).token:"token")
   return user ? JSON.parse(user).token : '';
 };
 
@@ -22,7 +20,7 @@ export const dateUTC = (date = new Date()) => new Date(new Date(date).toUTCStrin
 
 // Common payload fields for POST requests
 export const commonPayloadFields = {
-  createdBy: 'APPLICATION',
+  createdBy: user ? JSON.parse(user).primary_phone:'APPLICATION',
   createdDt: dateUTC(new Date()),
   updatedBy: 'APPLICATION',
   updatedDt: dateUTC(new Date()),
@@ -38,7 +36,7 @@ const post = (url, payload) => {
     url: BASE_URL + `${url}`,
     data: payload,
     headers: {
-      'Authorization':`${getToken()}`
+      'Authorization':`Bearer ${getToken()}`
     }
   }).catch(handleAuthenticationError);
 };

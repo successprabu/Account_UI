@@ -19,7 +19,6 @@ const ClientList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Fetching client list");
     const user = localStorage.getItem("user");
     if (!user) {
       setIsAuthenticated(false);

@@ -12,6 +12,7 @@ import ContactUsLayout from "./components/screen/ContactUsLayout";
 import PageNotFound from "./components/screen/PageNotFound";
 import ClientList from "./components/screen/list/ClientList";
 import Login from "./components/screen/login/Login";
+import Transaction from "./components/screen/Transaction";
 
 const Router = () => {
   return (
@@ -29,6 +30,7 @@ const Router = () => {
           </Route>
           <Route path="client-list" element={<ClientList />} />
           <Route path="login" element={<Login />} />
+          <Route path="transaction" element={<Transaction />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
