@@ -13,6 +13,7 @@ import PageNotFound from "./components/screen/PageNotFound";
 import ClientList from "./components/screen/list/ClientList";
 import Login from "./components/screen/login/Login";
 import Transaction from "./components/screen/Transaction";
+import TransactionList from "./components/screen/list/TransactionList";
 
 const Router = () => {
   return (
@@ -31,6 +32,7 @@ const Router = () => {
           <Route path="client-list" element={<ClientList />} />
           <Route path="login" element={<Login />} />
           <Route path="transaction" element={<Transaction />} />
+          <Route path="transaction-list" element={<TransactionList />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

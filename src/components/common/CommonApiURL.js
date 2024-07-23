@@ -7,3 +7,4 @@ export const SAVE_NEW_CUSTOMER_API = `${BASE_URL}${AUTH}AddCustomer`
 export const SAVE_NEW_TRANS_API = `${TRANSACTION}UpdateTransaction`
 export const LOGIN_API = `${BASE_URL}${AUTH}UserLogin`
 export const LIST_CLIENT_API=`${MASTER}GetCustomer`
+export const LIST_TRANSACTION_API=`${TRANSACTION}GetTransaction?customer`

@@ -19,10 +19,11 @@ import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-ico
 import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup"; // Import yup for validation
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
+import { TaInput } from "@opentf/react-ta-input";
 
 const schema = yup.object().shape({
   villageName: yup.string().required(),
@@ -35,6 +36,7 @@ const schema = yup.object().shape({
 
 const Transaction = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: 0,
     customerId: 0,
@@ -48,7 +50,10 @@ const Transaction = () => {
     createdDt: "2024-07-01T13:12:38.744Z",
     updatedBy: "SYSTEM",
     updatedDt: "2024-07-01T13:12:38.744Z",
-    isActive: true
+    isActive: true,
+    type: "",
+    returnRemark: "",
+    functionId: 0
   });
 
   const [errors, setErrors] = useState({});
@@ -63,17 +68,22 @@ const Transaction = () => {
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
-  
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const userDetail = localStorage.getItem("user");
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    if (!user) {
+    if (user) {
+      const userDetail = JSON.parse(user);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        customerId: userDetail.customerID,
+        functionId: userDetail.functionId,
+      }));
+    } else {
       setIsAuthenticated(false);
-      return;
+      navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (i18n.language === 'ta') {
@@ -83,33 +93,40 @@ const Transaction = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let transliteratedValue = value;
+    const updatedValue = value;
 
-    if (i18n.language === 'ta') {
-      transliteratedValue = transliterateToTamil(value);
+    // Update form data
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: updatedValue
+    }));
+
+    // Check if the input ends with a space to trigger transliteration
+    if (i18n.language === 'ta' && updatedValue.endsWith(' ')) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: transliterateToTamil(updatedValue.trim())
+      }));
     }
-
-    setFormData({
-      ...formData,
-      [name]: transliteratedValue,
-    });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    const userDetail = JSON.parse(localStorage.getItem("user"));
+    if (!userDetail || userDetail.functionId === 0) {
+      toast.error("Please Create Function Details");
+      return;
+    }
+
     try {
       await schema.validate(formData, { abortEarly: false });
-      console.log('Payload:', formData); // Log payload to console
-      console.log(SAVE_NEW_TRANS_API,'url')
-  
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then((response) => {
-          console.log(response.data,'response')
           if (response.data.result) {
             setFormData({
               id: 0,
-              customerId: userDetail.id,
+              customerId: userDetail.customerID,
               villageName: "",
               initial: "",
               name: "",
@@ -118,16 +135,20 @@ const Transaction = () => {
               phoneNo: "",
               createdBy: "SYSTEM",
               createdDt: new Date().toISOString(),
-              updateddBy: "SYSTEM",
+              updatedBy: "SYSTEM",
               updatedDt: new Date().toISOString(),
-              isActive: true
+              isActive: true,
+              type: "",
+              returnRemark: "",
+              functionId: userDetail.functionId
             });
             toast.success("Transaction Saved Successfully");
           } else {
-            toast.error("Something went wrong on Transaction Save..pls Try Again");
+            toast.error(response.data.message || "Something went wrong on Transaction Save..pls Try Again");
           }
         })
         .catch((error) => {
+          toast.error(error.response?.data?.message || 'API call error');
           console.error('API call error:', error);
         });
     } catch (validationErrors) {
@@ -138,7 +159,6 @@ const Transaction = () => {
       setErrors(newErrors);
     }
   };
-  
 
   const handleKeyDown = (e, nextRef) => {
     if (e.key === 'Enter' || e.key === 'Tab') {

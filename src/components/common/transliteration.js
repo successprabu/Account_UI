@@ -1,53 +1,90 @@
-// Function to transliterate Tanglish text to Tamil
 export const transliterateToTamil = (tanglishText) => {
   const transliterationMap = {
-    'a': 'அ', 'b': 'ப', 'c': 'ச', 'd': 'ட', 'e': 'எ', 'f': 'ஃ', 'g': 'க',
-    'h': 'ஹ', 'i': 'இ', 'j': 'ஜ', 'k': 'க', 'l': 'ள', 'm': 'ம', 'n': 'ந',
-    'o': 'ஒ', 'p': 'ப', 'q': 'ஃ', 'r': 'ர', 's': 'ஸ', 't': 'ட', 'u': 'உ',
-    'v': 'வ', 'w': 'வ', 'x': 'ஷ', 'y': 'ய', 'z': 'ழ',
-
-    // Common Tamil syllables (case insensitive)
+    'aa': 'ஆ', 'ii': 'ஈ', 'uu': 'ஊ', 'ee': 'ஏ', 'ai': 'ஐ', 'oo': 'ஓ', 'au': 'ஔ',
+    'a': 'அ', 'i': 'இ', 'u': 'உ', 'e': 'எ', 'o': 'ஒ',
     'ka': 'க', 'ki': 'கி', 'ku': 'கு', 'ke': 'கெ', 'kai': 'கை', 'ko': 'கொ', 'koo': 'கூ',
-    'sa': 'ஸ', 'si': 'ஸி', 'su': 'ஸு', 'se': 'ஸெ', 'sai': 'ஸை', 'so': 'ஸொ', 'soo': 'ஸூ',
-    // Add more syllables as needed
-
-    // Handle case insensitivity
-    'A': 'அ', 'B': 'ப', 'C': 'ச', 'D': 'ட', 'E': 'எ', 'F': 'ஃ', 'G': 'க',
-    'H': 'ஹ', 'I': 'இ', 'J': 'ஜ', 'K': 'க', 'L': 'ள', 'M': 'ம', 'N': 'ந',
-    'O': 'ஒ', 'P': 'ப', 'Q': 'ஃ', 'R': 'ர', 'S': 'ஸ', 'T': 'ட', 'U': 'உ',
-    'V': 'வ', 'W': 'வ', 'X': 'ஷ', 'Y': 'ய', 'Z': 'ழ',
-
+    'k': 'க்',
+    'nga': 'ங', 'ngi': 'ஙி', 'ngu': 'ஙு', 'nge': 'ஙெ', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoo': 'ஙூ',
+    'ng': 'ங்',
+    'cha': 'ச', 'chi': 'சி', 'chu': 'சு', 'che': 'செ', 'chai': 'சை', 'cho': 'சொ', 'choo': 'சூ',
+    'ch': 'ச்',
+    'ja': 'ஜ', 'ji': 'ஜி', 'ju': 'ஜு', 'je': 'ஜெ', 'jai': 'ஜை', 'jo': 'ஜொ', 'joo': 'ஜூ',
+    'j': 'ஜ்',
+    'nya': 'ஞ', 'nyi': 'ஞி', 'nyu': 'ஞு', 'nye': 'ஞெ', 'nyai': 'ஞை', 'nyo': 'ஞொ', 'nyoo': 'ஞூ',
+    'ny': 'ஞ்',
+    'ta': 'ட', 'ti': 'டி', 'tu': 'டு', 'te': 'டெ', 'tai': 'டை', 'to': 'டொ', 'too': 'டூ',
+    't': 'ட்',
+    'na': 'ண', 'ni': 'ணி', 'nu': 'ணு', 'ne': 'ணெ', 'nai': 'ணை', 'no': 'ணொ', 'noo': 'ணூ',
+    'n': 'ண்',
+    'tha': 'த', 'thi': 'தி', 'thu': 'து', 'the': 'தெ', 'thai': 'தை', 'tho': 'தொ', 'thoo': 'தூ',
+    'th': 'த்',
+    'pa': 'ப', 'pi': 'பி', 'pu': 'பு', 'pe': 'பெ', 'pai': 'பை', 'po': 'பொ', 'poo': 'பூ',
+    'p': 'ப்',
+    'ma': 'ம', 'mi': 'மி', 'mu': 'மு', 'me': 'மெ', 'mai': 'மை', 'mo': 'மொ', 'moo': 'மூ',
+    'm': 'ம்',
+    'ya': 'ய', 'yi': 'யி', 'yu': 'யு', 'ye': 'யெ', 'yai': 'யை', 'yo': 'யொ', 'yoo': 'யூ',
+    'y': 'ய்',
+    'ra': 'ர', 'ri': 'ரி', 'ru': 'ரு', 're': 'ரெ', 'rai': 'ரை', 'ro': 'ரொ', 'roo': 'ரூ',
+    'r': 'ர்',
+    'la': 'ல','laa': 'லா', 'li': 'லி', 'lu': 'லு', 'le': 'லெ', 'lai': 'லை', 'lo': 'லொ', 'loo': 'லூ',
+    'l': 'ல்',
+    'va': 'வ', 'vaa': 'வா','vi': 'வி', 'vu': 'வு', 've': 'வெ', 'vai': 'வை', 'vo': 'வொ', 'voo': 'வூ',
+    'v': 'வ்',
+    'sha': 'ஷ', 'shi': 'ஷி', 'shu': 'ஷு', 'she': 'ஷெ', 'shai': 'ஷை', 'sho': 'ஷொ', 'shoo': 'ஷூ',
+    'sh': 'ஷ்',
+    'sa': 'ச', 'si': 'சி', 'su': 'சு', 'se': 'செ', 'sai': 'சை', 'so': 'சொ', 'soo': 'சூ',
+    's': 'ச்',
+    'ha': 'ஹ', 'hi': 'ஹி', 'hu': 'ஹு', 'he': 'ஹெ', 'hai': 'ஹை', 'ho': 'ஹொ', 'hoo': 'ஹூ',
+    'h': 'ஹ்',
+    'lla': 'ள', 'lli': 'ளி', 'llu': 'ளு', 'lle': 'ளெ', 'llai': 'ளை', 'llo': 'ளொ', 'lloo': 'ளூ',
+    'll': 'ள்',
+    'zha': 'ழ', 'zhi': 'ழி', 'zhu': 'ழு', 'zhe': 'ழெ', 'zhai': 'ழை', 'zho': 'ழொ', 'zhoo': 'ழூ',
+    'zh': 'ழ்',
+    'tra': 'ட்ர', 'tri': 'ட்ரி', 'tru': 'ட்ரு', 'tre': 'ட்ரெ', 'trai': 'ட்ரை', 'tro': 'ட்ரொ', 'troo': 'ட்ரூ',
+    'tr': 'ட்ர்',
+    'gna': 'ஞ', 'gni': 'ஞி', 'gnu': 'ஞு', 'gne': 'ஞெ', 'gnai': 'ஞை', 'gno': 'ஞொ', 'gnoo': 'ஞூ',
+    'gn': 'ஞ்',
     ' ': ' '
   };
+  
 
-  let tamilText = '';
-  let buffer = '';
+  // Sort keys by length in descending order
+  const sortedKeys = Object.keys(transliterationMap).sort((a, b) => b.length - a.length);
 
-  for (let i = 0; i < tanglishText.length; i++) {
-    const char = tanglishText[i].toLowerCase();
-    buffer += char;
+  const transliterateWord = (word) => {
+    let result = '';
+    let i = 0;
 
-    // Check if buffer matches any Tamil syllable
-    if (transliterationMap[buffer]) {
-      tamilText += transliterationMap[buffer];
-      buffer = ''; // Reset buffer
-    } else {
-      // Check if current character matches a single Tamil character
-      if (transliterationMap[char]) {
-        tamilText += transliterationMap[char];
-        buffer = ''; // Reset buffer
-      } else {
-        // If no match found, add the current character(s) to output as-is
-        tamilText += buffer;
-        buffer = ''; // Reset buffer
+    while (i < word.length) {
+      let matched = false;
+
+      // Try to match the longest possible pattern first
+      for (const key of sortedKeys) {
+        if (word.substr(i, key.length).toLowerCase() === key) {
+          result += transliterationMap[key];
+          i += key.length;
+          matched = true;
+          break;
+        }
+      }
+
+      // If no match is found, add the current character as-is
+      if (!matched) {
+        result += word[i];
+        i++;
       }
     }
-  }
 
-  // Append any remaining characters in buffer to output
-  tamilText += buffer;
+    return result;
+  };
 
-  return tamilText;
+  // Split the text into words and transliterate each word
+  const words = tanglishText.trim().split(/\s+/);
+  let tamilText = '';
+
+  words.forEach(word => {
+    tamilText += transliterateWord(word) + ' ';
+  });
+
+  return tamilText.trim();
 };
-
-

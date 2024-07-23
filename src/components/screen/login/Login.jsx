@@ -7,15 +7,18 @@ import * as yup from 'yup';
 import { loginSchema } from "../../../validations/ValidationSchema";
 import { LOGIN_API } from "../../common/CommonApiURL";
 import axios from "axios";
+import { ClipLoader } from 'react-spinners';  // Importing a loader from react-spinners
 
 const Login = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '',
-    password: ''
+    password: '',
+    userType:'AU'
   });
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
+  const [loading, setLoading] = useState(false);  // Loading state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,16 +31,16 @@ const Login = () => {
 
   const userLogin = async (event) => {
     event.preventDefault();
+    setLoading(true);  // Start loading
 
     try {
-      console.log(formData, 'formData');
       const isValid = await loginSchema.isValid(formData);
-      console.log(isValid)
       if (isValid) {
         // Axios post request
         const response = await axios.post(LOGIN_API, formData);
         const data = response.data;
-        
+        console.log(data.message);
+
         if (data.result) {
           localStorage.setItem('user', JSON.stringify(data.data));
           navigate('/dashboard');  // Change to your dashboard route
@@ -48,7 +51,13 @@ const Login = () => {
         setErrors({ validation: t("please_enter_username_password") });
       }
     } catch (error) {
-      setLoginError(t("an_error_occurred"));
+      if (error.response && error.response.data && error.response.data.message) {
+        setLoginError(error.response.data.message);
+      } else {
+        setLoginError(t("an_error_occurred"));
+      }
+    } finally {
+      setLoading(false);  // Stop loading
     }
   };
 
@@ -86,7 +95,9 @@ const Login = () => {
             <label htmlFor='check' className='custom-input-label m-2'>{t("remember_me")}</label>
           </div>
           <div className="d-grid">
-            <button className="btn btn-primary m-2">{t("sign_in")}</button>
+            <button className="btn btn-primary m-2" disabled={loading}>
+              {loading ? <ClipLoader size={20} color={"#ffffff"} /> : t("sign_in")}
+            </button>
           </div>
           <p className="text-center">
             <a href="">{t("forgot_password")}</a><Link to="/purchase" className="m-2">{t("sign_up")}</Link>

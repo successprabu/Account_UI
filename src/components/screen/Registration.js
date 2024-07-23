@@ -108,7 +108,11 @@ const Registration = () => {
         toast.success("Registration successful!");
         navigate("/login");
       } catch (error) {
-        toast.error("Something went wrong on registration..pls Try Again");
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Something Went Wrong please Try Again.");
+        }
       } finally {
         setIsLoading(false); // Stop the loader
       }
@@ -286,7 +290,7 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="conpassword">
                   <FormLabel>
-                    {t('confirm_password')} <span className="text-danger">*</span>
+                    {t('conpassword')} <span className="text-danger">*</span>
                   </FormLabel>
                   <FormControl
                     type="password"
@@ -346,7 +350,7 @@ const Registration = () => {
             </Row>
 
             <Row className="mb-3">
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <FormGroup controlId="address_line1">
                   <FormLabel>
                     {t('address_line1')}
@@ -366,7 +370,7 @@ const Registration = () => {
                   {errors.address_line1 && <div className="text-danger">{errors.address_line1}</div>}
                 </FormGroup>
               </Col>
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <FormGroup controlId="address_line2">
                   <FormLabel>
                     {t('address_line2')}
@@ -380,9 +384,6 @@ const Registration = () => {
                   />
                 </FormGroup>
               </Col>
-            </Row>
-
-            <Row className="mb-3">
               <Col xs={12} md={4}>
                 <FormGroup controlId="pincode">
                   <FormLabel>
@@ -397,34 +398,7 @@ const Registration = () => {
                   />
                 </FormGroup>
               </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="createdBy">
-                  <FormLabel>
-                    {t('createdBy')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_createdBy')}
-                    name="createdBy"
-                    value={formData.createdBy}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="createdDt">
-                  <FormLabel>
-                    {t('createdDt')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_createdDt')}
-                    name="createdDt"
-                    value={formData.createdDt}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
+                          
             </Row>
 
             <Button type="submit" variant="primary" className="me-3">

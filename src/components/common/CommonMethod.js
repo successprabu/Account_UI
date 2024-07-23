@@ -18,6 +18,7 @@ const handleAuthenticationError = (error) => {
 // Function to get the current date in UTC format
 export const dateUTC = (date = new Date()) => new Date(new Date(date).toUTCString()).toISOString();
 
+console.log(user,'localstorage')
 // Common payload fields for POST requests
 export const commonPayloadFields = {
   createdBy: user ? JSON.parse(user).primary_phone:'APPLICATION',
@@ -42,10 +43,11 @@ const post = (url, payload) => {
 };
 
 // GET method
-const get = (url) => {
+const get = (url,payload) => {
   return axios({
     method: "get",
     url: BASE_URL + `${url}`,
+    params: payload,
     headers: {
       'Authorization':`Bearer ${getToken()}`      
     }

@@ -70,12 +70,25 @@
   "enter_village": "Enter Village",
   "enter_amount": "Enter Amount",
   "enter_remarks": "Enter Remarks",
+  "enter_confirm_password": "Enter Confirm Password",
+  "enter_country": "Enter Country",
+  "enter_state": "Enter State",
+  "enter_district": "Enter District",
   "authentication_required":"Please login to access this page",
   "login_here": "Log in here",
   "validation_villageName":"Please Enter Name of the Place",
   "validation_name":"Please Enter Name",
   "validation_amount":"Please Enter the Amount",
-  "validation_phone":"Please Enter the valid Number"
+  "validation_phone":"Please Enter the valid Number",
+  "placeName": "Place Name",
+  "phoneNo": "Contact Number",
+  "active": "Active",
+  "options": "Options",
+  "yes": "Yes",
+  "no": "No",
+  "noData": "No Data Available...",
+  "edit": "Edit",
+  "delete": "Delete"
   
   }
   
