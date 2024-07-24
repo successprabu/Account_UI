@@ -4,7 +4,7 @@ import { Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 import styled from "styled-components";
 import { ClientTable } from "../css/styled";
 import { API_SERVICE } from "../../common/CommonMethod";
-import { LIST_TRANSACTION_API, SAVE_NEW_TRANS_API } from "../../common/CommonApiURL";
+import { DELETE_TRANSACTION_API, LIST_TRANSACTION_API, SAVE_NEW_TRANS_API } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess";
 import { useNavigate } from "react-router-dom";
 import TransDeleteModal from "../modal/TransDeleteModal";
@@ -102,8 +102,14 @@ const TransactionList = () => {
   };
 
   const handleDelete = async () => {
+    console.log(deletingTransactionId,"deteleid")
+  
     try {
-      await API_SERVICE.delete(`${SAVE_NEW_TRANS_API}/${deletingTransactionId}`);
+      const user = localStorage.getItem("user");
+      await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
+        id: deletingTransactionId,
+        deletedBy:JSON.parse(user).mobile??"system"
+      });
       setTransactionList(transactionList.filter(t => t.id !== deletingTransactionId));
       setShowDeleteModal(false);
     } catch (error) {
@@ -113,7 +119,7 @@ const TransactionList = () => {
 
   const handleEditSave = async () => {
     try {
-      await API_SERVICE.put(`${SAVE_NEW_TRANS_API}/${editingTransaction.id}`, editingTransaction);
+      await API_SERVICE.post(SAVE_NEW_TRANS_API, editingTransaction);
       setTransactionList(transactionList.map(t => (t.id === editingTransaction.id ? editingTransaction : t)));
       setShowEditModal(false);
     } catch (error) {

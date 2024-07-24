@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./CommonApiURL";
+import { faHandPointUp } from "@fortawesome/free-solid-svg-icons";
 
 const user = localStorage.getItem('user');
 // Function to get the token from localStorage
@@ -54,8 +55,23 @@ const get = (url,payload) => {
   }).catch(handleAuthenticationError);
 };
 
+// put method
+const postreq = (url, payload) => {
+  return axios({
+    method: 'post',
+    url: BASE_URL + url,
+    params: payload, // Send payload as query parameters
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer ${getToken()}`,
+    },
+  }).catch(handleAuthenticationError);
+};
+
 // Export API service
 export const API_SERVICE = {
   post: post,
-  get: get
+  get: get,
+  postreq:postreq
 };
