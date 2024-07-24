@@ -87,6 +87,10 @@
     "no": "இல்லை",
     "noData": "தகவல் கிடைக்கவில்லை...",
     "edit": "திருத்து",
-    "delete": "அழி"
+    "delete": "அழி",
+    "search": "தேடல்",
+    "deleteConfirmation":"சாதனத்தை நீக்கு",
+    "deleteConfirmationMessage": "சாதனத்தை நீக்க உறுதியாக உள்ளீர்களா ?",
+    "editTransaction": "செயல்பாட்டைத் திருத்தவும்"
   }
   

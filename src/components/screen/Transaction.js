@@ -23,7 +23,6 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup"; // Import yup for validation
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
-import { TaInput } from "@opentf/react-ta-input";
 
 const schema = yup.object().shape({
   villageName: yup.string().required(),

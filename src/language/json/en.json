@@ -88,7 +88,11 @@
   "no": "No",
   "noData": "No Data Available...",
   "edit": "Edit",
-  "delete": "Delete"
+  "delete": "Delete",
+  "search": "Search",
+  "deleteConfirmation":"Delete Record",
+  "deleteConfirmationMessage":"Are you sure to remove record ?",
+  "editTransaction": "Edit Transaction"
   
   }
   

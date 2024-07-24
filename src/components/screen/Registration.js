@@ -404,7 +404,7 @@ const Registration = () => {
             <Button type="submit" variant="primary" className="me-3">
               {t('save')}
             </Button>
-            <Button type="button" variant="danger">
+            <Button type="button" variant="secondary">
               {t('cancel')}
             </Button>
           </Form>
