@@ -49,7 +49,6 @@ const SideBar = () => {
             <a href="#"> {t('my_accounts')}</a>
           </div>
         </div>
-        <LanguageSelector/>
         <ul className="sidebar-nav">
           <li className="sidebar-item">
             <NavLink to="/client-list" className="sidebar-link">

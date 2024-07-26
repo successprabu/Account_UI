@@ -1,5 +1,14 @@
 import styled  from 'styled-components';
 import Table  from 'react-bootstrap/Table';
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  InputGroup,
+  Pagination,
+  FormLabel,
+} from "react-bootstrap";
 
 export const ClientTable = styled(Table)`
   font-size: 10px !important;
@@ -174,4 +183,63 @@ export const FormError = styled.span`
   font-size: 12px;
   min-height: 20px;
   font-weight: 600;
+`;
+export const SearchForm = styled(Form)`
+  font-size: 1rem;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", "Arial, sans-serif";
+  margin-bottom: 20px;
+`;
+
+export const SearchInput = styled(Form.Control)`
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.6rem;
+  padding: 0.375rem 0.95rem;
+  font-size: 1rem;
+  color: #044179;
+`;
+
+export const SearchButton = styled(Button)`
+  font-size: 1rem;
+  width: 100%;
+  @media (min-width: 768px) {
+    width: auto;
+    margin-top: 20px;
+  }
+`;
+
+export const ClearButton = styled(Button)`
+  margin-left: 5px;
+  margin-top: 20px;
+  margin-left: 20px;
+`;
+
+export const SearchLabel = styled(Form.Label)`
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", "Arial, sans-serif";
+  font-size: 1rem;
+  color: #0e2238;
+`;
+
+export const PageSizeSelect = styled(Form.Control)`
+  width: auto;
+  display: inline-block;
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+`;
+
+export const PageSizeWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const TotalRow = styled.tr`
+  background-color: blue;
+  color: white;
+  font-weight: bold;
 `;

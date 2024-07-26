@@ -96,7 +96,9 @@
   "pageSize":"Page Size",
   "addTransaction":"New Transaction",
   "clearButton":"Clear",
-  "transactionList":"Transaction List"
+  "transactionList":"Transaction List",
+  "totalRows":"Page Total",
+  "pagerows":"Records"
   
   }
   

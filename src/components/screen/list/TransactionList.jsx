@@ -1,16 +1,25 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Row,
   Col,
-  Form,
-  Button,
   InputGroup,
   Pagination,
-  FormLabel,
+  Form,
+  Button,
 } from "react-bootstrap";
-import styled from "styled-components";
-import { ClientTable } from "../css/styled";
+import { useTranslation } from "react-i18next";
+import {
+  ClientTable,
+  SearchButton,
+  SearchForm,
+  SearchInput,
+  SearchLabel,
+  PageSizeWrapper,
+  PageSizeSelect,
+  PaginationWrapper,
+  ClearButton,
+  TotalRow,
+} from "../css/listStyles";
 import { API_SERVICE } from "../../common/CommonMethod";
 import {
   DELETE_TRANSACTION_API,
@@ -25,93 +34,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMicrophone,
   faMicrophoneSlash,
-  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-import { FaSearch, FaPlus, FaTimes } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 import { transliterateToTamil } from "../../common/transliteration";
-import { Link } from "react-router-dom";
 import i18n from "../../../language/i18n";
-import LanguageSelector from "../../../language/LanguageSelector";
-
-const SearchForm = styled(Form)`
-  font-size: 1rem;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", "Arial, sans-serif";
-  margin-bottom: 20px;
-`;
-
-const SearchInput = styled(Form.Control)`
-  font-size: 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.6rem;
-  padding: 0.375rem 0.95rem;
-  font-size: 1rem;
-  color: #044179;
-`;
-
-const SearchButton = styled(Button)`
-  font-size: 1rem;
-  width: 100%;
-  @media (min-width: 768px) {
-    width: auto;
-    margin-top: 20px;
-  }
-`;
-
-const ClearButton = styled(Button)`
-  margin-left: 5px;
-  margin-top: 20px;
-  margin-left: 20px;
-`;
-
-const SearchLabel = styled(Form.Label)`
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", "Arial, sans-serif";
-  font-size: 1rem;
-  color: #0e2238;
-`;
-
-const PageSizeSelect = styled(Form.Control)`
-  width: auto;
-  display: inline-block;
-`;
-
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-`;
-
-const PageSizeWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-const Heading = styled.header`
-  background-color: #0e2238;
-  color: white;
-  margin: 0;
-  padding: 2px; /* Adjust padding for better spacing */
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", "Arial, sans-serif";
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-const HeadingLink = styled(Link)`
-  color: white;
-  text-decoration: none;
-  font-size: 1rem;
-  padding: 5px 10px; /* Adjust padding for better spacing */
-  border-radius: 4px;
-  margin-left: 10px; /* Space between language selector and link */
-`;
-
-const LanguageSelectorWrapper = styled.div`
-  display: flex;
-  align-items: center;
-`;
+import Header from "../../common/Header";
 
 const onEdit = (id, transaction, setEditingTransaction, setShowEditModal) => {
   setEditingTransaction(transaction);
@@ -262,6 +189,14 @@ const TransactionList = () => {
     return <UnauthorizedAccess />;
   }
 
+  const calculateTotals = () => {
+    const totalAmount = transactionList.reduce(
+      (acc, trans) => acc + parseFloat(trans.amount || 0),0 );
+    const totalRows = transactionList.length;
+    return { totalAmount, totalRows };
+  };
+
+  const { totalAmount, totalRows } = calculateTotals();
   const list = transactionList.map((el) => (
     <tr key={el.id}>
       <td>{el.villageName}</td>
@@ -294,16 +229,15 @@ const TransactionList = () => {
 
   return (
     <div>
-      <Heading>
-        <div>{t("transactionList")}</div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <HeadingLink to="/transaction">Add Transaction</HeadingLink>
-          <LanguageSelectorWrapper>
-            <LanguageSelector />
-          </LanguageSelectorWrapper>
-        </div>
-      </Heading>
-
+      {/* <Header title={t("transactionList")} links={[{to: "/transaction", label: t("addTransaction")}]} /> */}
+      <Header
+        //titles={[t("transactionList"), t("anotherTitle")]}
+        titles={[t("transactionList")]}
+        links={[
+          { to: "/dashboard", label: t("dashboard") },
+          { to: "/transaction", label: t("addTransaction") },
+        ]}
+      />
       <Row>
         <Col>
           <SearchForm onSubmit={handleSearch} className="mb-3">
@@ -440,7 +374,16 @@ const TransactionList = () => {
             <th className="text-end">{t("actions")}</th>
           </tr>
         </thead>
-        <tbody>{list}</tbody>
+        <tbody>
+          {list}
+          <TotalRow>
+            <td colSpan="2">
+              {" "}
+              {t("totalRows")}: {totalRows} {t("pagerows")}
+            </td>
+            <td> {totalAmount}</td>
+          </TotalRow>
+        </tbody>
       </ClientTable>
       <PaginationWrapper>
         <Pagination>
