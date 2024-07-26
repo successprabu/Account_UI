@@ -92,7 +92,11 @@
   "search": "Search",
   "deleteConfirmation":"Delete Record",
   "deleteConfirmationMessage":"Are you sure to remove record ?",
-  "editTransaction": "Edit Transaction"
+  "editTransaction": "Edit Transaction",
+  "pageSize":"Page Size",
+  "addTransaction":"New Transaction",
+  "clearButton":"Clear",
+  "transactionList":"Transaction List"
   
   }
   

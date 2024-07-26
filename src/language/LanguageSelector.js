@@ -2,7 +2,27 @@ import React from 'react';
 import { useLanguage } from './LanguageContext';
 import { Dropdown } from 'react-bootstrap';
 import { BsGlobe } from 'react-icons/bs';
-import './language.css'; // Import custom CSS for additional styling
+import styled from 'styled-components';
+
+// Styled components for custom dropdown styling
+const CustomDropdownToggle = styled(Dropdown.Toggle)`
+  background-color: #0e2238;
+  color: white; /* Set text color to white */
+  border: none; /* Remove border */
+  &:hover {
+    background-color: #0a1e2d; /* Slightly darker shade for hover effect */
+  }
+`;
+
+const CustomDropdownMenu = styled(Dropdown.Menu)`
+  background-color: #0e2238; /* Match the background color of the toggle */
+  .dropdown-item {
+    color: white; /* Set text color for dropdown items */
+    &:hover {
+      background-color: #0a1e2d; /* Darker shade on hover */
+    }
+  }
+`;
 
 const LanguageSelector = () => {
   const { changeLanguage } = useLanguage();
@@ -13,15 +33,14 @@ const LanguageSelector = () => {
 
   return (
     <Dropdown className="language-selector">
-      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+      <CustomDropdownToggle id="dropdown-basic">
         <BsGlobe className="language-icon" />
-      </Dropdown.Toggle>
+      </CustomDropdownToggle>
 
-      <Dropdown.Menu>
+      <CustomDropdownMenu>
         <Dropdown.Item onClick={() => handleLanguageChange('en')}>English</Dropdown.Item>
         <Dropdown.Item onClick={() => handleLanguageChange('ta')}>தமிழ்</Dropdown.Item>
-        {/* Add more languages as needed */}
-      </Dropdown.Menu>
+      </CustomDropdownMenu>
     </Dropdown>
   );
 };

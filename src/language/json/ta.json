@@ -91,6 +91,10 @@
     "search": "தேடல்",
     "deleteConfirmation":"சாதனத்தை நீக்கு",
     "deleteConfirmationMessage": "சாதனத்தை நீக்க உறுதியாக உள்ளீர்களா ?",
-    "editTransaction": "செயல்பாட்டைத் திருத்தவும்"
+    "editTransaction": "செயல்பாட்டைத் திருத்தவும்",
+    "pageSize":"பக்க அளவு",
+    "addTransaction":"புதிய பரிவர்த்தனை",
+    "clearButton":"அழிக்க",
+    "transactionList":"பரிவர்த்தனை பட்டியல்"
   }
   
