@@ -19,7 +19,7 @@ import {
   PaginationWrapper,
   ClearButton,
   TotalRow,
-} from "../css/listStyles";
+} from "../css/styles";
 import { API_SERVICE } from "../../common/CommonMethod";
 import {
   DELETE_TRANSACTION_API,

@@ -63,7 +63,7 @@
   "village": "Village",
   "initial": "Surname",
   "remarks": "Remarks",
-  "amount": "Amount",
+  "amount": "Amount (Rs.)",
   "mobile": "Mobile",
   "enter_mobile": "Enter Mobile Number",
   "enter_initial": "Enter Surname",
@@ -98,7 +98,10 @@
   "clearButton":"Clear",
   "transactionList":"Transaction List",
   "totalRows":"Page Total",
-  "pagerows":"Records"
+  "pagerows":"Records",
+  "lastRecordHistory":"Recently Saved Transaction",
+  "totalRecord":"Total Transaction saved by you",
+  "totalAmount":"Total Amount by you"
   
   }
   

@@ -95,6 +95,11 @@
     "pageSize":"பக்க அளவு",
     "addTransaction":"புதிய பரிவர்த்தனை",
     "clearButton":"அழிக்க",
-    "transactionList":"பரிவர்த்தனை பட்டியல்"
+    "transactionList":"பரிவர்த்தனை பட்டியல்",
+    "totalRows":"பக்கம் மொத்தம்",
+    "pagerows":"பதிவுகள்",
+    "lastRecordHistory":" சமீபத்தில் சேமிக்கப்பட்ட பரிவர்த்தனை",
+    "totalRecord":"நீங்கள் சேமித்த மொத்த பரிவர்த்தனை",
+    "totalAmount":"உங்களின் மொத்தத் தொகை"
   }
   

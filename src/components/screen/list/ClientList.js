@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { ClientTable } from "../css/listStyles";
+import { ClientTable } from "../css/styles";
 import { API_SERVICE } from "../../common/CommonMethod";
 import { LIST_CLIENT_API } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess"; 

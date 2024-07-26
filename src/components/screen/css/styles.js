@@ -239,7 +239,7 @@ export const PageSizeWrapper = styled.div`
 `;
 
 export const TotalRow = styled.tr`
-  background-color: blue;
-  color: white;
+  background-color: red;
+  color: red;
   font-weight: bold;
 `;

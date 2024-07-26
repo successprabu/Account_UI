@@ -6,3 +6,25 @@
     height: 100vh;
   }
   
+  /* In your CSS file or within a <style> tag if using styled-components */
+.row-border {
+  border-bottom: 1px solid #eee; /* Light grey line separating rows */
+}
+
+.col-border {
+  border-right: 1px solid #eee; /* Light grey line separating columns */
+}
+
+.card-body {
+  border: 1px solid #ddd; /* Border around the card body */
+  border-radius: 5px; /* Slightly rounded corners */
+}
+
+.text-primary {
+
+  padding: 5px; /* Padding for better spacing */
+}
+
+.text-secondary {
+  padding: 5px; /* Padding for better spacing */
+}
