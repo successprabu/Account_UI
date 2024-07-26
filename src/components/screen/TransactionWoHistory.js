@@ -23,12 +23,9 @@ import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
-import * as yup from "yup";
+import * as yup from "yup"; // Import yup for validation
 import { API_SERVICE } from "../common/CommonMethod";
-import {
-  SAVE_NEW_TRANS_API,
-  GET_LAST_RECORD_API,
-} from "../common/CommonApiURL";
+import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 
 const schema = yup.object().shape({
@@ -40,7 +37,7 @@ const schema = yup.object().shape({
   remarks: yup.string(),
 });
 
-const Transactions = () => {
+const TransactionWoHistory = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -66,9 +63,6 @@ const Transactions = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [lastRecord, setLastRecord] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -77,6 +71,7 @@ const Transactions = () => {
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -99,21 +94,6 @@ const Transactions = () => {
     }
   }, [i18n.language]);
 
-  //   useEffect(() => {
-  //     // Fetch the last record history on component mount
-  //     const fetchLastRecord = async () => {
-  //       try {
-  //         const response = await API_SERVICE.get(SAVE_NEW_TRANS_API);
-  //         setLastRecord(response.data);
-  //       } catch (error) {
-  //         toast.error("Error fetching last record");
-  //         console.error("Error fetching last record:", error);
-  //       }
-  //     };
-
-  //     fetchLastRecord();
-  //   }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedValue = value;
@@ -133,10 +113,6 @@ const Transactions = () => {
     }
   };
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userDetail = JSON.parse(localStorage.getItem("user"));
@@ -148,17 +124,8 @@ const Transactions = () => {
     try {
       await schema.validate(formData, { abortEarly: false });
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
-        .then(async (response) => {
+        .then((response) => {
           if (response.data.result) {
-            // Fetch updated last record
-            try {
-              const lastRecordResponse = response.data;
-              setLastRecord(lastRecordResponse.data);
-            } catch (error) {
-              toast.error("Error fetching updated last record");
-              console.error("Error fetching updated last record:", error);
-            }
-
             setFormData({
               id: 0,
               customerId: userDetail.customerID,
@@ -249,72 +216,15 @@ const Transactions = () => {
   }
 
   return (
-    <Card>
+      <Card>
       <Header
         titles={[t("addTransaction")]}
-        links={[{ to: "/transaction-list", label: t("transactionList") }]}
+        links={[
+          // { to: "/dashboard", label: t("dashboard") },
+          { to: "/transaction-list", label: t("transactionList") },
+        ]}
       />
       <CardBody>
-        {lastRecord && (
-          <Card className="mb-3">
-            <CardHeader>
-              {t("lastRecordHistory")}
-              <Button
-                variant="link"
-                className="float-end"
-                onClick={toggleExpand}
-                aria-expanded={isExpanded}
-                aria-controls="lastRecordContent"
-              >
-                {isExpanded ? "-" : "+"}
-              </Button>
-            </CardHeader>
-            {isExpanded && (
-              <CardBody id="lastRecordContent">
-                <Row className="mb-2 row-border">
-                  <Col xs={6} className="text-primary col-border">
-                    <strong>{t("placeName")}:</strong>
-                  </Col>
-                  <Col xs={6} className="text-secondary">
-                    {lastRecord.villageName}
-                  </Col>
-                </Row>
-                <Row className="mb-2 row-border">
-                  <Col xs={6} className="text-primary col-border">
-                    <strong>{t("name")}:</strong>
-                  </Col>
-                  <Col xs={6} className="text-secondary">
-                    {lastRecord.name}
-                  </Col>
-                </Row>
-                <Row className="mb-2 row-border">
-                  <Col xs={6} className="text-primary col-border">
-                    <strong>{t("amount")}:</strong>
-                  </Col>
-                  <Col xs={6} className="text-secondary">
-                    {lastRecord.amount}
-                  </Col>
-                </Row>
-                <Row className="mb-2 row-border">
-                  <Col xs={6} className="text-primary col-border">
-                    <strong>{t("totalRecord")}:</strong>
-                  </Col>
-                  <Col xs={6} className="text-secondary">
-                    {lastRecord.totalRecord}
-                  </Col>
-                </Row>
-                <Row className="mb-2">
-                  <Col xs={6} className="text-primary col-border">
-                    <strong>{t("totalAmount")}:</strong>
-                  </Col>
-                  <Col xs={6} className="text-secondary">
-                    {lastRecord.totalAmount}
-                  </Col>
-                </Row>
-              </CardBody>
-            )}
-          </Card>
-        )}
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col xs={12} md={4}>
@@ -561,4 +471,4 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default TransactionWoHistory;
