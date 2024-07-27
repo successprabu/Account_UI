@@ -372,7 +372,15 @@ const TransactionList = () => {
           </tr>
         </thead>
         <tbody>
-          {list}
+        {transactionList.length > 0 ? (
+                list
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    {t("noData")}
+                  </td>
+                </tr>
+              )}
           <TotalRow>
             <td colSpan="2">
               {" "}

@@ -73,7 +73,7 @@ const ClientList = () => {
         id: null,
         customer_name: name,
         mobile: primaryPhone,
-       // isactive:isActive,
+        isactive:isActive !== undefined ? isActive : null,
         current_page: currentPage,
         page_size: pageSize,
       });
@@ -152,6 +152,10 @@ const ClientList = () => {
   // };
 
   // const { totalRows } = calculateTotals();
+  if(customerList.length==0)
+    {
+
+    }
   const list = customerList.map((el) => (
     <tr key={el.id}>
       <td>{el.name}</td>
@@ -263,8 +267,8 @@ const ClientList = () => {
                     onChange={(e) => setIsActive(e.target.value)}
                   >
                     <option value="">{t("select")}</option>
-                    <option value="1">{t("yes")}</option>
-                    <option value="0">{t("no")}</option>
+                    <option value="true">{t("yes")}</option>
+                    <option value="false">{t("no")}</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
@@ -307,7 +311,15 @@ const ClientList = () => {
                 <th className="text-end">{t("actions")}</th>
               </tr>
             </thead>
-            <tbody>{list}</tbody>
+            <tbody>{customerList.length > 0 ? (
+                list
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    {t("noData")}
+                  </td>
+                </tr>
+              )}</tbody>
             {/* <tfoot>
               <tr>
                 <td colSpan="5">
