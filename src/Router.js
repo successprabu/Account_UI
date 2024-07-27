@@ -15,6 +15,7 @@ import Login from "./components/screen/login/Login";
 import Transaction from "./components/screen/Transaction";
 import TransactionList from "./components/screen/list/TransactionList";
 import TransactionWoHistory from "./components/screen/TransactionWoHistory";
+import Function from "./components/screen/Function";
 
 const Router = () => {
   return (
@@ -35,6 +36,7 @@ const Router = () => {
           <Route path="transaction" element={<Transaction />} />
           <Route path="transaction-list" element={<TransactionList />} />
           <Route path="transaction-wo-history" element={<TransactionWoHistory />} />
+          <Route path="function" element={<Function/>} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

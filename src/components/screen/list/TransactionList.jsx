@@ -27,7 +27,6 @@ import {
   SAVE_NEW_TRANS_API,
 } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess";
-import { useNavigate } from "react-router-dom";
 import TransDeleteModal from "../modal/TransDeleteModal";
 import TransEditModal from "../modal/TransEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -64,7 +63,6 @@ const TransactionList = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-  const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -373,21 +371,21 @@ const TransactionList = () => {
         </thead>
         <tbody>
         {transactionList.length > 0 ? (
-                list
-              ) : (
+             <>
+             {list}
+             <TotalRow>
+               <td colSpan="2">
+                 {t("totalRows")}: {totalRows} {t("pagerows")}
+               </td>
+               <td>{totalAmount}</td>
+             </TotalRow>
+           </> ) : (
                 <tr>
-                  <td colSpan="5" className="text-center">
+                  <td colSpan="6" className="text-center danger">
                     {t("noData")}
                   </td>
                 </tr>
               )}
-          <TotalRow>
-            <td colSpan="2">
-              {" "}
-              {t("totalRows")}: {totalRows} {t("pagerows")}
-            </td>
-            <td> {totalAmount}</td>
-          </TotalRow>
         </tbody>
       </ClientTable>
       <PaginationWrapper>

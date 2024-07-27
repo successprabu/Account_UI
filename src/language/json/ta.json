@@ -1,9 +1,9 @@
 {
      "Clients": "வாடிக்கையாளர்கள்",
       "Masters": "மாஸ்டர்கள்",
-      "Name Master": "பெயர் மாஸ்டர்",
-      "Village Master": "கிராம மாஸ்டர்",
-      "Client Master": "வாடிக்கையாளர் மாஸ்டர்",
+      "functionMaster": "நிகழ்வுகள் மாஸ்டர்",
+      "userMaster": "பயனர் மாஸ்டர்",
+      "clientMaster": "வாடிக்கையாளர் மாஸ்டர்",
       "Transactions": "பரிவர்த்தனைகள்",
       "Two Links": "இரண்டு இணைப்புகள்",
       "Link 1": "இணைப்பு 1",

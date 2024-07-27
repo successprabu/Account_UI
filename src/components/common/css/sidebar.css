@@ -117,19 +117,28 @@ a.sidebar-link:focus {
     position: relative;
 }
 
-.sidebar-item.has-dropdown .sidebar-link::after {
-    content: "▼"; /* Arrow down icon */
-    font-size: 0.7rem;
+.dropdown-icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
     margin-left: auto;
-    transition: transform 0.2s ease;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #FFF;
+    transform: rotate(0);
+    transition: transform 0.2s;
 }
 
-#sidebar:not(.expand) .sidebar-item.has-dropdown .sidebar-link::after {
-    display: none; /* Hide the arrow when not expanded */
+.dropdown-icon.expanded {
+    transform: rotate(180deg);
 }
 
-.sidebar-item.has-dropdown.expanded .sidebar-link::after {
-    content: "▲"; /* Arrow up icon when expanded */
+.sidebar-item.has-dropdown.expanded .sidebar-link .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+#sidebar:not(.expand) .sidebar-item.has-dropdown .dropdown-icon {
+    display: none;
 }
 
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
@@ -167,30 +176,32 @@ a.sidebar-link:focus {
     transition: all .2s ease-out;
 }
 
-.sidebar-footer {
-    margin-top: auto;
-    padding: 1rem 1.625rem;
-    border-top: 1px solid white; /* Horizontal line above logout button */
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center the content horizontally */
+.sidebar-dropdown {
+    padding: 0;
 }
 
-#sidebar:not(.expand) .sidebar-footer .sidebar-link span {
+.sidebar-dropdown .sidebar-item {
+    padding: 0;
+}
+
+.sidebar-dropdown .sidebar-item a {
+    padding-left: 2rem; /* Adjust padding to align sublinks */
+}
+
+.sidebar-footer {
+    padding: .75rem 1.625rem;
+    border-top: 1px solid #3b7ddd;
+    margin-top: auto; /* Ensure the logout button is at the bottom */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.nav-text.hidden {
     display: none;
 }
 
-#sidebar.expand .sidebar-footer .sidebar-link span {
+#sidebar.expand .nav-text.hidden {
     display: inline;
-}
-
-.sidebar-footer .sidebar-link {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center the content horizontally */
-}
-
-.sidebar-footer .sidebar-link i {
-    font-size: 1.1rem;
-    margin-right: .75rem;
 }

@@ -12,7 +12,6 @@ import {
   Col,
   Row,
   FormCheck,
-  FormSelect,
   InputGroup
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -1,9 +1,9 @@
 {
   "Clients": "Clients",
   "Masters": "Masters",
-  "Name Master": "Name Master",
-  "Village Master": "Village Master",
-  "Client Master": "Client Master",
+  "functionMaster": "Function Master",
+  "userMaster": "User Master",
+  "clientMaster": "Client Master",
   "Transactions": "Transactions",
   "Two Links": "Two Links",
   "Link 1": "Link 1",
@@ -108,5 +108,6 @@
   "whatsapp":"Whatsapp",
   "addClient" :"Add New Client",
   "select":"Please Select"
+  
   }
   
