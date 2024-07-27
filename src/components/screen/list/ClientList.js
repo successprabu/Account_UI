@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import {
   Row,
@@ -31,16 +32,8 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { transliterateToTamil } from "../../common/transliteration";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
+import EditCustomerModal from "../modal/EditCustomerModal ";
 
-const onEdit = (id, customer, setEditingCustomer, setShowEditModal) => {
-  setEditingCustomer(customer);
-  setShowEditModal(true);
-};
-
-const onDelete = (id, setDeletingCustomerId, setShowDeleteModal) => {
-  setDeletingCustomerId(id);
-  setShowDeleteModal(true);
-};
 
 const ClientList = () => {
   const { t } = useTranslation();
@@ -48,15 +41,12 @@ const ClientList = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [name, setName] = useState("");
   const [primaryPhone, setPrimaryPhone] = useState("");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [deletingCustomerId, setDeletingCustomerId] = useState(null);
-  const [editingCustomer, setEditingCustomer] = useState(null);
+  const [editingCustomerId, setEditingCustomerId] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
   const [isActive, setIsActive] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -73,7 +63,7 @@ const ClientList = () => {
         id: null,
         customer_name: name,
         mobile: primaryPhone,
-        isactive:isActive !== undefined ? isActive : null,
+        isactive: isActive !== undefined ? isActive : null,
         current_page: currentPage,
         page_size: pageSize,
       });
@@ -146,16 +136,6 @@ const ClientList = () => {
     return <UnauthorizedAccess />;
   }
 
-  // const calculateTotals = () => {
-  //   const totalRows = customerList.length;
-  //   return { totalRows };
-  // };
-
-  // const { totalRows } = calculateTotals();
-  if(customerList.length==0)
-    {
-
-    }
   const list = customerList.map((el) => (
     <tr key={el.id}>
       <td>{el.name}</td>
@@ -168,22 +148,20 @@ const ClientList = () => {
             className="fa-solid fa-pen-to-square text-primary me-2"
             role="presentation"
             title={t("edit")}
-            onClick={() =>
-              onEdit(el.id, el, setEditingCustomer, setShowEditModal)
-            }
-          ></i>
-          <i
-            className="fa-solid fa-trash text-danger me-2"
-            role="presentation"
-            title={t("delete")}
-            onClick={() =>
-              onDelete(el.id, setDeletingCustomerId, setShowDeleteModal)
-            }
-          />
+            onClick={() => {
+              setEditingCustomerId(el.id);
+              setShowEditModal(true);
+            }}
+          ></i>          
         </div>
       </td>
     </tr>
   ));
+
+  const handleSaveEdit = () => {
+    // Refresh the customer list after saving changes
+    fetchCustomers();
+  };
 
   return (
     <div>
@@ -191,7 +169,7 @@ const ClientList = () => {
         titles={[t("clientList")]}
         links={[
           { to: "/purchase", label: t("addClient") },
-          { to: "/dashboard", label: t("dashboard") },         
+          { to: "/dashboard", label: t("dashboard") },
         ]}
       />
       <Row>
@@ -320,13 +298,6 @@ const ClientList = () => {
                   </td>
                 </tr>
               )}</tbody>
-            {/* <tfoot>
-              <tr>
-                <td colSpan="5">
-                  <TotalRow>{t("totalRows")}: {totalRows}</TotalRow>
-                </td>
-              </tr>
-            </tfoot> */}
           </ClientTable>
           <PaginationWrapper>
             <Pagination>
@@ -359,6 +330,12 @@ const ClientList = () => {
           </PaginationWrapper>
         </Col>
       </Row>
+      <EditCustomerModal
+        show={showEditModal}
+        onHide={() => setShowEditModal(false)}
+        customerId={editingCustomerId}
+        onSave={handleSaveEdit}
+      />
     </div>
   );
 };
