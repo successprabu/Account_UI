@@ -200,21 +200,26 @@ export const SearchInput = styled(Form.Control)`
   color: #044179;
 `;
 
-export const SearchButton = styled(Button)`
+export const SearchButton = styled(Button).attrs({
+  variant: 'primary',
+  type: 'submit',
+})`
   font-size: 1rem;
-  width: 100%;
-  @media (min-width: 768px) {
-    width: auto;
-    margin-top: 20px;
-  }
+  width: auto;
+  margin: 20px 5px 0 0;
+  display: flex;
+  align-items: center;
 `;
 
-export const ClearButton = styled(Button)`
-  margin-left: 5px;
-  margin-top: 20px;
-  margin-left: 20px;
+export const ClearButton = styled(Button).attrs({
+  variant: 'secondary',
+})`
+  font-size: 1rem;
+  width: auto;
+  margin: 20px 0 0 5px;
+  display: flex;
+  align-items: center;
 `;
-
 export const SearchLabel = styled(Form.Label)`
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", "Arial, sans-serif";

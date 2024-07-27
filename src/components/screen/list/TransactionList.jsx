@@ -234,8 +234,8 @@ const TransactionList = () => {
         //titles={[t("transactionList"), t("anotherTitle")]}
         titles={[t("transactionList")]}
         links={[
-          { to: "/dashboard", label: t("dashboard") },
           { to: "/transaction", label: t("addTransaction") },
+          { to: "/dashboard", label: t("dashboard") },
         ]}
       />
       <Row>
@@ -332,14 +332,11 @@ const TransactionList = () => {
             </Row>
             <Row className="justify-content-center align-items-end">
               <Col xs={12} md={6} className="text-center">
-                <div className="mb-0">
-                  <SearchButton variant="primary" type="submit">
+                <div className="mb-0 d-flex justify-content-center align-items-center">
+                  <SearchButton>
                     <FaSearch className="mr-2" /> {t("search")}
                   </SearchButton>
-                  <ClearButton
-                    variant="secondary"
-                    onClick={() => handleClear()}
-                  >
+                  <ClearButton onClick={handleClear}>
                     <FaTimes className="mr-2" /> {t("clearButton")}
                   </ClearButton>
                 </div>
@@ -366,11 +363,11 @@ const TransactionList = () => {
       <ClientTable responsive className="table table-striped">
         <thead>
           <tr>
-            <th>{t("villageName")}</th>
+            <th>{t("placeName")}</th>
             <th>{t("name")}</th>
             <th>{t("amount")}</th>
-            <th>{t("mobile")}</th>
-            <th>{t("isActive")}</th>
+            <th>{t("phoneNo")}</th>
+            <th>{t("active")}</th>
             <th className="text-end">{t("actions")}</th>
           </tr>
         </thead>

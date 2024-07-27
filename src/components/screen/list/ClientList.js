@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Row, Col, InputGroup, Pagination, Form, Button } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  InputGroup,
+  Pagination,
+  Form,
+  Button,
+} from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import {
   ClientTable,
@@ -11,14 +18,15 @@ import {
   PageSizeSelect,
   PaginationWrapper,
   ClearButton,
-  TotalRow,
 } from "../css/styles";
 import { API_SERVICE } from "../../common/CommonMethod";
 import { LIST_CLIENT_API } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMicrophone,
+  faMicrophoneSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { transliterateToTamil } from "../../common/transliteration";
 import i18n from "../../../language/i18n";
@@ -47,7 +55,7 @@ const ClientList = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-  const navigate = useNavigate();
+  const [isActive, setIsActive] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -62,10 +70,10 @@ const ClientList = () => {
 
     try {
       const response = await API_SERVICE.get(LIST_CLIENT_API, {
-        customer_id: JSON.parse(user).customerID,
         id: null,
         customer_name: name,
-        primary_phone: primaryPhone,
+        mobile: primaryPhone,
+       // isactive:isActive,
         current_page: currentPage,
         page_size: pageSize,
       });
@@ -178,15 +186,15 @@ const ClientList = () => {
       <Header
         titles={[t("clientList")]}
         links={[
-          { to: "/dashboard", label: t("dashboard") },
-          { to: "/client", label: t("addClient") },
+          { to: "/purchase", label: t("addClient") },
+          { to: "/dashboard", label: t("dashboard") },         
         ]}
       />
       <Row>
         <Col>
           <SearchForm onSubmit={handleSearch} className="mb-3">
             <Row className="align-items-end">
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <Form.Group controlId="formName">
                   <SearchLabel>{t("name")}</SearchLabel>
                   <InputGroup>
@@ -215,13 +223,13 @@ const ClientList = () => {
                   </InputGroup>
                 </Form.Group>
               </Col>
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <Form.Group controlId="formPrimaryPhone">
-                  <SearchLabel>{t("primaryPhone")}</SearchLabel>
+                  <SearchLabel>{t("mobile_number")}</SearchLabel>
                   <InputGroup>
                     <SearchInput
                       type="text"
-                      placeholder={t("primaryPhone")}
+                      placeholder={t("mobile_number")}
                       value={primaryPhone}
                       onChange={(e) => handleChange(e, setPrimaryPhone)}
                     />
@@ -231,7 +239,9 @@ const ClientList = () => {
                           ? "danger"
                           : "primary"
                       }
-                      onClick={() => toggleRecording("primaryPhone", setPrimaryPhone)}
+                      onClick={() =>
+                        toggleRecording("primaryPhone", setPrimaryPhone)
+                      }
                     >
                       <FontAwesomeIcon
                         icon={
@@ -244,17 +254,28 @@ const ClientList = () => {
                   </InputGroup>
                 </Form.Group>
               </Col>
+              <Col xs={12} md={4}>
+                <Form.Group controlId="formIsActive">
+                  <SearchLabel>{t("active")}</SearchLabel>
+                  <Form.Control
+                    as="select"
+                    value={isActive}
+                    onChange={(e) => setIsActive(e.target.value)}
+                  >
+                    <option value="">{t("select")}</option>
+                    <option value="1">{t("yes")}</option>
+                    <option value="0">{t("no")}</option>
+                  </Form.Control>
+                </Form.Group>
+              </Col>
             </Row>
             <Row className="justify-content-center align-items-end">
               <Col xs={12} md={6} className="text-center">
-                <div className="mb-0">
-                  <SearchButton variant="primary" type="submit">
+                <div className="mb-0 d-flex justify-content-center align-items-center">
+                  <SearchButton>
                     <FaSearch className="mr-2" /> {t("search")}
                   </SearchButton>
-                  <ClearButton
-                    variant="secondary"
-                    onClick={() => handleClear()}
-                  >
+                  <ClearButton onClick={handleClear}>
                     <FaTimes className="mr-2" /> {t("clearButton")}
                   </ClearButton>
                 </div>
@@ -280,9 +301,9 @@ const ClientList = () => {
             <thead>
               <tr>
                 <th>{t("name")}</th>
-                <th>{t("primaryPhone")}</th>
-                <th>{t("isPrimaryPhoneWhatsapp")}</th>
-                <th>{t("isActive")}</th>
+                <th>{t("mobile_number")}</th>
+                <th>{t("whatsapp")}</th>
+                <th>{t("active")}</th>
                 <th className="text-end">{t("actions")}</th>
               </tr>
             </thead>
@@ -297,8 +318,14 @@ const ClientList = () => {
           </ClientTable>
           <PaginationWrapper>
             <Pagination>
-              <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />
-              <Pagination.Prev onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} />
+              <Pagination.First
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+              />
+              <Pagination.Prev
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
               {[...Array(totalPages)].map((_, index) => (
                 <Pagination.Item
                   key={index + 1}
@@ -308,8 +335,14 @@ const ClientList = () => {
                   {index + 1}
                 </Pagination.Item>
               ))}
-              <Pagination.Next onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} />
-              <Pagination.Last onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} />
+              <Pagination.Next
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              />
+              <Pagination.Last
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+              />
             </Pagination>
           </PaginationWrapper>
         </Col>

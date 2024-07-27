@@ -101,7 +101,12 @@
   "pagerows":"Records",
   "lastRecordHistory":"Recently Saved Transaction",
   "totalRecord":"Total Transaction saved by you",
-  "totalAmount":"Total Amount by you"
-  
+  "totalAmount":"Total Amount by you",
+  "dashboard":"Dashboard",
+  "actions":"Actions",
+  "clientList":"Client List",
+  "whatsapp":"Whatsapp",
+  "addClient" :"Add New Client",
+  "select":"Please Select"
   }
   
