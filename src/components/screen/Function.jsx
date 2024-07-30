@@ -12,6 +12,7 @@ import {
   Col,
   Row,
   InputGroup,
+  Table,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,18 +24,19 @@ import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
-import * as yup from "yup"; // Import yup for validation
+import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
-import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
+import { SAVE_FUNCTION_API, LIST_TRANSACTION_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
+import { ClientTable } from "./css/styles";
 
 const schema = yup.object().shape({
-  villageName: yup.string().required(),
-  name: yup.string().required(),
-  initial: yup.string().required(),
-  amount: yup.number().required().positive(),
-  phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
+  functionName: yup.string().required(),
+  functionDate: yup.date().required(),
+  mahalName: yup.string().required(),
+  funPersionNames: yup.number().required().positive(),
   remarks: yup.string(),
+  funMessage: yup.string(),
 });
 
 const Function = () => {
@@ -43,20 +45,17 @@ const Function = () => {
   const [formData, setFormData] = useState({
     id: 0,
     customerId: 0,
-    villageName: "",
-    initial: "",
-    name: "",
-    amount: 0,
+    functionName: "",
+    functionDate: "",
+    mahalName: "",
+    funPersionNames: 0,
     remarks: "",
-    phoneNo: "",
+    funMessage: "",
     createdBy: "SYSTEM",
-    createdDt: "2024-07-01T13:12:38.744Z",
+    createdDt: new Date().toISOString(),
     updatedBy: "SYSTEM",
-    updatedDt: "2024-07-01T13:12:38.744Z",
-    isActive: true,
-    type: "",
-    returnRemark: "",
-    functionId: 0,
+    updatedDt: new Date().toISOString(),
+    isActive: true
   });
 
   const [errors, setErrors] = useState({});
@@ -64,24 +63,22 @@ const Function = () => {
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
 
-  // Refs for form controls
-  const villageNameRef = useRef(null);
-  const nameRef = useRef(null);
-  const initialRef = useRef(null);
-  const amountRef = useRef(null);
-  const phoneNoRef = useRef(null);
-  const remarksRef = useRef(null);
+  const [transactionList, setTransactionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  // Define refs
+  const functionNameRef = useRef(null);
+  const functionDateRef = useRef(null);
+  const mahalNameRef = useRef(null);
+  const funPersionNamesRef = useRef(null);
+  const remarksRef = useRef(null);
+  const funMessageRef = useRef(null);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       const userDetail = JSON.parse(user);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        customerId: userDetail.customerID,
-        functionId: userDetail.functionId,
-      }));
+      // Initialize formData if needed
     } else {
       setIsAuthenticated(false);
       navigate("/login");
@@ -93,6 +90,18 @@ const Function = () => {
       // Additional setup for Tamil language if needed
     }
   }, [i18n.language]);
+
+  useEffect(() => {
+    // Fetch transactions list on component mount
+    API_SERVICE.get(LIST_TRANSACTION_API)
+      .then((response) => {
+        setTransactionList(response.data || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching transaction list:", error);
+        toast.error("Error fetching transaction list");
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,40 +124,34 @@ const Function = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userDetail = JSON.parse(localStorage.getItem("user"));
-    if (!userDetail || userDetail.functionId === 0) {
-      toast.error("Please Create Function Details");
-      return;
-    }
 
     try {
       await schema.validate(formData, { abortEarly: false });
-      API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
+      API_SERVICE.post(SAVE_FUNCTION_API, formData)
         .then((response) => {
           if (response.data.result) {
             setFormData({
-              id: 0,
-              customerId: userDetail.customerID,
-              villageName: "",
-              initial: "",
-              name: "",
-              amount: 0,
+              functionName: "",
+              functionDate: "",
+              mahalName: "",
+              funPersionNames: "",
               remarks: "",
-              phoneNo: "",
-              createdBy: "SYSTEM",
-              createdDt: new Date().toISOString(),
-              updatedBy: "SYSTEM",
-              updatedDt: new Date().toISOString(),
-              isActive: true,
-              type: "",
-              returnRemark: "",
-              functionId: userDetail.functionId,
+              funMessage: "",
             });
-            toast.success("Transaction Saved Successfully");
+            toast.success("Function Saved Successfully");
+            // Fetch updated transaction list
+            API_SERVICE.get(LIST_TRANSACTION_API)
+              .then((response) => {
+                setTransactionList(response.data || []);
+              })
+              .catch((error) => {
+                console.error("Error fetching Function list:", error);
+                toast.error("Error fetching Function list");
+              });
           } else {
             toast.error(
               response.data.message ||
-                "Something went wrong on Transaction Save..pls Try Again"
+                "Something went wrong on Function Save..pls Try Again"
             );
           }
         })
@@ -216,207 +219,169 @@ const Function = () => {
   }
 
   return (
-      <Card>
+    <Card>
       <Header
-        titles={[t("addTransaction")]}
-        links={[
-          // { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction-list", label: t("transactionList") },
-        ]}
+        titles={[t("functionCreate")]}
+        links={[{ to: "/dashboard", label: t("dashboard") }]}
       />
       <CardBody>
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="villageName">
+              <FormGroup controlId="functionName">
                 <FormLabel>
-                  {t("village")}
+                  {t("functionName")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_village")}
-                    name="villageName"
-                    id="villageName"
-                    value={formData.villageName}
+                    placeholder={t("enter_function_name")}
+                    name="functionName"
+                    id="functionName"
+                    value={formData.functionName}
                     onChange={handleChange}
-                    ref={villageNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, nameRef)}
+                    ref={functionNameRef}
+                    onKeyDown={(e) => handleKeyDown(e, functionDateRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "villageName"
+                      isRecording && recordingField === "functionName"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("villageName")}
+                    onClick={() => toggleRecording("functionName")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "villageName"
+                        isRecording && recordingField === "functionName"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                 </InputGroup>
-                {errors.villageName && (
-                  <div className="text-danger">{errors.villageName}</div>
+                {errors.functionName && (
+                  <div className="text-danger">{errors.functionName}</div>
                 )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="name">
+              <FormGroup controlId="functionDate">
                 <FormLabel>
-                  {t("name")}
+                  {t("functionDate")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
-                    placeholder={t("enter_name")}
-                    name="name"
-                    id="name"
-                    value={formData.name}
+                    type="date"
+                    placeholder={t("enter_function_date")}
+                    name="functionDate"
+                    id="functionDate"
+                    value={formData.functionDate}
                     onChange={handleChange}
-                    ref={nameRef}
-                    onKeyDown={(e) => handleKeyDown(e, initialRef)}
+                    ref={functionDateRef}
+                    onKeyDown={(e) => handleKeyDown(e, mahalNameRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "name"
+                      isRecording && recordingField === "functionDate"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("name")}
+                    onClick={() => toggleRecording("functionDate")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "name"
+                        isRecording && recordingField === "functionDate"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                 </InputGroup>
-                {errors.name && (
-                  <div className="text-danger">{errors.name}</div>
+                {errors.functionDate && (
+                  <div className="text-danger">{errors.functionDate}</div>
                 )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="initial">
+              <FormGroup controlId="mahalName">
                 <FormLabel>
-                  {t("initial")}
+                  {t("mahalName")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_initial")}
-                    name="initial"
-                    id="initial"
-                    value={formData.initial}
+                    placeholder={t("enter_mahal_name")}
+                    name="mahalName"
+                    id="mahalName"
+                    value={formData.mahalName}
                     onChange={handleChange}
-                    ref={initialRef}
-                    onKeyDown={(e) => handleKeyDown(e, amountRef)}
+                    ref={mahalNameRef}
+                    onKeyDown={(e) => handleKeyDown(e, funPersionNamesRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "initial"
+                      isRecording && recordingField === "mahalName"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("initial")}
+                    onClick={() => toggleRecording("mahalName")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "initial"
+                        isRecording && recordingField === "mahalName"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                 </InputGroup>
-                {errors.initial && (
-                  <div className="text-danger">{errors.initial}</div>
+                {errors.mahalName && (
+                  <div className="text-danger">{errors.mahalName}</div>
                 )}
               </FormGroup>
             </Col>
           </Row>
-
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="amount">
+              <FormGroup controlId="funPersionNames">
                 <FormLabel>
-                  {t("amount")}
+                  {t("funPersionNames")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
-                    placeholder={t("enter_amount")}
-                    name="amount"
-                    value={formData.amount}
+                    type="number"
+                    placeholder={t("enter_fun_persion_names")}
+                    name="funPersionNames"
+                    id="funPersionNames"
+                    value={formData.funPersionNames}
                     onChange={handleChange}
-                    ref={amountRef}
-                    onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "amount"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("amount")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "amount"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.amount && (
-                  <div className="text-danger">{errors.amount}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="phoneNo">
-                <FormLabel>{t("mobile")}</FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_mobile")}
-                    name="phoneNo"
-                    value={formData.phoneNo}
-                    onChange={handleChange}
-                    ref={phoneNoRef}
+                    ref={funPersionNamesRef}
                     onKeyDown={(e) => handleKeyDown(e, remarksRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "phoneNo"
+                      isRecording && recordingField === "funPersionNames"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("phoneNo")}
+                    onClick={() => toggleRecording("funPersionNames")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "phoneNo"
+                        isRecording && recordingField === "funPersionNames"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                 </InputGroup>
-                {errors.phoneNo && (
-                  <div className="text-danger">{errors.phoneNo}</div>
+                {errors.funPersionNames && (
+                  <div className="text-danger">{errors.funPersionNames}</div>
                 )}
               </FormGroup>
             </Col>
@@ -425,14 +390,13 @@ const Function = () => {
                 <FormLabel>{t("remarks")}</FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
                     placeholder={t("enter_remarks")}
                     name="remarks"
                     id="remarks"
                     value={formData.remarks}
                     onChange={handleChange}
                     ref={remarksRef}
-                    onKeyDown={(e) => handleKeyDown(e, villageNameRef)}
+                    onKeyDown={(e) => handleKeyDown(e, funMessageRef)}
                   />
                   <Button
                     variant={
@@ -456,16 +420,81 @@ const Function = () => {
                 )}
               </FormGroup>
             </Col>
+            <Col xs={12} md={4}>
+              <FormGroup controlId="funMessage">
+                <FormLabel>{t("funMessage")}</FormLabel>
+                <InputGroup>
+                  <FormControl
+                    as="textarea"
+                    placeholder={t("enter_fun_message")}
+                    name="funMessage"
+                    id="funMessage"
+                    value={formData.funMessage}
+                    onChange={handleChange}
+                    ref={funMessageRef}
+                  />
+                  <Button
+                    variant={
+                      isRecording && recordingField === "funMessage"
+                        ? "danger"
+                        : "primary"
+                    }
+                    onClick={() => toggleRecording("funMessage")}
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        isRecording && recordingField === "funMessage"
+                          ? faMicrophoneSlash
+                          : faMicrophone
+                      }
+                    />
+                  </Button>
+                </InputGroup>
+                {errors.funMessage && (
+                  <div className="text-danger">{errors.funMessage}</div>
+                )}
+              </FormGroup>
+            </Col>
           </Row>
-          <div className="d-flex justify-content-center mt-3">
-            <Button type="submit" variant="success" className="me-3">
-              {t("save")}
-            </Button>
-            <Button type="button" variant="secondary">
+          <Button variant="primary" type="submit" className="me-3">
+            {t("save")}
+          </Button>
+          <Button type="button" variant="secondary">
               {t("clearButton")}
             </Button>
-          </div>
         </Form>
+        <ClientTable striped bordered hover>
+  <thead>
+    <tr>
+      <th>{t("functionName")}</th>
+      <th>{t("functionDate")}</th>
+      <th>{t("mahalName")}</th>
+      <th>{t("funPersionNames")}</th>
+      <th>{t("remarks")}</th>
+      <th>{t("funMessage")}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {transactionList.length > 0 ? (
+      transactionList.map((transaction, index) => (
+        <tr key={index}>
+          <td>{transaction.functionName}</td>
+          <td>{transaction.functionDate}</td>
+          <td>{transaction.mahalName}</td>
+          <td>{transaction.funPersionNames}</td>
+          <td>{transaction.remarks}</td>
+          <td>{transaction.funMessage}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="6" className="text-center">
+          {t("noData")}
+        </td>
+      </tr>
+    )}
+  </tbody>
+</ClientTable>
       </CardBody>
     </Card>
   );

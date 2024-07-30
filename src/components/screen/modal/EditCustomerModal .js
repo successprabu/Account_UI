@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Col, Row, InputGroup, FormControl, FormLabel, FormGroup, FormCheck, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import { toast } from "react-toastify";
-import { Oval } from 'react-loader-spinner'; // Import Oval
+import { Oval } from 'react-loader-spinner';
 import { LIST_CLIENT_API, UPDATE_CUSTOMER_API } from "../../common/CommonApiURL";
 import { API_SERVICE } from "../../common/CommonMethod";
 
@@ -45,7 +43,6 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
 
   useEffect(() => {
     if (customerId) {
-      // Fetch customer details when modal opens
       API_SERVICE.get(LIST_CLIENT_API, {
         id: customerId,
         customer_name: "",
@@ -54,34 +51,33 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
         current_page: 1,
         page_size: 10})
         .then(response => {
-          const customer = response.data.data.customers;
-          console.log(customer,'cust')
+          const customer = response.data.data.customers[0];
           setFormData({
-            id: customer[0].id,
-            name: customer[0].name,
-            primary_phone: customer[0].primary_phone,
-            secondary_phone: customer[0].secondary_phone || "",
-            country: customer[0].country,
-            state: customer[0].state,
-            district: customer[0].district,
-            address_line1: customer[0].address_line1,
-            address_line2: customer[0].address_line2 || "",
-            is_primary_phone_whatsup: customer[0].is_primary_phone_whatsup,
-            is_secondary_phone_whatsup: customer[0].is_secondary_phone_whatsup,
-            pincode: customer[0].pincode,
-            createdBy: customer[0].createdBy,
-            createdDt: customer[0].createdDt,
-            updatedBy: customer[0].updatedBy,
-            updatedDt: customer[0].updatedDt,
-            isActive: customer[0].isActive,
-            password: customer[0].password,
-            userType: customer[0].userType,
-            customerId: customer[0].customerId,
-            activated_from: customer[0].activated_from,
-            activated_To: customer[0].activated_To,
-            current_plan_id: customer[0].current_plan_id,
-            previous_plan_id: customer[0].previous_plan_id,
-            country_code: customer[0].country_code
+            id: customer.id,
+            name: customer.name,
+            primary_phone: customer.primary_phone,
+            secondary_phone: customer.secondary_phone || "",
+            country: customer.country,
+            state: customer.state,
+            district: customer.district,
+            address_line1: customer.address_line1,
+            address_line2: customer.address_line2 || "",
+            is_primary_phone_whatsup: customer.is_primary_phone_whatsup,
+            is_secondary_phone_whatsup: customer.is_secondary_phone_whatsup,
+            pincode: customer.pincode,
+            createdBy: customer.createdBy,
+            createdDt: customer.createdDt,
+            updatedBy: customer.updatedBy,
+            updatedDt: customer.updatedDt,
+            isActive: customer.isActive,
+            password: customer.password,
+            userType: customer.userType,
+            customerId: customer.customerId,
+            activated_from: customer.activated_from,
+            activated_To: customer.activated_To,
+            current_plan_id: customer.current_plan_id,
+            previous_plan_id: customer.previous_plan_id,
+            country_code: customer.country_code
           });
         })
         .catch(error => {
@@ -103,6 +99,14 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
     setFormData({
       ...formData,
       [name]: checked,
+    });
+  };
+
+  const handleActiveChange = (e) => {
+    const { value } = e.target;
+    setFormData({
+      ...formData,
+      isActive: value === "Yes",
     });
   };
 
@@ -131,47 +135,19 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
           pincode: Number(formData.pincode),
           current_plan_id: Number(formData.current_plan_id),
           previous_plan_id: Number(formData.previous_plan_id),
-          customerId: Number(formData.customerId)
+          customerId: Number(formData.customerId),
+          isActive: formData.isActive ? 1 : 0
         };
-        console.log('Payload being sent to server:', payload); // Log payload
         API_SERVICE.post(UPDATE_CUSTOMER_API, payload)
         toast.success("Customer details updated successfully!");
-        onSave(); // Notify parent component of changes
-        onHide(); // Close the modal
+        onSave();
+        onHide();
       } catch (error) {
         console.error("Error updating customer details:", error.response || error.message);
         toast.error("Error updating customer details");
       } finally {
         setIsLoading(false);
       }
-    }
-  };
-
-  const startRecording = () => {
-    setIsRecording(true);
-    recognitionRef.current = new window.webkitSpeechRecognition();
-    recognitionRef.current.lang = "ta-IN"; // Set language to Tamil
-    recognitionRef.current.onresult = (event) => {
-      setFormData({
-        ...formData,
-        address_line1: event.results[0][0].transcript,
-      });
-    };
-    recognitionRef.current.start();
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
-  };
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
     }
   };
 
@@ -302,7 +278,7 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
             </Row>
 
             <Row className="mb-4">
-              <Col xs={12}>
+              <Col xs={12} md={6}>
                 <FormGroup controlId="address_line1">
                   <FormLabel>{t('address_line1')}</FormLabel>
                   <InputGroup>
@@ -313,19 +289,13 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
                       value={formData.address_line1}
                       onChange={handleChange}
                     />
-                    <Button variant={isRecording ? "danger" : "primary"} onClick={toggleRecording}>
-                      <FontAwesomeIcon icon={isRecording ? faMicrophoneSlash : faMicrophone} />
-                    </Button>
                   </InputGroup>
                   <FormControl.Feedback type="invalid">
                     {errors.address_line1}
                   </FormControl.Feedback>
                 </FormGroup>
               </Col>
-            </Row>
-
-            <Row className="mb-4">
-              <Col xs={12} md={6}>
+                <Col xs={12} md={6}>
                 <FormGroup controlId="address_line2">
                   <FormLabel>{t('address_line2')}</FormLabel>
                   <FormControl
@@ -340,7 +310,7 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
             </Row>
 
             <Row className="mb-4">
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <FormGroup controlId="is_primary_phone_whatsup">
                   <FormCheck
                     type="checkbox"
@@ -351,7 +321,7 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
                   />
                 </FormGroup>
               </Col>
-              <Col xs={12} md={6}>
+              <Col xs={12} md={4}>
                 <FormGroup controlId="is_secondary_phone_whatsup">
                   <FormCheck
                     type="checkbox"
@@ -360,6 +330,20 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
                     checked={formData.is_secondary_phone_whatsup}
                     onChange={handleCheckboxChange}
                   />
+                </FormGroup>
+              </Col>            
+              <Col xs={12} md={4}>
+                <FormGroup controlId="isActive">
+                  <FormLabel>{t('active')}</FormLabel>
+                  <FormControl
+                    as="select"
+                    name="isActive"
+                    value={formData.isActive ? t('yes') : t('no')}
+                    onChange={handleActiveChange}
+                  >
+                     <option value="Yes">{t('yes')}</option>
+                      <option value="No">{t('no')}</option>
+                  </FormControl>
                 </FormGroup>
               </Col>
             </Row>

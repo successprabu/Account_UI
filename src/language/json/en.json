@@ -73,6 +73,7 @@
   "enter_confirm_password": "Enter Confirm Password",
   "enter_country": "Enter Country",
   "enter_state": "Enter State",
+  "district": "District",
   "enter_district": "Enter District",
   "authentication_required":"Please login to access this page",
   "login_here": "Log in here",
@@ -107,7 +108,16 @@
   "clientList":"Client List",
   "whatsapp":"Whatsapp",
   "addClient" :"Add New Client",
-  "select":"Please Select"
-  
+  "select":"Please Select",
+  "editCustomer":"Customer Edit",
+  "functionCreate": "Create Function",
+  "functionName":"Function Name",
+  "enter_function_name":"Enter Function Name",
+  "enter_mahal_name":"Enter Mahal Name",
+  "functionDate":"Function Date",
+  "mahalName":"Mahal Name",
+  "funPersionNames":"Function Hero/Heroine",
+  "funMessage":"Message to Send your wellwishers",
+  "enter_fun_message":"Enter Message to Send your wellwishers"
   }
   

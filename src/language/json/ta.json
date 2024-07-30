@@ -73,6 +73,7 @@
   "enter_confirm_password": "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
   "enter_country": "நாட்டை உள்ளிடவும்",
   "enter_state": "மாநிலத்தை உள்ளிடவும்",
+  "district": "மாவட்டம்",
   "enter_district": "மாவட்டத்தை உள்ளிடவும்",
   "authentication_required":"இந்தப் பக்கத்தை அணுக உள்நுழையவும் ",
   "login_here": "இங்கு உள்நுழைக",
@@ -106,6 +107,16 @@
     "clientList":"வாடிக்கையாளர் பட்டியல்",
     "whatsapp":"பகிரி",
     "addClient" :"புதிய வாடிக்கையாளர் சேர்கை",
-    "select":"தேர்ந்தெடுக்கவும்"
+    "select":"தேர்ந்தெடுக்கவும்",
+    "editCustomer":"வாடிக்கையாளர் திருத்தம்",
+    "functionCreate": "நிகழ்வு உருவாக்கு",
+    "functionName":"நிகழ்வு பெயர்",
+    "enter_function_name":"நிகழ்வு பெயரை உள்ளிடவும்",
+    "functionDate":"நிகழ்வு தேதி",
+    "mahalName":"மண்டபம் பெயர்",
+    "enter_mahal_name":"மண்டபம் பெயரை உள்ளிடவும்",
+    "funPersionNames":"விழா நாயகர்கள்",
+    "funMessage":"அனுப்ப வேண்டிய செய்தி",
+    "enter_fun_message":"அனுப்ப வேண்டிய செய்தியை உள்ளிடவும்"
   }
   
