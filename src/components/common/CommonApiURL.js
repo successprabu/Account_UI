@@ -6,6 +6,7 @@ export const AUTH = `Auth/`
 export const TRANSACTION = `Transaction/`
 export const LOGIN_API = `${BASE_URL}${AUTH}UserLogin`
 export const SAVE_NEW_CUSTOMER_API = `${BASE_URL}${AUTH}AddCustomer`
+export const SAVE_NEW_USER_API = `${AUTH}AddCustomer`
 export const SAVE_FUNCTION_API=`${MASTER}UpdateCustomerFunction`
 export const SAVE_NEW_TRANS_API = `${TRANSACTION}UpdateTransaction`
 export const UPDATE_CUSTOMER_API=`${MASTER}UpdateCustomer`

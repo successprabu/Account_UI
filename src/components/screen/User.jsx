@@ -11,6 +11,7 @@ import {
   Col,
   Row,
   InputGroup,
+  FormCheck
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,42 +25,54 @@ import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
-import { SAVE_FUNCTION_API, LIST_FUNCTION_API } from "../common/CommonApiURL";
+import { LIST_CLIENT_API,SAVE_NEW_USER_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { ClientTable, ClearButton, SaveButton } from "./css/styles";
 import { FaSave , FaTimes } from "react-icons/fa";
 import { format } from "date-fns";
 
-const schema = yup.object().shape({
-  functionName: yup.string().required(),
-  functionDate: yup.date().required(),
-  mahalName: yup.string().required(),
-  funPersionNames: yup.string().required(),
-  remarks: yup.string(),
-  funMessage: yup.string(),
-});
 
 const formatDate = (dateString) => {
   return format(new Date(dateString), "dd/MM/yyyy");
 };
 
-const Function = () => {
+
+
+const User = () => {
   const { t } = useTranslation();
+  const schema = yup.object().shape({
+    name: yup.string().required(t('required')),
+    primary_phone: yup.string().required(t('required')),
+    password: yup.string().required(t('required')),
+    conpassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], t('passwordMatch'))
+    .required(t('required')),
+  email: yup.string().email(t('invalidEmail')).nullable(),
+  });
+
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: 0,
-    customerId: 0,
-    functionName: "",
-    functionDate: "",
-    mahalName: "",
-    funPersionNames: "",
-    remarks: "",
-    funMessage: "",
-    createdBy: "SYSTEM",
-    createdDt: new Date().toISOString(),
-    updatedBy: "SYSTEM",
-    updatedDt: new Date().toISOString(),
+    name: "",
+    primary_phone: "",
+    secondary_phone: "",
+    country: "",
+    state: "",
+    district: "",
+    address_line1: "",
+    address_line2: "",
+    is_primary_phone_whatsup: false,
+    is_secondary_phone_whatsup: false,
+    pincode: 0,
+    createdBy: "",
+    createdDt: "2024-07-06T10:07:21.637Z",
+    updateddBy: "SYSTEM",
+    updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: true,
+    password: "Welcome@24",
+    userType:"NU"
   });
 
   const [errors, setErrors] = useState({});
@@ -67,32 +80,44 @@ const Function = () => {
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
 
-  const [functionList, setFunctionList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Define refs
-  const functionNameRef = useRef(null);
-  const functionDateRef = useRef(null);
-  const mahalNameRef = useRef(null);
-  const funPersionNamesRef = useRef(null);
-  const remarksRef = useRef(null);
-  const funMessageRef = useRef(null);
+  const nameRef = useRef(null);
+  const primaryRef = useRef(null);
+  const passwordRef = useRef(null);
+  const conpasswordRef = useRef(null);
+  const emailRef = useRef(null);
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: checked,
+    });
+  };
   const handleClear = () => {
     setFormData({
-      id: 0,
-      customerId: formData.customerId,
-      functionName: "",
-      functionDate: "",
-      mahalName: "",
-      funPersionNames: "",
-      remarks: "",
-      funMessage: "",
-      createdBy: "SYSTEM",
-      createdDt: new Date().toISOString(),
-      updatedBy: "SYSTEM",
-      updatedDt: new Date().toISOString(),
-      isActive: true,
+        id: 0,
+        name: "",
+        primary_phone: "",
+        secondary_phone: "",
+        country: "",
+        state: "",
+        district: "",
+        address_line1: "",
+        address_line2: "",
+        is_primary_phone_whatsup: false,
+        is_secondary_phone_whatsup: false,
+        pincode: 0,
+        createdBy: "",
+        createdDt: "2024-07-06T10:07:21.637Z",
+        updateddBy: "SYSTEM",
+        updatedDt: "2024-07-06T10:07:21.637Z",
+        isActive: true,
+        password: "",
+        userType:"NU"
     });
   };
   useEffect(() => {
@@ -104,7 +129,6 @@ const Function = () => {
         ...prevFormData,
         customerId: userDetail.customerID,
       }));
-      console.log(userDetail.customerID, "testcustomer");
     } else {
       setIsAuthenticated(false);
       navigate("/login");
@@ -118,11 +142,11 @@ const Function = () => {
   }, [i18n.language]);
 
   useEffect(() => {
-    fetchFunctionList();
+    fetchUserList();
   }, [formData.customerId]);
 
-  const fetchFunctionList = () => {
-    API_SERVICE.get(LIST_FUNCTION_API, {
+  const fetchUserList = () => {
+    API_SERVICE.get(LIST_CLIENT_API, {
       id: null,
       customer_id: formData.customerId,
       function_name: "",
@@ -130,7 +154,7 @@ const Function = () => {
       page_size: 10,
     })
       .then((response) => {
-        setFunctionList(response.data.data.transactions || []);
+        setUserList(response.data.data.customers || []);
       })
       .catch((error) => {
         console.error("Error fetching Function list:", error);
@@ -162,30 +186,37 @@ const Function = () => {
 
     try {
       await schema.validate(formData, { abortEarly: false });
-      API_SERVICE.post(SAVE_FUNCTION_API, formData)
+      console.log(formData,"payload")
+      API_SERVICE.post(SAVE_NEW_USER_API, formData)
         .then((response) => {
           if (response.data.result) {
             setFormData({
-              id: 0,
-              customerId: formData.customerId,
-              functionName: "",
-              functionDate: "",
-              mahalName: "",
-              funPersionNames: "",
-              remarks: "",
-              funMessage: "",
-              createdBy: "SYSTEM",
-              createdDt: new Date().toISOString(),
-              updatedBy: "SYSTEM",
-              updatedDt: new Date().toISOString(),
-              isActive: true,
+                id: 0,
+                name: "",
+                primary_phone: "",
+                secondary_phone: "",
+                country: "",
+                state: "",
+                district: "",
+                address_line1: "",
+                address_line2: "",
+                is_primary_phone_whatsup: false,
+                is_secondary_phone_whatsup: false,
+                pincode: 0,
+                createdBy: "",
+                createdDt: "2024-07-06T10:07:21.637Z",
+                updateddBy: "SYSTEM",
+                updatedDt: "2024-07-06T10:07:21.637Z",
+                isActive: true,
+                password: "Welcome@24",
+                userType:"NU"
             });
-            toast.success("Function Saved Successfully");
-            fetchFunctionList(); // Refetch updated list
+            toast.success("User Saved Successfully");
+            fetchUserList(); // Refetch updated list
           } else {
             toast.error(
               response.data.message ||
-                "Something went wrong on Function Save..pls Try Again"
+                "Something went wrong on User Save..pls Try Again"
             );
           }
         })
@@ -203,23 +234,23 @@ const Function = () => {
   };
 
   const handleEdit = (transaction) => {
-    setFormData({
-      id: transaction.id,
-      customerId: transaction.customerId,
-      functionName: transaction.functionName,
-      functionDate: transaction.functionDate
-        ? formatDate(transaction.functionDate)
-        : "",
-      mahalName: transaction.mahalName,
-      funPersionNames: transaction.funPersionNames,
-      remarks: transaction.remarks,
-      funMessage: transaction.funMessage,
-      createdBy: transaction.createdBy,
-      createdDt: transaction.createdDt,
-      updatedBy: transaction.updatedBy,
-      updatedDt: transaction.updatedDt,
-      isActive: transaction.isActive,
-    });
+    // setFormData({
+    //   id: transaction.id,
+    //   customerId: transaction.customerId,
+    //   functionName: transaction.functionName,
+    //   functionDate: transaction.functionDate
+    //     ? formatDate(transaction.functionDate)
+    //     : "",
+    //   mahalName: transaction.mahalName,
+    //   funPersionNames: transaction.funPersionNames,
+    //   remarks: transaction.remarks,
+    //   funMessage: transaction.funMessage,
+    //   createdBy: transaction.createdBy,
+    //   createdDt: transaction.createdDt,
+    //   updatedBy: transaction.updatedBy,
+    //   updatedDt: transaction.updatedDt,
+    //   isActive: transaction.isActive,
+    // });
   };
 
   const handleKeyDown = (e, nextRef) => {
@@ -275,220 +306,200 @@ const Function = () => {
   return (
     <Card>
       <Header
-        titles={[t("functionCreate")]}
+        titles={[t("userCreate")]}
         links={[{ to: "/dashboard", label: t("dashboard") }]}
       />
       <CardBody>
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="functionName">
+              <FormGroup controlId="name">
                 <FormLabel>
-                  {t("functionName")}
+                  {t("name")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_function_name")}
-                    name="functionName"
-                    id="functionName"
-                    value={formData.functionName}
+                    placeholder={t("enter_name")}
+                    name="name"
+                    id="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    isInvalid={!!errors.functionName}
-                    ref={functionNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, functionNameRef)}
+                    isInvalid={!!errors.name}
+                    ref={nameRef}
+                    onKeyDown={(e) => handleKeyDown(e, nameRef)}
                   />
+            
                   <Button
                     variant={
-                      isRecording && recordingField === "functionName"
+                      isRecording && recordingField === "name"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("functionName")}
+                    onClick={() => toggleRecording("name")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "functionName"
+                        isRecording && recordingField === "name"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                   <FormControl.Feedback type="invalid">
-                    {errors.functionName}
+                    {errors.name}
                   </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="functionDate">
+              <FormGroup controlId="primary_phone">
                 <FormLabel>
-                  {t("functionDate")}
-                  <span className="text-danger">*</span>
-                </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="date"
-                    placeholder={t("enter_function_date")}
-                    name="functionDate"
-                    id="functionDate"
-                    value={formData.functionDate}
-                    onChange={handleChange}
-                    isInvalid={!!errors.functionDate}
-                    ref={functionDateRef}
-                    onKeyDown={(e) => handleKeyDown(e, functionDateRef)}
-                  />
-                  <FormControl.Feedback type="invalid">
-                    {errors.functionDate}
-                  </FormControl.Feedback>
-                </InputGroup>
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="mahalName">
-                <FormLabel>
-                  {t("mahalName")}
+                  {t("primary_phone")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_mahal_name")}
-                    name="mahalName"
-                    id="mahalName"
-                    value={formData.mahalName}
+                    placeholder={t("enter_primary_phone")}
+                    name="primary_phone"
+                    id="primary_phone"
+                    value={formData.primary_phone}
                     onChange={handleChange}
-                    isInvalid={!!errors.mahalName}
-                    ref={mahalNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, funPersionNamesRef)}
+                    isInvalid={!!errors.primary_phone}
+                    ref={primaryRef}
+                    onKeyDown={(e) => handleKeyDown(e, primaryRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "mahalName"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("mahalName")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "mahalName"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
                   <FormControl.Feedback type="invalid">
-                    {errors.mahalName}
+                    {errors.primary_phone}
                   </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
+            </Col>
+            <Col xs={12} md={4}>
+            <FormGroup id="is_primary_phone_whatsup">
+                  <FormCheck
+                    type="checkbox"
+                    label={t('is_primary_phone_whatsup')}
+                    name="is_primary_phone_whatsup"
+                    checked={formData.is_primary_phone_whatsup}
+                    onChange={handleCheckboxChange}
+                  />
+                </FormGroup>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="funPersionNames">
+              <FormGroup controlId="password">
                 <FormLabel>
-                  {t("funPersionNames")}
+                  {t("password")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
-                    placeholder={t("enter_fun_person_names")}
-                    name="funPersionNames"
-                    id="funPersionNames"
-                    value={formData.funPersionNames}
+                    type="password"
+                    placeholder={t("enter_password")}
+                    name="password"
+                    id="password"
+                    value={formData.password}
                     onChange={handleChange}
-                    isInvalid={!!errors.funPersionNames}
-                    ref={funPersionNamesRef}
-                    onKeyDown={(e) => handleKeyDown(e, remarksRef)}
+                    isInvalid={!!errors.password}
+                    ref={passwordRef}
+                    onKeyDown={(e) => handleKeyDown(e, passwordRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "funPersionNames"
+                      isRecording && recordingField === "password"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("funPersionNames")}
+                    onClick={() => toggleRecording("password")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "funPersionNames"
+                        isRecording && recordingField === "password"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
                   <FormControl.Feedback type="invalid">
-                    {errors.funPersionNames}
+                    {errors.password}
                   </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="remarks">
-                <FormLabel>{t("remarks")}</FormLabel>
+              <FormGroup controlId="conpassword">
+                <FormLabel>{t("conpassword")}</FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_remarks")}
-                    name="remarks"
-                    id="remarks"
-                    value={formData.remarks}
+                    placeholder={t("enter_confirm_password")}
+                    name="conpassword"
+                    id="conpassword"
+                    value={formData.conpassword}
                     onChange={handleChange}
-                    ref={remarksRef}
-                    onKeyDown={(e) => handleKeyDown(e, funMessageRef)}
+                    ref={conpasswordRef}
+                    isInvalid={!!errors.conpassword}
+                    onKeyDown={(e) => handleKeyDown(e, conpasswordRef)}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "remarks"
+                      isRecording && recordingField === "conpassword"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("remarks")}
+                    onClick={() => toggleRecording("conpassword")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "remarks"
+                        isRecording && recordingField === "conpassword"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.conpassword}
+                  </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-              <FormGroup controlId="funMessage">
-                <FormLabel>{t("funMessage")}</FormLabel>
+              <FormGroup controlId="email">
+                <FormLabel>{t("email")}</FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_fun_message")}
-                    name="funMessage"
-                    id="funMessage"
-                    value={formData.funMessage}
+                    placeholder={t("enter_email")}
+                    name="email"
+                    id="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    ref={funMessageRef}
+                    ref={emailRef}
+                    isInvalid={!!errors.email}
                   />
                   <Button
                     variant={
-                      isRecording && recordingField === "funMessage"
+                      isRecording && recordingField === "email"
                         ? "danger"
                         : "primary"
                     }
-                    onClick={() => toggleRecording("funMessage")}
+                    onClick={() => toggleRecording("email")}
                   >
                     <FontAwesomeIcon
                       icon={
-                        isRecording && recordingField === "funMessage"
+                        isRecording && recordingField === "email"
                           ? faMicrophoneSlash
                           : faMicrophone
                       }
                     />
                   </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.email}
+                  </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
@@ -516,38 +527,33 @@ const Function = () => {
         </Form>
         <div className="mt-4">
           <h5 style={{ color: "#0e2238", fontWeight: "bold" }}>
-            {t("function_list")}
+            {t("user_list")}
           </h5>
 
           <ClientTable className="table table-striped">
             <thead>
               <tr>
                 {/* <th>{t("id")}</th> */}
-                <th>{t("functionName")}</th>
-                <th>{t("functionDate")}</th>
-                <th>{t("mahalName")}</th>
-                <th>{t("funPersionNames")}</th>
-                <th>{t("remarks")}</th>
-                <th>{t("funMessage")}</th>
+                <th>{t("name")}</th>
+                <th>{t("primary_phone")}</th>
+                <th>{t("whatsapp")}</th>
+                <th>{t("active")}</th>
                 <th>{t("actions")}</th>
               </tr>
             </thead>
             <tbody>
-              {functionList.map((functions) => (
-                <tr key={functions.id}>
-                  {/* <td>{functions.id}</td> */}
-                  <td>{functions.functionName}</td>
-                  <td>{formatDate(functions.functionDate)}</td>
-                  <td>{functions.mahalName}</td>
-                  <td>{functions.funPersionNames}</td>
-                  <td>{functions.remarks}</td>
-                  <td>{functions.funMessage}</td>
+              {userList.map((user) => (
+                <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.primary_phone}</td>
+                <td>{user.is_primary_phone_whatsup ? t("yes") : t("no")}</td>
+                <td>{user.isActive ? t("yes") : t("no")}</td>
                   <td>
                     <i
                       className="fa-solid fa-pen-to-square text-primary me-2"
                       role="presentation"
                       title={t("edit")}
-                      onClick={() => handleEdit(functions)}
+                      onClick={() => handleEdit(user)}
                     ></i>
                   </td>
                 </tr>
@@ -560,4 +566,4 @@ const Function = () => {
   );
 };
 
-export default Function;
+export default User;

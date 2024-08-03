@@ -19,7 +19,7 @@
     "email": "Email",
     "enter_email": "Enter your email",
     "enter_name": "Enter your name",
-    "primary_phone": "Primary Phone",
+    "primary_phone": "Mobile Number (Login ID)",
     "enter_primary_phone": "Enter your primary phone number",
     "secondary_phone": "Secondary Phone",
     "enter_secondary_phone": "Enter your secondary phone number",
@@ -120,6 +120,11 @@
   "funMessage":"Message to Send your wellwishers",
   "enter_fun_message":"Enter Message to Send your wellwishers",
   "enter_fun_person_names":"Enter name of the Persons",
-  "function_list":"Function List"
+  "function_list":"Function List",
+  "userCreate":"Create User",
+  "user_list":"User List",
+  "required": "This field is required",
+  "invalidEmail": "Invalid email address",
+  "passwordMatch": "Passwords must match"
   }
   

@@ -73,7 +73,7 @@ const SideBar = () => {
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <Nav.Link href="/user" className="sidebar-link sidebar-sublink">
                     {t('userMaster')}
                   </Nav.Link>
                 </li>
