@@ -143,7 +143,7 @@ const ClientList = () => {
       <td>{el.is_primary_phone_whatsup ? t("yes") : t("no")}</td>
       <td>{el.isActive ? t("yes") : t("no")}</td>
       <td>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end align-items-center">
           <i
             className="fa-solid fa-pen-to-square text-primary me-2"
             role="presentation"

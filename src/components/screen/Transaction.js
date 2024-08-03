@@ -19,6 +19,7 @@ import {
   faMicrophone,
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
+import { FaSave , FaTimes } from "react-icons/fa";
 import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
@@ -29,7 +30,7 @@ import {
   SAVE_NEW_TRANS_API
 } from "../common/CommonApiURL";
 import Header from "../common/Header";
-import { SearchButton } from "./css/styles";
+import { SaveButton,ClearButton } from "./css/styles";
 
 const schema = yup.object().shape({
   villageName: yup.string().required(),
@@ -533,12 +534,12 @@ const Transaction = () => {
             </Col>
           </Row>
           <div className="d-flex justify-content-center mt-3">
-            <Button type="submit" variant="success" className="me-3">
-              {t("save")}
-            </Button>
-            <Button type="button" variant="secondary">
-              {t("clearButton")}
-            </Button>
+            <SaveButton type="submit" variant="success" className="me-3">
+            <FaSave className="me-2" />{t("save")}
+            </SaveButton>
+            <ClearButton type="button" variant="secondary">
+            <FaTimes className="me-2" />{t("clearButton")}
+            </ClearButton>
           </div>
         </Form>
       </CardBody>

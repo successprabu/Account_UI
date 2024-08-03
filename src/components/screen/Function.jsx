@@ -7,12 +7,10 @@ import {
   FormLabel,
   Button,
   Card,
-  CardHeader,
   CardBody,
   Col,
   Row,
   InputGroup,
-  Table,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,18 +24,24 @@ import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
-import { SAVE_FUNCTION_API, LIST_TRANSACTION_API } from "../common/CommonApiURL";
+import { SAVE_FUNCTION_API, LIST_FUNCTION_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
-import { ClientTable } from "./css/styles";
+import { ClientTable, ClearButton, SaveButton } from "./css/styles";
+import { FaSave , FaTimes } from "react-icons/fa";
+import { format } from "date-fns";
 
 const schema = yup.object().shape({
   functionName: yup.string().required(),
   functionDate: yup.date().required(),
   mahalName: yup.string().required(),
-  funPersionNames: yup.number().required().positive(),
+  funPersionNames: yup.string().required(),
   remarks: yup.string(),
   funMessage: yup.string(),
 });
+
+const formatDate = (dateString) => {
+  return format(new Date(dateString), "dd/MM/yyyy");
+};
 
 const Function = () => {
   const { t } = useTranslation();
@@ -48,14 +52,14 @@ const Function = () => {
     functionName: "",
     functionDate: "",
     mahalName: "",
-    funPersionNames: 0,
+    funPersionNames: "",
     remarks: "",
     funMessage: "",
     createdBy: "SYSTEM",
     createdDt: new Date().toISOString(),
     updatedBy: "SYSTEM",
     updatedDt: new Date().toISOString(),
-    isActive: true
+    isActive: true,
   });
 
   const [errors, setErrors] = useState({});
@@ -63,7 +67,7 @@ const Function = () => {
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
 
-  const [transactionList, setTransactionList] = useState([]);
+  const [functionList, setFunctionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Define refs
@@ -74,11 +78,33 @@ const Function = () => {
   const remarksRef = useRef(null);
   const funMessageRef = useRef(null);
 
+  const handleClear = () => {
+    setFormData({
+      id: 0,
+      customerId: formData.customerId,
+      functionName: "",
+      functionDate: "",
+      mahalName: "",
+      funPersionNames: "",
+      remarks: "",
+      funMessage: "",
+      createdBy: "SYSTEM",
+      createdDt: new Date().toISOString(),
+      updatedBy: "SYSTEM",
+      updatedDt: new Date().toISOString(),
+      isActive: true,
+    });
+  };
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       const userDetail = JSON.parse(user);
-      // Initialize formData if needed
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        customerId: userDetail.customerID,
+      }));
+      console.log(userDetail.customerID, "testcustomer");
     } else {
       setIsAuthenticated(false);
       navigate("/login");
@@ -92,16 +118,25 @@ const Function = () => {
   }, [i18n.language]);
 
   useEffect(() => {
-    // Fetch transactions list on component mount
-    API_SERVICE.get(LIST_TRANSACTION_API)
+    fetchFunctionList();
+  }, [formData.customerId]);
+
+  const fetchFunctionList = () => {
+    API_SERVICE.get(LIST_FUNCTION_API, {
+      id: null,
+      customer_id: formData.customerId,
+      function_name: "",
+      current_page: 1,
+      page_size: 10,
+    })
       .then((response) => {
-        setTransactionList(response.data || []);
+        setFunctionList(response.data.data.transactions || []);
       })
       .catch((error) => {
-        console.error("Error fetching transaction list:", error);
-        toast.error("Error fetching transaction list");
+        console.error("Error fetching Function list:", error);
+        toast.error("Error fetching Function list");
       });
-  }, []);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -131,23 +166,22 @@ const Function = () => {
         .then((response) => {
           if (response.data.result) {
             setFormData({
+              id: 0,
+              customerId: formData.customerId,
               functionName: "",
               functionDate: "",
               mahalName: "",
               funPersionNames: "",
               remarks: "",
               funMessage: "",
+              createdBy: "SYSTEM",
+              createdDt: new Date().toISOString(),
+              updatedBy: "SYSTEM",
+              updatedDt: new Date().toISOString(),
+              isActive: true,
             });
             toast.success("Function Saved Successfully");
-            // Fetch updated transaction list
-            API_SERVICE.get(LIST_TRANSACTION_API)
-              .then((response) => {
-                setTransactionList(response.data || []);
-              })
-              .catch((error) => {
-                console.error("Error fetching Function list:", error);
-                toast.error("Error fetching Function list");
-              });
+            fetchFunctionList(); // Refetch updated list
           } else {
             toast.error(
               response.data.message ||
@@ -166,6 +200,26 @@ const Function = () => {
       });
       setErrors(newErrors);
     }
+  };
+
+  const handleEdit = (transaction) => {
+    setFormData({
+      id: transaction.id,
+      customerId: transaction.customerId,
+      functionName: transaction.functionName,
+      functionDate: transaction.functionDate
+        ? formatDate(transaction.functionDate)
+        : "",
+      mahalName: transaction.mahalName,
+      funPersionNames: transaction.funPersionNames,
+      remarks: transaction.remarks,
+      funMessage: transaction.funMessage,
+      createdBy: transaction.createdBy,
+      createdDt: transaction.createdDt,
+      updatedBy: transaction.updatedBy,
+      updatedDt: transaction.updatedDt,
+      isActive: transaction.isActive,
+    });
   };
 
   const handleKeyDown = (e, nextRef) => {
@@ -241,8 +295,9 @@ const Function = () => {
                     id="functionName"
                     value={formData.functionName}
                     onChange={handleChange}
+                    isInvalid={!!errors.functionName}
                     ref={functionNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, functionDateRef)}
+                    onKeyDown={(e) => handleKeyDown(e, functionNameRef)}
                   />
                   <Button
                     variant={
@@ -260,10 +315,10 @@ const Function = () => {
                       }
                     />
                   </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.functionName}
+                  </FormControl.Feedback>
                 </InputGroup>
-                {errors.functionName && (
-                  <div className="text-danger">{errors.functionName}</div>
-                )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -280,29 +335,14 @@ const Function = () => {
                     id="functionDate"
                     value={formData.functionDate}
                     onChange={handleChange}
+                    isInvalid={!!errors.functionDate}
                     ref={functionDateRef}
                     onKeyDown={(e) => handleKeyDown(e, mahalNameRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "functionDate"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("functionDate")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "functionDate"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.functionDate}
+                  </FormControl.Feedback>
                 </InputGroup>
-                {errors.functionDate && (
-                  <div className="text-danger">{errors.functionDate}</div>
-                )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -319,6 +359,7 @@ const Function = () => {
                     id="mahalName"
                     value={formData.mahalName}
                     onChange={handleChange}
+                    isInvalid={!!errors.mahalName}
                     ref={mahalNameRef}
                     onKeyDown={(e) => handleKeyDown(e, funPersionNamesRef)}
                   />
@@ -338,10 +379,10 @@ const Function = () => {
                       }
                     />
                   </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.mahalName}
+                  </FormControl.Feedback>
                 </InputGroup>
-                {errors.mahalName && (
-                  <div className="text-danger">{errors.mahalName}</div>
-                )}
               </FormGroup>
             </Col>
           </Row>
@@ -354,12 +395,13 @@ const Function = () => {
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="number"
-                    placeholder={t("enter_fun_persion_names")}
+                    type="text"
+                    placeholder={t("enter_fun_person_names")}
                     name="funPersionNames"
                     id="funPersionNames"
                     value={formData.funPersionNames}
                     onChange={handleChange}
+                    isInvalid={!!errors.funPersionNames}
                     ref={funPersionNamesRef}
                     onKeyDown={(e) => handleKeyDown(e, remarksRef)}
                   />
@@ -379,10 +421,10 @@ const Function = () => {
                       }
                     />
                   </Button>
+                  <FormControl.Feedback type="invalid">
+                    {errors.funPersionNames}
+                  </FormControl.Feedback>
                 </InputGroup>
-                {errors.funPersionNames && (
-                  <div className="text-danger">{errors.funPersionNames}</div>
-                )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -390,6 +432,7 @@ const Function = () => {
                 <FormLabel>{t("remarks")}</FormLabel>
                 <InputGroup>
                   <FormControl
+                    type="text"
                     placeholder={t("enter_remarks")}
                     name="remarks"
                     id="remarks"
@@ -415,9 +458,6 @@ const Function = () => {
                     />
                   </Button>
                 </InputGroup>
-                {errors.remarks && (
-                  <div className="text-danger">{errors.remarks}</div>
-                )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -425,7 +465,7 @@ const Function = () => {
                 <FormLabel>{t("funMessage")}</FormLabel>
                 <InputGroup>
                   <FormControl
-                    as="textarea"
+                    type="text"
                     placeholder={t("enter_fun_message")}
                     name="funMessage"
                     id="funMessage"
@@ -450,51 +490,71 @@ const Function = () => {
                     />
                   </Button>
                 </InputGroup>
-                {errors.funMessage && (
-                  <div className="text-danger">{errors.funMessage}</div>
-                )}
               </FormGroup>
             </Col>
           </Row>
-          <Button variant="primary" type="submit" className="me-3">
-            {t("save")}
-          </Button>
-          <Button type="button" variant="secondary">
-              {t("clearButton")}
-            </Button>
+          <Row className="mb-3 d-flex justify-content-center">
+            <Col
+              xs="auto"
+              md="auto"
+              sm="auto"
+              className="d-flex justify-content-between align-items-center"
+            >
+              <SaveButton variant="success" type="submit" className="me-1">
+               <FaSave className="me-2" />
+                {t("save")}
+              </SaveButton>
+              <ClearButton
+                onClick={handleClear}
+                className="d-flex align-items-center"
+              >
+                <FaTimes className="me-2" />
+                {t("clearButton")}
+              </ClearButton>
+            </Col>
+          </Row>
         </Form>
-        <ClientTable striped bordered hover>
-  <thead>
-    <tr>
-      <th>{t("functionName")}</th>
-      <th>{t("functionDate")}</th>
-      <th>{t("mahalName")}</th>
-      <th>{t("funPersionNames")}</th>
-      <th>{t("remarks")}</th>
-      <th>{t("funMessage")}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {transactionList.length > 0 ? (
-      transactionList.map((transaction, index) => (
-        <tr key={index}>
-          <td>{transaction.functionName}</td>
-          <td>{transaction.functionDate}</td>
-          <td>{transaction.mahalName}</td>
-          <td>{transaction.funPersionNames}</td>
-          <td>{transaction.remarks}</td>
-          <td>{transaction.funMessage}</td>
-        </tr>
-      ))
-    ) : (
-      <tr>
-        <td colSpan="6" className="text-center">
-          {t("noData")}
-        </td>
-      </tr>
-    )}
-  </tbody>
-</ClientTable>
+        <div className="mt-4">
+          <h5 style={{ color: "#0e2238", fontWeight: "bold" }}>
+            {t("function_list")}
+          </h5>
+
+          <ClientTable className="table table-striped">
+            <thead>
+              <tr>
+                {/* <th>{t("id")}</th> */}
+                <th>{t("functionName")}</th>
+                <th>{t("functionDate")}</th>
+                <th>{t("mahalName")}</th>
+                <th>{t("funPersionNames")}</th>
+                <th>{t("remarks")}</th>
+                <th>{t("funMessage")}</th>
+                <th>{t("actions")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {functionList.map((functions) => (
+                <tr key={functions.id}>
+                  {/* <td>{functions.id}</td> */}
+                  <td>{functions.functionName}</td>
+                  <td>{formatDate(functions.functionDate)}</td>
+                  <td>{functions.mahalName}</td>
+                  <td>{functions.funPersionNames}</td>
+                  <td>{functions.remarks}</td>
+                  <td>{functions.funMessage}</td>
+                  <td>
+                    <i
+                      className="fa-solid fa-pen-to-square text-primary me-2"
+                      role="presentation"
+                      title={t("edit")}
+                      onClick={() => handleEdit(functions)}
+                    ></i>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </ClientTable>
+        </div>
       </CardBody>
     </Card>
   );

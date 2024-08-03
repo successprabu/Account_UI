@@ -210,7 +210,16 @@ export const SearchButton = styled(Button).attrs({
   display: flex;
   align-items: center;
 `;
-
+export const SaveButton = styled(Button).attrs({
+  variant: 'success',
+  type: 'submit',
+})`
+  font-size: 1rem;
+  width: auto;
+  margin: 20px 5px 0 0;
+  display: flex;
+  align-items: center;
+`;
 export const ClearButton = styled(Button).attrs({
   variant: 'secondary',
 })`

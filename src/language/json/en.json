@@ -118,6 +118,8 @@
   "mahalName":"Mahal Name",
   "funPersionNames":"Function Hero/Heroine",
   "funMessage":"Message to Send your wellwishers",
-  "enter_fun_message":"Enter Message to Send your wellwishers"
+  "enter_fun_message":"Enter Message to Send your wellwishers",
+  "enter_fun_person_names":"Enter name of the Persons",
+  "function_list":"Function List"
   }
   

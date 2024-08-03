@@ -1,6 +1,13 @@
 import axios from "axios";
 import { BASE_URL } from "./CommonApiURL";
-import { faHandPointUp } from "@fortawesome/free-solid-svg-icons";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 const user = localStorage.getItem('user');
 // Function to get the token from localStorage
@@ -73,5 +80,6 @@ const postreq = (url, payload) => {
 export const API_SERVICE = {
   post: post,
   get: get,
-  postreq:postreq
+  postreq:postreq,
+  formatDate:formatDate
 };

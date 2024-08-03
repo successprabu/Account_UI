@@ -400,7 +400,7 @@ const Registration = () => {
                           
             </Row>
 
-            <Button type="submit" variant="primary" className="me-3">
+            <Button type="submit" variant="success" className="me-3">
               {t('save')}
             </Button>
             <Button type="button" variant="secondary">
