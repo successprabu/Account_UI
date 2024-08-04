@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Collapse, Nav } from "react-bootstrap";
 import { BiUser, BiMenu, BiShield, BiDollar, BiBook, BiCog, BiExit } from "react-icons/bi";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -11,14 +11,24 @@ const SideBar = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [multiOpen, setMultiOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [userType, setUserType] = useState(null);
+  const [appName, setAppName] = useState(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setUserType(user.userType);
+      setAppName(user.appName);
+    }
+  }, []);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("user");
-      navigate("/login"); // Redirect to the login page
+      navigate("/login");
     }
   };
 
@@ -36,24 +46,24 @@ const SideBar = () => {
     }
   };
 
-  return (
-    <div className="wrapper">
-      <aside id="sidebar" className={isExpanded ? "expand" : ""}>
-        <div className="d-flex">
-          <button className="toggle-btn" type="button" onClick={handleToggle}>
-            <BiMenu />
-          </button>
-          <div className="sidebar-logo">
-            <a href="#"> {t('my_accounts')}</a>
-          </div>
-        </div>
-        <ul className="sidebar-nav">
+  const renderMenuItems = () => {
+    if (!userType) return null;
+
+    const isSuperAdmin = userType === "SU";
+    const isAdminUser = userType === "AU";
+    const isNormalUser = userType === "NU";
+
+    return (
+      <>
+        {(isSuperAdmin) && (
           <li className="sidebar-item">
             <NavLink to="/client-list" className="sidebar-link" onClick={handleExpand}>
               <BiUser />
               <span className={isExpanded ? "nav-text" : "hidden"}>{t('Clients')}</span>
             </NavLink>
           </li>
+        )}
+        {(isSuperAdmin || isAdminUser) && (
           <li className={`sidebar-item has-dropdown ${authOpen ? "expanded" : ""}`}>
             <NavLink
               className="sidebar-link"
@@ -85,6 +95,8 @@ const SideBar = () => {
               </ul>
             </Collapse>
           </li>
+        )}
+        {(isSuperAdmin || isAdminUser || isNormalUser) && (
           <li className={`sidebar-item has-dropdown ${multiOpen ? "expanded" : ""}`}>
             <NavLink
               className="sidebar-link"
@@ -111,6 +123,8 @@ const SideBar = () => {
               </ul>
             </Collapse>
           </li>
+        )}
+        {(isSuperAdmin || isAdminUser) && (
           <li className={`sidebar-item has-dropdown ${reportOpen ? "expanded" : ""}`}>
             <NavLink
               className="sidebar-link"
@@ -142,12 +156,32 @@ const SideBar = () => {
               </ul>
             </Collapse>
           </li>
+        )}
+        {(isSuperAdmin || isAdminUser || isNormalUser) && (
           <li className="sidebar-item">
             <NavLink to="#" className="sidebar-link" onClick={handleExpand}>
               <BiCog />
               <span className={isExpanded ? "nav-text" : "hidden"}>{t('Setting')}</span>
             </NavLink>
           </li>
+        )}
+      </>
+    );
+  };
+
+  return (
+    <div className="wrapper">
+      <aside id="sidebar" className={isExpanded ? "expand" : ""}>
+        <div className="d-flex">
+          <button className="toggle-btn" type="button" onClick={handleToggle}>
+            <BiMenu />
+          </button>
+          <div className="sidebar-logo">
+            <a href="#"> {t('my_accounts')}</a>
+          </div>
+        </div>
+        <ul className="sidebar-nav">
+          {renderMenuItems()}
         </ul>
         <div className="sidebar-footer">
           <NavLink to="#" onClick={handleLogout} className="sidebar-link">

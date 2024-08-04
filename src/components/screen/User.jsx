@@ -141,9 +141,9 @@ const User = () => {
     }
   }, [i18n.language]);
 
-  useEffect(() => {
-    fetchUserList();
-  }, [formData.customerId]);
+ useEffect(() => {
+   fetchUserList();
+ }, [formData.customerId]);
 
   const fetchUserList = () => {
     API_SERVICE.get(LIST_CLIENT_API, {
