@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import {
   Row,
@@ -34,8 +33,7 @@ import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
 import EditCustomerModal from "../modal/EditCustomerModal ";
 
-
-const ClientList = () => {
+const ClientList = ({ showHeader = true }) => {
   const { t } = useTranslation();
   const [customerList, setCustomerList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -152,7 +150,7 @@ const ClientList = () => {
               setEditingCustomerId(el.id);
               setShowEditModal(true);
             }}
-          ></i>          
+          ></i>
         </div>
       </td>
     </tr>
@@ -165,16 +163,18 @@ const ClientList = () => {
 
   return (
     <div>
-      <Header
-        titles={[t("clientList")]}
-        links={[
-          { to: "/purchase", label: t("addClient") },
-          { to: "/dashboard", label: t("dashboard") },
-        ]}
-      />
+      {showHeader && (
+        <Header
+          titles={[t("clientList")]}
+          links={[
+            { to: "/purchase", label: t("addClient") },
+            { to: "/dashboard", label: t("dashboard") },
+          ]}
+        />
+      )}
       <Row>
         <Col>
-          <SearchForm onSubmit={handleSearch} className="mb-3">
+        {showHeader && ( <SearchForm onSubmit={handleSearch} className="mb-3">
             <Row className="align-items-end">
               <Col xs={12} md={4}>
                 <Form.Group controlId="formName">
@@ -278,7 +278,8 @@ const ClientList = () => {
                 </Form.Group>
               </PageSizeWrapper>
             </Row>
-          </SearchForm>
+          </SearchForm> 
+        )}
           <ClientTable responsive striped bordered hover>
             <thead>
               <tr>
@@ -289,7 +290,8 @@ const ClientList = () => {
                 <th className="text-end">{t("actions")}</th>
               </tr>
             </thead>
-            <tbody>{customerList.length > 0 ? (
+            <tbody>
+              {customerList.length > 0 ? (
                 list
               ) : (
                 <tr>
@@ -297,7 +299,8 @@ const ClientList = () => {
                     {t("noData")}
                   </td>
                 </tr>
-              )}</tbody>
+              )}
+            </tbody>
           </ClientTable>
           <PaginationWrapper>
             <Pagination>

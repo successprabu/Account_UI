@@ -7,10 +7,10 @@ import {
   FormLabel,
   Button,
   Card,
+  CardBody,
   Col,
   Row,
   InputGroup,
-  CardBody
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,17 +18,17 @@ import {
   faMicrophone,
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
 import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
-import { API_SERVICE } from "../common/CommonMethod";
-import { SAVE_FUNCTION_API } from "../common/CommonApiURL";
-import { ClearButton, SaveButton } from "./css/styles";
-import { FaSave, FaTimes } from "react-icons/fa";
-import { format } from "date-fns";
+import "./css/Transaction.css";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { API_SERVICE } from "../common/CommonMethod";
+import { SAVE_FUNCTION_API, LIST_FUNCTION_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
-import FunctionList from "./list/FunctionList";
+import { ClientTable, ClearButton, SaveButton } from "./css/styles";
+import { FaSave , FaTimes } from "react-icons/fa";
+import { format } from "date-fns";
 
 const schema = yup.object().shape({
   functionName: yup.string().required(),
@@ -43,7 +43,7 @@ const formatDate = (dateString) => {
   return format(new Date(dateString), "dd/MM/yyyy");
 };
 
-const FunctionForm = () => {
+const FunctionWithList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -67,6 +67,7 @@ const FunctionForm = () => {
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
 
+  const [functionList, setFunctionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Define refs
@@ -94,7 +95,6 @@ const FunctionForm = () => {
       isActive: true,
     });
   };
-
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -111,13 +111,27 @@ const FunctionForm = () => {
     }
   }, [navigate]);
 
-  
 
   useEffect(() => {
-    if (i18n.language === "ta") {
-      // Additional setup for Tamil language if needed
-    }
-  }, [i18n.language]);
+    fetchFunctionList();
+  }, [formData.customerId]);
+
+  const fetchFunctionList = () => {
+    API_SERVICE.get(LIST_FUNCTION_API, {
+      id: null,
+      customer_id: formData.customerId,
+      function_name: "",
+      current_page: 1,
+      page_size: 10,
+    })
+      .then((response) => {
+        setFunctionList(response.data.data.functions || []);
+      })
+      .catch((error) => {
+        console.error("Error fetching Function list:", error);
+        toast.error("Error fetching Function list");
+      });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -162,6 +176,7 @@ const FunctionForm = () => {
               isActive: true,
             });
             toast.success("Function Saved Successfully");
+            fetchFunctionList(); // Refetch updated list
           } else {
             toast.error(
               response.data.message ||
@@ -180,6 +195,26 @@ const FunctionForm = () => {
       });
       setErrors(newErrors);
     }
+  };
+
+  const handleEdit = (transaction) => {
+    setFormData({
+      id: transaction.id,
+      customerId: transaction.customerId,
+      functionName: transaction.functionName,
+      functionDate: transaction.functionDate
+        ? formatDate(transaction.functionDate)
+        : "",
+      mahalName: transaction.mahalName,
+      funPersionNames: transaction.funPersionNames,
+      remarks: transaction.remarks,
+      funMessage: transaction.funMessage,
+      createdBy: transaction.createdBy,
+      createdDt: transaction.createdDt,
+      updatedBy: transaction.updatedBy,
+      updatedDt: transaction.updatedDt,
+      isActive: transaction.isActive,
+    });
   };
 
   const handleKeyDown = (e, nextRef) => {
@@ -233,7 +268,6 @@ const FunctionForm = () => {
   }
 
   return (
-    <>
     <Card>
       <Header
         titles={[t("functionCreate")]}
@@ -307,7 +341,7 @@ const FunctionForm = () => {
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-            <FormGroup controlId="mahalName">
+              <FormGroup controlId="mahalName">
                 <FormLabel>
                   {t("mahalName")}
                   <span className="text-danger">*</span>
@@ -349,7 +383,7 @@ const FunctionForm = () => {
           </Row>
           <Row className="mb-3">
             <Col xs={12} md={4}>
-            <FormGroup controlId="funPersionNames">
+              <FormGroup controlId="funPersionNames">
                 <FormLabel>
                   {t("funPersionNames")}
                   <span className="text-danger">*</span>
@@ -389,7 +423,7 @@ const FunctionForm = () => {
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-            <FormGroup controlId="remarks">
+              <FormGroup controlId="remarks">
                 <FormLabel>{t("remarks")}</FormLabel>
                 <InputGroup>
                   <FormControl
@@ -422,7 +456,7 @@ const FunctionForm = () => {
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
-            <FormGroup controlId="funMessage">
+              <FormGroup controlId="funMessage">
                 <FormLabel>{t("funMessage")}</FormLabel>
                 <InputGroup>
                   <FormControl
@@ -454,24 +488,71 @@ const FunctionForm = () => {
               </FormGroup>
             </Col>
           </Row>
-          <FormGroup className="d-flex justify-content-end">
-            <SaveButton type="submit">
-              <FaSave /> {t("save")}
-            </SaveButton>
-            <ClearButton
+          <Row className="mb-3 d-flex justify-content-center">
+            <Col
+              xs="auto"
+              md="auto"
+              sm="auto"
+              className="d-flex justify-content-between align-items-center"
+            >
+              <SaveButton variant="success" type="submit" className="me-1">
+               <FaSave className="me-2" />
+                {t("save")}
+              </SaveButton>
+              <ClearButton
                 onClick={handleClear}
                 className="d-flex align-items-center"
               >
                 <FaTimes className="me-2" />
                 {t("clearButton")}
               </ClearButton>
-          </FormGroup>
+            </Col>
+          </Row>
         </Form>
+        <div className="mt-4">
+          <h5 style={{ color: "#0e2238", fontWeight: "bold" }}>
+            {t("function_list")}
+          </h5>
+
+          <ClientTable className="table table-striped">
+            <thead>
+              <tr>
+                {/* <th>{t("id")}</th> */}
+                <th>{t("functionName")}</th>
+                <th>{t("functionDate")}</th>
+                <th>{t("mahalName")}</th>
+                <th>{t("funPersionNames")}</th>
+                <th>{t("remarks")}</th>
+                <th>{t("funMessage")}</th>
+                <th>{t("actions")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {functionList.map((functions) => (
+                <tr key={functions.id}>
+                  {/* <td>{functions.id}</td> */}
+                  <td>{functions.functionName}</td>
+                  <td>{formatDate(functions.functionDate)}</td>
+                  <td>{functions.mahalName}</td>
+                  <td>{functions.funPersionNames}</td>
+                  <td>{functions.remarks}</td>
+                  <td>{functions.funMessage}</td>
+                  <td>
+                    <i
+                      className="fa-solid fa-pen-to-square text-primary me-2"
+                      role="presentation"
+                      title={t("edit")}
+                      onClick={() => handleEdit(functions)}
+                    ></i>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </ClientTable>
+        </div>
       </CardBody>
     </Card>
-    <FunctionList/>
-    </>
   );
 };
 
-export default FunctionForm;
+export default FunctionWithList;

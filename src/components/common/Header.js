@@ -6,8 +6,8 @@ import LanguageSelector from "../../language/LanguageSelector";
 const HeaderContainer = styled.header`
   background-color: #0e2238;
   color: white;
-  margin: 0;
-  padding: 2px; /* Adjust padding for better spacing */
+  margin: 1px;
+  padding: 1px; /* Adjust padding for better spacing */
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", "Arial, sans-serif";
   display: flex;
