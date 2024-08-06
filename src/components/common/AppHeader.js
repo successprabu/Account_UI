@@ -45,7 +45,7 @@ const AppHeader = () => {
           <Nav className="ms-auto">
             <StyledNavLink exact to='/'>{t('home')}</StyledNavLink>
             <StyledNavLink to='/about'>{t('about_us')}</StyledNavLink>
-            <StyledNavLink to='/purchase'>{t('purchase')}</StyledNavLink>
+            <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
             <StyledNavLink to='/contactus'>{t('contact_us')}</StyledNavLink>
             <StyledNavLink to='/login'>{t('login')}</StyledNavLink>
             <LanguageSelector />

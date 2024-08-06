@@ -1,36 +1,68 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import './css/ContactUs.css';
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import './css/ContactPage.css'; // Import the CSS file for styling
 
-const ContactUs = () => {
+const ContactPage = () => {
   return (
-    <>
-    <Container className="contact-us mt-5">
-      <Row className="justify-content-center">
-        <Col md={8}>
-          <Card className="text-primary" style={{ backgroundColor: 'white' }}>
-            <Card.Body>
-              <Card.Title>Contact Us</Card.Title>
-              <Card.Text>
-                We are here to help you. Please reach out to us using any of the following methods:
-              </Card.Text>
-              <div className="d-flex justify-content-around">
-                <NavLink to="mail-us">
-                  <Button variant="primary">Mail Us</Button>
-                </NavLink>
-                <NavLink to="call-us">
-                  <Button variant="primary">Call Us</Button>
-                </NavLink>
+    <div>
+      <section className="contact-us">
+        <Container>
+          <Row className="text-center">
+            <Col md={12}>
+              <h1>Contact Us</h1>
+              <p>We would love to hear from you. Please use the contact form below or reach out to us using the contact information provided.</p>
+            </Col>
+          </Row>
+
+          <Row className="contact-info mt-4">
+            <Col md={12}>
+              <h2>Get in Touch</h2>
+              <p>If you have any questions or need support, feel free to contact us via the form below or through the following channels:</p>
+              <p><strong>Email:</strong> [Your Email Address]</p>
+              <p><strong>Phone:</strong> [Your Phone Number]</p>
+              <p><strong>Address:</strong> [Your Address]</p>
+            </Col>
+          </Row>
+
+          <Row className="mt-4">
+            <Col md={12}>
+              <div className="contact-form">
+                <h2>Contact Form</h2>
+                <Form>
+                  <Form.Group controlId="formName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" placeholder="Your Name" />
+                  </Form.Group>
+                  
+                  <Form.Group controlId="formEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Your Email" />
+                  </Form.Group>
+                  
+                  <Form.Group controlId="formMessage">
+                    <Form.Label>Message</Form.Label>
+                    <Form.Control as="textarea" rows={5} placeholder="Your Message" />
+                  </Form.Group>
+                  
+                  <Button className="btn-primary" type="submit">Send Message</Button>
+                </Form>
               </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-   
-    </>
+            </Col>
+          </Row>
+
+          <Row className="map mt-4">
+            <Col md={12}>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=YOUR_MAP_EMBED_URL" 
+                allowFullScreen="" 
+                loading="lazy">
+              </iframe>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </div>
   );
 };
 
-export default ContactUs;
+export default ContactPage;
