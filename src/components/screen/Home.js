@@ -1,93 +1,90 @@
-import React from 'react';
-import { Carousel, Container, Row, Col, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import './css/Home.css';  // Import custom CSS for additional styling
+import React from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import "./css/HomePage.css"; // Import the CSS file for styling
 
 const Home = () => {
+  const { t } = useTranslation();
+
+  const features = [
+    {
+      title: "Innovative Solutions",
+      description:
+        "Leverage cutting-edge technology to drive your business forward with our comprehensive suite of services. Our solutions are designed to meet the unique needs of your industry, helping you stay ahead of the competition.",
+      imgSrc: "/images/innovation.jpg", // Ensure these images exist in your public directory
+    },
+    {
+      title: "Tailored Services",
+      description:
+        "Experience personalized service with our custom solutions that fit your specific business requirements. From ERP systems to accounting software, we provide tools that are as unique as your business.",
+      imgSrc: "/images/services.jpg",
+    },
+    {
+      title: "Expert Support",
+      description:
+        "Our dedicated support team is here to assist you every step of the way. Whether you need troubleshooting, guidance, or advice, we're committed to ensuring your success and satisfaction.",
+      imgSrc: "/images/support.jpg",
+    },
+  ];
+
   return (
-    <Container fluid className="p-4">
-      <Row className="justify-content-center mb-4">
-        <Col xs={12} md={12}>
-          <Carousel>
-            <Carousel.Item>
-              <img
-                className="d-block w-100 carousel-img"
-                src="1.jpg"
-                alt="First slide"
-              />
-              <Carousel.Caption>
-                <h3>First Slide</h3>
-                <p>Some description for the first slide.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className="d-block w-100 carousel-img"
-                src="2.jpg"
-                alt="Second slide"
-              />
-              <Carousel.Caption>
-                <h3>Second Slide</h3>
-                <p>Some description for the second slide.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className="d-block w-100 carousel-img"
-                src="3.jpg"
-                alt="Third slide"
-              />
-              <Carousel.Caption>
-                <h3>Third Slide</h3>
-                <p>Some description for the third slide.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          </Carousel>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col xs={12} md={6} lg={4}>
-          <Card className="mb-4 text-center card-hover bg-primary text-white">
-            <Card.Body as={Link} to="/feature1">
-              <Card.Title>User-Friendly Interface</Card.Title>
-              <Card.Text>Intuitive design for easy navigation and efficient workflow.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Card className="mb-4 text-center card-hover bg-primary text-white">
-            <Card.Body as={Link} to="/feature2">
-              <Card.Title>Real-Time Data Access</Card.Title>
-              <Card.Text>Access and update financial data in real-time from anywhere.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Card className="mb-4 text-center card-hover bg-primary text-white">
-            <Card.Body as={Link} to="/feature3">
-              <Card.Title>Mobile Accessibility</Card.Title>
-              <Card.Text>Full functionality on mobile devices for on-the-go accounting.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Card className="mb-4 text-center card-hover bg-primary text-white">
-            <Card.Body as={Link} to="/feature4">
-              <Card.Title>Customer Support</Card.Title>
-              <Card.Text>Dedicated customer support available to assist with any issues or queries.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Card className="mb-4 text-center card-hover bg-primary text-white">
-            <Card.Body as={Link} to="/feature5">
-              <Card.Title>Secure Data Storage</Card.Title>
-              <Card.Text>Advanced encryption and secure cloud storage to protect sensitive information.</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <section className="hero">
+        <Container>
+          <Row className="align-items-center">
+            <Col md={12} className="text-center">
+              <div className="hero-content">
+                <h2>{t("homeHeadermessage")}</h2>
+                <p>
+                  {t("At ")}
+                  <strong style={{ fontSize: "1.2em", color: "#007bff" }}>
+                    {t("companyName")}
+                  </strong>
+                  {t("homeIntro" )}
+                </p>
+                <Button variant="primary" href="/services">
+                  {t("exploreServices")}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      <section className="why-choose-us">
+        <Container>
+          <Row>
+            <Col md={12} className="text-center">
+              <h2>{t("whyChooseUs")}</h2>
+              <p>
+                {t("whyChooseMessage")}
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      <section className="features">
+        <Container>
+          <Row>
+            {features.map((feature, index) => (
+              <Col key={index} xs={12} sm={6} md={4} lg={4} className="mb-4">
+                <Card className="feature-card">
+                  <Card.Img variant="top" src={feature.imgSrc} />
+                  <Card.Body>
+                    <Card.Title>{t(feature.title)}</Card.Title>
+                    <Card.Text>{t(feature.description)}</Card.Text>
+                    <Button variant="primary" href="/learn-more">
+                      {t("learnMore")}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+    </div>
   );
 };
 

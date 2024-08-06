@@ -19,6 +19,7 @@ import User from "./components/screen/User";
 import FunctionWithList from "./components/screen/FunctionWithList";
 import DashboardNormal from "./components/screen/DashboardNormal";
 import DashboardAdmin from "./components/screen/DashboardNormal";
+import ServicePage from "./components/screen/Services";
 
 const Router = () => {
   return (
@@ -43,6 +44,7 @@ const Router = () => {
           <Route path="transaction-wo-history" element={<TransactionWoHistory />} />
           <Route path="function" element={<FunctionWithList/>} />
           <Route path="user" element={<User/>} />
+          <Route path="services" element={<ServicePage/>}/>
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

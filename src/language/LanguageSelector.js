@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from './LanguageContext';
 import { Dropdown } from 'react-bootstrap';
-import { BsGlobe } from 'react-icons/bs';
+import { FaLanguage } from 'react-icons/fa';
 import styled from 'styled-components';
 
 // Styled components for custom dropdown styling
@@ -34,7 +34,7 @@ const LanguageSelector = () => {
   return (
     <Dropdown className="language-selector">
       <CustomDropdownToggle id="dropdown-basic">
-        <BsGlobe className="language-icon" />
+        <FaLanguage className="language-icon" size={24} />
       </CustomDropdownToggle>
 
       <CustomDropdownMenu>
