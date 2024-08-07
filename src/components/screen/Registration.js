@@ -125,6 +125,7 @@ const Registration = () => {
       <Header
         titles={[t("registration")]}
         links={[{ to: "/", label: t("") }]}
+        showLanguageSelector={false}
       />
       <CardBody>
         {isLoading ? (

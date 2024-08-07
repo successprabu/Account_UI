@@ -39,28 +39,30 @@ const LanguageSelectorWrapper = styled.div`
   align-items: center;
 `;
 
-const Header = ({ titles, links }) => {
-    return (
-      <HeaderContainer>
-        <HeadingTitle>
-          {titles.map((title, index) => (
-            <span key={index} style={{ marginRight: index < titles.length - 1 ? "1rem" : "0" }}>
-              {title}
-            </span>
-          ))}
-        </HeadingTitle>
-        <HeaderLinks>
-          {links.map((link, index) => (
-            <HeadingLink key={index} to={link.to}>
-              {link.label}
-            </HeadingLink>
-          ))}
+const Header = ({ titles, links, showLanguageSelector = true }) => {
+  return (
+    <HeaderContainer>
+      <HeadingTitle>
+        {titles.map((title, index) => (
+          <span key={index} style={{ marginRight: index < titles.length - 1 ? "1rem" : "0" }}>
+            {title}
+          </span>
+        ))}
+      </HeadingTitle>
+      <HeaderLinks>
+        {links.map((link, index) => (
+          <HeadingLink key={index} to={link.to}>
+            {link.label}
+          </HeadingLink>
+        ))}
+        {showLanguageSelector && (
           <LanguageSelectorWrapper>
             <LanguageSelector />
           </LanguageSelectorWrapper>
-        </HeaderLinks>
-      </HeaderContainer>
-    );
-  };
-  
-  export default Header;
+        )}
+      </HeaderLinks>
+    </HeaderContainer>
+  );
+};
+
+export default Header;

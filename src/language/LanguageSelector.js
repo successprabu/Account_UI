@@ -6,25 +6,25 @@ import styled from 'styled-components';
 
 // Styled components for custom dropdown styling
 const CustomDropdownToggle = styled(Dropdown.Toggle)`
-  background-color: #0e2238;
-  color: white; /* Set text color to white */
-  border: none; /* Remove border */
+  background-color: ${({ bgColor }) => bgColor || '#0e2238'};
+  color: ${({ textColor }) => textColor || 'white'};
+  border: none;
   &:hover {
-    background-color: #0a1e2d; /* Slightly darker shade for hover effect */
+    background-color: ${({ hoverColor }) => hoverColor || '#0a1e2d'};
   }
 `;
 
 const CustomDropdownMenu = styled(Dropdown.Menu)`
-  background-color: #0e2238; /* Match the background color of the toggle */
+  background-color: ${({ bgColor }) => bgColor || '#0e2238'};
   .dropdown-item {
-    color: white; /* Set text color for dropdown items */
+    color: ${({ textColor }) => textColor || 'white'};
     &:hover {
-      background-color: #0a1e2d; /* Darker shade on hover */
+      background-color: ${({ hoverColor }) => hoverColor || '#0a1e2d'};
     }
   }
 `;
 
-const LanguageSelector = () => {
+const LanguageSelector = ({ backgroundColor, textColor, hoverColor }) => {
   const { changeLanguage } = useLanguage();
 
   const handleLanguageChange = (language) => {
@@ -33,13 +33,26 @@ const LanguageSelector = () => {
 
   return (
     <Dropdown className="language-selector">
-      <CustomDropdownToggle id="dropdown-basic">
+      <CustomDropdownToggle 
+        id="dropdown-basic" 
+        bgColor={backgroundColor} 
+        textColor={textColor} 
+        hoverColor={hoverColor}
+      >
         <FaLanguage className="language-icon" size={24} />
       </CustomDropdownToggle>
 
-      <CustomDropdownMenu>
-        <Dropdown.Item onClick={() => handleLanguageChange('en')}>English</Dropdown.Item>
-        <Dropdown.Item onClick={() => handleLanguageChange('ta')}>தமிழ்</Dropdown.Item>
+      <CustomDropdownMenu 
+        bgColor={backgroundColor} 
+        textColor={textColor} 
+        hoverColor={hoverColor}
+      >
+        <Dropdown.Item onClick={() => handleLanguageChange('en')}>
+          English
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => handleLanguageChange('ta')}>
+          தமிழ்
+        </Dropdown.Item>
       </CustomDropdownMenu>
     </Dropdown>
   );

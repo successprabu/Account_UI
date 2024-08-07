@@ -48,7 +48,11 @@ const AppHeader = () => {
             <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
             <StyledNavLink to='/contactus'>{t('contact_us')}</StyledNavLink>
             <StyledNavLink to='/login'>{t('login')}</StyledNavLink>
-            <LanguageSelector />
+            <LanguageSelector
+              backgroundColor="white"  // Background color for the language selector
+              textColor="#0e2238"           // Text color for the language selector
+              hoverColor="#0056b3"       // Hover color for the language selector
+            />
           </Nav>
         </NavbarCollapse>
       </Container>
