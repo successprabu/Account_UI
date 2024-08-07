@@ -1,27 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Form,
   FormGroup,
-  FormControl,
   FormLabel,
   Button,
   Card,
-  CardHeader,
   CardBody,
   Col,
   Row,
-  FormCheck,
-  InputGroup
+  FormCheck
 } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import i18n from "../../language/i18n";
 import { SAVE_NEW_CUSTOMER_API } from "../common/CommonApiURL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Oval } from 'react-loader-spinner';
+import Header from "../common/Header";
+import InputWithMicrophone from "../common/InputWithMicrophone";
+import "./css/Registration.css"; // Ensure you import the CSS file
+
+
 
 const Registration = () => {
   const { t } = useTranslation();
@@ -44,14 +44,12 @@ const Registration = () => {
     updateddBy: "SYSTEM",
     updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: true,
-    password: "SYSTEM",
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [isRecording, setIsRecording] = useState(false);
-  const [transcript, setTranscript] = useState("");
-  const recognitionRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showMandatoryOnly, setShowMandatoryOnly] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -118,43 +116,19 @@ const Registration = () => {
     }
   };
 
-  const startRecording = () => {
-    setIsRecording(true);
-    recognitionRef.current = new window.webkitSpeechRecognition();
-    recognitionRef.current.lang = "ta-IN"; // Set language to Tamil
-    recognitionRef.current.onresult = (event) => {
-      setTranscript(event.results[0][0].transcript);
-      setFormData({
-        ...formData,
-        address_line1: event.results[0][0].transcript,
-      });
-    };
-    recognitionRef.current.start();
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
-  };
-
-  const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+  const handleShowMandatoryOnlyChange = (e) => {
+    setShowMandatoryOnly(e.target.checked);
   };
 
   return (
     <Card className="mt-1">
-      <CardHeader>
-        <h4 className="mb-0 text-primary">{t('registration')}</h4>
-      </CardHeader>
+      <Header
+        titles={[t("registration")]}
+        links={[{ to: "/", label: t("") }]}
+      />
       <CardBody>
         {isLoading ? (
-          <div className="text-center">
+          <div className="loading-container">
             <Oval
               height={80}
               width={80}
@@ -165,23 +139,31 @@ const Registration = () => {
               strokeWidth={2}
               strokeWidthSecondary={2}
             />
+            <p className="loading-text">{t('processing_your_request')}...</p>
           </div>
         ) : (
           <Form className="text-primary w-100" onSubmit={handleSubmit}>
+            <FormGroup controlId="showMandatoryOnly" className="mb-3">
+              <FormCheck
+                type="checkbox"
+                label={t('display_mandatory_fields_only')}
+                checked={showMandatoryOnly}
+                onChange={handleShowMandatoryOnlyChange}
+              />
+            </FormGroup>
             <Row className="mb-3">
               <Col xs={12} md={4}>
                 <FormGroup controlId="txtname">
                   <FormLabel>
                     {t('name')}<span className="text-danger">*</span>
                   </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_name')}
+                  <InputWithMicrophone
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
+                    placeholder={t('enter_name')}
+                    error={errors.name}
                   />
-                  {errors.name && <div className="text-danger">{errors.name}</div>}
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
@@ -189,14 +171,13 @@ const Registration = () => {
                   <FormLabel>
                     {t('primary_phone')}<span className="text-danger">*</span>
                   </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_primary_phone')}
+                  <InputWithMicrophone
                     name="primary_phone"
                     value={formData.primary_phone}
                     onChange={handleChange}
+                    placeholder={t('enter_primary_phone')}
+                    error={errors.primary_phone}
                   />
-                  {errors.primary_phone && <div className="text-danger">{errors.primary_phone}</div>}
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
@@ -204,208 +185,197 @@ const Registration = () => {
                   <FormLabel>
                     {t('otp')} <span className="text-danger">*</span>
                   </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_otp')}
+                  <InputWithMicrophone
                     name="otp"
                     value={formData.otp}
                     onChange={handleChange}
-                  />
-                  {errors.otp && <div className="text-danger">{errors.otp}</div>}
-                </FormGroup>
-              </Col>           
-            </Row>
-
-            <Row className="mb-3">
-              <Col xs={12} md={4}>
-                <FormGroup controlId="secondary_phone">
-                  <FormLabel>
-                    {t('secondary_phone')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_secondary_phone')}
-                    name="secondary_phone"
-                    value={formData.secondary_phone}
-                    onChange={handleChange}
-                  />
-                  {errors.secondary_phone && <div className="text-danger">{errors.secondary_phone}</div>}
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4} className="d-flex align-items-center">
-                <FormGroup id="is_primary_phone_whatsup">
-                  <FormCheck
-                    type="checkbox"
-                    label={t('is_primary_phone_whatsup')}
-                    name="is_primary_phone_whatsup"
-                    checked={formData.is_primary_phone_whatsup}
-                    onChange={handleCheckboxChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4} className="d-flex align-items-center">
-                <FormGroup id="is_secondary_phone_whatsup">
-                  <FormCheck
-                    type="checkbox"
-                    label={t('is_secondary_phone_whatsup')}
-                    name="is_secondary_phone_whatsup"
-                    checked={formData.is_secondary_phone_whatsup}
-                    onChange={handleCheckboxChange}
+                    placeholder={t('enter_otp')}
+                    error={errors.otp}
                   />
                 </FormGroup>
               </Col>
             </Row>
-
             <Row className="mb-3">
-              <Col xs={12} md={4}>
-                <FormGroup controlId="email">
-                  <FormLabel>
-                    {t('email')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_email')}
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
               <Col xs={12} md={4}>
                 <FormGroup controlId="password">
                   <FormLabel>
                     {t('password')} <span className="text-danger">*</span>
                   </FormLabel>
-                  <FormControl
-                    type="password"
-                    placeholder={t('enter_password')}
+                  <InputWithMicrophone
                     name="password"
+                    type="password" 
                     value={formData.password}
                     onChange={handleChange}
+                    placeholder={t('enter_password')}
+                    error={errors.password}
                   />
-                  {errors.password && <div className="text-danger">{errors.password}</div>}
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
                 <FormGroup controlId="conpassword">
                   <FormLabel>
-                    {t('conpassword')} <span className="text-danger">*</span>
+                    {t('confirm_password')} <span className="text-danger">*</span>
                   </FormLabel>
-                  <FormControl
-                    type="password"
-                    placeholder={t('enter_confirm_password')}
+                  <InputWithMicrophone
                     name="conpassword"
+                    type="password"
                     value={formData.conpassword}
                     onChange={handleChange}
+                    placeholder={t('confirm_password')}
+                    error={errors.conpassword}
                   />
-                  {errors.conpassword && <div className="text-danger">{errors.conpassword}</div>}
                 </FormGroup>
               </Col>
+              <Col xs={12} md={4}>
+                    <FormGroup controlId="pincode">
+                      <FormLabel>
+                        {t('pincode')}<span className="text-danger">*</span>
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        placeholder={t('enter_pincode')}
+                        error={errors.pincode}
+                      />
+                    </FormGroup>
+                  </Col>
             </Row>
 
-            <Row className="mb-3">
-              <Col xs={12} md={4}>
-                <FormGroup controlId="country">
-                  <FormLabel>
-                    {t('country')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_country')}
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="state">
-                  <FormLabel>
-                    {t('state')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_state')}
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="district">
-                  <FormLabel>
-                    {t('district')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_district')}
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
+            {!showMandatoryOnly && (
+              <>
+                {/* <Row className="mb-3">
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="secondary_phone">
+                      <FormLabel>
+                        {t('secondary_phone')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="secondary_phone"
+                        value={formData.secondary_phone}
+                        onChange={handleChange}
+                        placeholder={t('enter_secondary_phone')}
+                        error={errors.secondary_phone}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4} className="d-flex align-items-center">
+                    <FormGroup id="is_primary_phone_whatsup">
+                      <FormCheck
+                        type="checkbox"
+                        label={t('is_primary_phone_whatsup')}
+                        name="is_primary_phone_whatsup"
+                        checked={formData.is_primary_phone_whatsup}
+                        onChange={handleCheckboxChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4} className="d-flex align-items-center">
+                    <FormGroup id="is_secondary_phone_whatsup">
+                      <FormCheck
+                        type="checkbox"
+                        label={t('is_secondary_phone_whatsup')}
+                        name="is_secondary_phone_whatsup"
+                        checked={formData.is_secondary_phone_whatsup}
+                        onChange={handleCheckboxChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row> */}
+                <Row className="mb-3">
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="country">
+                      <FormLabel>
+                        {t('country')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        placeholder={t('enter_country')}
+                        error={errors.country}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="state">
+                      <FormLabel>
+                        {t('state')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        placeholder={t('enter_state')}
+                        error={errors.state}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="district">
+                      <FormLabel>
+                        {t('district')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        placeholder={t('enter_district')}
+                        error={errors.district}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="address_line1">
+                      <FormLabel>
+                        {t('address_line1')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="address_line1"
+                        value={formData.address_line1}
+                        onChange={handleChange}
+                        placeholder={t('enter_address_line1')}
+                        error={errors.address_line1}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <FormGroup controlId="address_line2">
+                      <FormLabel>
+                        {t('address_line2')}
+                      </FormLabel>
+                      <InputWithMicrophone
+                        name="address_line2"
+                        value={formData.address_line2}
+                        onChange={handleChange}
+                        placeholder={t('enter_address_line2')}
+                        error={errors.address_line2}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col xs={12} md={4} className="d-flex align-items-center">
+                    <FormGroup id="is_primary_phone_whatsup">
+                      <FormCheck
+                        type="checkbox"
+                        label={t('is_primary_phone_whatsup')}
+                        name="is_primary_phone_whatsup"
+                        checked={formData.is_primary_phone_whatsup}
+                        onChange={handleCheckboxChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </>
+            )}            
+            <Row>
+              <Col xs={12} className="text-center">
+                <Button type="submit" variant="success">
+                  {t('register')}
+                </Button>
               </Col>
             </Row>
-
-            <Row className="mb-3">
-              <Col xs={12} md={4}>
-                <FormGroup controlId="address_line1">
-                  <FormLabel>
-                    {t('address_line1')}
-                  </FormLabel>
-                  <InputGroup>
-                    <FormControl
-                      type="text"
-                      placeholder={t('enter_address_line1')}
-                      name="address_line1"
-                      value={formData.address_line1}
-                      onChange={handleChange}
-                    />
-                    <Button variant={isRecording ? "danger" : "primary"} onClick={toggleRecording}>
-                      <FontAwesomeIcon icon={isRecording ? faMicrophoneSlash : faMicrophone} />
-                    </Button>
-                  </InputGroup>
-                  {errors.address_line1 && <div className="text-danger">{errors.address_line1}</div>}
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="address_line2">
-                  <FormLabel>
-                    {t('address_line2')}
-                  </FormLabel>
-                  <FormControl
-                    type="text"
-                    placeholder={t('enter_address_line2')}
-                    name="address_line2"
-                    value={formData.address_line2}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={12} md={4}>
-                <FormGroup controlId="pincode">
-                  <FormLabel>
-                    {t('pincode')}
-                  </FormLabel>
-                  <FormControl
-                    type="number"
-                    placeholder={t('enter_pincode')}
-                    name="pincode"
-                    value={formData.pincode}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-                          
-            </Row>
-
-            <Button type="submit" variant="success" className="me-3">
-              {t('save')}
-            </Button>
-            <Button type="button" variant="secondary">
-              {t('cancel')}
-            </Button>
           </Form>
         )}
       </CardBody>

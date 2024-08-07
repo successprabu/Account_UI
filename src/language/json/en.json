@@ -14,7 +14,7 @@
   "Transaction Report": "Transaction Report",
   "Setting": "Setting",
   "Logout": "Logout",
-    "registration": "Registration",
+    "registration": "Please Register here to Try Demo",
     "name": "Name",
     "email": "Email",
     "enter_email": "Enter your email",
@@ -29,7 +29,7 @@
     "enter_otp": "Enter OTP sent to your mobile/email",
     "password": "Password",
     "enter_password": "Enter your password",
-    "conpassword": "Confirm Password",
+    "confirm_password": "Confirm Password",
     "enter_conpassword": "Confirm your password",
     "address_line1": "Address Line 1",
     "enter_address_line1": "Enter your address line 1",
@@ -149,7 +149,10 @@
  "whyChooseUs": "Why Choose Us?",
  "whyChooseMessage":"Discover the reasons our clients trust us to deliver exceptional results. Our innovative solutions, tailored services, and expert support are designed to help your business thrive.",
  "userType":"You Are Login As",
- "no_user_found": "Invalid User"
+ "no_user_found": "Invalid User",
+ "display_mandatory_fields_only":"Show Mandatory Fields Only",
+ "register":"Register",
+ "processing_your_request": "Processing Your Request..."
 
   }
   
