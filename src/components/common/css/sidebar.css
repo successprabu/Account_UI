@@ -29,9 +29,8 @@ body {
 
 .wrapper {
     display: flex;
-    height: 100%;
+    min-height: 100vh; /* Ensures the wrapper adjusts to the content height */
 }
-
 .main {
     min-height: 100vh;
     width: 100%;
@@ -41,7 +40,8 @@ body {
 }
 
 #sidebar {
-    height: 100dvh;
+    height: auto; /* Allows sidebar to adjust based on the content height */
+    flex-grow: 1; /* Ensures the sidebar grows to fill the height of the wrapper */
     width: 70px;
     min-width: 70px;
     z-index: 1000;
