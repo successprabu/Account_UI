@@ -147,7 +147,9 @@
  "homeHeadermessage":"Transforming Businesses with Cutting-Edge Solutions",
  "homeIntro":"we specialize in delivering innovative and tailored solutions designed to propel your business forward. Our comprehensive suite of services is crafted to address the unique needs of your industry, ensuring that you remain ahead of the competition.",
  "whyChooseUs": "Why Choose Us?",
- "whyChooseMessage":"Discover the reasons our clients trust us to deliver exceptional results. Our innovative solutions, tailored services, and expert support are designed to help your business thrive."
+ "whyChooseMessage":"Discover the reasons our clients trust us to deliver exceptional results. Our innovative solutions, tailored services, and expert support are designed to help your business thrive.",
+ "userType":"You Are Login As",
+ "no_user_found": "Invalid User"
 
   }
   

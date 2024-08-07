@@ -17,8 +17,8 @@ import TransactionList from "./components/screen/list/TransactionList";
 import TransactionWoHistory from "./components/screen/TransactionWoHistory";
 import User from "./components/screen/User";
 import FunctionWithList from "./components/screen/FunctionWithList";
-import DashboardNormal from "./components/screen/DashboardNormal";
-import DashboardAdmin from "./components/screen/DashboardNormal";
+import DashboardUser from "./components/screen/DashboardUser";
+import DashboardAdmin from "./components/screen/DashboardUser";
 import ServicePage from "./components/screen/Services";
 
 const Router = () => {
@@ -30,7 +30,7 @@ const Router = () => {
           <Route path="purchase" element={<Registration />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="admin-dashboard" element={<DashboardAdmin />} />
-          <Route path="user-dashboard" element={<DashboardNormal />} />
+          <Route path="user-dashboard" element={<DashboardUser />} />
           <Route path="purchase:id" element={<Registration />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="contactus" element={<ContactUsLayout />}>

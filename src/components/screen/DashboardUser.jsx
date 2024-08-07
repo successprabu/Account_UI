@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import Header from "../common/Header";
 
 
-const DashboardAdmin = () => {
+const DashboardUser = () => {
   const [showClientListModal, setShowClientListModal] = useState(false);
 
   const handleShowClientListModal = () => setShowClientListModal(true);
@@ -86,6 +86,4 @@ const DashboardAdmin = () => {
     </div>
   );
 };
-export default DashboardAdmin;
-
-
+export default DashboardUser;

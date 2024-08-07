@@ -4,22 +4,20 @@ import "../../../App.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { loginSchema } from "../../../validations/ValidationSchema";
-import { LOGIN_API, LOGIN_USER_ACCOUNT_CHECK_API } from "../../common/CommonApiURL";
+import { LOGIN_API } from "../../common/CommonApiURL";
 import axios from "axios";
 import { ClipLoader } from 'react-spinners';  // Importing a loader from react-spinners
 
-const Login = () => {
+const OldLogin = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    userType: 'AU',
-    userTypeDescription: ''
+    userType:'AU'
   });
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false);  // Loading state
-  const [userTypes, setUserTypes] = useState([]);  // User types state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,50 +25,6 @@ const Login = () => {
     setFormData({
       ...formData,
       [name]: value
-    });
-  };
-
-  const handleUsernameBlur = async () => {
-    try {
-      //const response = await axios.get(`http://localhost/api/Auth/UserAccountCheck?userName=${formData.username}&appName=MOI`);
-       const response = await axios.get(`${LOGIN_USER_ACCOUNT_CHECK_API}userName=${formData.username}&appName=MOI`);
-      const data = response.data;
-      if (data.result && data.data.length > 0) {
-        const uniqueUserTypes = [...new Set(data.data.map(item => item.userType))];
-        const userTypesWithDescriptions = uniqueUserTypes.map(userType => {
-          const userTypeInfo = data.data.find(item => item.userType === userType);
-          return {
-            userType: userTypeInfo.userType,
-            userTypeDescription: userTypeInfo.userTypeDescription
-          };
-        });
-
-        if (uniqueUserTypes.length === 1) {
-          setFormData({
-            ...formData,
-            userType: userTypesWithDescriptions[0].userType,
-            userTypeDescription: userTypesWithDescriptions[0].userTypeDescription
-          });
-          setUserTypes([]);
-        } else {
-          setUserTypes(userTypesWithDescriptions);
-        }
-      } else {
-        setLoginError(t("no_user_found"));
-        setUserTypes([]);
-      }
-    } catch (error) {
-      setLoginError(t("an_error_occurred"));
-      setUserTypes([]);
-    }
-  };
-
-  const handleUserTypeChange = (e) => {
-    const selectedUserType = userTypes.find(type => type.userType === e.target.value);
-    setFormData({
-      ...formData,
-      userType: selectedUserType.userType,
-      userTypeDescription: selectedUserType.userTypeDescription
     });
   };
 
@@ -84,9 +38,11 @@ const Login = () => {
         // Axios post request
         const response = await axios.post(LOGIN_API, formData);
         const data = response.data;
+        console.log(data.message);
+
         if (data.result) {
           localStorage.setItem('user', JSON.stringify(data.data));
-          navigate('/dashboard');  
+          navigate('/dashboard');  // Change to your dashboard route
         } else {
           setLoginError(data.message);
         }
@@ -120,7 +76,6 @@ const Login = () => {
               className="form-control"
               value={formData.username}
               onChange={handleChange}
-              onBlur={handleUsernameBlur}  // Call API when username input loses focus
             />
           </div>
           <div className="m2 text-primary">
@@ -134,30 +89,17 @@ const Login = () => {
               onChange={handleChange}
             />
           </div>
-          {userTypes.length > 1 && (
-            <div className="m2 text-primary">
-              <label htmlFor="userType">{t("userType")}</label>
-              <select
-                name="userType"
-                className="form-control"
-                value={formData.userType}
-                onChange={handleUserTypeChange}
-              >
-                {userTypes.map((type, index) => (
-                  <option key={index} value={type.userType}>
-                    {type.userTypeDescription}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          <div className="m2">
+            <input type="checkbox" className="custom-control custom-checkbox" id='check' />
+            <label htmlFor='check' className='custom-input-label m-2'>{t("remember_me")}</label>
+          </div>
           <div className="d-grid">
             <button className="btn btn-primary m-2" disabled={loading}>
               {loading ? <ClipLoader size={20} color={"#ffffff"} /> : t("sign_in")}
             </button>
           </div>
           <p className="text-center">
-            <a href="" >{t("forgot_password")} </a><Link to="/purchase" className="m-5">{t("sign_up")}</Link>
+            <a href="">{t("forgot_password")}</a><Link to="/purchase" className="m-2">{t("sign_up")}</Link>
           </p>
         </form>
       </div>
@@ -165,4 +107,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default OldLogin;

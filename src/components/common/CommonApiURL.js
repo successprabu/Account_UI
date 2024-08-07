@@ -5,6 +5,7 @@ export const MASTER = `Master/`
 export const AUTH = `Auth/`
 export const TRANSACTION = `Transaction/`
 export const LOGIN_API = `${BASE_URL}${AUTH}UserLogin`
+export const LOGIN_USER_ACCOUNT_CHECK_API = `${BASE_URL}${AUTH}UserAccountCheck?`
 export const SAVE_NEW_CUSTOMER_API = `${BASE_URL}${AUTH}AddCustomer`
 export const SAVE_NEW_USER_API = `${AUTH}AddCustomer`
 export const SAVE_FUNCTION_API=`${MASTER}UpdateCustomerFunction`
