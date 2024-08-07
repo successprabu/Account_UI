@@ -1,0 +1,185 @@
+[33mcommit fb39f148befe7b3d7de866495f9d70e554706ef2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Aug 7 18:42:55 2024 +0530
+
+    Token expiry changes
+
+[33mcommit a193e3d6742c0133bec3e4a787bf692c9357deb9[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Aug 7 14:05:16 2024 +0530
+
+    header Lanuguage selector enable or disable & launguage selector  color send through param
+
+[33mcommit 1ce68151b0a8b9fe67ae145444cf8d1e3bbfdc8d[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Aug 7 13:33:26 2024 +0530
+
+    Registration page changes
+
+[33mcommit cfbee3d564a9f3f30dc180b86b0d7c4aff8ba2fd[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Aug 7 11:50:10 2024 +0530
+
+    Login changes
+
+[33mcommit 610ebe4d2a9b5a950b7cce30303cf2577e24f689[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Tue Aug 6 14:27:11 2024 +0530
+
+    Aboutus&ContactUs changes
+
+[33mcommit bb3a58fb90435cfd0f50106ff2ca10e901778601[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Tue Aug 6 12:51:46 2024 +0530
+
+    Home and Service page chagnes
+
+[33mcommit ffdbf12e2729eb2a6733a4b4fcca2a93280fb302[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Mon Aug 5 21:28:47 2024 +0530
+
+    Dashboard changes
+
+[33mcommit 4536b49987e7dfca67cb541557bed8bb04da2ff7[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sun Aug 4 20:34:48 2024 +0530
+
+    Role Based menu
+
+[33mcommit b1933042cf8f33eb063178b6ac201c5143c9525c[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Aug 3 22:49:04 2024 +0530
+
+    User add & List
+
+[33mcommit 8ec0b7813127395e957dd431a88797e09cf98fd0[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Aug 3 12:52:22 2024 +0530
+
+    Function & list changes
+
+[33mcommit 6bd96397d65deefcbc3f3f7da1cd5c10767a71ed[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Tue Jul 30 12:26:17 2024 +0530
+
+    Function chagnes
+
+[33mcommit f175c99fc036830ee98af9db05f2596062c79f22[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jul 27 22:11:46 2024 +0530
+
+    customer Edit changes
+
+[33mcommit b704b19b45daa6f65fcdd783af9aa8d9b7d76ff7[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jul 27 19:24:41 2024 +0530
+
+    sidebar changes
+
+[33mcommit 71705c8741a4a73b54ef2efd008f6bfd248c00e4[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jul 27 14:15:29 2024 +0530
+
+    list no record display changes
+
+[33mcommit 7f75543d1d865fbeb65ac2f91d3dbd539d9ed61e[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jul 27 10:50:02 2024 +0530
+
+    Client List chagnes
+
+[33mcommit d219ae3ebfce60db160a389a456e48ed5f8014b3[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Fri Jul 26 20:25:45 2024 +0530
+
+    customer List changes
+
+[33mcommit 21db8e346b351a48dd6adcff44ae00089337c601[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Fri Jul 26 18:38:17 2024 +0530
+
+    TransactonwoHistory added
+
+[33mcommit 0fbeda711f4d3b41b6132756498ae119c61ab275[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Fri Jul 26 18:27:36 2024 +0530
+
+    TranasactionPage changes
+
+[33mcommit 7d71794a0c48d065704d88b9f1bea3914f87d5c0[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Fri Jul 26 15:56:17 2024 +0530
+
+    stylecommon changes
+
+[33mcommit c52be0b979e9166c7af3ddb634fbdae54e2a9ec9[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Fri Jul 26 12:25:43 2024 +0530
+
+    header changes
+
+[33mcommit 047ba78a5300fca42ab1edbf44cf1d6edc42853a[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Jul 24 21:43:44 2024 +0530
+
+    trans edit&delete chagnes
+
+[33mcommit c210830ff8ae53a82ca008fc64bee971242eedc4[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Jul 24 19:59:08 2024 +0530
+
+    transactionListchanges
+
+[33mcommit 999517c0a0edc964eabe92523a36720d7d19b33e[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Tue Jul 23 20:34:53 2024 +0530
+
+    transaction changes
+
+[33mcommit c333e71c8ce9af826291707cd333c8352886c41d[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Wed Jul 17 17:02:00 2024 +0530
+
+    Transaction screen changes
+
+[33mcommit e6c9e06837443ce04bb554fbfd0e2486f426c9cb[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Thu Jun 27 16:07:17 2024 +0530
+
+    Multilanguage changes
+
+[33mcommit eaf293c99f9b64531709c9e9e073f2ae191c147a[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Thu Jun 20 13:40:39 2024 +0530
+
+    Updated souce update Authentication
+
+[33mcommit 7f9b15806cb37063e0b58361fd3c963645d247ed[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jun 8 19:01:02 2024 +0530
+
+    Sidebar changes
+
+[33mcommit e14e9d0a05a602da414042ae51c2228682972a72[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Sat Jun 8 17:32:36 2024 +0530
+
+    Fixed sidebar toggle functionality and adjusted CSS for height and text decoration
+
+[33mcommit 3dfbfa1ebd0a498d4ea039996126c98cc4544e73[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Thu Jun 6 21:34:44 2024 +0530
+
+    Toast issue fix
+
+[33mcommit 52d9bd22b8410bfad13ab596553a401f33e3bb08[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Thu Jun 6 16:54:16 2024 +0530
+
+    Initial commit
+
+[33mcommit dd9d5317d6d6f38a8e6f2eeb67f8a4008a93d399[m
+Author: antonyprabuv <96037775+antonyprabuv@users.noreply.github.com>
+Date:   Thu May 16 17:08:45 2024 +0530
+
+    Initialize project using Create React App
