@@ -36,10 +36,6 @@ const InputWithMicrophone = ({ name, value,type, onChange, placeholder, error })
       startRecording();
     }
   };
-
-
-
-
   return (
     <InputGroup>
       <FormControl

@@ -150,6 +150,7 @@
   "userType": "பயனர் வகை",
   "no_user_found": "தவறான பயனர்",
   "display_mandatory_fields_only":"கட்டாய புலங்களை மட்டும் காட்டு",
-  "processing_your_request": "உங்கள் கோரிக்கையை செயலாக்குகிறோம்..."
+  "processing_your_request": "உங்கள் கோரிக்கையை செயலாக்குகிறோம்...",
+   "help":"உதவி"
   }
   

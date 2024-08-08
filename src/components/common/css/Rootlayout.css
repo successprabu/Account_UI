@@ -1,13 +1,23 @@
+
+  /* Ensure the layout takes full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 .content-container {
-    display: flex;
-  }
-  
-  .SideBar {
-    width: 250px; /* Adjust the width as necessary */
-  }
-  
-  .outlet {
-    flex: 1;
-    padding: 0.5px; /* Adjust padding as necessary */
-  }
-  
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.sidebar {
+  width: 250px; /* Adjust the width as needed */
+  height: 100%; /* Full height */
+  overflow: auto; /* Allows scrolling if content overflows */
+}
+
+.outlet {
+  flex: 1; /* Takes the remaining space */
+  overflow-y: auto; /* Adds vertical scroll if content overflows */
+  padding: 0.1px; /* Adjust padding as necessary */
+}

@@ -1,5 +1,6 @@
+//working as expected
 import React, { useState, useEffect } from "react";
-import { Collapse, Nav } from "react-bootstrap";
+import { Collapse } from "react-bootstrap";
 import {
   BiUser,
   BiMenu,
@@ -8,7 +9,6 @@ import {
   BiBook,
   BiCog,
   BiExit,
-  BiHelpCircle,
 } from "react-icons/bi";
 import { FaTachometerAlt } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -21,10 +21,8 @@ const SideBar = () => {
   const [multiOpen, setMultiOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [userType, setUserType] = useState(null);
+  const [appName, setAppName] = useState(null);
   const [userName, setUserName] = useState(null);
-  const [designation, setDesignation] = useState(null);
-  const [userDetailsOpen, setUserDetailsOpen] = useState(false); 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login check
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -32,11 +30,8 @@ const SideBar = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setUserType(user.userType);
-      setUserName(user.name);
-      setDesignation(user.userTypeDescription);
-      setIsLoggedIn(true); // Set login state
-    } else {
-      setIsLoggedIn(false); // If no user, not logged in
+      setAppName(user.appName);
+      setUserName(user.userName);
     }
   }, []);
 
@@ -44,8 +39,7 @@ const SideBar = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("user");
-      setIsLoggedIn(false); // Set login state to false on logout
-      navigate("/");
+      navigate("/login");
     }
   };
 
@@ -64,7 +58,8 @@ const SideBar = () => {
   };
 
   const renderMenuItems = () => {
-    if (!userType) return null; 
+    if (!userType) return null;
+
     const isSuperAdmin = userType === "SU";
     const isAdminUser = userType === "AU";
     const isNormalUser = userType === "NU";
@@ -123,28 +118,28 @@ const SideBar = () => {
             <Collapse in={authOpen}>
               <ul id="auth" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/function"
+                  <NavLink
+                    to="/function"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("functionMaster")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/user"
+                  <NavLink
+                    to="/user"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("userMaster")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/purchase"
+                  <NavLink
+                    to="/purchase"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("clientMaster")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
               </ul>
             </Collapse>
@@ -176,20 +171,20 @@ const SideBar = () => {
             <Collapse in={multiOpen}>
               <ul id="multi" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/transaction"
+                  <NavLink
+                    to="/transaction"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("addTransaction")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/transaction-list"
+                  <NavLink
+                    to="/transaction-list"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("transactionList")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
               </ul>
             </Collapse>
@@ -221,19 +216,28 @@ const SideBar = () => {
             <Collapse in={reportOpen}>
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="#"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("Name Reports")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="#"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("Village Reports")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="#"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("Transaction Report")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
               </ul>
             </Collapse>
@@ -253,49 +257,26 @@ const SideBar = () => {
     );
   };
 
-  const handleUserDetailsToggle = () => {
-    setUserDetailsOpen(!userDetailsOpen);
-  };
-
-  // Render the sidebar only if isLoggedIn is true
-  if (!isLoggedIn) {
-    return null;
-  }
-
   return (
     <div className="wrapper">
-      <aside id="sidebar" className={isExpanded ? "expand" : ''}>
+      <aside id="sidebar" className={isExpanded ? "expand" : ""}>
         <div className="d-flex">
           <button className="toggle-btn" type="button" onClick={handleToggle}>
             <BiMenu />
           </button>
           <div className="sidebar-logo">
-            <a href="#"> {t("my_accounts")}</a>
+            <a href="#">{t("my_accounts")}</a>
           </div>
         </div>
-         <ul className="sidebar-nav">{renderMenuItems()}</ul>
-        
-        <div className="user-details" onClick={handleUserDetailsToggle}>
-          <BiUser />
-          <div className="user-info">
-            <div>{userName}</div>
-            <div>{designation}</div>
-          </div>
-          <span className={`dropdown-icon ${userDetailsOpen ? "expanded" : ""}`}></span>
-        </div> 
-        {userDetailsOpen &&  (
-          <div className="user-menu">
-            <NavLink to="/" onClick={handleLogout} className="sidebar-link">
-              <BiExit />
-              <span className="nav-text">{t("Logout")}</span>
-            </NavLink>
-            <NavLink to="/help" className="sidebar-link">
-              <BiBook />
-              <span className="nav-text">{t("help")}</span>
-            </NavLink>
-          </div>
-        )}
-
+        <ul className="sidebar-nav">{renderMenuItems()}</ul>
+        <div className="sidebar-footer">
+          <NavLink to="#" onClick={handleLogout} className="sidebar-link">
+            <BiExit />
+            <span className={isExpanded ? "nav-text" : "hidden"}>
+              {t("Logout")}
+            </span>
+          </NavLink>
+        </div>
       </aside>
     </div>
   );

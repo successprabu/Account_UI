@@ -11,19 +11,19 @@ const Home = () => {
       title: "Innovative Solutions",
       description:
         "Leverage cutting-edge technology to drive your business forward with our comprehensive suite of services. Our solutions are designed to meet the unique needs of your industry, helping you stay ahead of the competition.",
-      imgSrc: "/images/innovation.jpg", // Ensure these images exist in your public directory
+      imgSrc: "/images/innovation.png", // Ensure these images exist in your public directory
     },
     {
       title: "Tailored Services",
       description:
         "Experience personalized service with our custom solutions that fit your specific business requirements. From ERP systems to accounting software, we provide tools that are as unique as your business.",
-      imgSrc: "/images/services.jpg",
+      imgSrc: "/images/services.png",
     },
     {
       title: "Expert Support",
       description:
         "Our dedicated support team is here to assist you every step of the way. Whether you need troubleshooting, guidance, or advice, we're committed to ensuring your success and satisfaction.",
-      imgSrc: "/images/support.jpg",
+      imgSrc: "/images/support.png",
     },
   ];
 

@@ -152,7 +152,8 @@
  "no_user_found": "Invalid User",
  "display_mandatory_fields_only":"Show Mandatory Fields Only",
  "register":"Register",
- "processing_your_request": "Processing Your Request..."
+ "processing_your_request": "Processing Your Request...",
+ "help":"Help"
 
   }
   

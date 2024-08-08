@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppHeader from './AppHeader';
 import { Outlet } from 'react-router-dom';
 import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
 
 const Rootlayout = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-console.log(user,"userlogin")
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+    console.log(user,"userfromroot")
+  }, []);
   return (
     <div>
       {user ? (

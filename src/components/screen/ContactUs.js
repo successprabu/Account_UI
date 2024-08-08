@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import './css/ContactPage.css'; // Import the CSS file for styling
 
-const ContactPage = () => {
+const ContactUs = () => {
   return (
     <div>
       <section className="contact-us">
@@ -65,4 +65,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage;
+export default ContactUs;

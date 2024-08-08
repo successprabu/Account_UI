@@ -81,13 +81,16 @@ const Login = () => {
     try {
       const isValid = await loginSchema.isValid(formData);
       if (isValid) {
+        console.log('API input:', formData);
         // Axios post request
         const response = await axios.post(LOGIN_API, formData);
         const data = response.data;
+    
         console.log('API Response:', data);  // Debugging API response
         if (data.result) {
           localStorage.setItem('user', JSON.stringify(data.data));
-          navigate('/dashboard');  
+          navigate('/transaction');  
+         
         } else {
           setLoginError(data.message);
         }
