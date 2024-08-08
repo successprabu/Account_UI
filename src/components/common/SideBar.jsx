@@ -8,20 +8,24 @@ import {
   BiBook,
   BiCog,
   BiExit,
+  BiHelpCircle,
 } from "react-icons/bi";
-import { FaTachometerAlt } from 'react-icons/fa';
+import { FaTachometerAlt } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./css/sidebar.css";
-import LanguageSelector from "../../language/LanguageSelector";
 
 const SideBar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [multiOpen, setMultiOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [userType, setUserType] = useState(null);
   const [appName, setAppName] = useState(null);
+  const [userName, setUserName] = useState(null);
+  const [designation, setDesignation] = useState(null);
+  const [userDetailsOpen, setUserDetailsOpen] = useState(false); 
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -30,6 +34,8 @@ const SideBar = () => {
     if (user) {
       setUserType(user.userType);
       setAppName(user.appName);
+      setUserName(user.name);
+      setDesignation(user.designation);
     }
   }, []);
 
@@ -56,11 +62,12 @@ const SideBar = () => {
   };
 
   const renderMenuItems = () => {
-    if (!userType) return null;
-
+    if (!userType) return null; 
     const isSuperAdmin = userType === "SU";
     const isAdminUser = userType === "AU";
     const isNormalUser = userType === "NU";
+
+  
 
     return (
       <>
@@ -246,6 +253,9 @@ const SideBar = () => {
     );
   };
 
+  const handleUserDetailsToggle = () => {
+    setUserDetailsOpen(!userDetailsOpen);
+  };
   return (
     <div className="wrapper">
       <aside id="sidebar" className={isExpanded ? "expand" : ""}>
@@ -258,14 +268,28 @@ const SideBar = () => {
           </div>
         </div>
         <ul className="sidebar-nav">{renderMenuItems()}</ul>
-        <div className="sidebar-footer">
-          <NavLink to="#" onClick={handleLogout} className="sidebar-link">
-            <BiExit />
-            <span className={isExpanded ? "nav-text" : "hidden"}>
-              {t("Logout")}
-            </span>
-          </NavLink>
+        
+        <div className="user-details" onClick={handleUserDetailsToggle}>
+          <BiUser />
+          <div className="user-info">
+            <div>{userName}</div>
+            <div>{userType}</div>
+          </div>
+          <span className={`dropdown-icon ${userDetailsOpen ? "expanded" : ""}`}></span>
         </div>
+        {userDetailsOpen && (
+          <div className="user-menu">
+            <NavLink to="#" onClick={handleLogout} className="sidebar-link">
+              <BiExit />
+              <span className="nav-text">{t("Logout")}</span>
+            </NavLink>
+            <NavLink to="/help" className="sidebar-link">
+              <BiBook />
+              <span className="nav-text">{t("Help")}</span>
+            </NavLink>
+          </div>
+        )}
+
       </aside>
     </div>
   );

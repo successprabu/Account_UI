@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem('user'));
 
-  console.log('User:', user);
 
   if (!user) {
     console.log('User not found, redirecting to login.');

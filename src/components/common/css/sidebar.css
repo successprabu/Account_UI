@@ -205,3 +205,89 @@ a.sidebar-link:focus {
 #sidebar.expand .nav-text.hidden {
     display: inline;
 }
+
+/* User details styling */
+.user-details {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    color: #adb5bd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .user-info {
+    margin-left: 10px;
+    display: none;
+    flex-direction: column;
+    max-width: 100px; /* Adjust width to fit within the sidebar */
+  }
+  
+  #sidebar.expand .user-info {
+    display: flex;
+  }
+  
+  .user-info div:first-child {
+    text-transform: capitalize; /* Ensure Sentence Case */
+    font-weight: bold; /* Bold the username */
+    font-size: 0.9rem; /* Adjust font size for better fit */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .user-info div:last-child {
+    font-size: 0.8rem;
+    color: #adb5bd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .dropdown-icon {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+  }
+  
+  .dropdown-icon.expanded {
+    transform: rotate(90deg);
+  }
+  
+  /* User menu styling */
+  .user-menu {
+    padding-left: 30px;
+  }
+  
+  .user-menu .sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #adb5bd;
+  }
+  
+  .user-menu .sidebar-link:hover {
+    background-color: #495057;
+    color: #fff;
+  }
+  
+  /* Adjust sidebar width for better fit */
+  #sidebar {
+    min-width: 70px;
+    max-width: 200px;
+    transition: all 0.3s ease;
+  }
+  
+  #sidebar.expand {
+    max-width: 200px;
+  }
+  
+  #sidebar:not(.expand) .user-info {
+    display: none;
+  }
+  
+  #sidebar:not(.expand) .user-details {
+    justify-content: center;
+  }
+  
