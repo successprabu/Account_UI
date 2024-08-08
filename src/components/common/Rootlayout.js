@@ -1,13 +1,12 @@
 import React from 'react';
 import AppHeader from './AppHeader';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
 
 const Rootlayout = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  const location = useLocation();
-
+console.log(user,"userlogin")
   return (
     <div>
       {user ? (

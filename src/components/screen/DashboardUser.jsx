@@ -79,10 +79,10 @@ const DashboardUser = () => {
         </Modal.Footer>
       </Modal>
 
-      <div>
+      {/* <div>
         <h1>{t("recentlyCreated")}</h1>
         <ClientList showHeader={false} />
-      </div>
+      </div> */}
     </div>
   );
 };

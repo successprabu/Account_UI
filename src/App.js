@@ -7,6 +7,11 @@ import { LanguageProvider } from "./language/LanguageContext";
 import Router from "./Router"; 
 
 function App() {
+  React.useEffect(() => {
+    console.log('App rendered');
+    console.log('Local Storage:', localStorage.getItem('user'));
+  }, []);
+
   return (
     <LanguageProvider>
       <Router />

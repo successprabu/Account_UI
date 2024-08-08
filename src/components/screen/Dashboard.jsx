@@ -25,6 +25,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
+    console.log(user,'userinDashboard')
     if (user) {
       const userDetail = JSON.parse(user);
     } else {
@@ -79,10 +80,10 @@ const Dashboard = () => {
         </Modal.Footer>
       </Modal>
 
-      <div>
+      {/* <div>
         <h1>{t("recentlyCreated")}</h1>
         <ClientList showHeader={false} />
-      </div>
+      </div> */}
     </div>
   );
 };
