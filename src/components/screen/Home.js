@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import "./css/HomePage.css"; // Import the CSS file for styling
+import AppHeader from "../common/AppHeader";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -29,6 +30,7 @@ const Home = () => {
 
   return (
     <div>
+      <div><AppHeader/></div>
       <section className="hero">
         <Container>
           <Row className="align-items-center">

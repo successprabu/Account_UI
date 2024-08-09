@@ -27,9 +27,8 @@ const SideBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login check
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setUserType(user.userType);
       setUserName(user.name);
@@ -45,7 +44,7 @@ const SideBar = () => {
     if (confirmLogout) {
       localStorage.removeItem("user");
       setIsLoggedIn(false); // Set login state to false on logout
-      navigate("/");
+      navigate("/login");
     }
   };
 
@@ -258,9 +257,9 @@ const SideBar = () => {
   };
 
   // Render the sidebar only if isLoggedIn is true
-  if (!isLoggedIn) {
-    return null;
-  }
+  // if (!isLoggedIn) {
+  //   return null;
+  // }
 
   return (
     <div className="wrapper">

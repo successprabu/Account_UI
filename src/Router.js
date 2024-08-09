@@ -22,16 +22,18 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Rootlayout />}>        
-          <Route index element={<Home />} />
-          <Route path="purchase" element={<Registration />} />
-          <Route path="contactus" element={<ContactUs />} />
-          <Route
+      <Route path="login" element={<Login />} />
+      <Route path="purchase:id" element={<Registration />} />
+      <Route path="purchase" element={<Registration />} />
+      <Route path="contactus" element={<ContactUs />} />
+      <Route index element={<Home />} />
+      <Route path="about" element={<AboutUs />} />
+
+        <Route path="/" element={<Rootlayout />}>       
+           <Route
             path="dashboard"
             element={<RoleBasedDashboard/> }
-          />
-          <Route path="purchase:id" element={<Registration />} />
-          <Route path="about" element={<AboutUs />} />
+          />     
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route
             path="client-list"
@@ -40,9 +42,7 @@ const Router = () => {
                 <ClientList />
               </ProtectedRoute>
             }
-          />
-
-          <Route path="login" element={<Login />} />
+          />        
           <Route
             path="transaction"
             element={

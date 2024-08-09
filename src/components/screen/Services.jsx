@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { FaUsers, FaMoneyCheckAlt, FaCog, FaAnchor } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import './css/ServicePage.css'; // Import the CSS file for styling
+import AppHeader from '../common/AppHeader';
 
 const ServicePage = () => {
   const { t } = useTranslation();
@@ -33,6 +34,9 @@ const ServicePage = () => {
 
   return (
     <div>
+      <div>
+        <AppHeader />
+      </div>
       <section className="hero">
         <div className="hero-content">
           <h1>{t("ourServices")}</h1>

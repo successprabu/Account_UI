@@ -7,11 +7,10 @@ import './css/Rootlayout.css'; // Import the CSS file
 const Rootlayout = () => {
 
   const [user, setUser] = useState(null);
-
+  const storedUser = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
     setUser(storedUser);
-    console.log(user,"userfromroot")
+    //console.log(user,"userfromroot")
   }, []);
   return (
     <div>

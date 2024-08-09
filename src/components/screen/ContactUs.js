@@ -1,10 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import './css/ContactPage.css'; // Import the CSS file for styling
+import AppHeader from '../common/AppHeader';
 
 const ContactUs = () => {
   return (
     <div>
+          <div><AppHeader/></div>
       <section className="contact-us">
         <Container>
           <Row className="text-center">
