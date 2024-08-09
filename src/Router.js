@@ -27,6 +27,7 @@ const Router = () => {
       <Route path="purchase" element={<Registration />} />
       <Route path="contactus" element={<ContactUs />} />
       <Route index element={<Home />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="about" element={<AboutUs />} />
 
         <Route path="/" element={<Rootlayout />}>       

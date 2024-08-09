@@ -36,15 +36,24 @@ const Login = () => {
 
   const handleUsernameBlur = async () => {
     try {
-      //const response = await axios.get(`http://localhost/api/Auth/UserAccountCheck?userName=${formData.username}&appName=MOI`);
+      setLoginError([]);
       const response = await axios.get(
         `${LOGIN_USER_ACCOUNT_CHECK_API}userName=${formData.username}&appName=MOI`
       );
       const data = response.data;
+  
       if (data.result && data.data.length > 0) {
+        // Set the form data with the 0th value initially
+        setFormData({
+          ...formData,
+          userType: data.data[0].userType,
+          userTypeDescription: data.data[0].userTypeDescription,
+        });
+  
         const uniqueUserTypes = [
           ...new Set(data.data.map((item) => item.userType)),
         ];
+  
         const userTypesWithDescriptions = uniqueUserTypes.map((userType) => {
           const userTypeInfo = data.data.find(
             (item) => item.userType === userType
@@ -54,7 +63,7 @@ const Login = () => {
             userTypeDescription: userTypeInfo.userTypeDescription,
           };
         });
-
+  
         if (uniqueUserTypes.length === 1) {
           setFormData({
             ...formData,
@@ -75,6 +84,7 @@ const Login = () => {
       setUserTypes([]);
     }
   };
+  
 
   const handleUserTypeChange = (e) => {
     const selectedUserType = userTypes.find(
