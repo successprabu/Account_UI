@@ -64,6 +64,9 @@
   "initial": "Surname",
   "remarks": "Remarks",
   "amount": "Amount (Rs.)",
+  "total": "Total Amount (Rs.)",
+  "oldAmount":"Old Amount (Rs.)",
+  "newAmount":"New Amount (Rs.)",
   "mobile": "Mobile",
   "enter_mobile": "Enter Mobile Number",
   "enter_initial": "Enter Surname",
@@ -153,7 +156,11 @@
  "display_mandatory_fields_only":"Show Mandatory Fields Only",
  "register":"Register",
  "processing_your_request": "Processing Your Request...",
- "help":"Help"
+ "help":"Help",
+ "dashbordTotalAmount":"Total Rcd. Amount",
+ "dashbordTotalTrans":"Total Rcd.Transaction",
+ "dashbordTotalPlaces":"Total Places",
+ "dashbordTotalExpenase":"Total Expenses"
 
   }
   

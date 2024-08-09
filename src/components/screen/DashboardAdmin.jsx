@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Modal, Button, Card, Row, Col } from "react-bootstrap";
-import { FaUsers, FaMoneyCheckAlt, FaCog, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import ClientList from "./list/ClientList";
+import { FaMoneyBillWave , FaClipboardCheck   , FaMapMarkerAlt    , FaWallet  } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Header from "../common/Header";
 import { 
@@ -20,10 +19,10 @@ const DashboardAdmin = () => {
   const { t } = useTranslation();
 
   const tiles = [
-    { title: "clients", total: 52, lastModified: "15-10-2024", icon: <FaUsers size={50} />, handleClick: handleShowClientListModal, color: "blue" },
-    { title: "transactions", total: 120, lastModified: "14-10-2024", icon: <FaMoneyCheckAlt size={50} />, color: "orange" },
-    { title: "functions", total: 30, lastModified: "13-10-2024", icon: <FaCog size={50} />, color: "green" },
-    { title: "users", total: 200, lastModified: "12-10-2024", icon: <FaUser size={50} />, color: "red" }
+    { title:  t("dashbordTotalAmount"), total: "Rs.240450.00", lastModified: "15-10-2024", icon: <FaMoneyBillWave    size={50} />, handleClick: handleShowClientListModal, color: "#0088FE" },
+    { title: t("dashbordTotalTrans"), total: 120, lastModified: "14-10-2024", icon: <FaClipboardCheck    size={50} />, color: "#FFBB28" },
+    { title: t("dashbordTotalPlaces"), total: 30, lastModified: "13-10-2024", icon: <FaMapMarkerAlt     size={50} />, color: "#00C49F" },
+    { title: t("dashbordTotalExpenase"), total: 200, lastModified: "12-10-2024", icon: <FaWallet  size={50} />, color: "#FF8042" }
   ];
 
   // useEffect(() => {

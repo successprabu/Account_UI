@@ -19,27 +19,41 @@ import {
   faMicrophone,
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import { FaSave , FaTimes } from "react-icons/fa";
+import { FaSave, FaTimes } from "react-icons/fa";
 import i18n from "../../language/i18n";
 import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
-import {
-  SAVE_NEW_TRANS_API
-} from "../common/CommonApiURL";
+import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
-import { SaveButton,ClearButton } from "./css/styles";
+import { SaveButton, ClearButton } from "./css/styles";
 
 const schema = yup.object().shape({
   villageName: yup.string().required(),
   name: yup.string().required(),
-  initial: yup.string().required(),
-  amount: yup.number().required().positive(),
+  initial: yup.string(),
+  amount: yup.number().required("Please Enter Old / New Amount").positive("Please Enter Old / New Amount"),
+  oldAmount: yup.number()
+    .nullable()
+    .transform(value => (isNaN(value) ? null : value)), // Converts empty strings to null
+  newAmount: yup.number()
+    .nullable()
+    .transform(value => (isNaN(value) ? null : value)), // Converts empty strings to null
   phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
   remarks: yup.string(),
-});
+}).test(
+  'either-old-or-new-amount',
+  'Either old amount or new amount is required and must be greater than zero',
+  function (values) {
+    const { oldAmount, newAmount } = values;
+    // Check if at least one of the fields is provided and greater than zero
+    return (oldAmount && oldAmount > 0) || (newAmount && newAmount > 0);
+  }
+);
+
+
 
 const Transaction = () => {
   const { t } = useTranslation();
@@ -50,15 +64,18 @@ const Transaction = () => {
     villageName: "",
     initial: "",
     name: "",
+    oldAmount: 0,
+    newAmount: 0,
     amount: 0,
     remarks: "",
     phoneNo: "",
     createdBy: "SYSTEM",
-    createdDt: "2024-07-01T13:12:38.744Z",
+    createdDt: new Date().toISOString(),
     updatedBy: "SYSTEM",
-    updatedDt: "2024-07-01T13:12:38.744Z",
+    updatedDt: new Date().toISOString(),
     isActive: true,
-    type: "",
+    type: "R",
+    returnStatus: "N",
     returnRemark: "",
     functionId: 0,
   });
@@ -75,6 +92,8 @@ const Transaction = () => {
   const villageNameRef = useRef(null);
   const nameRef = useRef(null);
   const initialRef = useRef(null);
+  const oldAmountRef = useRef(null);
+  const newAmountRef = useRef(null);
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
@@ -100,7 +119,15 @@ const Transaction = () => {
     }
   }, [i18n.language]);
 
-    const handleChange = (e) => {
+  useEffect(() => {
+    // Automatically update the amount field whenever oldAmount or newAmount changes
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      amount: Number(prevFormData.oldAmount) + Number(prevFormData.newAmount),
+    }));
+  }, [formData.oldAmount, formData.newAmount]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedValue = value;
 
@@ -127,12 +154,13 @@ const Transaction = () => {
     e.preventDefault();
     const userDetail = JSON.parse(localStorage.getItem("user"));
     if (!userDetail || userDetail.functionId === 0) {
-      toast.error("Please Create Function Details");
+      toast.error("Please Create Function Detail");
       return;
     }
 
     try {
       await schema.validate(formData, { abortEarly: false });
+      console.log(formData,'payload')
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then(async (response) => {
           if (response.data.result) {
@@ -151,6 +179,8 @@ const Transaction = () => {
               villageName: "",
               initial: "",
               name: "",
+              oldAmount: 0,
+              newAmount: 0,
               amount: 0,
               remarks: "",
               phoneNo: "",
@@ -385,7 +415,6 @@ const Transaction = () => {
               <FormGroup controlId="initial">
                 <FormLabel>
                   {t("initial")}
-                  <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
@@ -396,7 +425,7 @@ const Transaction = () => {
                     value={formData.initial}
                     onChange={handleChange}
                     ref={initialRef}
-                    onKeyDown={(e) => handleKeyDown(e, amountRef)}
+                    onKeyDown={(e) => handleKeyDown(e, oldAmountRef)}
                   />
                   <Button
                     variant={
@@ -423,10 +452,88 @@ const Transaction = () => {
           </Row>
 
           <Row className="mb-3">
+          <Col xs={12} md={4}>
+              <FormGroup controlId="oldAmount">
+                <FormLabel>
+                  {t("oldAmount")}
+                  <span className="text-danger">*</span>
+                </FormLabel>
+                <InputGroup>
+                  <FormControl
+                    type="number"
+                    placeholder={t("enter_amount")}
+                    name="oldAmount"
+                    value={formData.oldAmount}
+                    onChange={handleChange}
+                    ref={oldAmountRef}
+                    onKeyDown={(e) => handleKeyDown(e, newAmountRef)}
+                    min="0"
+                  />
+                  <Button
+                    variant={
+                      isRecording && recordingField === "oldAmount"
+                        ? "danger"
+                        : "primary"
+                    }
+                    onClick={() => toggleRecording("oldAmount")}
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        isRecording && recordingField === "oldAmount"
+                          ? faMicrophoneSlash
+                          : faMicrophone
+                      }
+                    />
+                  </Button>
+                </InputGroup>
+                {errors.oldAmount && (
+                  <div className="text-danger">{errors.oldAmount}</div>
+                )}
+              </FormGroup>
+            </Col>
+            <Col xs={12} md={4}>
+              <FormGroup controlId="newAmount">
+                <FormLabel>
+                  {t("newAmount")}
+                  <span className="text-danger">*</span>
+                </FormLabel>
+                <InputGroup>
+                  <FormControl
+                    type="number"
+                    placeholder={t("enter_amount")}
+                    name="newAmount"
+                    value={formData.newAmount}
+                    onChange={handleChange}
+                    ref={newAmountRef}
+                    onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
+                    min="0"
+                  />
+                  <Button
+                    variant={
+                      isRecording && recordingField === "newAmount"
+                        ? "danger"
+                        : "primary"
+                    }
+                    onClick={() => toggleRecording("newAmount")}
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        isRecording && recordingField === "newAmount"
+                          ? faMicrophoneSlash
+                          : faMicrophone
+                      }
+                    />
+                  </Button>
+                </InputGroup>
+                {errors.newAmount && (
+                  <div className="text-danger">{errors.newAmount}</div>
+                )}
+              </FormGroup>
+            </Col>
             <Col xs={12} md={4}>
               <FormGroup controlId="amount">
                 <FormLabel>
-                  {t("amount")}
+                  {t("total")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
@@ -437,9 +544,10 @@ const Transaction = () => {
                     value={formData.amount}
                     onChange={handleChange}
                     ref={amountRef}
+                    disabled
                     onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
                   />
-                  <Button
+                  {/* <Button
                     variant={
                       isRecording && recordingField === "amount"
                         ? "danger"
@@ -454,13 +562,17 @@ const Transaction = () => {
                           : faMicrophone
                       }
                     />
-                  </Button>
+                  </Button> */}
                 </InputGroup>
                 {errors.amount && (
                   <div className="text-danger">{errors.amount}</div>
                 )}
               </FormGroup>
             </Col>
+
+           
+          </Row>
+          <Row>
             <Col xs={12} md={4}>
               <FormGroup controlId="phoneNo">
                 <FormLabel>{t("mobile")}</FormLabel>
@@ -508,7 +620,7 @@ const Transaction = () => {
                     value={formData.remarks}
                     onChange={handleChange}
                     ref={remarksRef}
-                    onKeyDown={(e) => handleKeyDown(e, villageNameRef)}
+                    onKeyDown={(e) => handleKeyDown(e, remarksRef)}
                   />
                   <Button
                     variant={
@@ -535,10 +647,12 @@ const Transaction = () => {
           </Row>
           <div className="d-flex justify-content-center mt-3">
             <SaveButton type="submit" variant="success" className="me-3">
-            <FaSave className="me-2" />{t("save")}
+              <FaSave className="me-2" />
+              {t("save")}
             </SaveButton>
             <ClearButton type="button" variant="secondary">
-            <FaTimes className="me-2" />{t("clearButton")}
+              <FaTimes className="me-2" />
+              {t("clearButton")}
             </ClearButton>
           </div>
         </Form>

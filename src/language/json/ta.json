@@ -64,6 +64,9 @@
   "initial": "குடும்பப் பெயர்",
   "remarks": "குறிப்புகள்",
   "amount": "தொகை (ரூ.)",
+  "total": "மொத்த தொகை (ரூ.)",
+  "oldAmount":"பழைய தொகை (ரூ.)",
+  "newAmount":"புதிய தொகை (ரூ.)",
   "mobile": "மொபைல் எண்",
   "enter_mobile": "மொபைல் எண்னை உள்ளிடவும்",
   "enter_initial": "குடும்பப் பெயரை உள்ளிடவும்",
@@ -151,6 +154,10 @@
   "no_user_found": "தவறான பயனர்",
   "display_mandatory_fields_only":"கட்டாய புலங்களை மட்டும் காட்டு",
   "processing_your_request": "உங்கள் கோரிக்கையை செயலாக்குகிறோம்...",
-   "help":"உதவி"
+   "help":"உதவி",
+   "dashbordTotalAmount": "மொத்த தொகை",
+   "dashbordTotalTrans": "மொத்த பரிவர்த்தனை",
+   "dashbordTotalPlaces": "மொத்த இடங்கள்",
+   "dashbordTotalExpenase": "மொத்த செலவுகள்"
   }
   
