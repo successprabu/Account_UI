@@ -190,7 +190,24 @@ const SideBar = () => {
                     {t("transactionList")}
                   </Nav.Link>
                 </li>
+                <li className="sidebar-item">
+                  <Nav.Link
+                    href="/addExpenses"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("addExpenses")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link
+                    href="/expenses-list"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("expensesList")}
+                  </Nav.Link>
+                </li>
               </ul>
+              
             </Collapse>
           </li>
         )}

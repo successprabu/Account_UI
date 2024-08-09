@@ -9,7 +9,6 @@ import ClientList from "./components/screen/list/ClientList";
 import Login from "./components/screen/login/Login";
 import Transaction from "./components/screen/Transaction";
 import TransactionList from "./components/screen/list/TransactionList";
-import TransactionWoHistory from "./components/screen/TransactionWoHistory";
 import User from "./components/screen/User";
 import FunctionWithList from "./components/screen/FunctionWithList";
 import ServicePage from "./components/screen/Services";
@@ -17,6 +16,7 @@ import Unauthorized from "./components/common/UnauthorizedAccess";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import RoleBasedDashboard from "./components/screen/RoleBasedDashboard ";
 import ContactUs from "./components/screen/ContactUs";
+import Expenses from "./components/screen/Expenses";
 
 const Router = () => {
   return (
@@ -61,13 +61,21 @@ const Router = () => {
             }
           />
           <Route
-            path="transaction-wo-history"
+            path="addExpenses"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <TransactionWoHistory />
+                <Expenses/>
               </ProtectedRoute>
             }
           />
+           {/* <Route
+            path="expenses-list"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <ExpensesList />
+              </ProtectedRoute>
+            }
+          /> */}
           <Route path="function"  
             element={
               <ProtectedRoute allowedRoles={["SU", "AU"]}>

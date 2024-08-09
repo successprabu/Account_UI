@@ -37,7 +37,7 @@ const schema = yup.object().shape({
   remarks: yup.string(),
 });
 
-const TransactionWoHistory = () => {
+const Expenses = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -46,6 +46,8 @@ const TransactionWoHistory = () => {
     villageName: "",
     initial: "",
     name: "",
+    oldAmount: 0,
+    newAmount: 0,
     amount: 0,
     remarks: "",
     phoneNo: "",
@@ -54,7 +56,8 @@ const TransactionWoHistory = () => {
     updatedBy: "SYSTEM",
     updatedDt: "2024-07-01T13:12:38.744Z",
     isActive: true,
-    type: "",
+    type: "R",
+    returnStatus: "N",
     returnRemark: "",
     functionId: 0,
   });
@@ -471,4 +474,4 @@ const TransactionWoHistory = () => {
   );
 };
 
-export default TransactionWoHistory;
+export default Expenses;
