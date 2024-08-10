@@ -30,30 +30,36 @@ import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { SaveButton, ClearButton } from "./css/styles";
 
-const schema = yup.object().shape({
-  villageName: yup.string().required(),
-  name: yup.string().required(),
-  initial: yup.string(),
-  amount: yup.number().required("Please Enter Old / New Amount").positive("Please Enter Old / New Amount"),
-  oldAmount: yup.number()
-    .nullable()
-    .transform(value => (isNaN(value) ? null : value)), // Converts empty strings to null
-  newAmount: yup.number()
-    .nullable()
-    .transform(value => (isNaN(value) ? null : value)), // Converts empty strings to null
-  phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
-  remarks: yup.string(),
-}).test(
-  'either-old-or-new-amount',
-  'Either old amount or new amount is required and must be greater than zero',
-  function (values) {
-    const { oldAmount, newAmount } = values;
-    // Check if at least one of the fields is provided and greater than zero
-    return (oldAmount && oldAmount > 0) || (newAmount && newAmount > 0);
-  }
-);
-
-
+const schema = yup
+  .object()
+  .shape({
+    villageName: yup.string().required(),
+    name: yup.string().required(),
+    initial: yup.string(),
+    amount: yup
+      .number()
+      .required("Please Enter Old / New Amount")
+      .positive("Please Enter Old / New Amount"),
+    oldAmount: yup
+      .number()
+      .nullable()
+      .transform((value) => (isNaN(value) ? null : value)), // Converts empty strings to null
+    newAmount: yup
+      .number()
+      .nullable()
+      .transform((value) => (isNaN(value) ? null : value)), // Converts empty strings to null
+    phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
+    remarks: yup.string(),
+  })
+  .test(
+    "either-old-or-new-amount",
+    "Either old amount or new amount is required and must be greater than zero",
+    function (values) {
+      const { oldAmount, newAmount } = values;
+      // Check if at least one of the fields is provided and greater than zero
+      return (oldAmount && oldAmount > 0) || (newAmount && newAmount > 0);
+    }
+  );
 
 const Transaction = () => {
   const { t } = useTranslation();
@@ -160,7 +166,7 @@ const Transaction = () => {
 
     try {
       await schema.validate(formData, { abortEarly: false });
-      console.log(formData,'payload')
+      console.log(formData, "payload");
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then(async (response) => {
           if (response.data.result) {
@@ -268,7 +274,10 @@ const Transaction = () => {
     <Card>
       <Header
         titles={[t("addTransaction")]}
-        links={[{ to: "/transaction-list", label: t("transactionList") }]}
+        links={[
+          { to: "/dashboard", label: t("dashboard") },
+          { to: "/transaction-list", label: t("transactionList") },
+        ]}
       />
       <CardBody>
         {lastRecord && (
@@ -413,9 +422,7 @@ const Transaction = () => {
             </Col>
             <Col xs={12} md={4}>
               <FormGroup controlId="initial">
-                <FormLabel>
-                  {t("initial")}
-                </FormLabel>
+                <FormLabel>{t("initial")}</FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
@@ -452,7 +459,7 @@ const Transaction = () => {
           </Row>
 
           <Row className="mb-3">
-          <Col xs={12} md={4}>
+            <Col xs={12} md={4}>
               <FormGroup controlId="oldAmount">
                 <FormLabel>
                   {t("oldAmount")}
@@ -569,8 +576,6 @@ const Transaction = () => {
                 )}
               </FormGroup>
             </Col>
-
-           
           </Row>
           <Row>
             <Col xs={12} md={4}>

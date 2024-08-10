@@ -7,7 +7,6 @@ import {
   FormLabel,
   Button,
   Card,
-  CardHeader,
   CardBody,
   Col,
   Row,
@@ -29,14 +28,15 @@ import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 
 const schema = yup.object().shape({
-  villageName: yup.string().required(),
+  villageName: yup
+    .string()
+    .required("This field is required.")
+    .notOneOf([""], "Please select a valid Expenase Category."), // Ensures it's not an empty string
   name: yup.string().required(),
-  initial: yup.string().required(),
   amount: yup.number().required().positive(),
   phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
   remarks: yup.string(),
 });
-
 const Expenses = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const Expenses = () => {
     updatedBy: "SYSTEM",
     updatedDt: "2024-07-01T13:12:38.744Z",
     isActive: true,
-    type: "R",
+    type: "E",
     returnStatus: "N",
     returnRemark: "",
     functionId: 0,
@@ -66,6 +66,7 @@ const Expenses = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
+  const [exCategory, setCategory] = useState("");
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -99,19 +100,15 @@ const Expenses = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValue = value;
-
-    // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: updatedValue,
+      [name]: value,
     }));
 
-    // Check if the input ends with a space to trigger transliteration
-    if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
+    if (i18n.language === "ta" && value.endsWith(" ")) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: transliterateToTamil(updatedValue.trim()),
+        [name]: transliterateToTamil(value.trim()),
       }));
     }
   };
@@ -126,6 +123,7 @@ const Expenses = () => {
 
     try {
       await schema.validate(formData, { abortEarly: false });
+      console.log(formData,'payload')
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then((response) => {
           if (response.data.result) {
@@ -143,11 +141,11 @@ const Expenses = () => {
               updatedBy: "SYSTEM",
               updatedDt: new Date().toISOString(),
               isActive: true,
-              type: "",
+              type: "E",
               returnRemark: "",
               functionId: userDetail.functionId,
             });
-            toast.success("Transaction Saved Successfully");
+            toast.success("Expenses Saved Successfully");
           } else {
             toast.error(
               response.data.message ||
@@ -157,7 +155,6 @@ const Expenses = () => {
         })
         .catch((error) => {
           toast.error(error.response?.data?.message || "API call error");
-          console.error("API call error:", error);
         });
     } catch (validationErrors) {
       const newErrors = {};
@@ -219,12 +216,12 @@ const Expenses = () => {
   }
 
   return (
-      <Card>
+    <Card>
       <Header
-        titles={[t("addTransaction")]}
+        titles={[t("addExpenses")]}
         links={[
-          // { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction-list", label: t("transactionList") },
+          { to: "/dashboard", label: t("dashboard") },
+          { to: "/expenses-list", label: t("expensesList") },
         ]}
       />
       <CardBody>
@@ -233,20 +230,52 @@ const Expenses = () => {
             <Col xs={12} md={4}>
               <FormGroup controlId="villageName">
                 <FormLabel>
-                  {t("village")}
+                  {t("expensesCategory")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
-                    placeholder={t("enter_village")}
+                    as="select"
+                    placeholder={t("enter_expensesCategory")}
                     name="villageName"
                     id="villageName"
-                    value={formData.villageName}
-                    onChange={handleChange}
+                    value={formData.villageName} // Bind to formData.villageName
+                    onChange={handleChange} // Use handleChange to update formData
                     ref={villageNameRef}
                     onKeyDown={(e) => handleKeyDown(e, nameRef)}
-                  />
+                  >
+                    <option value="">{t("select")}</option>
+                    <option value="venue">{t("venue")}</option>
+                    <option value="catering">{t("catering")}</option>
+                    <option value="decoration">{t("decoration")}</option>
+                    <option value="photography">{t("photography")}</option>
+                    <option value="videography">{t("videography")}</option>
+                    <option value="bridal_wear">{t("bridal_wear")}</option>
+                    <option value="groom_wear">{t("groom_wear")}</option>
+                    <option value="jewelry">{t("jewelry")}</option>
+                    <option value="transportation">
+                      {t("transportation")}
+                    </option>
+                    <option value="accommodation">{t("accommodation")}</option>
+                    <option value="gifts">{t("gifts")}</option>
+                    <option value="invitation_cards">
+                      {t("invitation_cards")}
+                    </option>
+                    <option value="makeup">{t("makeup")}</option>
+                    <option value="music_entertainment">
+                      {t("music_entertainment")}
+                    </option>
+                    <option value="wedding_favors">
+                      {t("wedding_favors")}
+                    </option>
+                    <option value="floral_arrangements">
+                      {t("floral_arrangements")}
+                    </option>
+                    <option value="mehndi_artist">{t("mehndi_artist")}</option>
+                    <option value="priest">{t("priest")}</option>
+                    <option value="honeymoon">{t("honeymoon")}</option>
+                    <option value="miscellaneous">{t("miscellaneous")}</option>
+                  </FormControl>
                   <Button
                     variant={
                       isRecording && recordingField === "villageName"
@@ -272,19 +301,19 @@ const Expenses = () => {
             <Col xs={12} md={4}>
               <FormGroup controlId="name">
                 <FormLabel>
-                  {t("name")}
+                  {t("expensesRcdPerson")}
                   <span className="text-danger">*</span>
                 </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_name")}
+                    placeholder={t("enter_expensesDescription")}
                     name="name"
                     id="name"
                     value={formData.name}
                     onChange={handleChange}
                     ref={nameRef}
-                    onKeyDown={(e) => handleKeyDown(e, initialRef)}
+                    onKeyDown={(e) => handleKeyDown(e, amountRef)}
                   />
                   <Button
                     variant={
@@ -308,48 +337,6 @@ const Expenses = () => {
                 )}
               </FormGroup>
             </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="initial">
-                <FormLabel>
-                  {t("initial")}
-                  <span className="text-danger">*</span>
-                </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_initial")}
-                    name="initial"
-                    id="initial"
-                    value={formData.initial}
-                    onChange={handleChange}
-                    ref={initialRef}
-                    onKeyDown={(e) => handleKeyDown(e, amountRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "initial"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("initial")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "initial"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.initial && (
-                  <div className="text-danger">{errors.initial}</div>
-                )}
-              </FormGroup>
-            </Col>
-          </Row>
-
-          <Row className="mb-3">
             <Col xs={12} md={4}>
               <FormGroup controlId="amount">
                 <FormLabel>
@@ -388,6 +375,9 @@ const Expenses = () => {
                 )}
               </FormGroup>
             </Col>
+          </Row>
+
+          <Row className="mb-3">
             <Col xs={12} md={4}>
               <FormGroup controlId="phoneNo">
                 <FormLabel>{t("mobile")}</FormLabel>

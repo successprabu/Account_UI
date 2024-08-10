@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import RoleBasedDashboard from "./components/screen/RoleBasedDashboard ";
 import ContactUs from "./components/screen/ContactUs";
 import Expenses from "./components/screen/Expenses";
+import ExpensesList from "./components/screen/list/ExpensesList";
 
 const Router = () => {
   return (
@@ -68,14 +69,14 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-           {/* <Route
+           <Route
             path="expenses-list"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <ExpensesList />
               </ProtectedRoute>
             }
-          /> */}
+          />
           <Route path="function"  
             element={
               <ProtectedRoute allowedRoles={["SU", "AU"]}>

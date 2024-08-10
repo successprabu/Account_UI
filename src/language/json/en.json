@@ -162,7 +162,32 @@
  "dashbordTotalAmount":"Total Rcd. Amount",
  "dashbordTotalTrans":"Total Rcd.Transaction",
  "dashbordTotalPlaces":"Total Places",
- "dashbordTotalExpenase":"Total Expenses"
+ "dashbordTotalExpenase":"Total Expenses",
+ "expensesCategory":"Expenses Category",
+ "enter_expensesCategory":"Please select Expenses",
+ "expensesRcdPerson":"Cash Recipient Name",
+ "enter_expensesDescription":"Please Enter Expenses Description",
+ "venue": "Venue",
+ "catering": "Catering",
+ "decoration": "Decoration",
+ "photography": "Photography",
+ "videography": "Videography",
+ "bridal_wear": "Bridal Wear",
+ "groom_wear": "Groom Wear",
+ "jewelry": "Jewelry",
+ "transportation": "Transportation",
+ "accommodation": "Accommodation",
+ "gifts": "Gifts",
+ "invitation_cards": "Invitation Cards",
+ "makeup": "Makeup",
+ "music_entertainment": "Music & Entertainment",
+ "wedding_favors": "Wedding Favors",
+ "floral_arrangements": "Floral Arrangements",
+ "mehndi_artist": "Mehndi Artist",
+ "priest": "Priest",
+ "honeymoon": "Honeymoon",
+ "miscellaneous": "Miscellaneous"
+
 
   }
   

@@ -15,6 +15,18 @@ const getToken = () => {
   return user ? JSON.parse(user).token : '';
 };
 
+// Common payload fields for POST requests
+export const userDetail = {
+  customerId: user ? JSON.parse(user).customerID : 0,
+  functionId: user ? JSON.parse(user).functionId : 0,
+  userType: user ? JSON.parse(user).userType : 'NU',
+  userTypeDescription:user ? JSON.parse(user).userTypeDescription : 'User',
+  id: user ? JSON.parse(user).id : 0,
+  appName: user ? JSON.parse(user).appName : 'MOI',
+  userName: user ? JSON.parse(user).name : 'Guest',
+  mobile: user ? JSON.parse(user).primary_phone : '0000000000',
+
+};
 // Function to handle authentication errors
 const handleAuthenticationError = (error) => {
   if (error.response && error.response.status === 401) {
@@ -32,7 +44,7 @@ export const dateUTC = (date = new Date()) => new Date(new Date(date).toUTCStrin
 export const commonPayloadFields = {
   createdBy: user ? JSON.parse(user).primary_phone : 'APPLICATION',
   createdDt: dateUTC(new Date()),
-  updatedBy: 'APPLICATION',
+  updatedBy: user ? JSON.parse(user).primary_phone : 'APPLICATION',
   updatedDt: dateUTC(new Date()),
   isActive: true
 };

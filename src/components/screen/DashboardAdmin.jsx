@@ -1,5 +1,5 @@
-import React, {  useState } from "react";
-import { Modal, Button, Card, Row, Col } from "react-bootstrap";
+import React, {  useState,useEffect } from "react";
+import { Modal, Card, Row, Col } from "react-bootstrap";
 import { FaMoneyBillWave , FaClipboardCheck   , FaMapMarkerAlt    , FaWallet  } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -8,23 +8,78 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   AreaChart, Area, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer 
 } from "recharts";
+import { DASHBOARD_SUMMARY_API } from "../common/CommonApiURL";
+import { userDetail,API_SERVICE } from "../common/CommonMethod";
+
 
 const DashboardAdmin = () => {
   const [showClientListModal, setShowClientListModal] = useState(false);
-
+  const [dashboardData, setDashboardData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const handleShowClientListModal = () => setShowClientListModal(true);
-  const handleCloseClientListModal = () => setShowClientListModal(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const tiles = [
-    { title:  t("dashbordTotalAmount"), total: "Rs.240450.00", lastModified: "15-10-2024", icon: <FaMoneyBillWave    size={50} />, handleClick: handleShowClientListModal, color: "#0088FE" },
-    { title: t("dashbordTotalTrans"), total: 120, lastModified: "14-10-2024", icon: <FaClipboardCheck    size={50} />, color: "#FFBB28" },
-    { title: t("dashbordTotalPlaces"), total: 30, lastModified: "13-10-2024", icon: <FaMapMarkerAlt     size={50} />, color: "#00C49F" },
-    { title: t("dashbordTotalExpenase"), total: 200, lastModified: "12-10-2024", icon: <FaWallet  size={50} />, color: "#FF8042" }
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+    
+        const response = await API_SERVICE.get(DASHBOARD_SUMMARY_API, {
+          customer_id: userDetail.customerId,
+          function_id: userDetail.functionId,
+          user_type:"AU"
+        });
+        if (response.data.result) {
+          setDashboardData(response.data.data);
+        } else {
+          setError("Failed to fetch dashboard data");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching dashboard data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
+    fetchDashboardData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const tiles = [
+    {
+      title: t("dashbordTotalAmount"),
+      total: `Rs.${dashboardData.totalRcdAmount.toFixed(2)}`,
+      icon: <FaMoneyBillWave size={50} />,
+      handleClick: handleShowClientListModal,
+      color: "#0088FE",
+    },
+    {
+      title: t("dashbordTotalTrans"),
+      total: dashboardData.totalRcdTransaction,
+      icon: <FaClipboardCheck size={50} />,
+      color: "#FFBB28",
+    },
+    {
+      title: t("dashbordTotalPlaces"),
+      total: dashboardData.totalPlaces,
+      icon: <FaMapMarkerAlt size={50} />,
+      color: "#00C49F",
+    },
+    {
+      title: t("dashbordTotalExpenase"),
+      total: dashboardData.totalExpenses,
+      icon: <FaWallet size={50} />,
+      color: "#FF8042",
+    },
+  ];
   // useEffect(() => {
   //   const user = localStorage.getItem("user");
   //   if (user) {
@@ -73,9 +128,9 @@ const DashboardAdmin = () => {
                     <Card.Text style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>
                       <a href="#" onClick={tile.handleClick} style={{ color: 'white' }}>{tile.total}</a>
                     </Card.Text>
-                    <Card.Text style={{ fontSize: '0.8rem', textAlign: 'center' }}>
+                    {/* <Card.Text style={{ fontSize: '0.8rem', textAlign: 'center' }}>
                       {t("lastModified")}: {tile.lastModified}
-                    </Card.Text>
+                    </Card.Text> */}
                   </div>
                 </Card.Body>
               </Card>

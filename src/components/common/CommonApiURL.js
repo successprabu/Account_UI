@@ -15,3 +15,4 @@ export const LIST_CLIENT_API=`${MASTER}GetCustomer`
 export const LIST_FUNCTION_API=`${MASTER}GetFunction`
 export const LIST_TRANSACTION_API=`${TRANSACTION}GetTransaction?`
 export const DELETE_TRANSACTION_API=`${TRANSACTION}DeleteTransaction?`
+export const DASHBOARD_SUMMARY_API=`${TRANSACTION}GetDashboard?`

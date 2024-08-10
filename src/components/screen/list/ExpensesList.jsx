@@ -49,7 +49,7 @@ const onDelete = (id, setDeletingTransactionId, setShowDeleteModal) => {
   setShowDeleteModal(true);
 };
 
-const TransactionList = () => {
+const ExpensesList = () => {
   const { t } = useTranslation();
   const [transactionList, setTransactionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -230,10 +230,10 @@ const TransactionList = () => {
       {/* <Header title={t("transactionList")} links={[{to: "/transaction", label: t("addTransaction")}]} /> */}
       <Header
         //titles={[t("transactionList"), t("anotherTitle")]}
-        titles={[t("transactionList")]}
+        titles={[t("expensesList")]}
         links={[
-          { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction", label: t("addTransaction") },
+            { to: "/dashboard", label: t("dashboard") },
+          { to: "/addExpenses", label: t("addExpenses") }
          
         ]}
       />
@@ -435,4 +435,4 @@ const TransactionList = () => {
   );
 };
 
-export default TransactionList;
+export default ExpensesList;
