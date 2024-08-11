@@ -112,6 +112,8 @@ const Login = () => {
         console.log("API Response:", data); // Debugging API response
         if (data.result) {
           localStorage.setItem("user", JSON.stringify(data.data));
+          const user=JSON.parse(localStorage.getItem('user'));
+          console.log(user,"userformlogin")
           navigate("/dashboard");
         } else {
           setLoginError(data.message);

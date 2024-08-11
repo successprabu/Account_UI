@@ -8,25 +8,40 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   AreaChart, Area, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer 
 } from "recharts";
-import { DASHBOARD_SUMMARY_API } from "../common/CommonApiURL";
-import { userDetail,API_SERVICE } from "../common/CommonMethod";
+import { DASHBOARD_SUMMARY_API,ClientList } from "../common/CommonApiURL";
+import { getUserDetail,API_SERVICE } from "../common/CommonMethod";
+import Unauthorized from "../common/UnauthorizedAccess";
 
 
 const DashboardAdmin = () => {
+  console.log(getUserDetail(),'userinDashbord')
   const [showClientListModal, setShowClientListModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [dashboardData, setDashboardData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const handleShowClientListModal = () => setShowClientListModal(true);
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  const userDetail=JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
+    
+ 
     const fetchDashboardData = async () => {
       try {
+      
+        if(userDetail.customerID===0)
+          {
+            setIsAuthenticated(false);
+          }
+        
+        if (!isAuthenticated) {
+          return <Unauthorized />;
+        }
+      
     
         const response = await API_SERVICE.get(DASHBOARD_SUMMARY_API, {
-          customer_id: userDetail.customerId,
+          customer_id: userDetail.customerID,
           function_id: userDetail.functionId,
           user_type:"AU"
         });
@@ -80,15 +95,6 @@ const DashboardAdmin = () => {
       color: "#FF8042",
     },
   ];
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user");
-  //   if (user) {
-  //     const userDetail = JSON.parse(user);
-  //   } else {
-  //     setIsAuthenticated(false);
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
 
   // Sample data for charts
   const data = [

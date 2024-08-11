@@ -24,26 +24,27 @@ const SideBar = () => {
   const [userName, setUserName] = useState(null);
   const [designation, setDesignation] = useState(null);
   const [userDetailsOpen, setUserDetailsOpen] = useState(false); 
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login check
+  //const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login check
   const navigate = useNavigate();
   const { t } = useTranslation();
   const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
+  
     if (user) {
       setUserType(user.userType);
       setUserName(user.name);
       setDesignation(user.userTypeDescription);
-      setIsLoggedIn(true); // Set login state
-    } else {
-      setIsLoggedIn(false); // If no user, not logged in
-    }
+     // setIsLoggedIn(true); // Set login state
+     } else {
+       console.log(user,"userfromsidebar")
+     }
   }, []);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("user");
-      setIsLoggedIn(false); // Set login state to false on logout
+     // setIsLoggedIn(false); // Set login state to false on logout
       navigate("/login");
     }
   };

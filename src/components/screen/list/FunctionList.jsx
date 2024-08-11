@@ -64,7 +64,6 @@ const FunctionList = () => {
         page_size: 10,
       });
       if (response.data.result) {
-        console.log(response.data, 'data');
         setFunctions(response.data.data.functions);
       } else {
         toast.error(

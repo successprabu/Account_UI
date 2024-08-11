@@ -130,6 +130,7 @@ const ClientList = ({ showHeader = true }) => {
     }
   };
 
+ 
   if (!isAuthenticated) {
     return <UnauthorizedAccess />;
   }
