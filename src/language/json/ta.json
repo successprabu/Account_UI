@@ -184,6 +184,8 @@
         "mehndi_artist": "மேஹந்தி கலைஞர்",
         "priest": "பூசாரி",
         "honeymoon": "பிரம்மச்சாரி விடுமுறை",
-        "miscellaneous": "பிற செலவுகள்"
+        "miscellaneous": "பிற செலவுகள்",
+        "totalRcdNosVsTotalExpenses": "மொத்த பதிவுகள்: பெறப்பட்டது Vs செலவுகள்",
+  "totalRcdAmountVsTotalExpenses": "மொத்த தொகை: பெறப்பட்டது Vs செலவுகள்"
   }
   

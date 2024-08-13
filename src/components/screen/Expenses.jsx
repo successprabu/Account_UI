@@ -223,6 +223,7 @@ const Expenses = () => {
           { to: "/dashboard", label: t("dashboard") },
           { to: "/expenses-list", label: t("expensesList") },
         ]}
+        bgColor="#ff5733" 
       />
       <CardBody>
         <Form className="text-primary w-100" onSubmit={handleSubmit}>

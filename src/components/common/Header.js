@@ -4,7 +4,7 @@ import styled from "styled-components";
 import LanguageSelector from "../../language/LanguageSelector";
 
 const HeaderContainer = styled.header`
-  background-color: #0e2238;
+  background-color: ${(props) => props.bgColor || "#0e2238"};
   color: white;
   margin: 1px;
   padding: 1px; /* Adjust padding for better spacing */
@@ -39,9 +39,9 @@ const LanguageSelectorWrapper = styled.div`
   align-items: center;
 `;
 
-const Header = ({ titles, links, showLanguageSelector = true }) => {
+const Header = ({ titles, links, showLanguageSelector = true, bgColor }) => {
   return (
-    <HeaderContainer>
+    <HeaderContainer bgColor={bgColor}>
       <HeadingTitle>
         {titles.map((title, index) => (
           <span key={index} style={{ marginRight: index < titles.length - 1 ? "1rem" : "0" }}>
@@ -57,7 +57,7 @@ const Header = ({ titles, links, showLanguageSelector = true }) => {
         ))}
         {showLanguageSelector && (
           <LanguageSelectorWrapper>
-            <LanguageSelector />
+            <LanguageSelector backgroundColor={bgColor} />
           </LanguageSelectorWrapper>
         )}
       </HeaderLinks>

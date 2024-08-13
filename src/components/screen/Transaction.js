@@ -278,6 +278,7 @@ const Transaction = () => {
           { to: "/dashboard", label: t("dashboard") },
           { to: "/transaction-list", label: t("transactionList") },
         ]}
+        bgColor='#00C49F' // Custom background color for Header
       />
       <CardBody>
         {lastRecord && (

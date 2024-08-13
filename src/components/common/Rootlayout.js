@@ -9,15 +9,15 @@ const Rootlayout = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user,'fromtoproot')
-  // useEffect(() => {
-  //   // console.log(user,'setuser')
-  //   // if (storedUser) {
-  //   //   setUser(storedUser);
-  //   // } else {
-  //   //   console.log("User not found, redirecting to login.");
-  //   //   navigate("/login");
-  //   // }
-  // }, [navigate]);
+  useEffect(() => {
+    // console.log(user,'setuser')
+    // if (storedUser) {
+    //   setUser(storedUser);
+    // } else {
+    //   console.log("User not found, redirecting to login.");
+    //   navigate("/login");
+    // }
+  }, [navigate]);
 
 
   return (

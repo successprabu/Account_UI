@@ -186,7 +186,9 @@
  "mehndi_artist": "Mehndi Artist",
  "priest": "Priest",
  "honeymoon": "Honeymoon",
- "miscellaneous": "Miscellaneous"
+ "miscellaneous": "Miscellaneous",
+ "totalRcdNosVsTotalExpenses": "Total Records : Received Vs Expenses",
+ "totalRcdAmountVsTotalExpenses": "Total Amount : Received Vs Expenses"
 
 
   }

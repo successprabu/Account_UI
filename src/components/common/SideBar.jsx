@@ -29,7 +29,7 @@ const SideBar = () => {
   const { t } = useTranslation();
   const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
-  
+
     if (user) {
       setUserType(user.userType);
       setUserName(user.name);
