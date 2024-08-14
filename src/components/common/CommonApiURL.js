@@ -1,5 +1,6 @@
-export const BASE_URL = `http://localhost/api/`
+//export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
+export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
 
 export const MASTER = `Master/`
 export const AUTH = `Auth/`
