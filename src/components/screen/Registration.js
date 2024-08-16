@@ -9,19 +9,17 @@ import {
   CardBody,
   Col,
   Row,
-  FormCheck
+  FormCheck,
 } from "react-bootstrap";
 import i18n from "../../language/i18n";
 import { SAVE_NEW_CUSTOMER_API } from "../common/CommonApiURL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Oval } from 'react-loader-spinner';
+import { Oval } from "react-loader-spinner";
 import Header from "../common/Header";
 import InputWithMicrophone from "../common/InputWithMicrophone";
 import "./css/Registration.css"; // Ensure you import the CSS file
-
-
 
 const Registration = () => {
   const { t } = useTranslation();
@@ -81,7 +79,8 @@ const Registration = () => {
     }
 
     if (!formData.primary_phone.trim()) {
-      validationErrors.primary_phone = "Please Enter valid 10 digit Mobile Number";
+      validationErrors.primary_phone =
+        "Please Enter valid 10 digit Mobile Number";
     } else if (!/^\d{10}$/.test(formData.primary_phone)) {
       validationErrors.primary_phone = "Mobile number must be 10 digits";
     }
@@ -105,7 +104,11 @@ const Registration = () => {
         toast.success("Registration successful!");
         navigate("/login");
       } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
           toast.error(error.response.data.message);
         } else {
           toast.error("Something Went Wrong please Try Again.");
@@ -124,8 +127,11 @@ const Registration = () => {
     <Card className="mt-1">
       <Header
         titles={[t("registration")]}
-        links={[{ to: "/", label: t("") }]}
-        showLanguageSelector={false}
+        links={[
+          { to: "/", label: t("home") },
+          { to: "/services", label: t("ourServices") },
+        ]}
+        showLanguageSelector={true}
       />
       <CardBody>
         {isLoading ? (
@@ -140,14 +146,14 @@ const Registration = () => {
               strokeWidth={2}
               strokeWidthSecondary={2}
             />
-            <p className="loading-text">{t('processing_your_request')}...</p>
+            <p className="loading-text">{t("processing_your_request")}...</p>
           </div>
         ) : (
           <Form className="text-primary w-100" onSubmit={handleSubmit}>
             <FormGroup controlId="showMandatoryOnly" className="mb-3">
               <FormCheck
                 type="checkbox"
-                label={t('display_mandatory_fields_only')}
+                label={t("display_mandatory_fields_only")}
                 checked={showMandatoryOnly}
                 onChange={handleShowMandatoryOnlyChange}
               />
@@ -156,13 +162,14 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="txtname">
                   <FormLabel>
-                    {t('name')}<span className="text-danger">*</span>
+                    {t("name")}
+                    <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder={t('enter_name')}
+                    placeholder={t("enter_name")}
                     error={errors.name}
                   />
                 </FormGroup>
@@ -170,13 +177,14 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="primary_phone">
                   <FormLabel>
-                    {t('primary_phone')}<span className="text-danger">*</span>
+                    {t("primary_phone")}
+                    <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="primary_phone"
                     value={formData.primary_phone}
                     onChange={handleChange}
-                    placeholder={t('enter_primary_phone')}
+                    placeholder={t("enter_primary_phone")}
                     error={errors.primary_phone}
                   />
                 </FormGroup>
@@ -184,13 +192,13 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="txtotp">
                   <FormLabel>
-                    {t('otp')} <span className="text-danger">*</span>
+                    {t("otp")} <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="otp"
                     value={formData.otp}
                     onChange={handleChange}
-                    placeholder={t('enter_otp')}
+                    placeholder={t("enter_otp")}
                     error={errors.otp}
                   />
                 </FormGroup>
@@ -200,14 +208,14 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="password">
                   <FormLabel>
-                    {t('password')} <span className="text-danger">*</span>
+                    {t("password")} <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="password"
-                    type="password" 
+                    type="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder={t('enter_password')}
+                    placeholder={t("enter_password")}
                     error={errors.password}
                   />
                 </FormGroup>
@@ -215,32 +223,34 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="conpassword">
                   <FormLabel>
-                    {t('confirm_password')} <span className="text-danger">*</span>
+                    {t("confirm_password")}{" "}
+                    <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="conpassword"
                     type="password"
                     value={formData.conpassword}
                     onChange={handleChange}
-                    placeholder={t('confirm_password')}
+                    placeholder={t("confirm_password")}
                     error={errors.conpassword}
                   />
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
-                    <FormGroup controlId="pincode">
-                      <FormLabel>
-                        {t('pincode')}<span className="text-danger">*</span>
-                      </FormLabel>
-                      <InputWithMicrophone
-                        name="pincode"
-                        value={formData.pincode}
-                        onChange={handleChange}
-                        placeholder={t('enter_pincode')}
-                        error={errors.pincode}
-                      />
-                    </FormGroup>
-                  </Col>
+                <FormGroup controlId="pincode">
+                  <FormLabel>
+                    {t("pincode")}
+                    <span className="text-danger">*</span>
+                  </FormLabel>
+                  <InputWithMicrophone
+                    name="pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    placeholder={t("enter_pincode")}
+                    error={errors.pincode}
+                  />
+                </FormGroup>
+              </Col>
             </Row>
 
             {!showMandatoryOnly && (
@@ -286,42 +296,36 @@ const Registration = () => {
                 <Row className="mb-3">
                   <Col xs={12} md={4}>
                     <FormGroup controlId="country">
-                      <FormLabel>
-                        {t('country')}
-                      </FormLabel>
+                      <FormLabel>{t("country")}</FormLabel>
                       <InputWithMicrophone
                         name="country"
                         value={formData.country}
                         onChange={handleChange}
-                        placeholder={t('enter_country')}
+                        placeholder={t("enter_country")}
                         error={errors.country}
                       />
                     </FormGroup>
                   </Col>
                   <Col xs={12} md={4}>
                     <FormGroup controlId="state">
-                      <FormLabel>
-                        {t('state')}
-                      </FormLabel>
+                      <FormLabel>{t("state")}</FormLabel>
                       <InputWithMicrophone
                         name="state"
                         value={formData.state}
                         onChange={handleChange}
-                        placeholder={t('enter_state')}
+                        placeholder={t("enter_state")}
                         error={errors.state}
                       />
                     </FormGroup>
                   </Col>
                   <Col xs={12} md={4}>
                     <FormGroup controlId="district">
-                      <FormLabel>
-                        {t('district')}
-                      </FormLabel>
+                      <FormLabel>{t("district")}</FormLabel>
                       <InputWithMicrophone
                         name="district"
                         value={formData.district}
                         onChange={handleChange}
-                        placeholder={t('enter_district')}
+                        placeholder={t("enter_district")}
                         error={errors.district}
                       />
                     </FormGroup>
@@ -330,28 +334,24 @@ const Registration = () => {
                 <Row className="mb-3">
                   <Col xs={12} md={4}>
                     <FormGroup controlId="address_line1">
-                      <FormLabel>
-                        {t('address_line1')}
-                      </FormLabel>
+                      <FormLabel>{t("address_line1")}</FormLabel>
                       <InputWithMicrophone
                         name="address_line1"
                         value={formData.address_line1}
                         onChange={handleChange}
-                        placeholder={t('enter_address_line1')}
+                        placeholder={t("enter_address_line1")}
                         error={errors.address_line1}
                       />
                     </FormGroup>
                   </Col>
                   <Col xs={12} md={4}>
                     <FormGroup controlId="address_line2">
-                      <FormLabel>
-                        {t('address_line2')}
-                      </FormLabel>
+                      <FormLabel>{t("address_line2")}</FormLabel>
                       <InputWithMicrophone
                         name="address_line2"
                         value={formData.address_line2}
                         onChange={handleChange}
-                        placeholder={t('enter_address_line2')}
+                        placeholder={t("enter_address_line2")}
                         error={errors.address_line2}
                       />
                     </FormGroup>
@@ -360,7 +360,7 @@ const Registration = () => {
                     <FormGroup id="is_primary_phone_whatsup">
                       <FormCheck
                         type="checkbox"
-                        label={t('is_primary_phone_whatsup')}
+                        label={t("is_primary_phone_whatsup")}
                         name="is_primary_phone_whatsup"
                         checked={formData.is_primary_phone_whatsup}
                         onChange={handleCheckboxChange}
@@ -369,11 +369,11 @@ const Registration = () => {
                   </Col>
                 </Row>
               </>
-            )}            
+            )}
             <Row>
               <Col xs={12} className="text-center">
                 <Button type="submit" variant="success">
-                  {t('register')}
+                  {t("register")}
                 </Button>
               </Col>
             </Row>

@@ -35,9 +35,9 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { transliterateToTamil } from "../../common/transliteration";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
+import Translator from "../../common/TranslationBasedOnLanguage";
 
 const onEdit = (id, transaction, setEditingTransaction, setShowEditModal) => {
   setEditingTransaction(transaction);
@@ -63,7 +63,7 @@ const ExpensesList = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -146,16 +146,29 @@ const ExpensesList = () => {
     }
   };
 
-  const handleChange = (e, setState) => {
-    const { value } = e.target;
-
-    setState(value);
-
-    if (i18n.language === "ta" && value.endsWith(" ")) {
-      setState(transliterateToTamil(value.trim()));
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      if (fieldBeingTranslated === "name") {
+        setName(translatedText);
+      } else if (fieldBeingTranslated === "placeName") {
+        setPlaceName(translatedText);
+      } else if (fieldBeingTranslated === "mobile") {
+        setMobile(translatedText);
+      }
+      setFieldBeingTranslated(null);
     }
   };
-
+  
+  const handleChange = (e, setState, fieldName) => {
+    const { value } = e.target;
+    setState(value);
+  
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(fieldName);
+      // Initiate translation
+      handleTranslation(value.trim());
+    }
+  };
   const startRecording = (fieldName, setState) => {
     setIsRecording(true);
     setRecordingField(fieldName);
@@ -329,6 +342,15 @@ const ExpensesList = () => {
                 </Form.Group>
               </Col>
             </Row>
+           {/* Translator Component */}
+           {fieldBeingTranslated && (
+            <Translator
+              inputText={name || placeName || mobile}
+              onTranslated={handleTranslation}
+              sourceLanguage="en"
+              targetLanguage={i18n.language || "en"}
+            />
+          )}
             <Row className="justify-content-center align-items-end">
               <Col xs={12} md={6} className="text-center">
                 <div className="mb-0 d-flex justify-content-center align-items-center">
@@ -389,6 +411,7 @@ const ExpensesList = () => {
               )}
         </tbody>
       </ClientTable>
+      
       <PaginationWrapper>
         <Pagination>
           <Pagination.First

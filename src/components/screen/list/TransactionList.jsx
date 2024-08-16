@@ -35,9 +35,9 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { transliterateToTamil } from "../../common/transliteration";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
+import Translator from "../../common/TranslationBasedOnLanguage";
 
 const onEdit = (id, transaction, setEditingTransaction, setShowEditModal) => {
   setEditingTransaction(transaction);
@@ -63,7 +63,7 @@ const TransactionList = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -82,6 +82,8 @@ const TransactionList = () => {
         customer_name: name,
         village_name: placeName,
         mobile: mobile,
+        user_type: JSON.parse(user).userType,
+        userId: JSON.parse(user).id,
         current_page: currentPage,
         page_size: pageSize,
       });
@@ -146,13 +148,26 @@ const TransactionList = () => {
     }
   };
 
-  const handleChange = (e, setState) => {
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      if (fieldBeingTranslated === "name") {
+        setName(translatedText);
+      } else if (fieldBeingTranslated === "placeName") {
+        setPlaceName(translatedText);
+      }
+      setFieldBeingTranslated(null);
+      console.log(fieldBeingTranslated, "fieldBeingTranslated");
+      console.log(translatedText, "translatedText");
+    }
+  };
+
+  const handleChange = (e, setState, fieldName) => {
     const { value } = e.target;
-
     setState(value);
-
-    if (i18n.language === "ta" && value.endsWith(" ")) {
-      setState(transliterateToTamil(value.trim()));
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(fieldName);
+      // Initiate translation
+      handleTranslation(value.trim());
     }
   };
 
@@ -189,7 +204,9 @@ const TransactionList = () => {
 
   const calculateTotals = () => {
     const totalAmount = transactionList.reduce(
-      (acc, trans) => acc + parseFloat(trans.amount || 0),0 );
+      (acc, trans) => acc + parseFloat(trans.amount || 0),
+      0
+    );
     const totalRows = transactionList.length;
     return { totalAmount, totalRows };
   };
@@ -234,7 +251,6 @@ const TransactionList = () => {
         links={[
           { to: "/dashboard", label: t("dashboard") },
           { to: "/transaction", label: t("addTransaction") },
-         
         ]}
       />
       <Row>
@@ -249,7 +265,7 @@ const TransactionList = () => {
                       type="text"
                       placeholder={t("name")}
                       value={name}
-                      onChange={(e) => handleChange(e, setName)}
+                      onChange={(e) => handleChange(e, setName, "name")}
                     />
                     <Button
                       variant={
@@ -278,7 +294,9 @@ const TransactionList = () => {
                       type="text"
                       placeholder={t("placeName")}
                       value={placeName}
-                      onChange={(e) => handleChange(e, setPlaceName)}
+                      onChange={(e) =>
+                        handleChange(e, setPlaceName, "placeName")
+                      }
                     />
                     <Button
                       variant={
@@ -307,7 +325,7 @@ const TransactionList = () => {
                       type="text"
                       placeholder={t("mobile")}
                       value={mobile}
-                      onChange={(e) => handleChange(e, setMobile)}
+                      onChange={(e) => handleChange(e, setMobile, "mobile")}
                     />
                     <Button
                       variant={
@@ -329,6 +347,22 @@ const TransactionList = () => {
                 </Form.Group>
               </Col>
             </Row>
+            {/* Translator Component */}
+            {fieldBeingTranslated && (
+              <Translator
+                inputText={
+                  fieldBeingTranslated === "name"
+                    ? name
+                    : fieldBeingTranslated === "placeName"
+                    ? placeName
+                    : ""
+                }
+                onTranslated={handleTranslation}
+                sourceLanguage="en"
+                targetLanguage={i18n.language || "en"}
+              />
+            )}
+
             <Row className="justify-content-center align-items-end">
               <Col xs={12} md={6} className="text-center">
                 <div className="mb-0 d-flex justify-content-center align-items-center">
@@ -371,22 +405,23 @@ const TransactionList = () => {
           </tr>
         </thead>
         <tbody>
-        {transactionList.length > 0 ? (
-             <>
-             {list}
-             <TotalRow>
-               <td colSpan="2">
-                 {t("totalRows")}: {totalRows} {t("pagerows")}
-               </td>
-               <td>{totalAmount}</td>
-             </TotalRow>
-           </> ) : (
-                <tr>
-                  <td colSpan="6" className="text-center danger">
-                    {t("noData")}
-                  </td>
-                </tr>
-              )}
+          {transactionList.length > 0 ? (
+            <>
+              {list}
+              <TotalRow>
+                <td colSpan="2">
+                  {t("totalRows")}: {totalRows} {t("pagerows")}
+                </td>
+                <td>{totalAmount}</td>
+              </TotalRow>
+            </>
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center danger">
+                {t("noData")}
+              </td>
+            </tr>
+          )}
         </tbody>
       </ClientTable>
       <PaginationWrapper>

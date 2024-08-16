@@ -18,6 +18,7 @@ import RoleBasedDashboard from "./components/screen/RoleBasedDashboard ";
 import ContactUs from "./components/screen/ContactUs";
 import Expenses from "./components/screen/Expenses";
 import ExpensesList from "./components/screen/list/ExpensesList";
+import TranslationDemo from "./components/common/TranslationDemo";
 
 const Router = () => {
   return (
@@ -27,16 +28,19 @@ const Router = () => {
       <Route path="purchase:id" element={<Registration />} />
       <Route path="purchase" element={<Registration />} />
       <Route path="contactus" element={<ContactUs />} />
-      <Route index element={<Home />} />
-      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="try-translation" element={<TranslationDemo />} />
+      <Route index element={<Home />} />      
+      <Route path="unauthorized" element={<Unauthorized />} />
       <Route path="about" element={<AboutUs />} />
+      <Route path="*" element={<PageNotFound />} />
+
 
         <Route path="/" element={<Rootlayout />}>       
            <Route
             path="dashboard"
             element={<RoleBasedDashboard/> }
           />     
-          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
           <Route
             path="client-list"
             element={

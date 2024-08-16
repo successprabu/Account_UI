@@ -55,11 +55,13 @@ const DashboardAdmin = () => {
             customer_id: userDetail.customerID,
             function_id: userDetail.functionId,
             user_type: userDetail.userType,
+            userId:userDetail.id
           }),
           API_SERVICE.get(DASHBOARD_DETAIL_API, {
             customer_id: userDetail.customerID,
             function_id: userDetail.functionId,
             user_type: userDetail.userType,
+            userId:userDetail.id
           }),
         ]);
 

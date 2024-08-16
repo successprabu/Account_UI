@@ -1,7 +1,9 @@
 //export const BASE_URL = `http://localhost/api/`
-//export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
-export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
+export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
+//export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
 
+const GOOGLE_TRANS_API_KEY ="AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE"
+export const GOOGLE_TRANS_API=`https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANS_API_KEY}`
 export const MASTER = `Master/`
 export const AUTH = `Auth/`
 export const TRANSACTION = `Transaction/`

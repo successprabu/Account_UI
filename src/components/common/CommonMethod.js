@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./CommonApiURL";
 
+
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, '0');
@@ -35,26 +36,27 @@ export const getUserDetail = () => {
 };
 
 // Function to handle authentication errors
-const handleAuthenticationError = (error) => {
-  if (error.response && error.response.status === 401) {
-    // Handle unauthorized error, e.g., redirect to login
-    localStorage.removeItem('user'); // Remove user from localStorage
-    window.location.href = '/login'; // Redirect to login page
-  }
-  return Promise.reject(error);
-};
+// const handleAuthenticationError = (error) => {
+//   if (error.response && error.response.status === 401) {
+//     // Handle unauthorized error, e.g., redirect to login
+//     localStorage.removeItem('user'); // Remove user from localStorage
+//     window.location.href = '/login'; // Redirect to login page
+//   }
+//   return Promise.reject(error);
+// };
 
 // Function to get the current date in UTC format
 export const dateUTC = (date = new Date()) => new Date(new Date(date).toUTCString()).toISOString();
 
 // Common payload fields for POST requests
 export const commonPayloadFields = {
-  createdBy: user ? JSON.parse(user).primary_phone : 'APPLICATION',
+  createdBy: String(user ? JSON.parse(user).id : 'APPLICATION'),
   createdDt: dateUTC(new Date()),
-  updatedBy: user ? JSON.parse(user).primary_phone : 'APPLICATION',
+  updatedBy: String(user ? JSON.parse(user).id : 'APPLICATION'),
   updatedDt: dateUTC(new Date()),
   isActive: true
 };
+
 
 // POST method
 const post = (url, payload) => {
@@ -67,7 +69,7 @@ const post = (url, payload) => {
     headers: {
       'Authorization': `Bearer ${getToken()}`
     }
-  }).catch(handleAuthenticationError);
+  }).catch(console.log("Error in Api call post"));
 };
 
 // GET method
@@ -79,7 +81,10 @@ const get = (url, payload) => {
     headers: {
       'Authorization': `Bearer ${getToken()}`
     }
-  }).catch(handleAuthenticationError);
+  }).catch((error) => {
+    console.log("Error in API call GET:", error);
+    throw error; // Optionally rethrow the error to propagate it further
+  });
 };
 
 // put method
@@ -93,7 +98,7 @@ const postreq = (url, payload) => {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Authorization': `Bearer ${getToken()}`,
     },
-  }).catch(handleAuthenticationError);
+  }).catch(console.log("Error in Api call postreq"));
 };
 
 // Export API service

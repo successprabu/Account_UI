@@ -14,14 +14,14 @@ const ServicePage = () => {
       description: "Efficiently manage school operations with our comprehensive ERP solution. From student management to academic records, streamline your processes seamlessly.",
       icon: <FaUsers size={50} />,
       color: "#ffcccb",
-      link: "/school-erp"
+      link: "school-erp"
     },
     {
       title: "accountsSoftware",
       description: "Handle your finances effortlessly with our advanced accounting software. Track expenses, manage invoices, and generate reports with ease.",
       icon: <FaMoneyCheckAlt size={50} />,
       color: "#e6e6fa",
-      link: "/purchase"
+      link: "purchase"
     },
     {
       title: "marineERP",
@@ -34,9 +34,9 @@ const ServicePage = () => {
 
   return (
     <div>
-      <div>
+      {/* <div>
         <AppHeader />
-      </div>
+      </div> */}
       <section className="hero">
         <div className="hero-content">
           <h1>{t("ourServices")}</h1>

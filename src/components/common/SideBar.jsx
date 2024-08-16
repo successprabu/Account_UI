@@ -138,14 +138,14 @@ const SideBar = () => {
                     {t("userMaster")}
                   </Nav.Link>
                 </li>
-                <li className="sidebar-item">
+                {/* <li className="sidebar-item">
                   <Nav.Link
                     href="/purchase"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("clientMaster")}
                   </Nav.Link>
-                </li>
+                </li> */}
               </ul>
             </Collapse>
           </li>
@@ -239,17 +239,32 @@ const SideBar = () => {
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link sidebar-sublink">
-                    {t("Name Reports")}
+                    {t("receiptReport")}
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link sidebar-sublink">
-                    {t("Village Reports")}
+                    {t("expenseReports")}
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link sidebar-sublink">
-                    {t("Transaction Report")}
+                    {t("locationAmountReport")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                    {t("userAmountReport")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                    {t("summaryReport")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                    {t("rankingReport")}
                   </Nav.Link>
                 </li>
               </ul>

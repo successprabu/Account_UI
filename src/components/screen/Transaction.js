@@ -29,6 +29,8 @@ import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { SaveButton, ClearButton } from "./css/styles";
+import Translator from "../common/TranslationBasedOnLanguage";
+
 
 const schema = yup
   .object()
@@ -104,6 +106,8 @@ const Transaction = () => {
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
 
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
+
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -112,6 +116,8 @@ const Transaction = () => {
         ...prevFormData,
         customerId: userDetail.customerID,
         functionId: userDetail.functionId,
+        createdBy:userDetail.id,
+        updatedBy:userDetail.id
       }));
     } else {
       setIsAuthenticated(false);
@@ -135,20 +141,25 @@ const Transaction = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValue = value;
 
-    // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: updatedValue,
+      [name]: value,
     }));
 
-    // Check if the input ends with a space to trigger transliteration
-    if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
+    // Check if the input ends with a space to trigger translation
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(name);
+    }
+  };
+
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: transliterateToTamil(updatedValue.trim()),
+        [fieldBeingTranslated]: translatedText,
       }));
+      setFieldBeingTranslated(null);
     }
   };
 
@@ -263,13 +274,10 @@ const Transaction = () => {
     return (
       <div className="text-danger">
         {t("authentication_required")}{" "}
-        <span className="text-primary">
-          <Link to="/login">{t("login_here")}</Link>
-        </span>
+        <Link to="/login">{t("login_here")}</Link>
       </div>
     );
   }
-
   return (
     <Card>
       <Header
@@ -302,7 +310,7 @@ const Transaction = () => {
                     <strong>{t("placeName")}:</strong>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.villageName}
+                    {lastRecord.transaction.villageName}
                   </Col>
                 </Row>
                 <Row className="mb-2 row-border">
@@ -310,7 +318,7 @@ const Transaction = () => {
                     <strong>{t("name")}:</strong>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.name}
+                    {lastRecord.transaction.name}
                   </Col>
                 </Row>
                 <Row className="mb-2 row-border">
@@ -318,7 +326,7 @@ const Transaction = () => {
                     <strong>{t("amount")}:</strong>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.amount}
+                    {lastRecord.transaction.amount}
                   </Col>
                 </Row>
                 <Row className="mb-2 row-border">
@@ -326,7 +334,7 @@ const Transaction = () => {
                     <strong>{t("totalRecord")}:</strong>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.totalRecord}
+                    {lastRecord.totalTrans}
                   </Col>
                 </Row>
                 <Row className="mb-2">
@@ -651,6 +659,13 @@ const Transaction = () => {
               </FormGroup>
             </Col>
           </Row>
+           {/* Translator Component */}
+           <Translator
+              inputText={formData[fieldBeingTranslated] || ""}
+              onTranslated={handleTranslation}
+              sourceLanguage="en"
+              targetLanguage= {i18n.language ||"en" }
+            />
           <div className="d-flex justify-content-center mt-3">
             <SaveButton type="submit" variant="success" className="me-3">
               <FaSave className="me-2" />
