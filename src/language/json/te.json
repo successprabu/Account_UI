@@ -63,6 +63,9 @@
   "addTransaction": "కొత్త రసీదు",
   "addExpenses": "కొత్త ఖర్చు",
   "transactionList": "రసీదు జాబితా",
-  "expensesList": "ఖర్చుల జాబితా"
+  "expensesList": "ఖర్చుల జాబితా",
+  "downloadPdf":"PDF డౌన్‌లోడ్ చేయండి",
+  "exportExcel":"Excel డౌన్‌లోడ్ చేయండి"
+ 
   }
   

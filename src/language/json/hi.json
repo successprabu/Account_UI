@@ -62,6 +62,9 @@
   "addTransaction": "नई रसीद",
   "addExpenses": "नया खर्च",
   "transactionList": "रसीद सूची",
-  "expensesList": "खर्च सूची"
+  "expensesList": "खर्च सूची",
+  "downloadPdf":"पीडीएफ़ डाउनलोड करें",
+  "exportExcel":"एक्सेल डाउनलोड करें"
+ 
   }
   

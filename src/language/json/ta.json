@@ -189,6 +189,9 @@
         "honeymoon": "பிரம்மச்சாரி விடுமுறை",
         "miscellaneous": "பிற செலவுகள்",
         "totalRcdNosVsTotalExpenses": "மொத்த பதிவுகள்: பெறப்பட்டது Vs செலவுகள்",
-  "totalRcdAmountVsTotalExpenses": "மொத்த தொகை: பெறப்பட்டது Vs செலவுகள்"
+  "totalRcdAmountVsTotalExpenses": "மொத்த தொகை: பெறப்பட்டது Vs செலவுகள்",
+  "downloadPdf":"PDF பதிவிறக்கவும்",
+  "exportExcel":"Excel பதிவிறக்கவும்"
+ 
   }
   

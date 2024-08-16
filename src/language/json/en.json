@@ -191,7 +191,9 @@
  "honeymoon": "Honeymoon",
  "miscellaneous": "Miscellaneous",
  "totalRcdNosVsTotalExpenses": "Total Records : Received Vs Expenses",
- "totalRcdAmountVsTotalExpenses": "Total Amount : Received Vs Expenses"
+ "totalRcdAmountVsTotalExpenses": "Total Amount : Received Vs Expenses",
+ "downloadPdf":"Download PDF",
+ "exportExcel":"Download Excel"
 
 
   }

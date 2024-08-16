@@ -8,7 +8,6 @@ const Rootlayout = () => {
   //const [user, setUser] = useState(undefined); // Start with undefined
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user,'fromtoproot')
   useEffect(() => {
     // console.log(user,'setuser')
     // if (storedUser) {

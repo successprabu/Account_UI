@@ -10,6 +10,7 @@ import {
   FormLabel,
 } from "react-bootstrap";
 
+
 export const ClientTable = styled(Table)`
   font-size: 10px !important;
   border: 1px solid #DFDFDF !important;
@@ -256,4 +257,34 @@ export const TotalRow = styled.tr`
   background-color: red;
   color: red;
   font-weight: bold;
+`;
+export const PdfButton = styled(Button).attrs({
+  variant: 'danger',
+  type: 'button',
+})`
+  font-size: 1rem;
+  width: auto;
+  margin: 20px 5px 0 0;
+  display: flex;
+  align-items: center;
+  background-color: #d32f2f; /* Adobe red color */
+  border: none;
+  &:hover {
+    background-color: #c62828;
+  }
+`;
+export const ExcelButton = styled(Button).attrs({
+  variant: 'success',
+  type: 'button',
+})`
+  font-size: 1rem;
+  width: auto;
+  margin: 20px 0 0 5px;
+  display: flex;
+  align-items: center;
+  background-color: #28a745; /* Excel green color */
+  border: none;
+  &:hover {
+    background-color: #218838;
+  }
 `;

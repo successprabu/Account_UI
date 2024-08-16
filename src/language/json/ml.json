@@ -62,6 +62,9 @@
   "addTransaction": "പുതിയ രസീത്",
   "addExpenses": "പുതിയ ചെലവ്",
   "transactionList": "രസീത് പട്ടിക",
-  "expensesList": "ചെലവ് പട്ടിക"
+  "expensesList": "ചെലവ് പട്ടിക",
+  "downloadPdf":"PDF ഡൗൺലോഡ് ചെയ്യുക",
+  "exportExcel":"Excel ഡൗൺലോഡ് ചെയ്യുക"
+ 
   }
   

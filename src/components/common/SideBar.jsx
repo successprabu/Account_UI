@@ -238,7 +238,7 @@ const SideBar = () => {
             <Collapse in={reportOpen}>
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <Nav.Link href="/income-report" className="sidebar-link sidebar-sublink">
                     {t("receiptReport")}
                   </Nav.Link>
                 </li>

@@ -62,6 +62,9 @@
   "addTransaction": "ಹೊಸ ರಸೀದು",
   "addExpenses": "ಹೊಸ ಖರ್ಚು",
   "transactionList": "ರಸೀದಿ ಪಟ್ಟಿ",
-  "expensesList": "ಖರ್ಚು ಪಟ್ಟಿ"
+  "expensesList": "ಖರ್ಚು ಪಟ್ಟಿ",
+  "downloadPdf":"ಪಿಡಿಎಫ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+  "exportExcel":"ಎಕ್ಸೆಲ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ"
+ 
   }
   

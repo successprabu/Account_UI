@@ -19,6 +19,8 @@ import ContactUs from "./components/screen/ContactUs";
 import Expenses from "./components/screen/Expenses";
 import ExpensesList from "./components/screen/list/ExpensesList";
 import TranslationDemo from "./components/common/TranslationDemo";
+import ReportComponent from "./components/screen/reports/ReportComponent";
+import ReportPage from "./components/screen/reports/IncomeReport";
 
 const Router = () => {
   return (
@@ -32,6 +34,7 @@ const Router = () => {
       <Route index element={<Home />} />      
       <Route path="unauthorized" element={<Unauthorized />} />
       <Route path="about" element={<AboutUs />} />
+      <Route path="report" element={<ReportComponent />} />
       <Route path="*" element={<PageNotFound />} />
 
 
@@ -92,6 +95,14 @@ const Router = () => {
              element={
               <ProtectedRoute allowedRoles={["SU", "AU"]}>
                 <User/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="income-report"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <ReportPage/>
               </ProtectedRoute>
             }
           />
