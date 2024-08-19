@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../App.css";
 import { Link } from "react-router-dom";
@@ -9,7 +9,8 @@ import {
   LOGIN_USER_ACCOUNT_CHECK_API,
 } from "../../common/CommonApiURL";
 import axios from "axios";
-import { ClipLoader } from "react-spinners"; // Importing a loader from react-spinners
+import {jwtDecode} from "jwt-decode"; // Import jwt-decode library
+import { ClipLoader } from "react-spinners";
 import AppHeader from "../../common/AppHeader";
 
 const Login = () => {
@@ -22,9 +23,23 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
-  const [userTypes, setUserTypes] = useState([]); // User types state
+  const [loading, setLoading] = useState(false);
+  const [userTypes, setUserTypes] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const decodedToken = jwtDecode(user.token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,19 +56,18 @@ const Login = () => {
         `${LOGIN_USER_ACCOUNT_CHECK_API}userName=${formData.username}&appName=MOI`
       );
       const data = response.data;
-  
+
       if (data.result && data.data.length > 0) {
-        // Set the form data with the 0th value initially
         setFormData({
           ...formData,
           userType: data.data[0].userType,
           userTypeDescription: data.data[0].userTypeDescription,
         });
-  
+
         const uniqueUserTypes = [
           ...new Set(data.data.map((item) => item.userType)),
         ];
-  
+
         const userTypesWithDescriptions = uniqueUserTypes.map((userType) => {
           const userTypeInfo = data.data.find(
             (item) => item.userType === userType
@@ -63,7 +77,7 @@ const Login = () => {
             userTypeDescription: userTypeInfo.userTypeDescription,
           };
         });
-  
+
         if (uniqueUserTypes.length === 1) {
           setFormData({
             ...formData,
@@ -84,7 +98,6 @@ const Login = () => {
       setUserTypes([]);
     }
   };
-  
 
   const handleUserTypeChange = (e) => {
     const selectedUserType = userTypes.find(
@@ -99,22 +112,26 @@ const Login = () => {
 
   const userLogin = async (event) => {
     event.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const isValid = await loginSchema.isValid(formData);
       if (isValid) {
         console.log("API input:", formData);
-        // Axios post request
         const response = await axios.post(LOGIN_API, formData);
         const data = response.data;
 
-        console.log("API Response:", data); // Debugging API response
+        console.log("API Response:", data);
         if (data.result) {
-          localStorage.setItem("user", JSON.stringify(data.data));
-          const user=JSON.parse(localStorage.getItem('user'));
-          console.log(user,"userformlogin")
-          navigate("/dashboard");
+          const decodedToken = jwtDecode(data.data.token);
+          const currentTime = Date.now() / 1000;
+
+          if (decodedToken.exp > currentTime) {
+            localStorage.setItem("user", JSON.stringify(data.data));
+            navigate("/dashboard");
+          } else {
+            setLoginError(t("session_expired"));
+          }
         } else {
           setLoginError(data.message);
         }
@@ -132,12 +149,12 @@ const Login = () => {
         setLoginError(t("an_error_occurred"));
       }
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   return (
-        <>
+    <>
       <div>
         <AppHeader />
       </div>
@@ -158,7 +175,7 @@ const Login = () => {
                 className="form-control"
                 value={formData.username}
                 onChange={handleChange}
-                onBlur={handleUsernameBlur} // Call API when username input loses focus
+                onBlur={handleUsernameBlur}
               />
             </div>
             <div className="m2 text-primary">

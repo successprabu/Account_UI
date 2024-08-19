@@ -92,7 +92,6 @@ const TransactionList = () => {
         setTransactionList(response.data.data.transactions);
         setTotalPages(response.data.data.totalPages);
       } else {
-        console.error("No Records Found");
         return <p>{t("noData")}</p>;
       }
     } catch (error) {
@@ -117,8 +116,6 @@ const TransactionList = () => {
   };
 
   const handleDelete = async () => {
-    console.log(deletingTransactionId, "deteleid");
-
     try {
       const user = localStorage.getItem("user");
       await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
@@ -156,8 +153,6 @@ const TransactionList = () => {
         setPlaceName(translatedText);
       }
       setFieldBeingTranslated(null);
-      console.log(fieldBeingTranslated, "fieldBeingTranslated");
-      console.log(translatedText, "translatedText");
     }
   };
 

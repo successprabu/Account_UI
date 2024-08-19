@@ -6,6 +6,7 @@ import { API_SERVICE } from "../../common/CommonMethod";
 import { REPORT_API } from "../../common/CommonApiURL";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import * as XLSX from "xlsx";
+import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
 import {
   SearchButton,
@@ -17,6 +18,7 @@ import {
   PdfButton,
   ExcelButton,
 } from "../css/styles";
+import Translator from "../../common/TranslationBasedOnLanguage";
 
 const ReportPage = () => {
   const [reportData, setReportData] = useState([]);
@@ -28,7 +30,7 @@ const ReportPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pdfExportComponent = useRef(null);
   const { t } = useTranslation();
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const fetchReportData = async (page = 1, size = 10) => {
     try {
       const user = localStorage.getItem("user");
@@ -104,6 +106,28 @@ const ReportPage = () => {
     pdfExportComponent.current.save();
   };
 
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      if (fieldBeingTranslated === "name") {
+        setName(translatedText);
+      } else if (fieldBeingTranslated === "placeName") {
+        setPlaceName(translatedText);
+      }
+      setFieldBeingTranslated(null);
+    }
+  };
+
+  const handleChange = (e, setState, fieldName) => {
+    const { value } = e.target;
+    setState(value);
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(fieldName);
+      // Initiate translation
+      handleTranslation(value.trim());
+    }
+  };
+
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -134,7 +158,7 @@ const ReportPage = () => {
                       type="text"
                       placeholder={t("name")}
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => handleChange(e, setName, "name")}
                     />
                   </InputGroup>
                 </Form.Group>
@@ -147,7 +171,7 @@ const ReportPage = () => {
                       type="text"
                       placeholder={t("placeName")}
                       value={placeName}
-                      onChange={(e) => setPlaceName(e.target.value)}
+                      onChange={(e) => handleChange(e, setPlaceName, "placeName")}
                     />
                   </InputGroup>
                 </Form.Group>
@@ -169,7 +193,7 @@ const ReportPage = () => {
             <Row className="justify-content-between align-items-end mt-3">
               <Col xs={12} md={4} className="text-left">
                 <div className="d-flex align-items-center">
-                  <SearchButton type="submit">
+                  <SearchButton>
                     <FaSearch className="mr-2" /> {t("search")}
                   </SearchButton>
                   <ClearButton onClick={handleClear}>
@@ -177,7 +201,46 @@ const ReportPage = () => {
                   </ClearButton>
                 </div>
               </Col>
-              <Col xs={12} md={4} className="text-center">
+             
+              <Col xs={12} md={4} className="text-right">
+                <div className="d-flex justify-content-end align-items-center">
+                  <PdfButton onClick={exportToPDF}>
+                    <FaFilePdf className="mr-2" /> {t("downloadPdf")}
+                  </PdfButton>
+                  <ExcelButton onClick={exportToExcel}>
+                    <FaFileExcel className="mr-2" /> {t("exportExcel")}
+                  </ExcelButton>
+                </div>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+         {/* Translator Component */}
+         {fieldBeingTranslated && (
+              <Translator
+                inputText={
+                  fieldBeingTranslated === "name"
+                    ? name
+                    : fieldBeingTranslated === "placeName"
+                    ? placeName
+                    : ""
+                }
+                onTranslated={handleTranslation}
+                sourceLanguage="en"
+                targetLanguage={i18n.language || "en"}
+              />
+            )}
+      <PDFExport
+        ref={pdfExportComponent}
+        paperSize="A4"
+        fileName="Report.pdf"
+        scale={0.6}
+        style={{
+          fontFamily: "'Noto Sans Tamil', sans-serif",
+        }}
+      >
+      
                 <PageSizeWrapper>
                   <Form.Label>{t("pageSize")}</Form.Label>
                   <PageSizeSelect
@@ -198,37 +261,16 @@ const ReportPage = () => {
                     <option value={50000}>50000</option>
                   </PageSizeSelect>
                 </PageSizeWrapper>
-              </Col>
-              <Col xs={12} md={4} className="text-right">
-                <div className="d-flex justify-content-end align-items-center">
-                  <PdfButton onClick={exportToPDF}>
-                    <FaFilePdf className="mr-2" /> {t("downloadPdf")}
-                  </PdfButton>
-                  <ExcelButton onClick={exportToExcel}>
-                    <FaFileExcel className="mr-2" /> {t("exportExcel")}
-                  </ExcelButton>
-                </div>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
-      <PDFExport
-        ref={pdfExportComponent}
-        paperSize="A4"
-        fileName="Report.pdf"
-        scale={0.6}
-        style={{
-          fontFamily: "'Noto Sans Tamil', sans-serif",
-        }}
-      >
+             
         <Table responsive className="table table-striped">
           <thead>
             <tr>
               <th>{t("placeName")}</th>
               <th>{t("initial")}</th>
               <th>{t("name")}</th>
-              <th>{t("amount")}</th>
+              <th>{t("oldAmount")}</th>
+              <th>{t("newAmount")}</th>
+              <th>{t("total")}</th>
               <th>{t("phoneNo")}</th>
             </tr>
           </thead>
@@ -239,6 +281,8 @@ const ReportPage = () => {
                   <td>{record.villageName}</td>
                   <td>{record.initial}</td>
                   <td>{record.name}</td>
+                  <td>{record.oldAmount}</td>
+                  <td>{record.newAmount}</td>
                   <td>{record.amount}</td>
                   <td>{record.phoneNo}</td>
                 </tr>
