@@ -100,9 +100,12 @@
   "deleteConfirmation":"Delete Record",
   "deleteConfirmationMessage":"Are you sure to remove record ?",
   "editTransaction": "Edit Transaction",
+  " editExpenses": "Edit Expenses",
   "pageSize":"Page Size",
   "addTransaction":"New Receipt",
   "addExpenses":"New Expenses",
+  "addOthers":"Add Others",
+  "othersList":"Others List",
   "clearButton":"Clear",
   "transactionList":"Receipt List",
   "expensesList":"Expenses List",
@@ -167,6 +170,7 @@
  "dashbordTotalPlaces":"Total Places",
  "dashbordTotalExpenase":"Total Expenses",
  "expensesCategory":"Expenses Category",
+ "expensesDescription": "Expenses Description",
  "enter_expensesCategory":"Please select Expenses",
  "expensesRcdPerson":"Cash Recipient Name",
  "enter_expensesDescription":"Please Enter Expenses Description",
@@ -193,7 +197,16 @@
  "totalRcdNosVsTotalExpenses": "Total Records : Received Vs Expenses",
  "totalRcdAmountVsTotalExpenses": "Total Amount : Received Vs Expenses",
  "downloadPdf":"Download PDF",
- "exportExcel":"Download Excel"
+ "exportExcel":"Download Excel",
+ "others": "Others",
+  "othersType": "Others Type",
+  "othersRemarks": "Others Remarks",
+  "ring": "Ring",
+  "jain": "Jain",
+  "coin": "Coin",
+  "pattam": "Pattam",
+  "enter_description_detail":"Please Enter Detail Description ",
+  "editOthers":"Edit Others"
 
 
   }

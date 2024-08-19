@@ -116,8 +116,8 @@ const Transaction = () => {
         ...prevFormData,
         customerId: userDetail.customerID,
         functionId: userDetail.functionId,
-        createdBy:userDetail.id,
-        updatedBy:userDetail.id
+        createdBy:String(userDetail.id),
+        updatedBy:String(userDetail.id)
       }));
     } else {
       setIsAuthenticated(false);

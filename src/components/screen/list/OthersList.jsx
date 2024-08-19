@@ -28,7 +28,6 @@ import {
 } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess";
 import TransDeleteModal from "../modal/TransDeleteModal";
-import ExpensesEditModal from "../modal/ExpensesEditModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMicrophone,
@@ -38,6 +37,7 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
 import Translator from "../../common/TranslationBasedOnLanguage";
+import OthersEditModal from "../modal/OthersEditModal";
 
 const onEdit = (id, transaction, setEditingTransaction, setShowEditModal) => {
   setEditingTransaction(transaction);
@@ -49,7 +49,7 @@ const onDelete = (id, setDeletingTransactionId, setShowDeleteModal) => {
   setShowDeleteModal(true);
 };
 
-const ExpensesList = () => {
+const OthersList = () => {
   const { t } = useTranslation();
   const [transactionList, setTransactionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -80,9 +80,11 @@ const ExpensesList = () => {
         customer_id: JSON.parse(user).customerID,
         id: null,
         customer_name: name,
-        trans_type:"E",
+        trans_type:"O",
         village_name: placeName,
         mobile: mobile,
+        user_type: JSON.parse(user).userType,
+        userId: JSON.parse(user).id,
         current_page: currentPage,
         page_size: pageSize,
       });
@@ -91,7 +93,6 @@ const ExpensesList = () => {
         setTransactionList(response.data.data.transactions);
         setTotalPages(response.data.data.totalPages);
       } else {
-        console.error("No Records Found");
         return <p>{t("noData")}</p>;
       }
     } catch (error) {
@@ -116,8 +117,6 @@ const ExpensesList = () => {
   };
 
   const handleDelete = async () => {
-    console.log(deletingTransactionId, "deteleid");
-
     try {
       const user = localStorage.getItem("user");
       await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
@@ -153,23 +152,21 @@ const ExpensesList = () => {
         setName(translatedText);
       } else if (fieldBeingTranslated === "placeName") {
         setPlaceName(translatedText);
-      } else if (fieldBeingTranslated === "mobile") {
-        setMobile(translatedText);
       }
       setFieldBeingTranslated(null);
     }
   };
-  
+
   const handleChange = (e, setState, fieldName) => {
     const { value } = e.target;
     setState(value);
-  
     if (value.endsWith(" ")) {
       setFieldBeingTranslated(fieldName);
       // Initiate translation
       handleTranslation(value.trim());
     }
   };
+
   const startRecording = (fieldName, setState) => {
     setIsRecording(true);
     setRecordingField(fieldName);
@@ -203,7 +200,9 @@ const ExpensesList = () => {
 
   const calculateTotals = () => {
     const totalAmount = transactionList.reduce(
-      (acc, trans) => acc + parseFloat(trans.amount || 0),0 );
+      (acc, trans) => acc + parseFloat(trans.amount || 0),
+      0
+    );
     const totalRows = transactionList.length;
     return { totalAmount, totalRows };
   };
@@ -213,6 +212,9 @@ const ExpensesList = () => {
     <tr key={el.id}>
       <td>{el.villageName}</td>
       <td>{el.name}</td>
+      <td>{el.others}</td>
+      <td>{t(el.othersType)}</td>
+      <td>{el.othersRemark}</td>
       <td>{el.amount}</td>
       <td>{el.phoneNo}</td>
       <td>{el.isActive ? t("yes") : t("no")}</td>
@@ -244,11 +246,10 @@ const ExpensesList = () => {
       {/* <Header title={t("transactionList")} links={[{to: "/transaction", label: t("addTransaction")}]} /> */}
       <Header
         //titles={[t("transactionList"), t("anotherTitle")]}
-        titles={[t("expensesList")]}
+        titles={[t("othersList")]}
         links={[
-            { to: "/dashboard", label: t("dashboard") },
-          { to: "/addExpenses", label: t("addExpenses") }
-         
+          { to: "/dashboard", label: t("dashboard") },
+          { to: "/others", label: t("addOthers") },
         ]}
       />
       <Row>
@@ -263,7 +264,7 @@ const ExpensesList = () => {
                       type="text"
                       placeholder={t("name")}
                       value={name}
-                      onChange={(e) => handleChange(e, setName)}
+                      onChange={(e) => handleChange(e, setName, "name")}
                     />
                     <Button
                       variant={
@@ -292,7 +293,9 @@ const ExpensesList = () => {
                       type="text"
                       placeholder={t("placeName")}
                       value={placeName}
-                      onChange={(e) => handleChange(e, setPlaceName)}
+                      onChange={(e) =>
+                        handleChange(e, setPlaceName, "placeName")
+                      }
                     />
                     <Button
                       variant={
@@ -321,7 +324,7 @@ const ExpensesList = () => {
                       type="text"
                       placeholder={t("mobile")}
                       value={mobile}
-                      onChange={(e) => handleChange(e, setMobile)}
+                      onChange={(e) => handleChange(e, setMobile, "mobile")}
                     />
                     <Button
                       variant={
@@ -343,15 +346,22 @@ const ExpensesList = () => {
                 </Form.Group>
               </Col>
             </Row>
-           {/* Translator Component */}
-           {fieldBeingTranslated && (
-            <Translator
-              inputText={name || placeName || mobile}
-              onTranslated={handleTranslation}
-              sourceLanguage="en"
-              targetLanguage={i18n.language || "en"}
-            />
-          )}
+            {/* Translator Component */}
+            {fieldBeingTranslated && (
+              <Translator
+                inputText={
+                  fieldBeingTranslated === "name"
+                    ? name
+                    : fieldBeingTranslated === "placeName"
+                    ? placeName
+                    : ""
+                }
+                onTranslated={handleTranslation}
+                sourceLanguage="en"
+                targetLanguage={i18n.language || "en"}
+              />
+            )}
+
             <Row className="justify-content-center align-items-end">
               <Col xs={12} md={6} className="text-center">
                 <div className="mb-0 d-flex justify-content-center align-items-center">
@@ -385,8 +395,11 @@ const ExpensesList = () => {
       <ClientTable responsive className="table table-striped">
         <thead>
           <tr>
-            <th>{t("expensesCategory")}</th>
-            <th>{t("expensesDescription")}</th>
+            <th>{t("placeName")}</th>
+            <th>{t("name")}</th>
+            <th>{t("others")}</th>
+            <th>{t("othersType")}</th>
+            <th>{t("othersRemarks")}</th>
             <th>{t("amount")}</th>
             <th>{t("phoneNo")}</th>
             <th>{t("active")}</th>
@@ -394,25 +407,25 @@ const ExpensesList = () => {
           </tr>
         </thead>
         <tbody>
-        {transactionList.length > 0 ? (
-             <>
-             {list}
-             <TotalRow>
-               <td colSpan="2">
-                 {t("totalRows")}: {totalRows} {t("pagerows")}
-               </td>
-               <td>{totalAmount}</td>
-             </TotalRow>
-           </> ) : (
-                <tr>
-                  <td colSpan="6" className="text-center danger">
-                    {t("noData")}
-                  </td>
-                </tr>
-              )}
+          {transactionList.length > 0 ? (
+            <>
+              {list}
+              <TotalRow>
+                <td colSpan="2">
+                  {t("totalRows")}: {totalRows} {t("pagerows")}
+                </td>
+                <td>{totalAmount}</td>
+              </TotalRow>
+            </>
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center danger">
+                {t("noData")}
+              </td>
+            </tr>
+          )}
         </tbody>
       </ClientTable>
-      
       <PaginationWrapper>
         <Pagination>
           <Pagination.First
@@ -448,7 +461,7 @@ const ExpensesList = () => {
         onHide={() => setShowDeleteModal(false)}
         onDelete={handleDelete}
       />
-      <ExpensesEditModal
+      <OthersEditModal
         show={showEditModal}
         onHide={() => setShowEditModal(false)}
         transaction={editingTransaction}
@@ -459,4 +472,4 @@ const ExpensesList = () => {
   );
 };
 
-export default ExpensesList;
+export default OthersList;

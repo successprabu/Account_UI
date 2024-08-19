@@ -64,7 +64,19 @@
   "transactionList": "രസീത് പട്ടിക",
   "expensesList": "ചെലവ് പട്ടിക",
   "downloadPdf":"PDF ഡൗൺലോഡ് ചെയ്യുക",
-  "exportExcel":"Excel ഡൗൺലോഡ് ചെയ്യുക"
+  "exportExcel":"Excel ഡൗൺലോഡ് ചെയ്യുക",
+  "editExpenses": "ചിലവുകൾ തിരുത്തുക",
+  "expensesCategory": "ചിലവുകളുടെ വിഭാഗം",
+  "expensesDescription": "ചിലവുകളുടെ വിവരണം",
+  "addOthers": "മറ്റുള്ളവ ചേർക്കുക",
+  "othersList": "മറ്റുള്ളവയുടെ ലിസ്റ്റ്",
+  "others": "മറ്റുള്ളവ",
+  "othersType": "മറ്റുള്ളവയുടെ തരം",
+  "othersRemarks": "മറ്റുള്ളവയുടെ പരാമർശം",
+  "ring": "ആലങ്കാര ചിന്തകം",
+"jain": "ജൈന",
+"coin": "നാണയം",
+"pattam": "പട്ടം"
  
   }
   

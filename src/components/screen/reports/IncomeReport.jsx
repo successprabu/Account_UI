@@ -36,6 +36,7 @@ const ReportPage = () => {
       const user = localStorage.getItem("user");
       const response = await API_SERVICE.get(REPORT_API, {
         customer_id: JSON.parse(user).customerID,
+        trans_type:"R",
         report_type: "INCOME",
         userId: JSON.parse(user).id||0,
         current_page: page,
@@ -57,12 +58,27 @@ const ReportPage = () => {
   };
 
   const fetchAllReportData = async () => {
-    let allData = [];
-    for (let page = 1; page <= totalPages; page++) {
-      const data = await fetchReportData(page, pageSize);
-      allData = allData.concat(data.transactions);
+    try {
+      const user = localStorage.getItem("user");
+      const response = await API_SERVICE.get(REPORT_API, {
+        customer_id: JSON.parse(user).customerID,
+        trans_type:"R",
+        report_type: "INCOME",
+        userId: 0, //JSON.parse(user).id||0,
+        customer_name: name,
+        village_name: placeName,
+        mobile: mobile,
+      });
+      if (response.data.result) {
+        return response.data.data.transactions;
+      } else {
+        console.error("No Records Found");
+        return { transactions: [], totalPages: 1 };
+      }
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+      return { transactions: [], totalPages: 1 };
     }
-    return allData;
   };
 
   useEffect(() => {

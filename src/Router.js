@@ -21,6 +21,8 @@ import ExpensesList from "./components/screen/list/ExpensesList";
 import TranslationDemo from "./components/common/TranslationDemo";
 import ReportComponent from "./components/screen/reports/ReportComponent";
 import ReportPage from "./components/screen/reports/IncomeReport";
+import OtherReceipt from "./components/screen/OtherReceipt";
+import OthersList from "./components/screen/list/OthersList";
 
 const Router = () => {
   return (
@@ -81,6 +83,22 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <ExpensesList />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="others"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <OtherReceipt />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="others-list"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <OthersList />
               </ProtectedRoute>
             }
           />

@@ -64,7 +64,19 @@
   "transactionList": "रसीद सूची",
   "expensesList": "खर्च सूची",
   "downloadPdf":"पीडीएफ़ डाउनलोड करें",
-  "exportExcel":"एक्सेल डाउनलोड करें"
+  "exportExcel":"एक्सेल डाउनलोड करें",
+  "editExpenses": "व्यय संपादित करें",
+  "expensesCategory": "व्यय श्रेणी",
+  "expensesDescription": "व्यय का विवरण",
+  "addOthers": "अन्य जोड़ें",
+  "othersList": "अन्य सूची",
+  "others": "अन्य",
+  "othersType": "अन्य प्रकार",
+  "othersRemarks": "अन्य टिप्पणी",
+  "ring": "अंगूठी",
+"jain": "जैन",
+"coin": "सिक्का",
+"pattam": "पदक"
  
   }
   

@@ -80,6 +80,7 @@ const TransactionList = () => {
         customer_id: JSON.parse(user).customerID,
         id: null,
         customer_name: name,
+        trans_type:"R",
         village_name: placeName,
         mobile: mobile,
         user_type: JSON.parse(user).userType,
@@ -211,6 +212,8 @@ const TransactionList = () => {
     <tr key={el.id}>
       <td>{el.villageName}</td>
       <td>{el.name}</td>
+      <td>{el.oldAmount}</td>
+      <td>{el.newAmount}</td>
       <td>{el.amount}</td>
       <td>{el.phoneNo}</td>
       <td>{el.isActive ? t("yes") : t("no")}</td>
@@ -393,6 +396,8 @@ const TransactionList = () => {
           <tr>
             <th>{t("placeName")}</th>
             <th>{t("name")}</th>
+            <th>{t("oldAmount")}</th>
+            <th>{t("newAmount")}</th>
             <th>{t("amount")}</th>
             <th>{t("phoneNo")}</th>
             <th>{t("active")}</th>

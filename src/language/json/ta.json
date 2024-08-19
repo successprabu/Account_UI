@@ -99,6 +99,7 @@
     "deleteConfirmation":"சாதனத்தை நீக்கு",
     "deleteConfirmationMessage": "சாதனத்தை நீக்க உறுதியாக உள்ளீர்களா ?",
     "editTransaction": "செயல்பாட்டைத் திருத்தவும்",
+    "editExpenses": "செலவுகளைத் திருத்தவும்",
     "pageSize":"பக்க அளவு",
     "addTransaction":"புதிய வருமானம்",
     "clearButton":"அழிக்க",
@@ -191,7 +192,19 @@
         "totalRcdNosVsTotalExpenses": "மொத்த பதிவுகள்: பெறப்பட்டது Vs செலவுகள்",
   "totalRcdAmountVsTotalExpenses": "மொத்த தொகை: பெறப்பட்டது Vs செலவுகள்",
   "downloadPdf":"PDF பதிவிறக்கவும்",
-  "exportExcel":"Excel பதிவிறக்கவும்"
+  "exportExcel":"Excel பதிவிறக்கவும்",
+  "expensesDescription": "செலவின் விளக்கம்",
+  "addOthers": "மற்றவற்றைச் சேர்க்கவும்",
+  "othersList": "மற்றவற்றின் பட்டியல்",
+  "others": "மற்றவை",
+  "othersType": "மற்றவைகளின் வகை",
+  "othersRemarks": "மற்றவைகள் குறிப்பு",
+  "ring": "அழகு அணிகலன்",
+  "jain": "ஜெயின்",
+  "coin": "நாணயம்",
+  "pattam": "பட்டம்",
+  "enter_description_detail":"விளக்கமாக விவரங்களை உள்ளிடவும்",
+  "editOthers":"திருத்து"
  
   }
   

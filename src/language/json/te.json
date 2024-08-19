@@ -65,7 +65,15 @@
   "transactionList": "రసీదు జాబితా",
   "expensesList": "ఖర్చుల జాబితా",
   "downloadPdf":"PDF డౌన్‌లోడ్ చేయండి",
-  "exportExcel":"Excel డౌన్‌లోడ్ చేయండి"
+  "exportExcel":"Excel డౌన్‌లోడ్ చేయండి",
+  "editExpenses": "ఖర్చులను సవరించండి",
+  "expensesCategory": "ఖర్చుల వర్గం",
+  "expensesDescription": "ఖర్చుల వివరణ",
+  "addOthers": "ఇతరులను చేర్చండి",
+  "othersList": "ఇతరుల జాబితా",
+  "others": "ఇతరులు",
+  "othersType": "ఇతరుల రకం",
+  "othersRemarks": "ఇతరుల గమనికలు"
  
   }
   

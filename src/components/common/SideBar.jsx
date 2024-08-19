@@ -207,6 +207,22 @@ const SideBar = () => {
                     {t("expensesList")}
                   </Nav.Link>
                 </li>
+                <li className="sidebar-item">
+                  <Nav.Link
+                    href="/others"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("addOthers")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link
+                    href="/others-list"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("othersList")}
+                  </Nav.Link>
+                </li>
               </ul>
               
             </Collapse>

@@ -64,7 +64,15 @@
   "transactionList": "ರಸೀದಿ ಪಟ್ಟಿ",
   "expensesList": "ಖರ್ಚು ಪಟ್ಟಿ",
   "downloadPdf":"ಪಿಡಿಎಫ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
-  "exportExcel":"ಎಕ್ಸೆಲ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ"
+  "exportExcel":"ಎಕ್ಸೆಲ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+  "editExpenses": "ఖర్చులను సవరించండి",
+  "expensesCategory": "ವೆಚ್ಚದ ವರ್ಗ",
+  "expensesDescription": "ವೆಚ್ಚದ ವಿವರಣೆ",
+  "addOthers": "ಇತರರನ್ನು ಸೇರಿಸಿ",
+  "othersList": "ಇತರರ ಪಟ್ಟಿ",
+  "others": "ಇತರರು",
+  "othersType": "ಇತರರ ವಿಧ",
+  "othersRemarks": "ಇತರರ ಟಿಪ್ಪಣಿಗಳು"
  
   }
   
