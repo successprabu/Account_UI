@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Form, Button, FormLabel, FormSelect  } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import InputWithMicrophone from "../../common/InputWithMicrophone";
 
 const OthersEditModal = ({
   show,
@@ -24,8 +25,10 @@ const OthersEditModal = ({
           <Form>
             <Form.Group controlId="formEditName">
               <Form.Label>{t("name")}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="name"
+                placeholder={t('name')}
                 value={transaction.name}
                 onChange={(e) =>
                   setTransaction({ ...transaction, name: e.target.value })
@@ -34,8 +37,10 @@ const OthersEditModal = ({
             </Form.Group>
             <Form.Group controlId="formEditPlaceName">
               <Form.Label>{t("placeName")}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="villageName"
+                placeholder={t('placeName')}
                 value={transaction.villageName}
                 onChange={(e) =>
                   setTransaction({
@@ -47,8 +52,10 @@ const OthersEditModal = ({
             </Form.Group>
             <Form.Group controlId="formEditMobile">
               <Form.Label>{t("phoneNo")}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="phoneNo"
+                placeholder={t('phoneNo')}
                 value={transaction.phoneNo}
                 onChange={(e) =>
                   setTransaction({ ...transaction, phoneNo: e.target.value })
@@ -57,8 +64,10 @@ const OthersEditModal = ({
             </Form.Group>
             <Form.Group controlId="formEditOldAmount">
               <Form.Label>{t("othersRemarks")}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="othersRemark"
+                placeholder={t('othersRemark')}
                 value={transaction.othersRemark}
                 onChange={(e) =>
                   setTransaction({ ...transaction, othersRemark: e.target.value })
@@ -68,7 +77,7 @@ const OthersEditModal = ({
             </Form.Group>
             <Form.Group controlId="formEditOldAmount">
               <Form.Label>{t("others")}</Form.Label>
-              <Form.Control
+             <InputWithMicrophone
                 type="number"
                 value={transaction.others}
                 onChange={(e) =>
@@ -84,6 +93,7 @@ const OthersEditModal = ({
               </FormLabel>
               <FormSelect
                 name="othersType"
+                placeholder={t('othersType')}
                 value={transaction.othersType} // Use the raw value from transaction.othersType
                 onChange={(e) =>
                   setTransaction({ ...transaction, othersType: e.target.value })

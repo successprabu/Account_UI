@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import InputWithMicrophone from '../../common/InputWithMicrophone';
 
 const TransEditModal = ({ show, onHide, transaction, setTransaction, onSave }) => {
   const { t } = useTranslation();
@@ -24,24 +25,30 @@ const TransEditModal = ({ show, onHide, transaction, setTransaction, onSave }) =
           <Form>
             <Form.Group controlId="formEditName">
               <Form.Label>{t('name')}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="name"
+                placeholder={t('name')}
                 value={transaction.name}
                 onChange={(e) => setTransaction({ ...transaction, name: e.target.value })}
               />
             </Form.Group>
             <Form.Group controlId="formEditPlaceName">
               <Form.Label>{t('placeName')}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="villageName"
+                placeholder={t('placeName')}
                 value={transaction.villageName}
                 onChange={(e) => setTransaction({ ...transaction, villageName: e.target.value })}
               />
             </Form.Group>
             <Form.Group controlId="formEditMobile">
               <Form.Label>{t('phoneNo')}</Form.Label>
-              <Form.Control
+              <InputWithMicrophone
                 type="text"
+                name="phoneNo"
+                placeholder={t('phoneNo')}
                 value={transaction.phoneNo}
                 onChange={(e) => setTransaction({ ...transaction, phoneNo: e.target.value })}
               />

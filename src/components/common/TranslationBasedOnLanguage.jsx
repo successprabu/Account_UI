@@ -33,9 +33,10 @@ const Translator = ({ inputText, onTranslated, sourceLanguage = 'en', targetLang
   }, [inputText]);
 
   return (
-    <div>
-      {isLoading && <p>Translating...</p>}
-    </div>
+    // <div>
+    //   {isLoading && <p>Translating...</p>}
+    // </div>
+    console.log('Translate')
   );
 };
 
