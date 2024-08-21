@@ -209,9 +209,10 @@
   "sNo":"வரிசை # ",
   "othersSummary":"உருப்படி வாரியான விவரம்",
   "itemName": "உருப்படி பெயர்",
-  "itemTotal":"மொத்தம்"
-
-
- 
+  "itemTotal":"மொத்தம்",
+  "receivedBy": "பெறுபவர்",
+  "receipt": "வருமானம்",
+  "expenses": "செலவுகள்",
+  "overallSummary":"ஒருங்கிணைந்த சுருக்கம்" 
   }
   

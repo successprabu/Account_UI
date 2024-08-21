@@ -269,17 +269,17 @@ const SideBar = () => {
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <Nav.Link href="/regional-report#" className="sidebar-link sidebar-sublink">
                     {t("locationAmountReport")}
                   </Nav.Link>
                 </li>
-                <li className="sidebar-item">
+                {/* <li className="sidebar-item">
                   <Nav.Link href="#" className="sidebar-link sidebar-sublink">
                     {t("userAmountReport")}
                   </Nav.Link>
-                </li>
+                </li> */}
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <Nav.Link href="/summary-report" className="sidebar-link sidebar-sublink">
                     {t("summaryReport")}
                   </Nav.Link>
                 </li>

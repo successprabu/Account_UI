@@ -1,0 +1,29 @@
+
+/* Align PDF and Excel buttons on the same line */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Space between buttons */
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for the headers */
+  .report-header {
+    background-color: #00C49F;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  /* Separator line between sections */
+  .separator-line {
+    border-top: 2px solid #00C49F;
+    margin: 20px 0;
+  }
+  
+  /* Footer text styling */
+  .table tfoot tr td {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  

@@ -211,7 +211,11 @@
   "sNo":"S.No",
   "othersSummary":"Item Details",
   "itemName":"Item Name",
-  "itemTotal":"Total (Nos)"
+  "itemTotal":"Total (Nos)",
+  "receivedBy":"Received By",
+  "receipt":"Receipt",
+  "expenses":"Expenses",
+  "overallSummary":"Consolidated Summary"
 
 
   }

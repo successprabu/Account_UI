@@ -24,3 +24,6 @@ export const DASHBOARD_DETAIL_API=`${TRANSACTION}GetDashboardDetail?`
 export const REPORT_API=`${REPORT}GetTransactionReport?`
 export const REPORT_GET_ALLDATA_API=`${REPORT}GetAllTransaction?`
 export const REPORT_GET_OTHERSSUMMARY_API=`${REPORT}GetOthersSummaryReport?`
+export const REPORT_GET_REGIONALSUMMARY_API=`${REPORT}GetRegionalSummaryReport?`
+export const REPORT_GET_OVERALLSUMMARY_API=`${REPORT}GetOverallSummaryReport?`
+

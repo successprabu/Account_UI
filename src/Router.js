@@ -25,6 +25,8 @@ import OthersList from "./components/screen/list/OthersList";
 import IncomeReport from "./components/screen/reports/IncomeReport";
 import ExpensesReport from "./components/screen/reports/ExpensesReport";
 import OthersReport from "./components/screen/reports/OthersReport";
+import RegionalSummaryReport from "./components/screen/reports/RegionalSummaryReport";
+import OverallSummaryReport from "./components/screen/reports/OverallSummaryReport";
 
 const Router = () => {
   return (
@@ -139,6 +141,22 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <OthersReport/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="regional-report"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <RegionalSummaryReport/>
+              </ProtectedRoute>
+            }
+          />
+            <Route
+            path="summary-report"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <OverallSummaryReport/>
               </ProtectedRoute>
             }
           />
