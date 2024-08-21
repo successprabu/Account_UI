@@ -259,8 +259,13 @@ const SideBar = () => {
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
-                    {t("expenseReports")}
+                  <Nav.Link href="/expenses-report" className="sidebar-link sidebar-sublink">
+                    {t("expenseReport")}
+                  </Nav.Link>
+                </li>
+                <li className="sidebar-item">
+                  <Nav.Link href="/others-report" className="sidebar-link sidebar-sublink">
+                    {t("othersReport")}
                   </Nav.Link>
                 </li>
                 <li className="sidebar-item">

@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Row, Col, InputGroup, Form, Table, Pagination } from "react-bootstrap";
+import { Row, Col, InputGroup, Form, Table, Pagination, Button } from "react-bootstrap";
 import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../../common/CommonMethod";
-import { REPORT_API, REPORT_GET_ALLDATA_API } from "../../common/CommonApiURL";
+import { REPORT_API, REPORT_GET_ALLDATA_API, REPORT_GET_OTHERSSUMMARY_API } from "../../common/CommonApiURL";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
-import {
-  StyleSheet,
-} from "@react-pdf/renderer";
+import { StyleSheet } from "@react-pdf/renderer";
 import {
   SearchButton,
   ClearButton,
@@ -21,7 +19,7 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
-
+import OthersSummaryModal from "../modal/OthersSummaryModal ";
 
 const styles = StyleSheet.create({
   page: {
@@ -35,7 +33,7 @@ const styles = StyleSheet.create({
   },
   page: {
     padding: 20,
-    fontFamily: 'Noto Sans Tamil, sans-serif',
+    fontFamily: "Noto Sans Tamil, sans-serif",
   },
   tableHeader: {
     borderBottom: "1px solid black",
@@ -50,7 +48,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const IncomeReport = () => {
+const OthersReport = () => {
   const [reportData, setReportData] = useState([]);
   const [name, setName] = useState("");
   const [placeName, setPlaceName] = useState("");
@@ -60,9 +58,10 @@ const IncomeReport = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pdfExportComponent = useRef(null);
   const { t } = useTranslation();
+  const [showModal, setShowModal] = useState(false);
+  const [othersData, setOthersData] = useState([]);
   const [pageTotals, setPageTotals] = useState({
-    oldAmount: 0,
-    newAmount: 0,
+    others: 0,
     amount: 0,
   });
 
@@ -72,8 +71,8 @@ const IncomeReport = () => {
       const user = localStorage.getItem("user");
       const response = await API_SERVICE.get(REPORT_API, {
         customer_id: JSON.parse(user).customerID,
-        trans_type: "R",
-        report_type: "INCOME",
+        trans_type: "O",
+        report_type: "OTHERS",
         userId: JSON.parse(user).id || 0,
         current_page: page,
         page_size: size,
@@ -94,13 +93,36 @@ const IncomeReport = () => {
     }
   };
 
+  const handleShowModal = async () => {
+    try {
+        const user = localStorage.getItem("user");
+      const response = await API_SERVICE.get(REPORT_GET_OTHERSSUMMARY_API, {
+        customer_id: JSON.parse(user).customerID,      
+        userId: 0, //JSON.parse(user).id||0,
+        function_id:JSON.parse(user).functionId || 0,
+      });
+     
+      if (response.data.result) {
+        setOthersData(response.data.data);
+      } else {
+        console.error("Failed to fetch others summary report");
+      }
+    } catch (error) {
+      console.error("Error fetching others summary report:", error);
+    }
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   const fetchAllReportData = async () => {
     try {
       const user = localStorage.getItem("user");
       const response = await API_SERVICE.get(REPORT_GET_ALLDATA_API, {
         customer_id: JSON.parse(user).customerID,
-        trans_type: "R",
-        report_type: "INCOME",
+        trans_type: "O",
+        report_type: "OTHERS",
         userId: 0, //JSON.parse(user).id||0,
         customer_name: name,
         village_name: placeName,
@@ -121,11 +143,10 @@ const IncomeReport = () => {
   const calculatePageTotals = (data) => {
     const totals = data.reduce(
       (acc, item) => ({
-        oldAmount: acc.oldAmount + item.oldAmount,
-        newAmount: acc.newAmount + item.newAmount,
+        others: acc.others + item.others,
         amount: acc.amount + item.amount,
       }),
-      { oldAmount: 0, newAmount: 0, amount: 0 }
+      { others: 0, amount: 0 }
     );
     setPageTotals(totals);
   };
@@ -183,7 +204,6 @@ const IncomeReport = () => {
     }
   };
 
-  
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
       if (fieldBeingTranslated === "name") {
@@ -217,10 +237,10 @@ const IncomeReport = () => {
   return (
     <div>
       <Header
-        titles={[t("receiptReport")]}
+        titles={[t("othersReport")]}
         links={[
           { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction", label: t("addTransaction") },
+          { to: "/others", label: t("addOthers") },
         ]}
       />
       <Row>
@@ -332,7 +352,6 @@ const IncomeReport = () => {
         </PageSizeSelect>
       </PageSizeWrapper>
 
-
       <PDFExport
         ref={pdfExportComponent}
         paperSize="A4"
@@ -351,62 +370,89 @@ const IncomeReport = () => {
         keepTogether="tr"
         fonts={[
           {
-            name: 'Noto Sans Tamil',
-            url: 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap',
-            format: 'truetype'
-          }
+            name: "Noto Sans Tamil",
+            url: "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap",
+            format: "truetype",
+          },
         ]}
       >
-        <div style={{ fontFamily: "'Noto Sans Tamil', sans-serif", fontSize: '12pt' }}>
-        <Table responsive className="table table-striped">
-          <thead>
-            <tr>
-              <th>{t("sNo")}</th>
-              <th>{t("placeName")}</th>
-              <th>{t("initial")}</th>
-              <th>{t("name")}</th>
-              <th>{t("oldAmount")}</th>
-              <th>{t("newAmount")}</th>
-              <th>{t("total")}</th>
-              <th>{t("phoneNo")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reportData.length > 0 ? (
-              reportData.map((item, index) => (
-                <tr key={index}>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{(currentPage - 1) * pageSize + index + 1}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.villageName}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.initial}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.name}</td>              
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.oldAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.newAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.amount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.mobile}</td>
-              </tr>
-            ))
-            ) : (
+        <div
+          style={{
+            fontFamily: "'Noto Sans Tamil', sans-serif",
+            fontSize: "12pt",
+          }}
+        >
+          <Table responsive className="table table-striped">
+            <thead>
               <tr>
-                <td colSpan="5" className="text-center">
-                  {t("noData")}
-                </td>
+                <th>{t("sNo")}</th>
+                <th>{t("placeName")}</th>
+                <th>{t("name")}</th>
+                <th>{t("amount")}</th>
+                <th>{t("others")}</th>
+                <th>{t("othersType")}</th>
+                <th>{t("othersRemarks")}</th>
+                <th>{t("phoneNo")}</th>
               </tr>
-            )}
-          </tbody>
+            </thead>
+            <tbody>
+              {reportData.length > 0 ? (
+                reportData.map((item, index) => (
+                  <tr key={index}>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {(currentPage - 1) * pageSize + index + 1}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.villageName}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.name}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.amount}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.others}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {t(item.othersType)}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.othersRemark}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.phoneNo}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    {t("noData")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
 
-          <tfoot
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            <tr>
-              <td colSpan="4">{t("total")}</td>
-              <td>{pageTotals.oldAmount}</td>
-              <td>{pageTotals.newAmount}</td>
-              <td>{pageTotals.amount}</td>
-            </tr>
-          </tfoot>
-        </Table>
+            <tfoot
+              style={{
+                fontWeight: "bold",
+              }}
+            >
+              <tr>
+                <td colSpan="3">{t("total")}</td>
+                <td>{pageTotals.amount}</td>
+                <Button variant="link" onClick={handleShowModal}>
+                  <td>{pageTotals.others}</td>
+                </Button>
+              </tr>
+            </tfoot>
+          </Table>
+          <OthersSummaryModal
+            show={showModal}
+            handleClose={handleCloseModal}
+            othersData={othersData}
+          />
         </div>
       </PDFExport>
 
@@ -443,4 +489,4 @@ const IncomeReport = () => {
   );
 };
 
-export default IncomeReport;
+export default OthersReport;

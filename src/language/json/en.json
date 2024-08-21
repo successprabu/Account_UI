@@ -10,7 +10,8 @@
   "Link 2": "Link 2",
   "Reports": "Reports",
   "receiptReport": "Income Report",
-  "expenseReports": "Expense Report",
+  "expenseReport": "Expense Report",
+  "othersReport":"Others Report",
   "locationAmountReport": "Regional Summary Report",
   "userAmountReport": "User Breakdown Report",
   "summaryReport": "Summary Report",
@@ -206,7 +207,11 @@
   "coin": "Coin",
   "pattam": "Pattam",
   "enter_description_detail":"Please Enter Detail Description ",
-  "editOthers":"Edit Others"
+  "editOthers":"Edit Others",
+  "sNo":"S.No",
+  "othersSummary":"Item Details",
+  "itemName":"Item Name",
+  "itemTotal":"Total (Nos)"
 
 
   }

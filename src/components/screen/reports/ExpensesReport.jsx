@@ -8,9 +8,7 @@ import { PDFExport } from "@progress/kendo-react-pdf";
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
-import {
-  StyleSheet,
-} from "@react-pdf/renderer";
+import { StyleSheet } from "@react-pdf/renderer";
 import {
   SearchButton,
   ClearButton,
@@ -21,7 +19,6 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
-
 
 const styles = StyleSheet.create({
   page: {
@@ -35,7 +32,7 @@ const styles = StyleSheet.create({
   },
   page: {
     padding: 20,
-    fontFamily: 'Noto Sans Tamil, sans-serif',
+    fontFamily: "Noto Sans Tamil, sans-serif",
   },
   tableHeader: {
     borderBottom: "1px solid black",
@@ -50,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const IncomeReport = () => {
+const ExpensesReport = () => {
   const [reportData, setReportData] = useState([]);
   const [name, setName] = useState("");
   const [placeName, setPlaceName] = useState("");
@@ -72,8 +69,8 @@ const IncomeReport = () => {
       const user = localStorage.getItem("user");
       const response = await API_SERVICE.get(REPORT_API, {
         customer_id: JSON.parse(user).customerID,
-        trans_type: "R",
-        report_type: "INCOME",
+        trans_type: "E",
+        report_type: "EXPENSES",
         userId: JSON.parse(user).id || 0,
         current_page: page,
         page_size: size,
@@ -99,8 +96,8 @@ const IncomeReport = () => {
       const user = localStorage.getItem("user");
       const response = await API_SERVICE.get(REPORT_GET_ALLDATA_API, {
         customer_id: JSON.parse(user).customerID,
-        trans_type: "R",
-        report_type: "INCOME",
+        trans_type: "E",
+        report_type: "EXPENSES",
         userId: 0, //JSON.parse(user).id||0,
         customer_name: name,
         village_name: placeName,
@@ -163,7 +160,7 @@ const IncomeReport = () => {
     const ws = XLSX.utils.json_to_sheet(allData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Income");
-    XLSX.writeFile(wb, "IncomeReport.xlsx");
+    XLSX.writeFile(wb, "ExpensesReport.xlsx");
   };
 
   const exportToPDF = async () => {
@@ -183,7 +180,6 @@ const IncomeReport = () => {
     }
   };
 
-  
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
       if (fieldBeingTranslated === "name") {
@@ -217,10 +213,10 @@ const IncomeReport = () => {
   return (
     <div>
       <Header
-        titles={[t("receiptReport")]}
+        titles={[t("expenseReport")]}
         links={[
           { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction", label: t("addTransaction") },
+          { to: "/addExpenses", label: t("addExpenses") },
         ]}
       />
       <Row>
@@ -332,18 +328,17 @@ const IncomeReport = () => {
         </PageSizeSelect>
       </PageSizeWrapper>
 
-
       <PDFExport
         ref={pdfExportComponent}
         paperSize="A4"
-        fileName="IncomeReport.pdf"
+        fileName="ExpensesReport.pdf"
         scale={0.6}
         author="Mercy Tech"
         creator="MySuccess.com"
         producer="MySuccess.com"
-        keywords="income report"
-        subject="Income Report"
-        title="Income Report"
+        keywords="ExpensesReport"
+        subject="ExpensesReport"
+        title="ExpensesReport"
         language="ta-IN"
         forcePageBreak=".page-break"
         margin={{ top: 20, left: 20, right: 20, bottom: 20 }}
@@ -351,62 +346,69 @@ const IncomeReport = () => {
         keepTogether="tr"
         fonts={[
           {
-            name: 'Noto Sans Tamil',
-            url: 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap',
-            format: 'truetype'
-          }
+            name: "Noto Sans Tamil",
+            url: "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap",
+            format: "truetype",
+          },
         ]}
       >
-        <div style={{ fontFamily: "'Noto Sans Tamil', sans-serif", fontSize: '12pt' }}>
-        <Table responsive className="table table-striped">
-          <thead>
-            <tr>
-              <th>{t("sNo")}</th>
-              <th>{t("placeName")}</th>
-              <th>{t("initial")}</th>
-              <th>{t("name")}</th>
-              <th>{t("oldAmount")}</th>
-              <th>{t("newAmount")}</th>
-              <th>{t("total")}</th>
-              <th>{t("phoneNo")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reportData.length > 0 ? (
-              reportData.map((item, index) => (
-                <tr key={index}>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{(currentPage - 1) * pageSize + index + 1}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.villageName}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.initial}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.name}</td>              
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.oldAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.newAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.amount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.mobile}</td>
-              </tr>
-            ))
-            ) : (
+        <div
+          style={{
+            fontFamily: "'Noto Sans Tamil', sans-serif",
+            fontSize: "12pt",
+          }}
+        >
+          <Table responsive className="table table-striped">
+            <thead>
               <tr>
-                <td colSpan="5" className="text-center">
-                  {t("noData")}
-                </td>
+                <th>{t("sNo")}</th>
+                <th>{t("expensesCategory")}</th>
+                <th>{t("expensesDescription")}</th>
+                <th>{t("amount")}</th>
+                <th>{t("phoneNo")}</th>
               </tr>
-            )}
-          </tbody>
+            </thead>
+            <tbody>
+              {reportData.length > 0 ? (
+                reportData.map((item, index) => (
+                  <tr key={index}>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {(currentPage - 1) * pageSize + index + 1}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.villageName}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.name}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.amount}
+                    </td>
+                    <td style={{ fontFamily: "Noto Sans Tamil, sans-serif" }}>
+                      {item.phoneNo}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    {t("noData")}
+                  </td>
+                </tr>
+              )}
+            </tbody>
 
-          <tfoot
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            <tr>
-              <td colSpan="4">{t("total")}</td>
-              <td>{pageTotals.oldAmount}</td>
-              <td>{pageTotals.newAmount}</td>
-              <td>{pageTotals.amount}</td>
-            </tr>
-          </tfoot>
-        </Table>
+            <tfoot
+              style={{
+                fontWeight: "bold",
+              }}
+            >
+              <tr>
+                <td colSpan="3">{t("total")}</td>
+                <td>{pageTotals.amount}</td>
+              </tr>
+            </tfoot>
+          </Table>
         </div>
       </PDFExport>
 
@@ -443,4 +445,4 @@ const IncomeReport = () => {
   );
 };
 
-export default IncomeReport;
+export default ExpensesReport;

@@ -10,7 +10,8 @@
       "Link 2": "இணைப்பு 2",
       "Reports": "அறிக்கைகள்",
       "receiptReport": "வருமான அறிக்கை",
-      "expenseReports": "செலவு அறிக்கை",
+      "expenseReport": "செலவு அறிக்கை",
+      "othersReport":"மற்றவைகள் அறிக்கை",
       "locationAmountReport": "பிராந்திய சுருக்கம் அறிக்கை",
       "userAmountReport": "பயனர் முறிவு அறிக்கை",
       "summaryReport": "சுருக்க அறிக்கை",
@@ -199,12 +200,18 @@
   "others": "மற்றவை",
   "othersType": "மற்றவைகளின் வகை",
   "othersRemarks": "மற்றவைகள் குறிப்பு",
-  "ring": "அழகு அணிகலன்",
+  "ring": "மோதிரம்",
   "jain": "ஜெயின்",
   "coin": "நாணயம்",
   "pattam": "பட்டம்",
   "enter_description_detail":"விளக்கமாக விவரங்களை உள்ளிடவும்",
-  "editOthers":"திருத்து"
+  "editOthers":"திருத்து",
+  "sNo":"வரிசை # ",
+  "othersSummary":"உருப்படி வாரியான விவரம்",
+  "itemName": "உருப்படி பெயர்",
+  "itemTotal":"மொத்தம்"
+
+
  
   }
   

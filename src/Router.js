@@ -20,9 +20,11 @@ import Expenses from "./components/screen/Expenses";
 import ExpensesList from "./components/screen/list/ExpensesList";
 import TranslationDemo from "./components/common/TranslationDemo";
 import ReportComponent from "./components/screen/reports/ReportComponent";
-import ReportPage from "./components/screen/reports/IncomeReport";
 import OtherReceipt from "./components/screen/OtherReceipt";
 import OthersList from "./components/screen/list/OthersList";
+import IncomeReport from "./components/screen/reports/IncomeReport";
+import ExpensesReport from "./components/screen/reports/ExpensesReport";
+import OthersReport from "./components/screen/reports/OthersReport";
 
 const Router = () => {
   return (
@@ -120,7 +122,23 @@ const Router = () => {
             path="income-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <ReportPage/>
+                <IncomeReport/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="expenses-report"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <ExpensesReport/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="others-report"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <OthersReport/>
               </ProtectedRoute>
             }
           />

@@ -207,7 +207,8 @@ export const SearchButton = styled(Button).attrs({
 })`
   font-size: 1rem;
   width: auto;
-  margin: 20px 5px 0 0;
+  padding:7px;
+  margin: 20px 4px 0 0;
   display: flex;
   align-items: center;
 `;
@@ -254,8 +255,8 @@ export const PageSizeWrapper = styled.div`
 `;
 
 export const TotalRow = styled.tr`
-  background-color: red;
-  color: red;
+  background-color: blue;
+  color: white;
   font-weight: bold;
 `;
 export const PdfButton = styled(Button).attrs({

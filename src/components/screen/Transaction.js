@@ -206,7 +206,7 @@ const Transaction = () => {
               updatedBy: "SYSTEM",
               updatedDt: new Date().toISOString(),
               isActive: true,
-              type: "",
+              type: "R",
               returnRemark: "",
               functionId: userDetail.functionId,
             });

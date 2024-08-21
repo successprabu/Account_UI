@@ -22,3 +22,5 @@ export const DELETE_TRANSACTION_API=`${TRANSACTION}DeleteTransaction?`
 export const DASHBOARD_SUMMARY_API=`${TRANSACTION}GetDashboard?`
 export const DASHBOARD_DETAIL_API=`${TRANSACTION}GetDashboardDetail?`
 export const REPORT_API=`${REPORT}GetTransactionReport?`
+export const REPORT_GET_ALLDATA_API=`${REPORT}GetAllTransaction?`
+export const REPORT_GET_OTHERSSUMMARY_API=`${REPORT}GetOthersSummaryReport?`

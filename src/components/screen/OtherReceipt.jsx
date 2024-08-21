@@ -22,7 +22,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSave, FaTimes } from "react-icons/fa";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -39,24 +38,11 @@ const schema = yup
     villageName: yup.string().required(),
     name: yup.string().required(),
     initial: yup.string(),
-    amount: yup
-      .number()
-      .required("Please Enter Old / New Amount")
-      .positive("Please Enter Old / New Amount"),
     others:yup.number("Please Enter Number only"),
     phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
     remarks: yup.string(),
   })
-  .test(
-    "either-old-or-new-amount",
-    "Either old amount or new amount is required and must be greater than zero",
-    function (values) {
-      const { oldAmount, newAmount } = values;
-      // Check if at least one of the fields is provided and greater than zero
-      return (oldAmount && oldAmount > 0) || (newAmount && newAmount > 0);
-    }
-  );
-
+  
 const OtherReceipt = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -99,6 +85,7 @@ const OtherReceipt = () => {
   const initialRef = useRef(null);
   const oldAmountRef = useRef(null);
   const newAmountRef = useRef(null);
+  const otherRemarkRef = useRef(null);
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
@@ -196,11 +183,14 @@ const OtherReceipt = () => {
               updatedBy: "SYSTEM",
               updatedDt: new Date().toISOString(),
               isActive: true,
-              type: "",
+              type: "O",
               returnRemark: "",
+              others:0,
+              othersType:"",
+              othersRemark:"",
               functionId: userDetail.functionId,
             });
-            toast.success("Transaction Saved Successfully");
+            toast.success("Details Saved Successfully");
           } else {
             toast.error(
               response.data.message ||
@@ -459,7 +449,7 @@ const OtherReceipt = () => {
 
           <Row className="mb-3">
             <Col xs={12} md={4}>
-              <FormGroup controlId="oldAmount">
+              <FormGroup controlId="others">
                 <FormLabel>
                   {t("others")}
                   <span className="text-danger">*</span>
@@ -468,7 +458,7 @@ const OtherReceipt = () => {
                   <FormControl
                     type="number"
                     placeholder={t("enter_amount")}
-                    name="oldAmount"
+                    name="others"
                     value={formData.others}
                     onChange={handleChange}
                     ref={oldAmountRef}
@@ -525,15 +515,14 @@ const OtherReceipt = () => {
             <Col xs={12} md={4}>
               <FormGroup controlId="amount">
                 <FormLabel>
-                  {t("othersRemarks")}
-                  <span className="text-danger">*</span>
+                  {t("amount")}
                 </FormLabel>
                 <InputGroup>
                   <FormControl
-                    as="textarea" 
+               type='number'
                     placeholder={t("enter_description_detail")}
-                    name="othersRemark"
-                    value={formData.othersRemark}
+                    name="amount"
+                    value={formData.amount}
                     onChange={handleChange}
                     ref={amountRef}
                     onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
@@ -555,13 +544,51 @@ const OtherReceipt = () => {
                     />
                   </Button>
                 </InputGroup>
+                {errors.amount && (
+                  <div className="text-danger">{errors.amount}</div>
+                )}
+              </FormGroup>
+            </Col>
+           
+          </Row>
+          <Row>
+          <Col xs={12} md={4}>
+              <FormGroup controlId="othersRemark">
+                <FormLabel>
+                  {t("othersRemarks")}
+                </FormLabel>
+                <InputGroup>
+                  <FormControl
+                    type="text"
+                    placeholder={t("enter_description_detail")}
+                    name="othersRemark"
+                    value={formData.othersRemark}
+                    onChange={handleChange}
+                    ref={otherRemarkRef}
+                    onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
+                  />
+                  <Button
+                    variant={
+                      isRecording && recordingField === "othersRemark"
+                        ? "danger"
+                        : "primary"
+                    }
+                    onClick={() => toggleRecording("othersRemark")}
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        isRecording && recordingField === "othersRemark"
+                          ? faMicrophoneSlash
+                          : faMicrophone
+                      }
+                    />
+                  </Button>
+                </InputGroup>
                 {errors.othersRemarks && (
                   <div className="text-danger">{errors.othersRemarks}</div>
                 )}
               </FormGroup>
             </Col>
-          </Row>
-          <Row>
             <Col xs={12} md={4}>
               <FormGroup controlId="phoneNo">
                 <FormLabel>{t("mobile")}</FormLabel>
