@@ -223,6 +223,14 @@ const SideBar = () => {
                     {t("othersList")}
                   </Nav.Link>
                 </li>
+                <li className="sidebar-item">
+                  <Nav.Link
+                    href="/handover"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("handOver")}
+                  </Nav.Link>
+                </li>
               </ul>
               
             </Collapse>

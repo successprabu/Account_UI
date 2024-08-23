@@ -27,6 +27,7 @@ import ExpensesReport from "./components/screen/reports/ExpensesReport";
 import OthersReport from "./components/screen/reports/OthersReport";
 import RegionalSummaryReport from "./components/screen/reports/RegionalSummaryReport";
 import OverallSummaryReport from "./components/screen/reports/OverallSummaryReport";
+import Handover from "./components/screen/Handover";
 
 const Router = () => {
   return (
@@ -157,6 +158,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <OverallSummaryReport/>
+              </ProtectedRoute>
+            }
+          />
+             <Route
+            path="handover"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <Handover/>
               </ProtectedRoute>
             }
           />

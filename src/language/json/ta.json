@@ -213,6 +213,8 @@
   "receivedBy": "பெறுபவர்",
   "receipt": "வருமானம்",
   "expenses": "செலவுகள்",
-  "overallSummary":"ஒருங்கிணைந்த சுருக்கம்" 
+  "overallSummary":"ஒருங்கிணைந்த சுருக்கம்" ,
+  "handOver": " ஒப்படைத்தல்"
+ 
   }
   

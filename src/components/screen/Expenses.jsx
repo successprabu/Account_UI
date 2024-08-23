@@ -125,7 +125,6 @@ const Expenses = () => {
 
     try {
       await schema.validate(formData, { abortEarly: false });
-      console.log(formData,'payload')
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then((response) => {
           if (response.data.result) {

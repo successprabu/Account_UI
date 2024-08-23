@@ -122,7 +122,7 @@ const ExpensesList = () => {
       const user = localStorage.getItem("user");
       await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
         id: deletingTransactionId,
-        deletedBy: JSON.parse(user).mobile ?? "system",
+        deletedBy: JSON.parse(user).id ?? "system",
       });
       setTransactionList(
         transactionList.filter((t) => t.id !== deletingTransactionId)

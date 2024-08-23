@@ -215,7 +215,8 @@
   "receivedBy":"Received By",
   "receipt":"Receipt",
   "expenses":"Expenses",
-  "overallSummary":"Consolidated Summary"
+  "overallSummary":"Consolidated Summary",
+  "handOver": "HandOver"
 
 
   }

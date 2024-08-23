@@ -14,6 +14,7 @@ export const SAVE_NEW_CUSTOMER_API = `${BASE_URL}${AUTH}AddCustomer`
 export const SAVE_NEW_USER_API = `${AUTH}AddCustomer`
 export const SAVE_FUNCTION_API=`${MASTER}UpdateCustomerFunction`
 export const SAVE_NEW_TRANS_API = `${TRANSACTION}UpdateTransaction`
+export const SAVE_HANDOVER_API = `${TRANSACTION}UpdateHandover`
 export const UPDATE_CUSTOMER_API=`${MASTER}UpdateCustomer`
 export const LIST_CLIENT_API=`${MASTER}GetCustomer`
 export const LIST_FUNCTION_API=`${MASTER}GetFunction`

@@ -146,9 +146,10 @@ const User = () => {
  }, [formData.customerId]);
 
   const fetchUserList = () => {
+    const user = localStorage.getItem("user");
     API_SERVICE.get(LIST_CLIENT_API, {
       id: null,
-      customer_id: formData.customerId,
+      customer_id: JSON.parse(user).customerID,
       function_name: "",
       current_page: 1,
       page_size: 10,
