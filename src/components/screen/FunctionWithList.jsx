@@ -78,42 +78,24 @@ const FunctionWithList = () => {
   const remarksRef = useRef(null);
   const funMessageRef = useRef(null);
 
-  const handleClear = () => {
-    setFormData({
-      id: 0,
-      customerId: formData.customerId,
-      functionName: "",
-      functionDate: "",
-      mahalName: "",
-      funPersionNames: "",
-      remarks: "",
-      funMessage: "",
-      createdBy: "SYSTEM",
-      createdDt: new Date().toISOString(),
-      updatedBy: "SYSTEM",
-      updatedDt: new Date().toISOString(),
-      isActive: true,
-    });
-  };
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       const userDetail = JSON.parse(user);
-
       setFormData((prevFormData) => ({
         ...prevFormData,
         customerId: userDetail.customerID,
       }));
-      console.log(userDetail.customerID, "testcustomer");
     } else {
       setIsAuthenticated(false);
       navigate("/login");
     }
   }, [navigate]);
 
-
   useEffect(() => {
-    fetchFunctionList();
+    if (formData.customerId) {
+      fetchFunctionList();
+    }
   }, [formData.customerId]);
 
   const fetchFunctionList = () => {
@@ -145,7 +127,6 @@ const FunctionWithList = () => {
     }
   };
 
-  
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
       setFormData((prevFormData) => ({
@@ -156,6 +137,24 @@ const FunctionWithList = () => {
     }
   };
 
+  
+  const handleClear = () => {
+    setFormData({
+      id: 0,
+      customerId: formData.customerId,
+      functionName: "",
+      functionDate: "",
+      mahalName: "",
+      funPersionNames: "",
+      remarks: "",
+      funMessage: "",
+      createdBy: "SYSTEM",
+      createdDt: new Date().toISOString(),
+      updatedBy: "SYSTEM",
+      updatedDt: new Date().toISOString(),
+      isActive: true,
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -296,24 +295,15 @@ const FunctionWithList = () => {
                     onChange={handleChange}
                     isInvalid={!!errors.functionName}
                     ref={functionNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, functionNameRef)}
+                    onKeyDown={(e) => handleKeyDown(e, functionDateRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "functionName"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("functionName")}
-                  >
+                  <InputGroup.Text>
                     <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "functionName"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
+                      icon={isRecording && recordingField === "functionName" ? faMicrophoneSlash : faMicrophone}
+                      onClick={() => toggleRecording("functionName")}
+                      className={isRecording && recordingField === "funMessage" ? "icon-danger" : "icon-primary"}
                     />
-                  </Button>
+                  </InputGroup.Text>
                   <FormControl.Feedback type="invalid">
                     {errors.functionName}
                   </FormControl.Feedback>
@@ -326,22 +316,20 @@ const FunctionWithList = () => {
                   {t("functionDate")}
                   <span className="text-danger">*</span>
                 </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="date"
-                    placeholder={t("enter_function_date")}
-                    name="functionDate"
-                    id="functionDate"
-                    value={formData.functionDate}
-                    onChange={handleChange}
-                    isInvalid={!!errors.functionDate}
-                    ref={functionDateRef}
-                    onKeyDown={(e) => handleKeyDown(e, functionDateRef)}
-                  />
-                  <FormControl.Feedback type="invalid">
-                    {errors.functionDate}
-                  </FormControl.Feedback>
-                </InputGroup>
+                <FormControl
+                  type="date"
+                  placeholder={t("enter_function_date")}
+                  name="functionDate"
+                  id="functionDate"
+                  value={formData.functionDate}
+                  onChange={handleChange}
+                  isInvalid={!!errors.functionDate}
+                  ref={functionDateRef}
+                  onKeyDown={(e) => handleKeyDown(e, mahalNameRef)}
+                />
+                <FormControl.Feedback type="invalid">
+                  {errors.functionDate}
+                </FormControl.Feedback>
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -362,30 +350,19 @@ const FunctionWithList = () => {
                     ref={mahalNameRef}
                     onKeyDown={(e) => handleKeyDown(e, funPersionNamesRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "mahalName"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("mahalName")}
-                  >
+                  <InputGroup.Text>
                     <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "mahalName"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
+                      icon={isRecording && recordingField === "mahalName" ? faMicrophoneSlash : faMicrophone}
+                      onClick={() => toggleRecording("mahalName")}
+                      className={isRecording && recordingField === "funMessage" ? "icon-danger" : "icon-primary"}
                     />
-                  </Button>
+                  </InputGroup.Text>
                   <FormControl.Feedback type="invalid">
                     {errors.mahalName}
                   </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
-          </Row>
-          <Row className="mb-3">
             <Col xs={12} md={4}>
               <FormGroup controlId="funPersionNames">
                 <FormLabel>
@@ -395,7 +372,7 @@ const FunctionWithList = () => {
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_fun_person_names")}
+                    placeholder={t("enter_fun_persion_names")}
                     name="funPersionNames"
                     id="funPersionNames"
                     value={formData.funPersionNames}
@@ -404,22 +381,13 @@ const FunctionWithList = () => {
                     ref={funPersionNamesRef}
                     onKeyDown={(e) => handleKeyDown(e, remarksRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "funPersionNames"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("funPersionNames")}
-                  >
+                  <InputGroup.Text>
                     <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "funPersionNames"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
+                      icon={isRecording && recordingField === "funPersionNames" ? faMicrophoneSlash : faMicrophone}
+                      onClick={() => toggleRecording("funPersionNames")}
+                      className={isRecording && recordingField === "funMessage" ? "icon-danger" : "icon-primary"}
                     />
-                  </Button>
+                  </InputGroup.Text>
                   <FormControl.Feedback type="invalid">
                     {errors.funPersionNames}
                   </FormControl.Feedback>
@@ -431,31 +399,27 @@ const FunctionWithList = () => {
                 <FormLabel>{t("remarks")}</FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
+                    as="textarea"
+                    rows={3}
                     placeholder={t("enter_remarks")}
                     name="remarks"
                     id="remarks"
                     value={formData.remarks}
                     onChange={handleChange}
+                    isInvalid={!!errors.remarks}
                     ref={remarksRef}
                     onKeyDown={(e) => handleKeyDown(e, funMessageRef)}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "remarks"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("remarks")}
-                  >
+                  <InputGroup.Text>
                     <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "remarks"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
+                      icon={isRecording && recordingField === "remarks" ? faMicrophoneSlash : faMicrophone}
+                      onClick={() => toggleRecording("remarks")}
+                      className={isRecording && recordingField === "funMessage" ? "icon-danger" : "icon-primary"}
                     />
-                  </Button>
+                  </InputGroup.Text>
+                  <FormControl.Feedback type="invalid">
+                    {errors.remarks}
+                  </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
@@ -464,41 +428,37 @@ const FunctionWithList = () => {
                 <FormLabel>{t("funMessage")}</FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
+                    as="textarea"
+                    rows={3}
                     placeholder={t("enter_fun_message")}
                     name="funMessage"
                     id="funMessage"
                     value={formData.funMessage}
                     onChange={handleChange}
+                    isInvalid={!!errors.funMessage}
                     ref={funMessageRef}
                   />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "funMessage"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("funMessage")}
-                  >
+                  <InputGroup.Text>
                     <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "funMessage"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
+                      icon={isRecording && recordingField === "funMessage" ? faMicrophoneSlash : faMicrophone}
+                      onClick={() => toggleRecording("funMessage")}
+                      className={isRecording && recordingField === "funMessage" ? "icon-danger" : "icon-primary"}
                     />
-                  </Button>
+                  </InputGroup.Text>
+                  <FormControl.Feedback type="invalid">
+                    {errors.funMessage}
+                  </FormControl.Feedback>
                 </InputGroup>
               </FormGroup>
             </Col>
           </Row>
-            {/* Translator Component */}
-            <Translator
-              inputText={formData[fieldBeingTranslated] || ""}
-              onTranslated={handleTranslation}
-              sourceLanguage="en"
-              targetLanguage= {i18n.language ||"en" }
-            />
+          <Translator
+      inputText={formData[fieldBeingTranslated] || ""}
+      onTranslated={handleTranslation}
+      sourceLanguage="en"
+      targetLanguage={i18n.language || "en"}
+  />
+
           <Row className="mb-3 d-flex justify-content-center">
             <Col
               xs="auto"
@@ -520,47 +480,39 @@ const FunctionWithList = () => {
             </Col>
           </Row>
         </Form>
-        <div className="mt-4">
-          <h5 style={{ color: "#0e2238", fontWeight: "bold" }}>
-            {t("function_list")}
-          </h5>
-
-          <ClientTable className="table table-striped">
-            <thead>
-              <tr>
-                {/* <th>{t("id")}</th> */}
-                <th>{t("functionName")}</th>
-                <th>{t("functionDate")}</th>
-                <th>{t("mahalName")}</th>
-                <th>{t("funPersionNames")}</th>
-                <th>{t("remarks")}</th>
-                <th>{t("funMessage")}</th>
-                <th>{t("actions")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {functionList.map((functions) => (
-                <tr key={functions.id}>
-                  {/* <td>{functions.id}</td> */}
-                  <td>{functions.functionName}</td>
-                  <td>{formatDate(functions.functionDate)}</td>
-                  <td>{functions.mahalName}</td>
-                  <td>{functions.funPersionNames}</td>
-                  <td>{functions.remarks}</td>
-                  <td>{functions.funMessage}</td>
-                  <td>
-                    <i
+        <ClientTable>
+          <thead>
+            <tr>
+              <th>{t("functionName")}</th>
+              <th>{t("functionDate")}</th>
+              <th>{t("mahalName")}</th>
+              <th>{t("funPersionNames")}</th>
+              <th>{t("remarks")}</th>
+              <th>{t("funMessage")}</th>
+              <th>{t("actions")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {functionList.map((fn) => (
+              <tr key={fn.id}>
+                <td>{fn.functionName}</td>
+                <td>{formatDate(fn.functionDate)}</td>
+                <td>{fn.mahalName}</td>
+                <td>{fn.funPersionNames}</td>
+                <td>{fn.remarks}</td>
+                <td>{fn.funMessage}</td>
+                <td>
+                <i
                       className="fa-solid fa-pen-to-square text-primary me-2"
                       role="presentation"
                       title={t("edit")}
-                      onClick={() => handleEdit(functions)}
+                      onClick={() => handleEdit(fn)}
                     ></i>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </ClientTable>
-        </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </ClientTable>
       </CardBody>
     </Card>
   );

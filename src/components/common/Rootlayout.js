@@ -5,20 +5,7 @@ import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
 
 const Rootlayout = () => {
-  //const [user, setUser] = useState(undefined); // Start with undefined
-  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  useEffect(() => {
-    // console.log(user,'setuser')
-    // if (storedUser) {
-    //   setUser(storedUser);
-    // } else {
-    //   console.log("User not found, redirecting to login.");
-    //   navigate("/login");
-    // }
-  }, [navigate]);
-
-
   return (
     <div>
       {user ? (

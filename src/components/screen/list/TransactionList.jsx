@@ -211,6 +211,7 @@ const TransactionList = () => {
   const list = transactionList.map((el) => (
     <tr key={el.id}>
       <td>{el.villageName}</td>
+      <td>{el.initial}</td>
       <td>{el.name}</td>
       <td>{el.oldAmount}</td>
       <td>{el.newAmount}</td>
@@ -395,6 +396,7 @@ const TransactionList = () => {
         <thead>
           <tr>
             <th>{t("placeName")}</th>
+            <th>{t("initial")}</th>
             <th>{t("name")}</th>
             <th>{t("oldAmount")}</th>
             <th>{t("newAmount")}</th>
@@ -409,7 +411,7 @@ const TransactionList = () => {
             <>
               {list}
               <TotalRow>
-                <td colSpan="2">
+                <td colSpan="5">
                   {t("totalRows")}: {totalRows} {t("pagerows")}
                 </td>
                 <td>{totalAmount}</td>

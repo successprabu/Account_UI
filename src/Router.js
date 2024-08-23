@@ -14,7 +14,7 @@ import FunctionWithList from "./components/screen/FunctionWithList";
 import ServicePage from "./components/screen/Services";
 import Unauthorized from "./components/common/UnauthorizedAccess";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import RoleBasedDashboard from "./components/screen/RoleBasedDashboard ";
+import RoleBasedDashboard from "./components/screen/RoleBasedDashboard";
 import ContactUs from "./components/screen/ContactUs";
 import Expenses from "./components/screen/Expenses";
 import ExpensesList from "./components/screen/list/ExpensesList";
@@ -33,24 +33,19 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path="login" element={<Login />} />
-      <Route path="purchase:id" element={<Registration />} />
-      <Route path="purchase" element={<Registration />} />
-      <Route path="contactus" element={<ContactUs />} />
-      <Route path="try-translation" element={<TranslationDemo />} />
-      <Route index element={<Home />} />      
-      <Route path="unauthorized" element={<Unauthorized />} />
-      <Route path="about" element={<AboutUs />} />
-      <Route path="report" element={<ReportComponent />} />
-      <Route path="*" element={<PageNotFound />} />
+        <Route path="login" element={<Login />} />
+        <Route path="purchase/:id" element={<Registration />} />
+        <Route path="purchase" element={<Registration />} />
+        <Route path="contactus" element={<ContactUs />} />
+        <Route path="try-translation" element={<TranslationDemo />} />
+        <Route index element={<Home />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="about" element={<AboutUs />} />
+        <Route path="report" element={<ReportComponent />} />
+        <Route path="*" element={<PageNotFound />} />
 
-
-        <Route path="/" element={<Rootlayout />}>       
-           <Route
-            path="dashboard"
-            element={<RoleBasedDashboard/> }
-          />     
-          <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="/" element={<Rootlayout />}>
+          <Route path="dashboard" element={<RoleBasedDashboard/>} />
           <Route
             path="client-list"
             element={
@@ -58,7 +53,7 @@ const Router = () => {
                 <ClientList />
               </ProtectedRoute>
             }
-          />        
+          />
           <Route
             path="transaction"
             element={
@@ -79,11 +74,11 @@ const Router = () => {
             path="addExpenses"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <Expenses/>
+                <Expenses />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="expenses-list"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
@@ -91,7 +86,7 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="others"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
@@ -107,25 +102,27 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="function"  
+          <Route
+            path="function"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU"]}>
                 <FunctionWithList />
               </ProtectedRoute>
             }
           />
-          <Route path="user" 
-             element={
+          <Route
+            path="user"
+            element={
               <ProtectedRoute allowedRoles={["SU", "AU"]}>
-                <User/>
+                <User />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="income-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <IncomeReport/>
+                <IncomeReport />
               </ProtectedRoute>
             }
           />
@@ -133,7 +130,7 @@ const Router = () => {
             path="expenses-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <ExpensesReport/>
+                <ExpensesReport />
               </ProtectedRoute>
             }
           />
@@ -141,31 +138,31 @@ const Router = () => {
             path="others-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <OthersReport/>
+                <OthersReport />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="regional-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <RegionalSummaryReport/>
+                <RegionalSummaryReport />
               </ProtectedRoute>
             }
           />
-            <Route
+          <Route
             path="summary-report"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <OverallSummaryReport/>
+                <OverallSummaryReport />
               </ProtectedRoute>
             }
           />
-             <Route
+          <Route
             path="handover"
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
-                <Handover/>
+                <Handover />
               </ProtectedRoute>
             }
           />

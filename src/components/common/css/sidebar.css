@@ -31,6 +31,7 @@ body {
     display: flex;
     min-height: 100vh; /* Ensures the wrapper adjusts to the content height */
 }
+
 .main {
     min-height: 100vh;
     width: 100%;
@@ -40,15 +41,15 @@ body {
 }
 
 #sidebar {
-    height: auto; /* Allows sidebar to adjust based on the content height */
-    flex-grow: 1; /* Ensures the sidebar grows to fill the height of the wrapper */
-    width: 70px;
+    height: 100%; /* Ensures the sidebar takes the full height of its parent */
+    width: 70px; /* Default width */
     min-width: 70px;
-    z-index: 1000;
-    transition: all .25s ease-in-out;
-    background-color: #0e2238;
+    max-width: 200px;
+    background-color: #0e2238; /* Sidebar background color */
     display: flex;
     flex-direction: column;
+    transition: width 0.25s ease-in-out;
+    position: relative; /* Allows background color to cover full height */
 }
 
 #sidebar.expand {
@@ -110,7 +111,7 @@ a.sidebar-link:focus {
 
 .sidebar-link i {
     font-size: 1.1rem;
-    margin-right: .05rem;
+    margin-right: .5rem; /* Adjusted for better spacing */
 }
 
 .sidebar-item {
@@ -165,15 +166,15 @@ a.sidebar-link:focus {
     display: inline-block;
     padding: 2px;
     position: absolute;
-    right: 1 rem;
+    right: 1rem; /* Adjusted for spacing */
     top: 1.4rem;
     transform: rotate(-135deg);
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
     transform: rotate(45deg);
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 .sidebar-dropdown {
@@ -195,8 +196,8 @@ a.sidebar-link:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #0e2238;
 }
-
 
 .nav-text.hidden {
     display: none;
@@ -216,78 +217,65 @@ a.sidebar-link:focus {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  
-  .user-info {
+}
+
+.user-info {
     margin-left: 10px;
     display: none;
     flex-direction: column;
     max-width: 100px; /* Adjust width to fit within the sidebar */
-  }
-  
-  #sidebar.expand .user-info {
+}
+
+#sidebar.expand .user-info {
     display: flex;
-  }
-  
-  .user-info div:first-child {
+}
+
+.user-info div:first-child {
     text-transform: capitalize; /* Ensure Sentence Case */
     font-weight: bold; /* Bold the username */
     font-size: 0.9rem; /* Adjust font size for better fit */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  
-  .user-info div:last-child {
+}
+
+.user-info div:last-child {
     font-size: 0.8rem;
     color: #adb5bd;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  
-  .dropdown-icon {
-    margin-left: auto;
-    transition: transform 0.4s ease;
-  }
-  
-  .dropdown-icon.expanded {
-    transform: rotate(90deg);
-  }
-  
-  /* User menu styling */
-  .user-menu {
-    padding-left: 30px;
-  }
-  
-  .user-menu .sidebar-link {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    color: #adb5bd;
-  }
-  
-  .user-menu .sidebar-link:hover {
-    background-color: #3b7ddd;
-    color: #fff;
-  }
-  
-  /* Adjust sidebar width for better fit */
-  #sidebar {
+}
+
+/* Adjust sidebar width for better fit */
+#sidebar {
     min-width: 80px;
     max-width: 200px;
     transition: all 0.4s ease;
-  }
-  
-  #sidebar.expand {
+}
+
+#sidebar.expand {
     max-width: 200px;
-  }
-  
-  #sidebar:not(.expand) .user-info {
+}
+
+#sidebar:not(.expand) .user-info {
     display: none;
-  }
-  
-  #sidebar:not(.expand) .user-details {
+}
+
+#sidebar:not(.expand) .user-details {
     justify-content: center;
-  }
-  
+}
+
+/* Ensure footer always visible */
+.sidebar-footer {
+    position: absolute; /* Ensures footer is always at the bottom of the sidebar */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: .75rem 1.625rem;
+    border-top: 1px solid #3b7ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0e2238;
+}

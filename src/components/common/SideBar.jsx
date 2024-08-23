@@ -23,43 +23,34 @@ const SideBar = () => {
   const [userType, setUserType] = useState(null);
   const [userName, setUserName] = useState(null);
   const [designation, setDesignation] = useState(null);
-  const [userDetailsOpen, setUserDetailsOpen] = useState(false); 
-  //const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for login check
+  const [userDetailsOpen, setUserDetailsOpen] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const user = JSON.parse(localStorage.getItem("user"));
-  useEffect(() => {
 
+  useEffect(() => {
     if (user) {
       setUserType(user.userType);
       setUserName(user.name);
       setDesignation(user.userTypeDescription);
-     // setIsLoggedIn(true); // Set login state
-     } else {
-       console.log(user,"userfromsidebar")
-     }
-  }, []);
+    }
+  }, [user]);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("user");
-     // setIsLoggedIn(false); // Set login state to false on logout
       navigate("/login");
     }
   };
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("expand");
   };
 
   const handleExpand = () => {
     if (!isExpanded) {
       setIsExpanded(true);
-      const sidebar = document.getElementById("sidebar");
-      sidebar.classList.add("expand");
     }
   };
 
@@ -101,9 +92,7 @@ const SideBar = () => {
         )}
         {(isSuperAdmin || isAdminUser) && (
           <li
-            className={`sidebar-item has-dropdown ${
-              authOpen ? "expanded" : ""
-            }`}
+            className={`sidebar-item has-dropdown ${authOpen ? "expanded" : ""}`}
           >
             <NavLink
               className="sidebar-link"
@@ -123,38 +112,28 @@ const SideBar = () => {
             <Collapse in={authOpen}>
               <ul id="auth" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/function"
+                  <NavLink
+                    to="/function"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("functionMaster")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/user"
+                  <NavLink
+                    to="/user"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("userMaster")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
-                {/* <li className="sidebar-item">
-                  <Nav.Link
-                    href="/purchase"
-                    className="sidebar-link sidebar-sublink"
-                  >
-                    {t("clientMaster")}
-                  </Nav.Link>
-                </li> */}
               </ul>
             </Collapse>
           </li>
         )}
         {(isSuperAdmin || isAdminUser || isNormalUser) && (
           <li
-            className={`sidebar-item has-dropdown ${
-              multiOpen ? "expanded" : ""
-            }`}
+            className={`sidebar-item has-dropdown ${multiOpen ? "expanded" : ""}`}
           >
             <NavLink
               className="sidebar-link"
@@ -169,78 +148,73 @@ const SideBar = () => {
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("transactions")}
               </span>
-              <span
-                className={`dropdown-icon ${multiOpen ? "expanded" : ""}`}
-              />
+              <span className={`dropdown-icon ${multiOpen ? "expanded" : ""}`} />
             </NavLink>
             <Collapse in={multiOpen}>
               <ul id="multi" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/transaction"
+                  <NavLink
+                    to="/transaction"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("addTransaction")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/transaction-list"
+                  <NavLink
+                    to="/transaction-list"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("transactionList")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/addExpenses"
+                  <NavLink
+                    to="/addExpenses"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("addExpenses")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/expenses-list"
+                  <NavLink
+                    to="/expenses-list"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("expensesList")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/others"
+                  <NavLink
+                    to="/others"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("addOthers")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/others-list"
+                  <NavLink
+                    to="/others-list"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("othersList")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link
-                    href="/handover"
+                  <NavLink
+                    to="/handover"
                     className="sidebar-link sidebar-sublink"
                   >
                     {t("handOver")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
               </ul>
-              
             </Collapse>
           </li>
         )}
         {(isSuperAdmin || isAdminUser) && (
           <li
-            className={`sidebar-item has-dropdown ${
-              reportOpen ? "expanded" : ""
-            }`}
+            className={`sidebar-item has-dropdown ${reportOpen ? "expanded" : ""}`}
           >
             <NavLink
               className="sidebar-link"
@@ -255,46 +229,39 @@ const SideBar = () => {
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("Reports")}
               </span>
-              <span
-                className={`dropdown-icon ${reportOpen ? "expanded" : ""}`}
-              />
+              <span className={`dropdown-icon ${reportOpen ? "expanded" : ""}`} />
             </NavLink>
             <Collapse in={reportOpen}>
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <Nav.Link href="/income-report" className="sidebar-link sidebar-sublink">
+                  <NavLink to="/income-report" className="sidebar-link sidebar-sublink">
                     {t("receiptReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="/expenses-report" className="sidebar-link sidebar-sublink">
+                  <NavLink to="/expenses-report" className="sidebar-link sidebar-sublink">
                     {t("expenseReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="/others-report" className="sidebar-link sidebar-sublink">
+                  <NavLink to="/others-report" className="sidebar-link sidebar-sublink">
                     {t("othersReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="/regional-report#" className="sidebar-link sidebar-sublink">
+                  <NavLink to="/regional-report#" className="sidebar-link sidebar-sublink">
                     {t("locationAmountReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
-                {/* <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
-                    {t("userAmountReport")}
-                  </Nav.Link>
-                </li> */}
                 <li className="sidebar-item">
-                  <Nav.Link href="/summary-report" className="sidebar-link sidebar-sublink">
+                  <NavLink to="/summary-report" className="sidebar-link sidebar-sublink">
                     {t("summaryReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <Nav.Link href="#" className="sidebar-link sidebar-sublink">
+                  <NavLink to="#" className="sidebar-link sidebar-sublink">
                     {t("rankingReport")}
-                  </Nav.Link>
+                  </NavLink>
                 </li>
               </ul>
             </Collapse>
@@ -318,11 +285,6 @@ const SideBar = () => {
     setUserDetailsOpen(!userDetailsOpen);
   };
 
-  // Render the sidebar only if isLoggedIn is true
-  // if (!isLoggedIn) {
-  //   return null;
-  // }
-
   return (
     <div className="wrapper">
       <aside id="sidebar" className={isExpanded ? "expand" : ''}>
@@ -331,11 +293,10 @@ const SideBar = () => {
             <BiMenu />
           </button>
           <div className="sidebar-logo">
-            <a href="#"> {t("my_accounts")}</a>
+            <NavLink to="#"> {t("my_accounts")}</NavLink>
           </div>
         </div>
-         <ul className="sidebar-nav">{renderMenuItems()}</ul>
-        
+        <ul className="sidebar-nav">{renderMenuItems()}</ul>
         <div className="user-details" onClick={handleUserDetailsToggle}>
           <BiUser />
           <div className="user-info">
@@ -351,12 +312,11 @@ const SideBar = () => {
               <span className="nav-text">{t("Logout")}</span>
             </NavLink>
             <NavLink to="/help" className="sidebar-link">
-              <BiBook />
+              <BiHelpCircle />
               <span className="nav-text">{t("help")}</span>
             </NavLink>
           </div>
         )}
-
       </aside>
     </div>
   );

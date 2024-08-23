@@ -21,7 +21,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FaSave, FaTimes } from "react-icons/fa";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -30,7 +29,6 @@ import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { SaveButton, ClearButton } from "./css/styles";
 import Translator from "../common/TranslationBasedOnLanguage";
-
 
 const schema = yup
   .object()
@@ -95,6 +93,7 @@ const Transaction = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [lastRecord, setLastRecord] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // Add this state
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -116,8 +115,8 @@ const Transaction = () => {
         ...prevFormData,
         customerId: userDetail.customerID,
         functionId: userDetail.functionId,
-        createdBy:String(userDetail.id),
-        updatedBy:String(userDetail.id)
+        createdBy: String(userDetail.id),
+        updatedBy: String(userDetail.id),
       }));
     } else {
       setIsAuthenticated(false);
@@ -169,12 +168,13 @@ const Transaction = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSaving) return;
     const userDetail = JSON.parse(localStorage.getItem("user"));
     if (!userDetail || userDetail.functionId === 0) {
       toast.error("Please Create Function Detail");
       return;
     }
-
+    setIsSaving(true); // Set loading state to true
     try {
       await schema.validate(formData, { abortEarly: false });
       console.log(formData, "payload");
@@ -228,6 +228,7 @@ const Transaction = () => {
         newErrors[error.path] = error.message;
       });
       setErrors(newErrors);
+      setIsSaving(false); // Set loading state to false
     }
   };
 
@@ -286,7 +287,7 @@ const Transaction = () => {
           { to: "/dashboard", label: t("dashboard") },
           { to: "/transaction-list", label: t("transactionList") },
         ]}
-        bgColor='#00C49F' // Custom background color for Header
+        bgColor="#00C49F" // Custom background color for Header
       />
       <CardBody>
         {lastRecord && (
@@ -659,17 +660,22 @@ const Transaction = () => {
               </FormGroup>
             </Col>
           </Row>
-           {/* Translator Component */}
-           <Translator
-              inputText={formData[fieldBeingTranslated] || ""}
-              onTranslated={handleTranslation}
-              sourceLanguage="en"
-              targetLanguage= {i18n.language ||"en" }
-            />
+          {/* Translator Component */}
+          <Translator
+            inputText={formData[fieldBeingTranslated] || ""}
+            onTranslated={handleTranslation}
+            sourceLanguage="en"
+            targetLanguage={i18n.language || "en"}
+          />
           <div className="d-flex justify-content-center mt-3">
-            <SaveButton type="submit" variant="success" className="me-3">
+            <SaveButton
+              type="submit"
+              variant="success"
+              className="me-3"
+              disabled={isSaving}
+            >
               <FaSave className="me-2" />
-              {t("save")}
+              {isSaving ? t("processing_your_request") : t("save")}
             </SaveButton>
             <ClearButton type="button" variant="secondary">
               <FaTimes className="me-2" />

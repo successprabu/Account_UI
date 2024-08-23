@@ -22,4 +22,12 @@
   flex: 1; /* Take up remaining space */
 }
 
+.icon-primary {
+  color: #007bff; /* Primary color */
+}
+
+.icon-danger {
+  color: #dc3545; /* Danger color */
+}
+
 
