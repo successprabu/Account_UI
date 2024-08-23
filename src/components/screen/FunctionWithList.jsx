@@ -19,7 +19,7 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
+import Translator from "../common/TranslationBasedOnLanguage";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -66,7 +66,7 @@ const FunctionWithList = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const [functionList, setFunctionList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -135,20 +135,24 @@ const FunctionWithList = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValue = value;
-
-    // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: updatedValue,
+      [name]: value,
     }));
+    // Check if the input ends with a space to trigger translation
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(name);
+    }
+  };
 
-    // Check if the input ends with a space to trigger transliteration
-    if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
+  
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: transliterateToTamil(updatedValue.trim()),
+        [fieldBeingTranslated]: translatedText,
       }));
+      setFieldBeingTranslated(null);
     }
   };
 
@@ -488,6 +492,13 @@ const FunctionWithList = () => {
               </FormGroup>
             </Col>
           </Row>
+            {/* Translator Component */}
+            <Translator
+              inputText={formData[fieldBeingTranslated] || ""}
+              onTranslated={handleTranslation}
+              sourceLanguage="en"
+              targetLanguage= {i18n.language ||"en" }
+            />
           <Row className="mb-3 d-flex justify-content-center">
             <Col
               xs="auto"

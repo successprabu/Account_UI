@@ -214,7 +214,12 @@
   "receipt": "வருமானம்",
   "expenses": "செலவுகள்",
   "overallSummary":"ஒருங்கிணைந்த சுருக்கம்" ,
-  "handOver": " ஒப்படைத்தல்"
+  "handOver": " ஒப்படைத்தல்",
+  "handoverBy": "ஒப்படைத்தவர்",
+  "handoverAmount": "ஒப்படைத்த தொகை",
+  "receivedByMobile": "பெறுநரின் மொபைல்",
+  "differnceAmount": "வித்தியாசம்",
+  "editHandover": "ஒப்படைத்தல் திருத்தம்"
  
   }
   

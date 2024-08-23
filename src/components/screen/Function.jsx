@@ -20,7 +20,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
+import Translator from "../common/TranslationBasedOnLanguage";
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_FUNCTION_API } from "../common/CommonApiURL";
 import { ClearButton, SaveButton } from "./css/styles";
@@ -76,6 +76,7 @@ const FunctionForm = () => {
   const funPersionNamesRef = useRef(null);
   const remarksRef = useRef(null);
   const funMessageRef = useRef(null);
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
 
   const handleClear = () => {
     setFormData({
@@ -121,28 +122,37 @@ const FunctionForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValue = value;
-
-    // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: updatedValue,
+      [name]: value,
     }));
 
-    // Check if the input ends with a space to trigger transliteration
-    if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: transliterateToTamil(updatedValue.trim()),
-      }));
+    // // Check if the input ends with a space to trigger transliteration
+    // if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
+    //   setFormData((prevFormData) => ({
+    //     ...prevFormData,
+    //     [name]: transliterateToTamil(updatedValue.trim()),
+    //   }));
+    // }
+    // Check if the input ends with a space to trigger translation
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(name);
     }
   };
 
- 
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldBeingTranslated]: translatedText,
+      }));
+      setFieldBeingTranslated(null);
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       await schema.validate(formData, { abortEarly: false });
       API_SERVICE.post(SAVE_FUNCTION_API, formData)
@@ -456,6 +466,13 @@ const FunctionForm = () => {
               </FormGroup>
             </Col>
           </Row>
+           {/* Translator Component */}
+           <Translator
+              inputText={formData[fieldBeingTranslated] || ""}
+              onTranslated={handleTranslation}
+              sourceLanguage="en"
+              targetLanguage= {i18n.language ||"en" }
+            />
           <FormGroup className="d-flex justify-content-end">
             <SaveButton type="submit">
               <FaSave /> {t("save")}

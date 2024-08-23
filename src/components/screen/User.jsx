@@ -20,7 +20,7 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
+import Translator from "../common/TranslationBasedOnLanguage";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -79,7 +79,7 @@ const User = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const [userList, setUserList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -165,22 +165,27 @@ const User = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const updatedValue = value;
-
-    // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: updatedValue,
+      [name]: value,
     }));
-
-    // Check if the input ends with a space to trigger transliteration
-    if (i18n.language === "ta" && updatedValue.endsWith(" ")) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: transliterateToTamil(updatedValue.trim()),
-      }));
+    // Check if the input ends with a space to trigger translation
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(name);
     }
   };
+
+  
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldBeingTranslated]: translatedText,
+      }));
+      setFieldBeingTranslated(null);
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -526,6 +531,13 @@ const User = () => {
             </Col>
           </Row>
         </Form>
+         {/* Translator Component */}
+         {/* <Translator
+              inputText={formData[fieldBeingTranslated] || ""}
+              onTranslated={handleTranslation}
+              sourceLanguage="en"
+              targetLanguage= {i18n.language ||"en" }
+            /> */}
         <div className="mt-4">
           <h5 style={{ color: "#0e2238", fontWeight: "bold" }}>
             {t("user_list")}

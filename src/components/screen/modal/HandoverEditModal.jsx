@@ -36,7 +36,7 @@ const HandoverEditModal = ({ show, onHide, handoverData, onSave }) => {
         id: handoverData?.id || 0,
         handoverBy: handoverData?.username || "",
         receivedBy: handoverData?.receivedBy || "",
-        totalRcdAmount: handoverData?.receipt || 0,
+        totalRcdAmount:handoverData?.receipt===0?handoverData?.others: handoverData?.receipt || 0,
         remarks: handoverData?.remarks || "",
         isActive: handoverData?.isActive ?? true,
         status: handoverData?.status || 1
@@ -107,7 +107,7 @@ const HandoverEditModal = ({ show, onHide, handoverData, onSave }) => {
       <Modal.Body>
         <Form>
           <Form.Group controlId="formReceivedBy">
-            <Form.Label>{t("hanoverBy")}</Form.Label>
+            <Form.Label>{t("handoverBy")}</Form.Label>
             <Form.Control
               type="text"
               name="hanoverBy"
@@ -117,7 +117,7 @@ const HandoverEditModal = ({ show, onHide, handoverData, onSave }) => {
             />
           </Form.Group>
           <Form.Group controlId="formReceipt">
-            <Form.Label>{t("receivedAmount")}</Form.Label>
+            <Form.Label>{t("total")}</Form.Label>
             <Form.Control
               type="text"
               name="totalRcdAmount"

@@ -216,7 +216,12 @@
   "receipt":"Receipt",
   "expenses":"Expenses",
   "overallSummary":"Consolidated Summary",
-  "handOver": "HandOver"
+  "handOver": "HandOver",
+  "handoverBy":"HandOver By",
+  "handoverAmount":"Handover Amount",
+  "receivedByMobile":"Recipient Mobile",
+  "differnceAmount":"Difference Amount",
+  "editHandover":"Handover Completion"
 
 
   }
