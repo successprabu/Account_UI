@@ -39,10 +39,12 @@ const schema = yup.object().shape({
   funMessage: yup.string(),
 });
 
-const formatDate = (dateString) => {
-  return format(new Date(dateString), "dd/MM/yyyy");
+const formatDate = (dateStr) => {
+  // Convert `yyyy-mm-dd` format to `dd/mm/yyyy` format for display
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${day}/${month}/${year}`;
 };
-
 const FunctionWithList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();

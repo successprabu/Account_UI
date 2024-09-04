@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./CommonApiURL";
 
-
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, '0');
@@ -10,9 +9,10 @@ const formatDate = (dateString) => {
   return `${day}/${month}/${year}`;
 };
 
-const user = localStorage.getItem('user');
+
 // Function to get the token from localStorage
 const getToken = () => {
+  const user = localStorage.getItem('user');
   return user ? JSON.parse(user).token : '';
 };
 
@@ -49,6 +49,7 @@ export const getUserDetail = () => {
 export const dateUTC = (date = new Date()) => new Date(new Date(date).toUTCString()).toISOString();
 
 // Common payload fields for POST requests
+const user = localStorage.getItem('user');
 export const commonPayloadFields = {
   createdBy: String(user ? JSON.parse(user).id : 'APPLICATION'),
   createdDt: dateUTC(new Date()),

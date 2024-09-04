@@ -4,7 +4,8 @@ import { FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../../common/CommonMethod";
 import { REPORT_GET_OTHERSSUMMARY_API, REPORT_GET_OVERALLSUMMARY_API } from "../../common/CommonApiURL";
-import { PDFExport } from "@progress/kendo-react-pdf";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
 import Header from "../../common/Header";
 import { PdfButton, ExcelButton } from "../css/styles";
@@ -111,31 +112,41 @@ const OverallSummaryReport = () => {
     });
   };
 
-//   const exportToExcel = async () => {
-//     const ws = XLSX.utils.json_to_sheet(calculateOverallTotals(reportData));
-//     const wb = XLSX.utils.book_new();
-//     XLSX.utils.book_append_sheet(wb, ws, "summaryReport");
-//     XLSX.writeFile(wb, "summaryReport.xlsx");
-//   };
-
-const exportToExcel = async () => {
-    const overallTotals = calculateOverallTotals(reportData);
-    const othersTotals = othersData.map((item, index) => ({
-      sNo: index + 1,
-      othersType: item.othersType || t("others"),
-      itemTotal: item.totalOthers,
-    }));
-  
-    const ws1 = XLSX.utils.json_to_sheet(overallTotals);
-    const ws2 = XLSX.utils.json_to_sheet(othersTotals);
-  
+  const exportToExcel = async () => {
+    const ws = XLSX.utils.json_to_sheet(calculateOverallTotals(reportData));
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws1, "Overall Summary");
-    XLSX.utils.book_append_sheet(wb, ws2, "Others Summary");
-  
-    XLSX.writeFile(wb, "SummaryReport.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "summaryReport");
+    XLSX.writeFile(wb, "summaryReport.xlsx");
   };
-  
+
+const DownloadPDF = async () => {
+  try {
+    // Check if the ref is correctly pointing to the PDFExport component
+    if (pdfExportComponent.current) {
+      // Use html2canvas to capture the content of the PDFExport component
+      const pdfElement = pdfExportComponent.current;
+      const canvas = await html2canvas(pdfElement);
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 30; // Adjust this value as needed
+
+      pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      pdf.save("Summary.pdf");
+    } else {
+      console.error("PDF export component not found");
+    }
+  } catch (error) {
+    console.error("Error exporting to PDF:", error);
+  }
+};
+
   const exportToPDF = () => {
     if (pdfExportComponent.current) {
       pdfExportComponent.current.save();
@@ -153,7 +164,7 @@ const exportToExcel = async () => {
 
       <Row>
         <Col className="text-right button-group">
-          <PdfButton onClick={exportToPDF}>
+          <PdfButton onClick={DownloadPDF}>
             <FaFilePdf /> {t("downloadPdf")}
           </PdfButton>
           <ExcelButton onClick={exportToExcel}>
@@ -161,12 +172,7 @@ const exportToExcel = async () => {
           </ExcelButton>
         </Col>
       </Row>
-
-      <PDFExport
-        ref={pdfExportComponent}
-        paperSize="A4"
-        fileName="SummaryReport.pdf"
-      >
+      <div ref={pdfExportComponent}>
         <h4 className="report-header">{t("overallSummary")}</h4>
         <Table responsive className="table table-striped">
           <thead>
@@ -227,7 +233,8 @@ const exportToExcel = async () => {
             </tr>
           </tfoot>
         </Table>
-      </PDFExport>
+
+    </div>
     </div>
   );
 };

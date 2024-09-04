@@ -24,6 +24,7 @@ import {
   Cell,
   ResponsiveContainer,
 } from "recharts";
+import {jwtDecode} from "jwt-decode";
 import { DASHBOARD_SUMMARY_API, DASHBOARD_DETAIL_API } from "../common/CommonApiURL";
 import { API_SERVICE } from "../common/CommonMethod";
 import Unauthorized from "../common/UnauthorizedAccess";
@@ -38,6 +39,20 @@ const DashboardAdmin = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const userDetail = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const decodedToken = jwtDecode(user.token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {

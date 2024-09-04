@@ -9,6 +9,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   AreaChart, Area, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer 
 } from "recharts";
+import {jwtDecode} from "jwt-decode";
 
 const Dashboard = () => {
   const [showClientListModal, setShowClientListModal] = useState(false);
@@ -42,6 +43,19 @@ const Dashboard = () => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const decodedToken = jwtDecode(user.token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
   return (
     <div>
       <Header

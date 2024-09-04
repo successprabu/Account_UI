@@ -20,23 +20,14 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import i18n from "../../language/i18n";
-import Translator from "../common/TranslationBasedOnLanguage";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
-import { LIST_CLIENT_API,SAVE_NEW_USER_API } from "../common/CommonApiURL";
+import { LIST_CLIENT_API,SAVE_NEW_USER_API,UPDATE_CUSTOMER_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { ClientTable, ClearButton, SaveButton } from "./css/styles";
 import { FaSave , FaTimes } from "react-icons/fa";
-import { format } from "date-fns";
-
-
-const formatDate = (dateString) => {
-  return format(new Date(dateString), "dd/MM/yyyy");
-};
-
-
 
 const User = () => {
   const { t } = useTranslation();
@@ -70,7 +61,7 @@ const User = () => {
     createdDt: "2024-07-06T10:07:21.637Z",
     updateddBy: "SYSTEM",
     updatedDt: "2024-07-06T10:07:21.637Z",
-    isActive: true,
+    isActive: false,
     password: "Welcome@24",
     userType:"NU"
   });
@@ -82,6 +73,7 @@ const User = () => {
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const [userList, setUserList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isEditing, setIsEditing] = useState(false); // Flag to determine if editing or creating a new user
 
   // Define refs
   const nameRef = useRef(null);
@@ -97,6 +89,7 @@ const User = () => {
       [name]: checked,
     });
   };
+
   const handleClear = () => {
     setFormData({
         id: 0,
@@ -115,8 +108,9 @@ const User = () => {
         createdDt: "2024-07-06T10:07:21.637Z",
         updateddBy: "SYSTEM",
         updatedDt: "2024-07-06T10:07:21.637Z",
-        isActive: true,
+        isActive: false,
         password: "",
+        conpassword:"",
         userType:"NU"
     });
   };
@@ -192,45 +186,38 @@ const User = () => {
 
     try {
       await schema.validate(formData, { abortEarly: false });
-      console.log(formData,"payload")
+      console.log(formData,"payloadedit")
+      if (isEditing) {
+        API_SERVICE.post(UPDATE_CUSTOMER_API, formData)
+            .then((response) => {
+                toast.success("User Updated Successfully");
+                fetchUserList(); // Refetch updated list
+                handleClear(); // Clear form after update
+            })
+            .catch((error) => {
+                toast.error(error.response?.data?.message || "API call error");
+                console.error("API call error:", error);
+            });
+      } else {
       API_SERVICE.post(SAVE_NEW_USER_API, formData)
         .then((response) => {
           if (response.data.result) {
-            setFormData({
-                id: 0,
-                name: "",
-                primary_phone: "",
-                secondary_phone: "",
-                country: "",
-                state: "",
-                district: "",
-                address_line1: "",
-                address_line2: "",
-                is_primary_phone_whatsup: false,
-                is_secondary_phone_whatsup: false,
-                pincode: 0,
-                createdBy: "",
-                createdDt: "2024-07-06T10:07:21.637Z",
-                updateddBy: "SYSTEM",
-                updatedDt: "2024-07-06T10:07:21.637Z",
-                isActive: true,
-                password: "Welcome@24",
-                userType:"NU"
-            });
+            handleClear();
             toast.success("User Saved Successfully");
-            fetchUserList(); // Refetch updated list
+            fetchUserList(); 
           } else {
             toast.error(
               response.data.message ||
                 "Something went wrong on User Save..pls Try Again"
             );
           }
-        })
+        })     
         .catch((error) => {
           toast.error(error.response?.data?.message || "API call error");
           console.error("API call error:", error);
         });
-    } catch (validationErrors) {
+      }  
+    }catch (validationErrors) {
       const newErrors = {};
       validationErrors.inner.forEach((error) => {
         newErrors[error.path] = error.message;
@@ -239,24 +226,31 @@ const User = () => {
     }
   };
 
-  const handleEdit = (transaction) => {
-    // setFormData({
-    //   id: transaction.id,
-    //   customerId: transaction.customerId,
-    //   functionName: transaction.functionName,
-    //   functionDate: transaction.functionDate
-    //     ? formatDate(transaction.functionDate)
-    //     : "",
-    //   mahalName: transaction.mahalName,
-    //   funPersionNames: transaction.funPersionNames,
-    //   remarks: transaction.remarks,
-    //   funMessage: transaction.funMessage,
-    //   createdBy: transaction.createdBy,
-    //   createdDt: transaction.createdDt,
-    //   updatedBy: transaction.updatedBy,
-    //   updatedDt: transaction.updatedDt,
-    //   isActive: transaction.isActive,
-    // });
+  const handleEdit = (fun) => {
+    setFormData({
+      id: fun.id,
+      customerId: fun.customerId,
+      functionId: fun.functionId,
+      name: fun.name,
+      primary_phone: fun.primary_phone,
+      secondary_phone: fun.secondary_phone,
+      country: fun.country,
+      state: fun.state,
+      district: fun.district,
+      address_line1: fun.address_line1,
+      address_line2: fun.address_line2,
+      is_primary_phone_whatsup: fun.is_primary_phone_whatsup,
+      is_secondary_phone_whatsup: fun.is_secondary_phone_whatsup,
+      pincode: fun.pincode,
+      password: fun.password,
+      conpassword: fun.password,
+      createdBy: fun.createdBy,
+      createdDt: fun.createdDt,
+      updateddBy: "SYSTEM",
+      updatedDt: "2024-07-06T10:07:21.637Z",
+      isActive: fun.isActive
+    });
+    setIsEditing(true); // Set the flag to true for edit mode
   };
 
   const handleKeyDown = (e, nextRef) => {
@@ -318,7 +312,7 @@ const User = () => {
       <CardBody>
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
           <Row className="mb-3">
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <FormGroup controlId="name">
                 <FormLabel>
                   {t("name")}
@@ -359,7 +353,7 @@ const User = () => {
                 </InputGroup>
               </FormGroup>
             </Col>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <FormGroup controlId="primary_phone">
                 <FormLabel>
                   {t("primary_phone")}
@@ -383,7 +377,18 @@ const User = () => {
                 </InputGroup>
               </FormGroup>
             </Col>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
+            <FormGroup id="isActive">
+                  <FormCheck
+                    type="checkbox"
+                    label={t('isActive')}
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={handleCheckboxChange}
+                  />
+                </FormGroup>
+            </Col>
+            <Col xs={12} md={3}>
             <FormGroup id="is_primary_phone_whatsup">
                   <FormCheck
                     type="checkbox"
@@ -396,7 +401,7 @@ const User = () => {
             </Col>
           </Row>
           <Row className="mb-3">
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <FormGroup controlId="password">
                 <FormLabel>
                   {t("password")}
@@ -436,12 +441,12 @@ const User = () => {
                 </InputGroup>
               </FormGroup>
             </Col>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <FormGroup controlId="conpassword">
                 <FormLabel>{t("conpassword")}</FormLabel>
                 <InputGroup>
                   <FormControl
-                    type="text"
+                    type="password"
                     placeholder={t("enter_confirm_password")}
                     name="conpassword"
                     id="conpassword"
@@ -473,7 +478,7 @@ const User = () => {
                 </InputGroup>
               </FormGroup>
             </Col>
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <FormGroup controlId="email">
                 <FormLabel>{t("email")}</FormLabel>
                 <InputGroup>

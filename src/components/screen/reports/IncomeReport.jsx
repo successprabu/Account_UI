@@ -3,8 +3,9 @@ import { Row, Col, InputGroup, Form, Table, Pagination } from "react-bootstrap";
 import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../../common/CommonMethod";
-import { REPORT_API, REPORT_GET_ALLDATA_API } from "../../common/CommonApiURL";
-import { PDFExport } from "@progress/kendo-react-pdf";
+import { REPORT_API, REPORT_GET_ALLDATA_API, REPORT_GET_GENERALDATA_API } from "../../common/CommonApiURL";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
@@ -21,6 +22,8 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
+import { addFooter, addHeader } from "./HeaderFooter";
+import { addInstructionPage } from "./InstructionPage";
 
 
 const styles = StyleSheet.create({
@@ -40,10 +43,12 @@ const styles = StyleSheet.create({
   tableHeader: {
     borderBottom: "1px solid black",
     padding: 10,
+    fontFamily: "'Noto Sans Tamil', sans-serif", 
   },
   tableCell: {
     padding: 10,
     borderBottom: "1px solid black",
+    fontFamily: "'Noto Sans Tamil', sans-serif"
   },
   total: {
     fontWeight: "bold",
@@ -165,24 +170,73 @@ const IncomeReport = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Income");
     XLSX.writeFile(wb, "IncomeReport.xlsx");
   };
-
-  const exportToPDF = async () => {
+  
+  
+  const DownloadPDF = async () => {
     try {
-      const allData = await fetchAllReportData();
-      setReportData(allData); // Set report data to include all pages' data
-      // const font = new FontFace('Noto Sans Tamil', 'url(https://fonts.gstatic.com/s/notosanstamil/v21/ieVc2YdFI3GCY6SyQy1KfStzYKZgzN1z4LKDbeZce-0429tBManUktuex7vGI3r.ttf)');
-      // await font.load();
-      // document.fonts.add(font);
-      setTimeout(() => {
-        if (pdfExportComponent.current) {
-          pdfExportComponent.current.save();
-        }
-      }, 500); // Adding a small delay to ensure state updates before PDF export
+      // Fetch data from API
+      const user = localStorage.getItem("user");
+      const response = await API_SERVICE.get(REPORT_GET_GENERALDATA_API, {
+        customer_id: JSON.parse(user).customerID,
+        function_id:JSON.parse(user).functionId || 0,
+        user_type:JSON.parse(user).userType || "",
+        userId:JSON.parse(user).id || 0
+      });
+    
+      const data = await response.data.data;
+      console.log(data,'ReportGeneralData')
+ 
+  
+      // Create a new PDF instance
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+      // Add Instruction Page with dynamic content
+      addInstructionPage(pdf, {
+        functionName: data.functions.functionName,  // Dynamic function name from API
+        date: data.functions.functionDate,  // Dynamic date from API
+        celebrationGifts: data.functions.funPersionNames,  // Dynamic date from API
+        place: data.functions.mahalName  // Dynamic place from API
+      });
+  
+   
+      // Add Header and Content Page
+      pdf.addPage();
+      pdf.setFontSize(16);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFont("helvetica", "bold");
+        // Add dynamic header data
+      addHeader(pdf, {
+        title: t("receiptReport"), 
+        reportDate:  data.header.reportDate,  
+        generatedBy: data.header.generatedBy  
+      });
+  
+      const contentCanvas = await html2canvas(
+        document.querySelector('#pdfContent')
+      );
+      const contentImgData = contentCanvas.toDataURL('images/png');
+// Adjust position and size as needed
+      const imgData = contentCanvas.toDataURL('images/png');
+      const imgWidth = contentCanvas.width;
+      const imgHeight = contentCanvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 20; // Adjust this value as needed
+      pdf.addImage(contentImgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      // Add Footer with dynamic content
+      addFooter(pdf, {
+        poweredBy: data.footer.poweredBy,
+        supportPhone: data.footer.supportPhone
+      });
+  
+      // Save the PDF
+      pdf.save("income_report.pdf");
     } catch (error) {
       console.error("Error exporting to PDF:", error);
     }
   };
-
+  
   
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
@@ -215,7 +269,7 @@ const IncomeReport = () => {
   };
 
   return (
-    <div>
+    <div >
       <Header
         titles={[t("receiptReport")]}
         links={[
@@ -283,7 +337,8 @@ const IncomeReport = () => {
 
               <Col xs={12} md={4} className="text-right">
                 <div className="d-flex justify-content-end align-items-center">
-                  <PdfButton onClick={exportToPDF}>
+                  {/* <PdfButton onClick={exportToPDF}> */}
+                  <PdfButton onClick={DownloadPDF}>
                     <FaFilePdf className="mr-2" /> {t("downloadPdf")}
                   </PdfButton>
                   <ExcelButton onClick={exportToExcel}>
@@ -332,32 +387,7 @@ const IncomeReport = () => {
         </PageSizeSelect>
       </PageSizeWrapper>
 
-
-      <PDFExport
-        ref={pdfExportComponent}
-        paperSize="A4"
-        fileName="IncomeReport.pdf"
-        scale={0.6}
-        author="Mercy Tech"
-        creator="MySuccess.com"
-        producer="MySuccess.com"
-        keywords="income report"
-        subject="Income Report"
-        title="Income Report"
-        language="ta-IN"
-        forcePageBreak=".page-break"
-        margin={{ top: 20, left: 20, right: 20, bottom: 20 }}
-        repeatHeaders={true}
-        keepTogether="tr"
-        fonts={[
-          {
-            name: 'Noto Sans Tamil',
-            url: 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap',
-            format: 'truetype'
-          }
-        ]}
-      >
-        <div style={{ fontFamily: "'Noto Sans Tamil', sans-serif", fontSize: '12pt' }}>
+        <div id="pdfContent" ref={pdfExportComponent}>
         <Table responsive className="table table-striped">
           <thead>
             <tr>
@@ -375,14 +405,14 @@ const IncomeReport = () => {
             {reportData.length > 0 ? (
               reportData.map((item, index) => (
                 <tr key={index}>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{(currentPage - 1) * pageSize + index + 1}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.villageName}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.initial}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.name}</td>              
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.oldAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.newAmount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.amount}</td>
-                <td style={{ fontFamily: 'Noto Sans Tamil, sans-serif' }}>{item.mobile}</td>
+                <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                <td>{item.villageName}</td>
+                <td>{item.initial}</td>
+                <td>{item.name}</td>              
+                <td>{item.oldAmount}</td>
+                <td>{item.newAmount}</td>
+                <td>{item.amount}</td>
+                <td>{item.mobile}</td>
               </tr>
             ))
             ) : (
@@ -408,7 +438,6 @@ const IncomeReport = () => {
           </tfoot>
         </Table>
         </div>
-      </PDFExport>
 
       <PaginationWrapper>
         <Pagination>

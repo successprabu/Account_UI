@@ -26,6 +26,7 @@ import * as yup from "yup"; // Import yup for validation
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
+import Translator from "../common/TranslationBasedOnLanguage";
 
 const schema = yup.object().shape({
   villageName: yup
@@ -67,7 +68,7 @@ const Expenses = () => {
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
   const [exCategory, setCategory] = useState("");
-
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   // Refs for form controls
   const villageNameRef = useRef(null);
   const nameRef = useRef(null);
@@ -102,16 +103,15 @@ const Expenses = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
 
-    if (i18n.language === "ta" && value.endsWith(" ")) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: transliterateToTamil(value.trim()),
-      }));
+    // Check if the input ends with a space to trigger translation
+    if (value.endsWith(" ")) {
+      setFieldBeingTranslated(name);
     }
   };
 
@@ -163,6 +163,17 @@ const Expenses = () => {
         newErrors[error.path] = error.message;
       });
       setErrors(newErrors);
+    }
+  };
+
+  
+  const handleTranslation = (translatedText) => {
+    if (fieldBeingTranslated) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldBeingTranslated]: translatedText,
+      }));
+      setFieldBeingTranslated(null);
     }
   };
 
@@ -452,6 +463,13 @@ const Expenses = () => {
               </FormGroup>
             </Col>
           </Row>
+            {/* Translator Component */}
+            <Translator
+            inputText={formData[fieldBeingTranslated] || ""}
+            onTranslated={handleTranslation}
+            sourceLanguage="en"
+            targetLanguage={i18n.language || "en"}
+          />
           <div className="d-flex justify-content-center mt-3">
             <Button type="submit" variant="success" className="me-3">
               {t("save")}

@@ -4,7 +4,8 @@ import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../../common/CommonMethod";
 import { REPORT_API, REPORT_GET_ALLDATA_API, REPORT_GET_OTHERSSUMMARY_API } from "../../common/CommonApiURL";
-import { PDFExport } from "@progress/kendo-react-pdf";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
@@ -187,22 +188,34 @@ const OthersReport = () => {
     XLSX.writeFile(wb, "IncomeReport.xlsx");
   };
 
-  const exportToPDF = async () => {
+  const DownloadPDF = async () => {
     try {
-      const allData = await fetchAllReportData();
-      setReportData(allData); // Set report data to include all pages' data
-      // const font = new FontFace('Noto Sans Tamil', 'url(https://fonts.gstatic.com/s/notosanstamil/v21/ieVc2YdFI3GCY6SyQy1KfStzYKZgzN1z4LKDbeZce-0429tBManUktuex7vGI3r.ttf)');
-      // await font.load();
-      // document.fonts.add(font);
-      setTimeout(() => {
-        if (pdfExportComponent.current) {
-          pdfExportComponent.current.save();
-        }
-      }, 500); // Adding a small delay to ensure state updates before PDF export
+      // Check if the ref is correctly pointing to the PDFExport component
+      if (pdfExportComponent.current) {
+        // Use html2canvas to capture the content of the PDFExport component
+        const pdfElement = pdfExportComponent.current;
+        const canvas = await html2canvas(pdfElement);
+        const imgData = canvas.toDataURL('image/png');
+  
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+        const imgX = (pdfWidth - imgWidth * ratio) / 2;
+        const imgY = 30; // Adjust this value as needed
+  
+        pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+        pdf.save("OthersReport.pdf");
+      } else {
+        console.error("PDF export component not found");
+      }
     } catch (error) {
       console.error("Error exporting to PDF:", error);
     }
   };
+  
 
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
@@ -303,7 +316,7 @@ const OthersReport = () => {
 
               <Col xs={12} md={4} className="text-right">
                 <div className="d-flex justify-content-end align-items-center">
-                  <PdfButton onClick={exportToPDF}>
+                  <PdfButton onClick={DownloadPDF}>
                     <FaFilePdf className="mr-2" /> {t("downloadPdf")}
                   </PdfButton>
                   <ExcelButton onClick={exportToExcel}>
@@ -351,37 +364,7 @@ const OthersReport = () => {
           <option value={50000}>50000</option>
         </PageSizeSelect>
       </PageSizeWrapper>
-
-      <PDFExport
-        ref={pdfExportComponent}
-        paperSize="A4"
-        fileName="IncomeReport.pdf"
-        scale={0.6}
-        author="Mercy Tech"
-        creator="MySuccess.com"
-        producer="MySuccess.com"
-        keywords="income report"
-        subject="Income Report"
-        title="Income Report"
-        language="ta-IN"
-        forcePageBreak=".page-break"
-        margin={{ top: 20, left: 20, right: 20, bottom: 20 }}
-        repeatHeaders={true}
-        keepTogether="tr"
-        fonts={[
-          {
-            name: "Noto Sans Tamil",
-            url: "https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap",
-            format: "truetype",
-          },
-        ]}
-      >
-        <div
-          style={{
-            fontFamily: "'Noto Sans Tamil', sans-serif",
-            fontSize: "12pt",
-          }}
-        >
+      <div ref={pdfExportComponent}>
           <Table responsive className="table table-striped">
             <thead>
               <tr>
@@ -454,7 +437,6 @@ const OthersReport = () => {
             othersData={othersData}
           />
         </div>
-      </PDFExport>
 
       <PaginationWrapper>
         <Pagination>

@@ -124,11 +124,11 @@ const Transaction = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (i18n.language === "ta") {
-      // Additional setup for Tamil language if needed
-    }
-  }, [i18n.language]);
+  // useEffect(() => {
+  //   if (i18n.language === "ta") {
+  //     // Additional setup for Tamil language if needed
+  //   }
+  // }, [i18n.language]);
 
   useEffect(() => {
     // Automatically update the amount field whenever oldAmount or newAmount changes
@@ -136,6 +136,7 @@ const Transaction = () => {
       ...prevFormData,
       amount: Number(prevFormData.oldAmount) + Number(prevFormData.newAmount),
     }));
+    setIsSaving(false);
   }, [formData.oldAmount, formData.newAmount]);
 
   const handleChange = (e) => {
