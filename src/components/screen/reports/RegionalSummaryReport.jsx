@@ -3,7 +3,7 @@ import { Row, Col, InputGroup, Form, Table, Pagination } from "react-bootstrap";
 import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../../common/CommonMethod";
-import {  REPORT_GET_REGIONALSUMMARY_API } from "../../common/CommonApiURL";
+import {  REPORT_GET_GENERALDATA_API ,REPORT_GET_REGIONALSUMMARY_API} from "../../common/CommonApiURL";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
@@ -20,6 +20,8 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
+import { addFooter, addHeader } from "./HeaderFooter";
+import { addInstructionPage } from "./InstructionPage";
 
 const styles = StyleSheet.create({
   page: {
@@ -153,31 +155,65 @@ const RegionalSummaryReport = () => {
 
   const DownloadPDF = async () => {
     try {
-      // Check if the ref is correctly pointing to the PDFExport component
-      if (pdfExportComponent.current) {
-        // Use html2canvas to capture the content of the PDFExport component
-        const pdfElement = pdfExportComponent.current;
-        const canvas = await html2canvas(pdfElement);
-        const imgData = canvas.toDataURL('image/png');
+      // Fetch data from API
+      const user = localStorage.getItem("user");
+      const response = await API_SERVICE.get(REPORT_GET_GENERALDATA_API, {
+        customer_id: JSON.parse(user).customerID,
+        function_id:JSON.parse(user).functionId || 0,
+        user_type:JSON.parse(user).userType || "",
+        userId:JSON.parse(user).id || 0
+      });
+    
+      const data = await response.data.data;
   
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const imgX = (pdfWidth - imgWidth * ratio) / 2;
-        const imgY = 30; // Adjust this value as needed
+      // Create a new PDF instance
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+      // Add Instruction Page with dynamic content
+      addInstructionPage(pdf, {
+        functionName: data.functions.functionName,  // Dynamic function name from API
+        date: data.functions.functionDate,  // Dynamic date from API
+        celebrationGifts: data.functions.funPersionNames,  // Dynamic date from API
+        place: data.functions.mahalName  // Dynamic place from API
+      });
   
-        pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-        pdf.save("RegionalSummaryReport.pdf");
-      } else {
-        console.error("PDF export component not found");
-      }
+   
+      // Add Header and Content Page
+      pdf.addPage();
+      pdf.setFontSize(16);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFont("helvetica", "bold");
+        // Add dynamic header data
+      addHeader(pdf, {
+        title: t("locationAmountReport"), 
+        reportDate:  data.header.reportDate,  
+        generatedBy: data.header.generatedBy  
+      });
+  
+      const contentCanvas = await html2canvas(
+        document.querySelector('#pdfContent')
+      );
+      const contentImgData = contentCanvas.toDataURL('images/png');
+      const imgWidth = contentCanvas.width;
+      const imgHeight = contentCanvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+      const imgY = 20; // Adjust this value as needed
+      pdf.addImage(contentImgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+      // Add Footer with dynamic content
+      addFooter(pdf, {
+        poweredBy: data.footer.poweredBy,
+        supportPhone: data.footer.supportPhone
+      });
+  
+      // Save the PDF
+      pdf.save("Regional_Summary_Report.pdf");
     } catch (error) {
       console.error("Error exporting to PDF:", error);
     }
   };
+  
 
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
@@ -297,7 +333,7 @@ const RegionalSummaryReport = () => {
         </PageSizeSelect>
       </PageSizeWrapper>
 
-      <div ref={pdfExportComponent}>
+      <div id="pdfContent" ref={pdfExportComponent}>
           <Table responsive className="table table-striped">
             <thead>
               <tr>
