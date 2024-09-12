@@ -72,7 +72,12 @@
   "othersList": "ಇತರರ ಪಟ್ಟಿ",
   "others": "ಇತರರು",
   "othersType": "ಇತರರ ವಿಧ",
-  "othersRemarks": "ಇತರರ ಟಿಪ್ಪಣಿಗಳು"
+  "othersRemarks": "ಇತರರ ಟಿಪ್ಪಣಿಗಳು",
+  "resendOTP": "OTP ಅನ್ನು ಮರುಕಳುಹಿಸಿ",
+    "sendOTP": "OTP ಕಳುಹಿಸಿ",
+    "seconds": "ಸೆಕೆಂಡುಗಳು",
+    "resendIn": "ಮರುಕಳುಹಿಸಲು",
+    "verifyOTP": "OTP ಪರಿಶೀಲಿಸಿ"
  
   }
   

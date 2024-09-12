@@ -5,7 +5,7 @@ import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-ico
 import i18n from "../../language/i18n";
 import Translator from "./TranslationBasedOnLanguage";
 
-const InputWithMicrophone = ({ name, value, type, onChange, placeholder, error }) => {
+const InputWithMicrophone = ({ name, value, type, onChange, placeholder,disabled, error,onFocus }) => {
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef(null);
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
@@ -61,7 +61,12 @@ const InputWithMicrophone = ({ name, value, type, onChange, placeholder, error }
       setFieldBeingTranslated(name);
     }
   };
-
+  const handleFocus = () => {
+    // Call the onFocus prop to clear the error in the parent component
+    if (onFocus) {
+      onFocus(name);
+    }
+  };
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
       onChange({ target: { name: fieldBeingTranslated, value: translatedText } });
@@ -76,6 +81,8 @@ const InputWithMicrophone = ({ name, value, type, onChange, placeholder, error }
         name={name}
         value={value}
         onChange={handleChange}
+        disabled={disabled ||false}
+        onFocus={handleFocus}
         placeholder={placeholder}
       />
       {/* Translator Component */}

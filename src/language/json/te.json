@@ -73,7 +73,12 @@
   "othersList": "ఇతరుల జాబితా",
   "others": "ఇతరులు",
   "othersType": "ఇతరుల రకం",
-  "othersRemarks": "ఇతరుల గమనికలు"
+  "othersRemarks": "ఇతరుల గమనికలు",
+  "resendOTP": "OTP మళ్ళీ పంపండి",
+    "sendOTP": "OTP పంపండి",
+    "seconds": "సెకన్లు",
+    "resendIn": "లో మళ్ళీ పంపండి",
+    "verifyOTP": "OTPని నిర్ధారించండి"
  
   }
   

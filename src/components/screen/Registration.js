@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { FaCheck, FaRedo,FaUserPlus  } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
+import { AiOutlineSend } from 'react-icons/ai';
 import {
   Form,
   FormGroup,
@@ -11,8 +13,12 @@ import {
   Row,
   FormCheck,
 } from "react-bootstrap";
-import i18n from "../../language/i18n";
-import { SAVE_NEW_CUSTOMER_API } from "../common/CommonApiURL";
+import {
+  OTP_KEY,
+  SEND_OTP_API,
+  SAVE_NEW_CUSTOMER_API,
+  GET_MOBILE_CHECK_API,
+} from "../common/CommonApiURL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -43,11 +49,37 @@ const Registration = () => {
     updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: true,
     password: "",
+    otp: "",
   });
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showMandatoryOnly, setShowMandatoryOnly] = useState(true);
+  const [generatedOtp, setGeneratedOtp] = useState(null);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(180); // 3 minutes
+  const [resendEnabled, setResendEnabled] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    if (otpSent && otpTimer > 0) {
+      interval = setInterval(() => {
+        setOtpTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (otpTimer === 0) {
+      clearInterval(interval);
+      setResendEnabled(true);
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, otpTimer]);
+
+  const handleFocus = (fieldName) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: null // Clear the specific error for the field
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,9 +97,88 @@ const Registration = () => {
     });
   };
 
-  const handleLanguageChange = (e) => {
-    const language = e.target.value;
-    i18n.changeLanguage(language);
+  const generateOtp = () => {
+    // Generate a random 6-digit OTP
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  const handleOtpSend = async () => {
+    const validationErrors = {};
+  
+    // Validate mobile number
+    if (!/^\d{10}$/.test(formData.primary_phone)) {
+      toast.error("Mobile number must be 10 digits");
+      validationErrors.primary_phone = "Mobile number must be 10 digits";
+      setErrors(validationErrors);
+      return;
+    }
+  
+    // Generate and store OTP
+    const otp = generateOtp();
+    setGeneratedOtp(otp);
+  
+    try {
+      // Make the mobile check API call
+      const mobileCheckResponse = await axios.get(GET_MOBILE_CHECK_API, {
+        params: {
+          userName: formData.primary_phone,
+          appName: "MOI",
+          userType: "AU",
+        },
+      });
+  
+      const mobileCheck = mobileCheckResponse.data;
+  
+      // Log the response structure for debugging
+      console.log('Mobile Check Response:', mobileCheck);
+  
+      // Check if mobile number is valid to send OTP
+      if (mobileCheck.result) {
+        // Send OTP if mobile check passed
+        await sendOtp(otp);
+      } else {
+        toast.error(mobileCheck.message || "Mobile number already exists or is invalid.");
+      }
+    } catch (error) {
+      // Log the error and show a toast message for failure
+      console.error("Error checking mobile number:", error.response ? error.response.data : error);
+      toast.error(error.response?.data?.message || "Error checking mobile number. Please try again.");
+    }
+  };
+  
+  // Separated function to handle sending OTP
+  const sendOtp = async (otp) => {
+    try {
+      await axios.get(SEND_OTP_API, {
+        params: {
+          authorization: OTP_KEY,
+          route: "otp",
+          variables_values: otp,
+          flash: 0,
+          numbers: formData.primary_phone,
+        },
+      });
+  
+      toast.success("OTP sent successfully!");
+      setOtpSent(true);
+      setOtpTimer(180); // Restart OTP timer
+      setResendEnabled(false); // Disable resend button initially
+    } catch (error) {
+      console.error("Error sending OTP:", error.response ? error.response.data : error);
+      toast.error("Error sending OTP. Please try again.");
+    }
+  };
+  
+
+  const handleOtpVerify = () => {
+    // Verify the entered OTP against the stored OTP
+    if (formData.otp === generatedOtp) {
+      setOtpVerified(true);
+      toast.success("OTP Verified!");
+    } else {
+      toast.error("Invalid OTP");
+      // setErrors((prev) => ({ ...prev, otp: "Invalid OTP" }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -79,11 +190,17 @@ const Registration = () => {
     }
 
     if (!formData.primary_phone.trim()) {
-      validationErrors.primary_phone =
-        "Please Enter valid 10 digit Mobile Number";
+      validationErrors.primary_phone ="Please Enter valid 10 digit Mobile Number";
     } else if (!/^\d{10}$/.test(formData.primary_phone)) {
       validationErrors.primary_phone = "Mobile number must be 10 digits";
     }
+    if (!/^\d{6}$/.test(formData.otp)) {
+      validationErrors.otp = "OTP must be exactly 6 digits";
+    }
+    if (!/^\d{6}$/.test(formData.pincode)) {
+      validationErrors.pincode = "Please Enter valid 6 digit pincode";
+    }
+    
 
     if (!formData.password.trim()) {
       validationErrors.password = "Password is required";
@@ -171,6 +288,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_name")}
                     error={errors.name}
+                    onFocus={handleFocus} 
                   />
                 </FormGroup>
               </Col>
@@ -180,13 +298,27 @@ const Registration = () => {
                     {t("primary_phone")}
                     <span className="text-danger">*</span>
                   </FormLabel>
-                  <InputWithMicrophone
-                    name="primary_phone"
-                    value={formData.primary_phone}
-                    onChange={handleChange}
-                    placeholder={t("enter_primary_phone")}
-                    error={errors.primary_phone}
-                  />
+                  <div className="d-flex">
+                    <InputWithMicrophone
+                      name="primary_phone"
+                      value={formData.primary_phone}
+                      onChange={handleChange}
+                      placeholder={t("enter_primary_phone")}
+                      error={errors.primary_phone}
+                      disabled={otpVerified}
+                      onFocus={handleFocus} 
+                      className="me-2 flex-grow-1"
+                    />
+                    <Button
+                      className="btn-sm d-flex align-items-center justify-content-center"
+                      variant="primary"
+                      onClick={handleOtpSend}
+                      disabled={(otpSent && !resendEnabled) || otpVerified} 
+                      style={{ height: "38px" }}
+                    >
+                      <AiOutlineSend className="me-1" /> {t("sendOTP")}
+                    </Button>
+                  </div>
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
@@ -194,15 +326,52 @@ const Registration = () => {
                   <FormLabel>
                     {t("otp")} <span className="text-danger">*</span>
                   </FormLabel>
-                  <InputWithMicrophone
-                    name="otp"
-                    value={formData.otp}
-                    onChange={handleChange}
-                    placeholder={t("enter_otp")}
-                    error={errors.otp}
-                  />
+                  <div className="d-flex">
+                    <InputWithMicrophone
+                      name="otp"
+                      value={formData.otp}
+                      onChange={handleChange}
+                      placeholder={t("enter_otp")}
+                      disabled={otpVerified}
+                      error={errors.otp}
+                      onFocus={handleFocus} 
+                      className="me-1 flex-grow-1"
+                    />
+                    <Button
+                      className="btn-sm d-flex align-items-center justify-content-center"
+                      variant="success"
+                      onClick={handleOtpVerify}
+                      disabled={formData.otp.length !== 6 || otpVerified}
+                      style={{ height: "38px" }}
+                    >
+                      <FaCheck className="me-1" /> {t("verifyOTP")}
+                    </Button>
+                    {resendEnabled && (
+                  <Button
+                    className="me-1 btn-sm d-flex align-items-center justify-content-center"
+                    variant="primary"
+                    onClick={handleOtpSend}
+                    disabled={otpVerified}
+                    style={{ height: '38px' }}
+                  >
+                    <FaRedo className="me-1" /> {t("resendOTP")}
+                  </Button>
+                )}
+                  </div>
                 </FormGroup>
+                {otpSent && !otpVerified && (
+                 <div>
+                  {otpTimer > 0 && otpSent && (
+                    <Col xs={12}>
+                      <p className="mt-1">
+                        {t("resendIn")} {otpTimer} {t("seconds")}
+                      </p>
+                    </Col>
+                  )}
+                  </div>
+      )}
               </Col>
+              
             </Row>
             <Row className="mb-3">
               <Col xs={12} md={4}>
@@ -217,6 +386,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_password")}
                     error={errors.password}
+                    onFocus={handleFocus} 
                   />
                 </FormGroup>
               </Col>
@@ -233,6 +403,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("confirm_password")}
                     error={errors.conpassword}
+                    onFocus={handleFocus} 
                   />
                 </FormGroup>
               </Col>
@@ -248,6 +419,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_pincode")}
                     error={errors.pincode}
+                    onFocus={handleFocus} 
                   />
                 </FormGroup>
               </Col>
@@ -255,44 +427,6 @@ const Registration = () => {
 
             {!showMandatoryOnly && (
               <>
-                {/* <Row className="mb-3">
-                  <Col xs={12} md={4}>
-                    <FormGroup controlId="secondary_phone">
-                      <FormLabel>
-                        {t('secondary_phone')}
-                      </FormLabel>
-                      <InputWithMicrophone
-                        name="secondary_phone"
-                        value={formData.secondary_phone}
-                        onChange={handleChange}
-                        placeholder={t('enter_secondary_phone')}
-                        error={errors.secondary_phone}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs={12} md={4} className="d-flex align-items-center">
-                    <FormGroup id="is_primary_phone_whatsup">
-                      <FormCheck
-                        type="checkbox"
-                        label={t('is_primary_phone_whatsup')}
-                        name="is_primary_phone_whatsup"
-                        checked={formData.is_primary_phone_whatsup}
-                        onChange={handleCheckboxChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col xs={12} md={4} className="d-flex align-items-center">
-                    <FormGroup id="is_secondary_phone_whatsup">
-                      <FormCheck
-                        type="checkbox"
-                        label={t('is_secondary_phone_whatsup')}
-                        name="is_secondary_phone_whatsup"
-                        checked={formData.is_secondary_phone_whatsup}
-                        onChange={handleCheckboxChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row> */}
                 <Row className="mb-3">
                   <Col xs={12} md={4}>
                     <FormGroup controlId="country">
@@ -372,8 +506,12 @@ const Registration = () => {
             )}
             <Row>
               <Col xs={12} className="text-center">
-                <Button type="submit" variant="success">
-                  {t("register")}
+                <Button 
+                type="submit"
+                 variant="success"
+                 disabled={!otpVerified}
+                 >
+                <FaUserPlus  className="me-1" />{t("register")}
                 </Button>
               </Col>
             </Row>

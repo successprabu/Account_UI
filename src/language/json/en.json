@@ -221,7 +221,12 @@
   "handoverAmount":"Handover Amount",
   "receivedByMobile":"Recipient Mobile",
   "differnceAmount":"Difference Amount",
-  "editHandover":"Handover Completion"
+  "editHandover":"Handover Completion",
+  "resendOTP": "Resend OTP",
+  "sendOTP": "Send OTP",
+  "seconds":"Seconds",
+  "resendIn":"Resend in",
+  "verifyOTP":"Verify OTP"
 
 
   }

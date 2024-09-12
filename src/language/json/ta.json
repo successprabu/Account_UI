@@ -219,7 +219,12 @@
   "handoverAmount": "ஒப்படைத்த தொகை",
   "receivedByMobile": "பெறுநரின் மொபைல்",
   "differnceAmount": "வித்தியாசம்",
-  "editHandover": "ஒப்படைத்தல் திருத்தம்"
+  "editHandover": "ஒப்படைத்தல் திருத்தம்",
+  "resendOTP": "மீண்டும் OTP அனுப்பவும்",
+  "sendOTP": "OTP அனுப்பவும்",
+  "seconds":"வினாடிகள்",
+  "resendIn":"மீண்டும் அனுப்பிட",
+  "verifyOTP":"OTP சரிபார்க்கவும்"
  
   }
   

@@ -76,7 +76,12 @@
   "ring": "अंगूठी",
 "jain": "जैन",
 "coin": "सिक्का",
-"pattam": "पदक"
+"pattam": "पदक",
+"resendOTP": "OTP फिर से भेजें",
+"sendOTP": "OTP भेजें",
+"seconds":"सेकंड",
+"resendIn":"में पुनः भेजें",
+"verifyOTP":"OTP सत्यापित करें"
  
   }
   
