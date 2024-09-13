@@ -28,6 +28,7 @@ import OthersReport from "./components/screen/reports/OthersReport";
 import RegionalSummaryReport from "./components/screen/reports/RegionalSummaryReport";
 import OverallSummaryReport from "./components/screen/reports/OverallSummaryReport";
 import Handover from "./components/screen/Handover";
+import MahalRegistration from "./components/screen/MahalRegistration";
 
 const Router = () => {
   return (
@@ -36,6 +37,7 @@ const Router = () => {
         <Route path="login" element={<Login />} />
         <Route path="purchase/:id" element={<Registration />} />
         <Route path="purchase" element={<Registration />} />
+        <Route path="mahal-reg" element={<MahalRegistration />} />
         <Route path="contactus" element={<ContactUs />} />
         <Route path="try-translation" element={<TranslationDemo />} />
         <Route index element={<Home />} />

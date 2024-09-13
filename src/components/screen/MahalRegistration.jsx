@@ -28,7 +28,7 @@ import Header from "../common/Header";
 import InputWithMicrophone from "../common/InputWithMicrophone";
 import "./css/Registration.css"; // Ensure you import the CSS file
 
-const Registration = () => {
+const MahalRegistration = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -44,6 +44,7 @@ const Registration = () => {
     is_primary_phone_whatsup: false,
     is_secondary_phone_whatsup: false,
     pincode: 0,
+    userType:"MU",
     createdBy: "APPLICATION",
     createdDt: "2024-07-06T10:07:21.637Z",
     updateddBy: "APPLICATION",
@@ -55,7 +56,7 @@ const Registration = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showMandatoryOnly, setShowMandatoryOnly] = useState(true);
+  const [showMandatoryOnly, setShowMandatoryOnly] = useState(false);
   const [generatedOtp, setGeneratedOtp] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
@@ -124,7 +125,7 @@ const Registration = () => {
         params: {
           userName: formData.primary_phone,
           appName: "MOI",
-          userType: "AU",
+          userType: "MU",
         },
       });
   
@@ -175,7 +176,7 @@ const Registration = () => {
       const payload = {
         id:0,
         primary_phone:formData.primary_phone,
-        userType:'AU',
+        userType:'MU',
         customerId:0,
         country_code:'+91',
         appName:'MOI',
@@ -205,7 +206,7 @@ const Registration = () => {
     const validationErrors = {};
 
     if (!formData.name.trim()) {
-      validationErrors.name = "Please Enter Your Name";
+      validationErrors.name = "Please Enter Your Mahal Name";
     }
 
     if (!formData.primary_phone.trim()) {
@@ -262,11 +263,12 @@ const Registration = () => {
   return (
     <Card className="mt-1">
       <Header
-        titles={[t("registration")]}
+        titles={[t("mahalRegistration")]}
         links={[
           { to: "/", label: t("home") },
           { to: "/services", label: t("ourServices") },
         ]}
+        bgColor="#3d7d3b" 
         showLanguageSelector={true}
       />
       <CardBody>
@@ -298,14 +300,14 @@ const Registration = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="txtname">
                   <FormLabel>
-                    {t("name")}
+                    {t("mahalName")}
                     <span className="text-danger">*</span>
                   </FormLabel>
                   <InputWithMicrophone
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder={t("enter_name")}
+                    placeholder={t("enter_mahal_name")}
                     error={errors.name}
                     onFocus={handleFocus} 
                   />
@@ -541,4 +543,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default MahalRegistration;

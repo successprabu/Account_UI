@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Card, Row, Col } from "react-bootstrap";
 import { FaUsers, FaMoneyCheckAlt, FaGifts, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import ClientList from "./list/ClientList";
+import {  useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Header from "../common/Header";
 import { 

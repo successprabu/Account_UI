@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import DashboardUser from './DashboardUser';
 import DashboardAdmin from './DashboardAdmin';
 import ProtectedRoute from '../common/ProtectedRoute';
+import DashboardMahal from './DashboardMahal';
 
 const RoleBasedDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -32,6 +33,13 @@ const RoleBasedDashboard = () => {
           <DashboardUser />
         </ProtectedRoute>
       );
+      case 'MU':
+        return (
+          <ProtectedRoute allowedRoles={['MU']}>
+            <DashboardMahal />
+          </ProtectedRoute>
+          
+        );
     default:
       // Redirect to unauthorized page if user type is not recognized
       return <Navigate to="/unauthorized" />;

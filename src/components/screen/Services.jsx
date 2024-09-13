@@ -1,27 +1,34 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { FaUsers, FaMoneyCheckAlt, FaCog, FaAnchor } from 'react-icons/fa';
+import { FaSchool , FaHandsHelping , FaCalendarAlt , FaAnchor } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import './css/ServicePage.css'; // Import the CSS file for styling
-import AppHeader from '../common/AppHeader';
 
 const ServicePage = () => {
   const { t } = useTranslation();
 
   const services = [
-    {
-      title: "schoolWebsiteERP",
-      description: "Efficiently manage school operations with our comprehensive ERP solution. From student management to academic records, streamline your processes seamlessly.",
-      icon: <FaUsers size={50} />,
-      color: "#ffcccb",
-      link: "school-erp"
-    },
-    {
-      title: "accountsSoftware",
-      description: "Handle your finances effortlessly with our advanced accounting software. Track expenses, manage invoices, and generate reports with ease.",
-      icon: <FaMoneyCheckAlt size={50} />,
+      {
+      title: "moitech",
+      description: "moitechDescription",
+      icon: <FaHandsHelping  size={50} />,
       color: "#e6e6fa",
       link: "purchase"
+    },
+    {
+      title: "mahalManagement",
+      description: "mahalDescription",
+      icon: <FaCalendarAlt   size={50} />,
+      color: "#98fb98",
+      link: "mahal-reg"
+    },
+      
+    {
+      title: "schoolWebsiteERP",
+      description: "schoolDescription",
+      icon: <FaSchool  size={50} />,
+      color: "#ffcccb",
+      link: "school-erp"
     },
     {
       title: "marineERP",
@@ -29,7 +36,7 @@ const ServicePage = () => {
       icon: <FaAnchor size={50} />,
       color: "#b0e0e6",
       link: "http://45.136.237.19:120/Home.html"
-    }
+    },
   ];
 
   return (

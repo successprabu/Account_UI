@@ -1,5 +1,5 @@
-//export const BASE_URL = `http://localhost/api/`
-export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
+export const BASE_URL = `http://localhost/api/`
+//export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
 //export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
 
 const GOOGLE_TRANS_API_KEY ="AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE"
@@ -14,6 +14,7 @@ export const GET_MOBILE_CHECK_API = `${BASE_URL}${AUTH}MobileExistingCheck`
 export const LOGIN_API = `${BASE_URL}${AUTH}UserLogin`
 export const LOGIN_USER_ACCOUNT_CHECK_API = `${BASE_URL}${AUTH}UserAccountCheck?`
 export const SAVE_NEW_CUSTOMER_API = `${BASE_URL}${AUTH}AddCustomer`
+export const SAVE_REGISTRATION_INITIAL_API = `${BASE_URL}${AUTH}AddRegistrationInitiate`
 export const SAVE_NEW_USER_API = `${AUTH}AddCustomer`
 export const SAVE_FUNCTION_API=`${MASTER}UpdateCustomerFunction`
 export const SAVE_NEW_TRANS_API = `${TRANSACTION}UpdateTransaction`

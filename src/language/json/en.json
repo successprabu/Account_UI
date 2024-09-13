@@ -19,6 +19,7 @@
   "Setting": "Setting",
   "Logout": "Logout",
     "registration": "Please Register here to Try Demo",
+    "mahalRegistration":"Elegance Awaits: Secure Your Mahal Today by Registering",
     "name": "Name",
     "email": "Email",
     "enter_email": "Enter your email",
@@ -149,7 +150,8 @@
   "close": "Close",
   "discoverOurInnovativeSolutions": "Discover Our Innovative Solutions",
   "schoolWebsiteERP": "School Website With ERP",
-  "accountsSoftware": "Accounting Software",
+  "moitech": "Moitech",
+  "mahalManagement":"Mahal Management",
   "marineERP": "Marine ERP",
   "learnMore": "Learn More...",
   "welcomeToOurPlatform": "Welcome To Our Modern Solutions",
@@ -226,8 +228,10 @@
   "sendOTP": "Send OTP",
   "seconds":"Seconds",
   "resendIn":"Resend in",
-  "verifyOTP":"Verify OTP"
-
+  "verifyOTP":"Verify OTP",
+   "moitechDescription":"Moi Virunthu is a traditional feast held in Tamil Nadu where villagers gather to share a meal and offer cash gifts. The practice, rooted in community support, helps families raise funds for various needs. This event has evolved into a cultural and financial custom, where participants repay the support by hosting their own feast. To simplify accounting for these events, a software called Moitech was developed, making the financial management of this complex custom easier",
+  "mahalDescription":"A Mahal Management System streamlines the operations of marriage halls (Mahals), making it easier to manage bookings, event schedules, and financial transactions. It offers features like real-time availability tracking, payment processing, and customer management. This system reduces manual efforts, ensures efficient event planning, and helps hall owners maintain clear records of bookings, payments, and expenses, enhancing the overall management experience.",
+  "schoolDescription":"A School Website/ERP system integrates academic, administrative, and communication functions into one platform. It simplifies the management of student records, attendance, exams, and fee collections while offering an online portal for teachers, students, and parents. With real-time updates, the system enhances transparency, streamlines school operations, and improves communication between all stakeholders."
 
   }
   
