@@ -10,6 +10,7 @@ import {
   BiExit,
   BiHelpCircle,
 } from "react-icons/bi";
+import { MdEventAvailable } from 'react-icons/md';
 import { FaTachometerAlt } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -59,10 +60,11 @@ const SideBar = () => {
     const isSuperAdmin = userType === "SU";
     const isAdminUser = userType === "AU";
     const isNormalUser = userType === "NU";
+    const isMahalAdmin = userType === "MU";
 
     return (
       <>
-        {(isSuperAdmin || isAdminUser || isNormalUser) && (
+        {(isSuperAdmin || isAdminUser || isNormalUser ||isMahalAdmin) && (
           <li className="sidebar-item">
             <NavLink
               to="/dashboard"
@@ -86,6 +88,20 @@ const SideBar = () => {
               <BiUser />
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("Clients")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+        {isMahalAdmin && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/mahal-booking"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <MdEventAvailable />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("mahalBooking")}
               </span>
             </NavLink>
           </li>

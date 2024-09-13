@@ -81,5 +81,6 @@
   "sendOTP": "OTP അയയ്ക്കുക",
   "seconds": "സെക്കൻഡുകൾ",
   "resendIn": "വീണ്ടും അയയ്ക്കുക",
-  "verifyOTP": "OTP സ്ഥിരീകരിക്കുക"
+  "verifyOTP": "OTP സ്ഥിരീകരിക്കുക",
+  "mahalBooking" :"മഹൽ ബുക്കിംഗ്"
 }
