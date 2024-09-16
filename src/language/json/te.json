@@ -79,7 +79,27 @@
     "seconds": "సెకన్లు",
     "resendIn": "లో మళ్ళీ పంపండి",
     "verifyOTP": "OTPని నిర్ధారించండి",
-     "mahalBooking" :"మహల్ బుకింగ్"
+     "mahalBooking" :"మహల్ బుకింగ్",
+     "toDate": "తేదీ & సమయం",
+  "fromDate": "ప్రారంభ తేదీ & సమయం",
+  "customerContactNum": "కస్టమర్ సంప్రదింపు సంఖ్య",
+  "customerName": "కస్టమర్ పేరు",
+  "enterCustomerName": "కస్టమర్ పేరు నమోదు చేయండి",
+  "enterContactNum": "మొబైల్ సంఖ్యను నమోదు చేయండి",
+  "payMethod": "చెల్లింపు విధానం",
+  "enterpayMethod": "చెల్లింపు విధానాన్ని నమోదు చేయండి",
+  "enterTotalAmt": "మొత్తం మొత్తాన్ని నమోదు చేయండి",
+  "discount": "రాయితీ",
+  "enterDiscount": "రాయితీని నమోదు చేయండి",
+  "advance": "ముందస్తు",
+  "enterAdvance": "ముందస్తు మొత్తాన్ని నమోదు చేయండి",
+  "balance": "మిగతా మొత్తం",
+  "rcdAmount": "అందుకున్న మొత్తం",
+  "enterRcdAmt": "అందుకున్న మొత్తాన్ని నమోదు చేయండి",
+  "isCancelled": "రద్దు చేయబడింది",
+  "canceReason": "రద్దు కారణం",
+  "enterCanceReason": "రద్దు కారణాన్ని నమోదు చేయండి",
+    "checkAval":"లభ్యతను తనిఖీ చేయండి"
  
   }
   

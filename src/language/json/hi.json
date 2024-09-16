@@ -82,7 +82,27 @@
 "seconds":"सेकंड",
 "resendIn":"में पुनः भेजें",
 "verifyOTP":"OTP सत्यापित करें",
-   "mahalBooking" :"महल बुकिंग"
+   "mahalBooking" :"महल बुकिंग",
+   "toDate": "तारीख और समय",
+  "fromDate": "प्रारंभ तारीख और समय",
+  "customerContactNum": "ग्राहक संपर्क नंबर",
+  "customerName": "ग्राहक का नाम",
+  "enterCustomerName": "ग्राहक का नाम दर्ज करें",
+  "enterContactNum": "मोबाइल नंबर दर्ज करें",
+  "payMethod": "भुगतान विधि",
+  "enterpayMethod": "भुगतान विधि दर्ज करें",
+  "enterTotalAmt": "कुल राशि दर्ज करें",
+  "discount": "छूट",
+  "enterDiscount": "छूट दर्ज करें",
+  "advance": "अग्रिम",
+  "enterAdvance": "अग्रिम दर्ज करें",
+  "balance": "शेष",
+  "rcdAmount": "प्राप्त राशि",
+  "enterRcdAmt": "प्राप्त शेष दर्ज करें",
+  "isCancelled": "क्या रद्द किया गया है",
+  "canceReason": "रद्द करने का कारण",
+  "enterCanceReason": "रद्द करने का कारण दर्ज करें",
+  "checkAval":"उपलब्धता जांचें"
  
   }
   

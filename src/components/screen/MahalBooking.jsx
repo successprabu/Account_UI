@@ -167,7 +167,7 @@ const MahalBooking = () => {
          <Row className="mb-3">
   <Col xs={12} md={4}>
     <FormGroup controlId="fromDate">
-      <FormLabel>{t("From Date & Time")}<span className="text-danger">*</span></FormLabel>
+      <FormLabel>{t("fromDate")}<span className="text-danger">*</span></FormLabel>
       <Controller
         name="fromDate"
         control={control}
@@ -189,7 +189,7 @@ const MahalBooking = () => {
   </Col>
   <Col xs={12} md={4}>
     <FormGroup controlId="toDate">
-      <FormLabel>{t("To Date & Time")}<span className="text-danger">*</span></FormLabel>
+      <FormLabel>{t("toDate")}<span className="text-danger">*</span></FormLabel>
       <Controller
         name="toDate"
         control={control}
@@ -211,7 +211,7 @@ const MahalBooking = () => {
   </Col>
   <Col xs={12} md={4}>
     <Button variant="outline-primary" onClick={handleCheckAvailability}>
-      {t("Check Availability")}
+      {t("checkAval")}
     </Button>
   </Col>
 </Row>
@@ -220,7 +220,7 @@ const MahalBooking = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="customerName">
                   <FormLabel>
-                    {t("Customer Name")}
+                    {t("customerName")}
                     <span className="text-danger">*</span>
                   </FormLabel>
                   <Controller
@@ -229,7 +229,7 @@ const MahalBooking = () => {
                     render={({ field }) => (
                       <InputWithMicrophone
                         {...field}
-                        placeholder={t("Enter Customer Name")}
+                        placeholder={t("enterCustomerName")}
                        // error={errors.customerName?.message}
                         onFocus={() => clearError("customerName")}
                       />
@@ -243,7 +243,7 @@ const MahalBooking = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="primary_phone">
                   <FormLabel>
-                    {t("Primary Phone")}
+                    {t("customerContactNum")}
                     <span className="text-danger">*</span>
                   </FormLabel>
                   <Controller
@@ -253,7 +253,7 @@ const MahalBooking = () => {
                       <InputWithMicrophone
                         {...field}
                         type="number"
-                        placeholder={t("Enter Mobile Number")}
+                        placeholder={t("enterContactNum")}
                        // error={errors.primary_phone?.message}
                         onFocus={() => clearError("primary_phone")}
                       />
@@ -266,14 +266,14 @@ const MahalBooking = () => {
               </Col>
               <Col xs={12} md={4}>
                 <FormGroup controlId="payMethod">
-                  <FormLabel>{t("Payment Method")}</FormLabel>
+                  <FormLabel>{t("payMethod")}</FormLabel>
                   <Controller
                     name="payMethod"
                     control={control}
                     render={({ field }) => (
                       <InputWithMicrophone
                         {...field}
-                        placeholder={t("Enter Payment Method")}
+                        placeholder={t("enterpayMethod")}
                         error={errors.payMethod?.message}
                         onFocus={() => clearError("payMethod")}
                       />
@@ -289,7 +289,7 @@ const MahalBooking = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="totalAmount">
                   <FormLabel>
-                    {t("Total Amount")}
+                    {t("totalAmount")}
                     <span className="text-danger">*</span>
                   </FormLabel>
                   <Controller
@@ -299,7 +299,7 @@ const MahalBooking = () => {
                       <InputWithMicrophone
                         {...field}
                         type="number"
-                        placeholder={t("Enter Total Amount")}
+                        placeholder={t("enterTotalAmt")}
                         error={errors.totalAmount?.message}
                         onFocus={() => clearError("totalAmount")}
                       />
@@ -312,7 +312,7 @@ const MahalBooking = () => {
               </Col>
               <Col xs={12} md={4}>
                 <FormGroup controlId="discount">
-                  <FormLabel>{t("Discount")}</FormLabel>
+                  <FormLabel>{t("discount")}</FormLabel>
                   <Controller
                     name="discount"
                     control={control}
@@ -320,7 +320,7 @@ const MahalBooking = () => {
                       <InputWithMicrophone
                         {...field}
                         type="number"
-                        placeholder={t("Enter Discount")}
+                        placeholder={t("enterDiscount")}
                         error={errors.discount?.message}
                         onFocus={() => clearError("discount")}
                       />
@@ -333,7 +333,7 @@ const MahalBooking = () => {
               </Col>
               <Col xs={12} md={4}>
                 <FormGroup controlId="advance">
-                  <FormLabel>{t("Advance")}</FormLabel>
+                  <FormLabel>{t("advance")}</FormLabel>
                   <Controller
                     name="advance"
                     control={control}
@@ -356,7 +356,7 @@ const MahalBooking = () => {
             <Row className="mb-3">
               <Col xs={12} md={4}>
                 <FormGroup controlId="balance">
-                  <FormLabel>{t("Balance")}</FormLabel>
+                  <FormLabel>{t("balance")}</FormLabel>
                   <Controller
                     name="balance"
                     control={control}
@@ -376,6 +376,49 @@ const MahalBooking = () => {
                 </FormGroup>
               </Col>
               <Col xs={12} md={4}>
+                <FormGroup controlId="rcdAmount">
+                  <FormLabel>{t("rcdAmount")}</FormLabel>
+                  <Controller
+                    name="rcdAmount"
+                    control={control}
+                    render={({ field }) => (
+                      <InputWithMicrophone
+                        {...field}
+                        type="number"
+                        placeholder={t("enterRcdAmt")}
+                        error={errors.rcdAmount?.message}
+                        onFocus={() => clearError("rcdAmount")}
+                      />
+                    )}
+                  />
+                  <div className="invalid-feedback">
+                    {errors.rcdAmount?.message}
+                  </div>
+                </FormGroup>
+              </Col>
+              <Col xs={12}  md={4}>
+                <FormGroup controlId="remarks">
+                  <FormLabel>{t("remarks")}</FormLabel>
+                  <Controller
+                    name="remarks"
+                    control={control}
+                    render={({ field }) => (
+                      <InputWithMicrophone
+                        {...field}
+                        placeholder={t("enter_remarks")}
+                        error={errors.remarks?.message}
+                        onFocus={() => clearError("remarks")}
+                      />
+                    )}
+                  />
+                  <div className="invalid-feedback">
+                    {errors.remarks?.message}
+                  </div>
+                </FormGroup>
+              </Col>
+              </Row>
+              <Row className="mb-3">
+              <Col xs={12} md={4}>
                 <FormGroup controlId="isCancelled">
                   <Controller
                     name="isCancelled"
@@ -390,7 +433,7 @@ const MahalBooking = () => {
                           }`}
                         />
                         <FormLabel className="form-check-label">
-                          {t("Is Cancelled")}
+                          {t("isCancelled")}
                         </FormLabel>
                       </div>
                     )}
@@ -400,16 +443,16 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-              <Col xs={12}>
+              <Col xs={12} md={8} >
                 <FormGroup controlId="cancelReason">
-                  <FormLabel>{t("Cancellation Reason")}</FormLabel>
+                  <FormLabel>{t("canceReason")}</FormLabel>
                   <Controller
                     name="cancelReason"
                     control={control}
                     render={({ field }) => (
                       <InputWithMicrophone
                         {...field}
-                        placeholder={t("Enter Cancellation Reason")}
+                        placeholder={t("enterCanceReason")}
                         disabled={!watch("isCancelled")}
                         error={errors.cancelReason?.message}
                         onFocus={() => clearError("cancelReason")}
@@ -421,26 +464,7 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-              <Col xs={12}>
-                <FormGroup controlId="remarks">
-                  <FormLabel>{t("Remarks")}</FormLabel>
-                  <Controller
-                    name="remarks"
-                    control={control}
-                    render={({ field }) => (
-                      <InputWithMicrophone
-                        {...field}
-                        placeholder={t("Enter Remarks")}
-                        error={errors.remarks?.message}
-                        onFocus={() => clearError("remarks")}
-                      />
-                    )}
-                  />
-                  <div className="invalid-feedback">
-                    {errors.remarks?.message}
-                  </div>
-                </FormGroup>
-              </Col>
+             
             </Row>
             <Row className="mb-3">
               <Col xs={12}>
@@ -463,12 +487,12 @@ const MahalBooking = () => {
                       </>
                     ) : (
                       <>
-                        <FaCheck /> {t("Submit")}
+                        <FaCheck /> {t("save")}
                       </>
                     )}
                   </StyledButton>
                   <StyledButton variant="secondary" onClick={() => reset()}>
-                    <FaRedo /> {t("Reset")}
+                    <FaRedo /> {t("clearButton")}
                   </StyledButton>
                 </div>
               </Col>

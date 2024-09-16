@@ -78,7 +78,27 @@
     "seconds": "ಸೆಕೆಂಡುಗಳು",
     "resendIn": "ಮರುಕಳುಹಿಸಲು",
     "verifyOTP": "OTP ಪರಿಶೀಲಿಸಿ",
-     "mahalBooking" :"ಮಹಲ್ ಬುಕ್ಕಿಂಗ್"
+     "mahalBooking" :"ಮಹಲ್ ಬುಕ್ಕಿಂಗ್",
+     "toDate": "ದಿನಾಂಕ ಮತ್ತು ಸಮಯ",
+  "fromDate": "ಪ್ರಾರಂಭ ದಿನಾಂಕ ಮತ್ತು ಸಮಯ",
+  "customerContactNum": "ಗ್ರಾಹಕರ ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+  "customerName": "ಗ್ರಾಹಕರ ಹೆಸರು",
+  "enterCustomerName": "ಗ್ರಾಹಕರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+  "enterContactNum": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+  "payMethod": "ಪಾವತಿ ವಿಧಾನ",
+  "enterpayMethod": "ಪಾವತಿ ವಿಧಾನವನ್ನು ನಮೂದಿಸಿ",
+  "enterTotalAmt": "ಒಟ್ಟು ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ",
+  "discount": "ರಿಯಾಯಿತಿ",
+  "enterDiscount": "ರಿಯಾಯಿತಿಯನ್ನು ನಮೂದಿಸಿ",
+  "advance": "ಮುಂಗಡ",
+  "enterAdvance": "ಮುಂಗಡವನ್ನು ನಮೂದಿಸಿ",
+  "balance": "ಮತ್ತಷ್ಟು",
+  "rcdAmount": "ಸ್ವೀಕರಿಸಿದ ಮೊತ್ತ",
+  "enterRcdAmt": "ಸ್ವೀಕರಿಸಿದ ಮೊತ್ತವನ್ನು ನಮೂದಿಸಿ",
+  "isCancelled": "ರದ್ದು ಮಾಡಲಾಗಿದೆ",
+  "canceReason": "ರದ್ದು ಮಾಡುವ ಕಾರಣ",
+  "enterCanceReason": "ರದ್ದು ಮಾಡುವ ಕಾರಣವನ್ನು ನಮೂದಿಸಿ",
+    "checkAval":"ಲಭ್ಯತೆಯನ್ನು ಪರಿಶೀಲಿಸಿ"
  
   }
   

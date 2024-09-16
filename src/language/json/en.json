@@ -233,7 +233,26 @@
   "mahalDescription":"A Mahal Management System streamlines the operations of marriage halls (Mahals), making it easier to manage bookings, event schedules, and financial transactions. It offers features like real-time availability tracking, payment processing, and customer management. This system reduces manual efforts, ensures efficient event planning, and helps hall owners maintain clear records of bookings, payments, and expenses, enhancing the overall management experience.",
   "schoolDescription":"A School Website/ERP system integrates academic, administrative, and communication functions into one platform. It simplifies the management of student records, attendance, exams, and fee collections while offering an online portal for teachers, students, and parents. With real-time updates, the system enhances transparency, streamlines school operations, and improves communication between all stakeholders.",
   "mahalBooking" :"Mahal Booking",
-  "toDate":"To Date & Time",
-  "fromDate":"From Date & Time"
+  "toDate":"End Date & Time",
+  "fromDate":"Start Date & Time",
+  "customerContactNum":"Customer Contact Number",
+  "customerName":"Customer Name",
+  "enterCustomerName":"Enter Customer Name",
+  "enterContactNum":"Enter Mobile Number",
+  "payMethod":"Payment Method",
+  "enterpayMethod":"Enter Payment Method",
+  "enterTotalAmt":"Enter Total Amount",
+  "discount":"Discount",
+  "enterDiscount":"Enter Discount",
+  "advance":"Advance",
+  "enterAdvance":"Enter Advance",
+  "balance":"Balance",
+  "rcdAmount":"Received Amount",
+  "enterRcdAmt":"Enter Received Balance",
+  "isCancelled":"Is Cancelled",
+  "canceReason":"Cancellation Reason",
+  "enterCanceReason":"Enter Cancellation Reason",
+  "checkAval":"Check Availability"
+
   }
   
