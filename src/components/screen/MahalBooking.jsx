@@ -108,7 +108,6 @@ const MahalBooking = () => {
   const onSubmit = async (data) => {
     try {
       // Example API call
-      console.log(data, "payload");
       await API_SERVICE.post(SAVE_MAHAL_BOOKING_API, data);
       toast.success(t("Data saved successfully!"));
     } catch (error) {
@@ -144,7 +143,7 @@ const MahalBooking = () => {
         titles={[t("mahalBooking")]}
         links={[
           { to: "/dashboard", label: t("dashboard") },
-          { to: "/booking-list", label: t("booking") },
+          { to: "/mahal-booking-list", label: t("mahalBookingList") },
         ]}
       />
       <CardBody>
@@ -197,7 +196,7 @@ const MahalBooking = () => {
           <DatePicker
             selected={field.value}
             onChange={(date) => setValue("toDate", date)}
-            minDate={watch("fromDate") ? new Date(watch("fromDate")).setDate(new Date(watch("fromDate")).getDate() + 1) : new Date()}
+            minDate={watch("fromDate") ? new Date(watch("fromDate")).setDate(new Date(watch("fromDate")).getDate()) : new Date()}
             showTimeSelect
             timeIntervals={15}
             dateFormat="dd/MM/yyyy hh:mm aa"

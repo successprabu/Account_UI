@@ -1,6 +1,6 @@
-export const BASE_URL = `http://localhost/api/`
+//export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
-//export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
+export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
 
 const GOOGLE_TRANS_API_KEY ="AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE"
 export const OTP_KEY ="szienOEZ8jVR54tGk0vKfahNUBwTgdb2HmylJcpo916YXQPSFWfJVLKISTXwzPg6rU1QjZek0NinAFR3"
@@ -24,6 +24,7 @@ export const SAVE_MAHAL_BOOKING_API = `${MAHAL}MahalBookingByOwner`
 export const UPDATE_CUSTOMER_API=`${MASTER}UpdateCustomer`
 export const LIST_CLIENT_API=`${MASTER}GetCustomer`
 export const LIST_FUNCTION_API=`${MASTER}GetFunction`
+export const LIST_MAHAL_BOOKING_LIST_API = `${MAHAL}MahalBookingList?`
 export const LIST_TRANSACTION_API=`${TRANSACTION}GetTransaction?`
 export const DELETE_TRANSACTION_API=`${TRANSACTION}DeleteTransaction?`
 export const DASHBOARD_SUMMARY_API=`${TRANSACTION}GetDashboard?`
@@ -34,4 +35,3 @@ export const REPORT_GET_OTHERSSUMMARY_API=`${REPORT}GetOthersSummaryReport?`
 export const REPORT_GET_REGIONALSUMMARY_API=`${REPORT}GetRegionalSummaryReport?`
 export const REPORT_GET_OVERALLSUMMARY_API=`${REPORT}GetOverallSummaryReport?`
 export const REPORT_GET_GENERALDATA_API=`${REPORT}GetGenearalDataForReport?`
-

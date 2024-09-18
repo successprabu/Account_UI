@@ -10,8 +10,8 @@ import {
   BiExit,
   BiHelpCircle,
 } from "react-icons/bi";
-import { MdEventAvailable } from 'react-icons/md';
-import { FaTachometerAlt } from "react-icons/fa";
+import { MdEventAvailable  } from 'react-icons/md';
+import { FaTachometerAlt,FaCalendarAlt } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./css/sidebar.css";
@@ -102,6 +102,21 @@ const SideBar = () => {
               <MdEventAvailable />
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("mahalBooking")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+
+    {isMahalAdmin && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/mahal-booking-list"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <FaCalendarAlt />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("mahalBookingList")}
               </span>
             </NavLink>
           </li>

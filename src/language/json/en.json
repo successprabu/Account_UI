@@ -252,7 +252,9 @@
   "isCancelled":"Is Cancelled",
   "canceReason":"Cancellation Reason",
   "enterCanceReason":"Enter Cancellation Reason",
-  "checkAval":"Check Availability"
+  "checkAval":"Check Availability",
+  "mahalBookingList":"Mahal Booking List",
+  "selectDate":"Select a Date"
 
   }
   

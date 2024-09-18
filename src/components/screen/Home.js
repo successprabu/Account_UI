@@ -30,27 +30,28 @@ const Home = () => {
 
   return (
     <div>
-      <div><AppHeader/></div>
+      <AppHeader />
       <section className="hero">
         <Container>
           <Row className="align-items-center">
             <Col md={12} className="text-center">
-              <div className="hero-content">
+              <div className="hero-content animated fadeInDown">
                 <h2>{t("homeHeadermessage")}</h2>
                 <p>
                   {t("At ")}
-                  <strong style={{ fontSize: "1.2em", color: "#007bff" }}>
+                  <strong className="company-name">
                     {t("companyName")}
                   </strong>
-                  {t("homeIntro" )}
+                  {t("homeIntro")}
                 </p>
-                <Button variant="primary" href="/services">
+                <Button variant="primary" className="explore-btn">
                   {t("exploreServices")}
                 </Button>
               </div>
             </Col>
           </Row>
         </Container>
+        <div className="background-animation"></div> {/* Add a moving background */}
       </section>
 
       <section className="why-choose-us">
@@ -58,9 +59,7 @@ const Home = () => {
           <Row>
             <Col md={12} className="text-center">
               <h2>{t("whyChooseUs")}</h2>
-              <p>
-                {t("whyChooseMessage")}
-              </p>
+              <p>{t("whyChooseMessage")}</p>
             </Col>
           </Row>
         </Container>
@@ -71,12 +70,12 @@ const Home = () => {
           <Row>
             {features.map((feature, index) => (
               <Col key={index} xs={12} sm={6} md={4} lg={4} className="mb-4">
-                <Card className="feature-card">
-                  <Card.Img variant="top" src={feature.imgSrc} />
+                <Card className="feature-card animated zoomIn">
+                  <Card.Img variant="top" src={feature.imgSrc} className="card-img-3d" />
                   <Card.Body>
                     <Card.Title>{t(feature.title)}</Card.Title>
                     <Card.Text>{t(feature.description)}</Card.Text>
-                    <Button variant="primary" href="/learn-more">
+                    <Button variant="primary" className="learn-more-btn">
                       {t("learnMore")}
                     </Button>
                   </Card.Body>

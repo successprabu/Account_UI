@@ -30,6 +30,7 @@ import OverallSummaryReport from "./components/screen/reports/OverallSummaryRepo
 import Handover from "./components/screen/Handover";
 import MahalRegistration from "./components/screen/MahalRegistration";
 import MahalBooking from "./components/screen/MahalBooking";
+import MahalBookingList from "./components/screen/MahalBookingList";
 
 const Router = () => {
   return (
@@ -174,6 +175,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["MU"]}>
                 <MahalBooking />
+              </ProtectedRoute>
+            }
+          />
+             <Route
+            path="mahal-booking-list"
+            element={
+              <ProtectedRoute allowedRoles={["MU"]}>
+                <MahalBookingList />
               </ProtectedRoute>
             }
           />

@@ -1,0 +1,17 @@
+.booked {
+    background-color: red !important;
+    color: white;
+}
+
+.available {
+    background-color: green !important;
+    color: white;
+}
+/* Vertical divider between columns */
+.vertical-divider {
+    width: 1px; /* Adjust width for thickness */
+    background-color: #ddd; /* Adjust color */
+    height: 100%; /* Full height of the container */
+    margin: 0 20px; /* Adjust spacing on the sides */
+  }
+  
