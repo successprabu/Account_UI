@@ -102,5 +102,6 @@
   "isCancelled": "റദ്ദാക്കി",
   "canceReason": "റദ്ദാക്കാനുള്ള കാരണം",
   "enterCanceReason": "റദ്ദാക്കാനുള്ള കാരണം നൽകുക",
-    "checkAval":"ലഭ്യത പരിശോധിക്കുക"
+    "checkAval":"ലഭ്യത പരിശോധിക്കുക",
+     "addMoiTechCustomer":"മോയിറ്റെക്കിന് രജിസ്ട്രേഷൻ"
 }

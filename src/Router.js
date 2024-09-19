@@ -31,6 +31,7 @@ import Handover from "./components/screen/Handover";
 import MahalRegistration from "./components/screen/MahalRegistration";
 import MahalBooking from "./components/screen/MahalBooking";
 import MahalBookingList from "./components/screen/MahalBookingList";
+import AddMoitechCustomer from "./components/screen/AddMoitechCustomer";
 
 const Router = () => {
   return (
@@ -183,6 +184,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["MU"]}>
                 <MahalBookingList />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="add-moitech-customer"
+            element={
+              <ProtectedRoute allowedRoles={["MU"]}>
+                <AddMoitechCustomer />
               </ProtectedRoute>
             }
           />

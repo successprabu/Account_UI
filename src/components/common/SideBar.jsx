@@ -11,7 +11,7 @@ import {
   BiHelpCircle,
 } from "react-icons/bi";
 import { MdEventAvailable  } from 'react-icons/md';
-import { FaTachometerAlt,FaCalendarAlt } from "react-icons/fa";
+import { FaTachometerAlt,FaCalendarAlt,FaHandsHelping } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./css/sidebar.css";
@@ -106,8 +106,7 @@ const SideBar = () => {
             </NavLink>
           </li>
         )}
-
-    {isMahalAdmin && (
+          {isMahalAdmin && (
           <li className="sidebar-item">
             <NavLink
               to="/mahal-booking-list"
@@ -117,6 +116,20 @@ const SideBar = () => {
               <FaCalendarAlt />
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("mahalBookingList")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+         {isMahalAdmin && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/add-moitech-customer"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <FaHandsHelping />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("addMoiTechCustomer")}
               </span>
             </NavLink>
           </li>

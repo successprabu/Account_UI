@@ -20,9 +20,8 @@ const ContactUs = () => {
             <Col md={12}>
               <h2>Get in Touch</h2>
               <p>If you have any questions or need support, feel free to contact us via the form below or through the following channels:</p>
-              <p><strong>Email:</strong> [Your Email Address]</p>
-              <p><strong>Phone:</strong> [Your Phone Number]</p>
-              <p><strong>Address:</strong> [Your Address]</p>
+              <p><strong>Email:</strong> successprabumca@gmail.com</p>
+              <p><strong>Phone:</strong> +918050386769</p>
             </Col>
           </Row>
 

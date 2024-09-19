@@ -92,7 +92,7 @@ const MahalBookingList = () => {
                 <tr key={booking.id}>
                   <td>{booking.name}</td>
                   <td>{booking.mobile}</td>
-                  <td>{booking.date}</td>
+                  <td>{new Date(booking.date).toLocaleDateString('en-GB')}</td>
                   <td>{booking.venue}</td>
           
                 </tr>

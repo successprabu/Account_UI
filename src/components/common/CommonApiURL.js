@@ -25,6 +25,7 @@ export const UPDATE_CUSTOMER_API=`${MASTER}UpdateCustomer`
 export const LIST_CLIENT_API=`${MASTER}GetCustomer`
 export const LIST_FUNCTION_API=`${MASTER}GetFunction`
 export const LIST_MAHAL_BOOKING_LIST_API = `${MAHAL}MahalBookingList?`
+export const CHECK_MAHAL_AVAILABILITY_API= `${MAHAL}MahalBookingList?`
 export const LIST_TRANSACTION_API=`${TRANSACTION}GetTransaction?`
 export const DELETE_TRANSACTION_API=`${TRANSACTION}DeleteTransaction?`
 export const DASHBOARD_SUMMARY_API=`${TRANSACTION}GetDashboard?`

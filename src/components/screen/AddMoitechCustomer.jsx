@@ -29,7 +29,7 @@ import Header from "../common/Header";
 import { ClientTable, ClearButton, SaveButton } from "./css/styles";
 import { FaSave , FaTimes } from "react-icons/fa";
 
-const User = () => {
+const AddMoitechCustomer = () => {
   const { t } = useTranslation();
   const schema = yup.object().shape({
     name: yup.string().required(t('required')),
@@ -62,8 +62,16 @@ const User = () => {
     updateddBy: "SYSTEM",
     updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: false,
-    password: "Welcome@24",
-    userType:"NU"
+    password: "welcome@123",
+    userType:"AU",
+    customerId: 0,
+    activated_from: "2024-09-19T13:48:50.037Z",
+    activated_To: "2024-09-19T13:48:50.037Z",
+    current_plan_id: 0,
+    previous_plan_id: 0,
+    country_code: "+91",
+    appName: "MOI",
+    referedBy: "string"
   });
 
   const [errors, setErrors] = useState({});
@@ -90,6 +98,25 @@ const User = () => {
     });
   };
 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const userDetail = JSON.parse(user);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        customerId: userDetail.customerID,
+        functionId: userDetail.functionId,
+        createdBy: String(userDetail.id),
+        updatedBy: String(userDetail.id),
+        referedBy:String(userDetail.id)
+      }));
+    } else {
+      setIsAuthenticated(false);
+      navigate("/login");
+    }
+  }, [navigate]);
+
+
   const handleClear = () => {
     setFormData({
         id: 0,
@@ -111,7 +138,7 @@ const User = () => {
         isActive: false,
         password: "",
         conpassword:"",
-        userType:"NU"
+        userType:"AU"
     });
   };
   useEffect(() => {
@@ -584,4 +611,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default AddMoitechCustomer;

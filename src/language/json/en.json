@@ -157,7 +157,7 @@
   "welcomeToOurPlatform": "Welcome To Our Modern Solutions",
   "weProvideComprehensiveSolutions": "We Provide Comprehensive Solutions",
   "exploreServices": "Explore Our Services",
-  "companyName":"My Success InfoTech",
+  "companyName":"MySuccess.Com",
  "homeHeadermessage":"Transforming Businesses with Cutting-Edge Solutions",
  "homeIntro":"we specialize in delivering innovative and tailored solutions designed to propel your business forward. Our comprehensive suite of services is crafted to address the unique needs of your industry, ensuring that you remain ahead of the competition.",
  "whyChooseUs": "Why Choose Us?",
@@ -254,7 +254,8 @@
   "enterCanceReason":"Enter Cancellation Reason",
   "checkAval":"Check Availability",
   "mahalBookingList":"Mahal Booking List",
-  "selectDate":"Select a Date"
+  "selectDate":"Select a Date",
+  "addMoiTechCustomer":"Moitech Reg"
 
   }
   

@@ -19,7 +19,7 @@ const AboutUs = () => {
               <h1>{t("Our Mission")}</h1>
               <p>
                 {t(
-                  "At [Your Company Name], we are dedicated to transforming businesses with innovative and tailored solutions. Our mission is to empower organizations by providing cutting-edge technology and exceptional service that drives success and fosters growth."
+                  "At MySuccess.Com, we are dedicated to transforming businesses with innovative and tailored solutions. Our mission is to empower organizations by providing cutting-edge technology and exceptional service that drives success and fosters growth."
                 )}
               </p>
             </Col>
@@ -30,7 +30,7 @@ const AboutUs = () => {
               <h2>{t("Who We Are")}</h2>
               <p>
                 {t(
-                  "[Your Company Name] is a team of passionate professionals committed to delivering excellence. With years of experience in [your industry], we offer a comprehensive suite of services designed to meet the unique needs of our clients. Our expertise spans various domains, ensuring that we provide solutions that are not only effective but also aligned with industry standards."
+                  "MySuccess.Com is a team of passionate professionals committed to delivering excellence. With years of experience in [your industry], we offer a comprehensive suite of services designed to meet the unique needs of our clients. Our expertise spans various domains, ensuring that we provide solutions that are not only effective but also aligned with industry standards."
                 )}
               </p>
             </Col>
@@ -68,11 +68,11 @@ const AboutUs = () => {
             </Col>
           </Row>
 
-          <Row className="mt-4">
+          {/* <Row className="mt-4">
             <Col md={12}>
               <h2>{t("Our Team")}</h2>
               <Row>
-                {/* Example team members */}
+               
                 <Col md={4}>
                   <Card>
                     <Card.Body>
@@ -86,10 +86,10 @@ const AboutUs = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-                {/* Repeat for other team members */}
+              
               </Row>
             </Col>
-          </Row>
+          </Row> */}
 
           <Row className="mt-4">
             <Col md={12}>
@@ -102,11 +102,10 @@ const AboutUs = () => {
             </Col>
           </Row>
 
-          <Row className="mt-4">
+          {/* <Row className="mt-4">
             <Col md={12}>
               <h2>{t("Client Success Stories")}</h2>
-              {/* Example client success stories */}
-              <p>
+                           <p>
                 {t(
                   "[Client Name]: [Brief description of the project and the impact]"
                 )}
@@ -117,7 +116,7 @@ const AboutUs = () => {
                 )}
               </p>
             </Col>
-          </Row>
+          </Row> */}
 
           <Row className="mt-4">
             <Col md={12} className="text-center">
@@ -128,13 +127,10 @@ const AboutUs = () => {
                 )}
               </p>
               <p>
-                <strong>{t("Email")}: </strong>[Your Email Address]
+                <strong>{t("Email")}: </strong>successprabumca@gmail.com
               </p>
               <p>
-                <strong>{t("Phone")}: </strong>[Your Phone Number]
-              </p>
-              <p>
-                <strong>{t("Address")}: </strong>[Your Address]
+                <strong>{t("Phone")}: </strong>+918050386769
               </p>
             </Col>
           </Row>

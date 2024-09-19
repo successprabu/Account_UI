@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import "../../../App.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaKey,
+  FaMobileAlt,
+  FaUserTag,
+  FaSignInAlt,
+} from "react-icons/fa";
 import { loginSchema } from "../../../validations/ValidationSchema";
 import {
   LOGIN_API,
   LOGIN_USER_ACCOUNT_CHECK_API,
 } from "../../common/CommonApiURL";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"; // Import jwt-decode library
+import { jwtDecode } from "jwt-decode"; // Import jwt-decode library
 import { ClipLoader } from "react-spinners";
 import AppHeader from "../../common/AppHeader";
 
@@ -25,6 +33,7 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false);
   const [userTypes, setUserTypes] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +56,10 @@ const Login = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   const handleUsernameBlur = async () => {
@@ -168,42 +181,65 @@ const Login = () => {
             )}
             <div className="m2 text-primary">
               <label htmlFor="username">{t("mobile_number")}</label>
-              <input
-                type="text"
-                name="username"
-                placeholder={t("enter_mobile_number")}
-                className="form-control"
-                value={formData.username}
-                onChange={handleChange}
-                onBlur={handleUsernameBlur}
-              />
+
+              <div className="input-group">
+                <span className="input-group-text">
+                  <FaMobileAlt /> {/* Mobile icon */}
+                </span>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder={t("enter_mobile_number")}
+                  className="form-control"
+                  value={formData.username}
+                  onChange={handleChange}
+                  onBlur={handleUsernameBlur}
+                />
+              </div>
             </div>
             <div className="m2 text-primary">
               <label htmlFor="password">{t("password")}</label>
-              <input
-                type="password"
-                name="password"
-                placeholder={t("enter_password")}
-                className="form-control"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <div className="input-group">
+                <span className="input-group-text">
+                  <FaKey />
+                </span>{" "}
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder={t("enter_password")}
+                  className="form-control"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <span
+                  className="input-group-text"
+                  onClick={togglePasswordVisibility}
+                  style={{ cursor: "pointer" }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
             </div>
             {userTypes.length > 1 && (
               <div className="m2 text-primary">
                 <label htmlFor="userType">{t("userType")}</label>
-                <select
-                  name="userType"
-                  className="form-control"
-                  value={formData.userType}
-                  onChange={handleUserTypeChange}
-                >
-                  {userTypes.map((type, index) => (
-                    <option key={index} value={type.userType}>
-                      {type.userTypeDescription}
-                    </option>
-                  ))}
-                </select>
+                <div className="input-group">
+                  <span className="input-group-text">
+                    <FaUserTag /> {/* Display the role icon */}
+                  </span>
+                  <select
+                    name="userType"
+                    className="form-control"
+                    value={formData.userType}
+                    onChange={handleUserTypeChange}
+                  >
+                    {userTypes.map((type, index) => (
+                      <option key={index} value={type.userType}>
+                        {type.userTypeDescription}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
             <div className="d-grid">
@@ -211,7 +247,11 @@ const Login = () => {
                 {loading ? (
                   <ClipLoader size={20} color={"#ffffff"} />
                 ) : (
-                  t("sign_in")
+                  <>
+                    <FaSignInAlt style={{ marginRight: "8px" }} />{" "}
+                    {/* Add Sign In Icon */}
+                    {t("sign_in")}
+                  </>
                 )}
               </button>
             </div>
