@@ -151,13 +151,14 @@
   "discoverOurInnovativeSolutions": "Discover Our Innovative Solutions",
   "schoolWebsiteERP": "School Website With ERP",
   "moitech": "Moitech",
+  "moitechReg": "Moitech Registration",
   "mahalManagement":"Mahal Management",
   "marineERP": "Marine ERP",
   "learnMore": "Learn More...",
   "welcomeToOurPlatform": "Welcome To Our Modern Solutions",
   "weProvideComprehensiveSolutions": "We Provide Comprehensive Solutions",
   "exploreServices": "Explore Our Services",
-  "companyName":"MySuccess.Com",
+  "companyName":"MySuccess.Com ",
  "homeHeadermessage":"Transforming Businesses with Cutting-Edge Solutions",
  "homeIntro":"we specialize in delivering innovative and tailored solutions designed to propel your business forward. Our comprehensive suite of services is crafted to address the unique needs of your industry, ensuring that you remain ahead of the competition.",
  "whyChooseUs": "Why Choose Us?",
@@ -256,6 +257,5 @@
   "mahalBookingList":"Mahal Booking List",
   "selectDate":"Select a Date",
   "addMoiTechCustomer":"Moitech Reg"
-
   }
   

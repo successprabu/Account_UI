@@ -26,7 +26,7 @@ import "./css/MahalBooking.css"; // Ensure you import the CSS file
 
 // Styled Components
 const StyledCard = styled(Card)`
-  margin: 20px;
+  margin: 0px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;

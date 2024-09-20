@@ -1,12 +1,11 @@
 
-/* Add custom styles for form groups to avoid overlapping */
 .form-group {
     margin-bottom: 1rem;
   }
   
   /* Adjust button spacing */
   .d-flex.justify-content-end .btn {
-    margin-left: 0.5rem;
+    margin-left: 0.1rem;
   }
   
   /* Ensure invalid feedback is clearly visible */

@@ -24,8 +24,6 @@ const MahalBookingList = () => {
         primary_phone: ""
       });
 
-      console.log("response:", response);
-
       if (response.data.result) {
         setBookings(response.data.data); // Set bookings from API response
         setBookedDates(response.data.data.map((booking) => new Date(booking.date))); // Set booked dates from API response
@@ -61,7 +59,6 @@ const MahalBookingList = () => {
         ]}
       />
       <Row>
-        {/* Left Column: Calendar */}
         <Col md={3}>
           <h4>{t("selectDate")}</h4>
           <Calendar

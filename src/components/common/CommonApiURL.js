@@ -1,6 +1,6 @@
-//export const BASE_URL = `http://localhost/api/`
+export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`  //LOCAL URL
-export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
+//export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/` //live URL
 
 const GOOGLE_TRANS_API_KEY ="AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE"
 export const OTP_KEY ="szienOEZ8jVR54tGk0vKfahNUBwTgdb2HmylJcpo916YXQPSFWfJVLKISTXwzPg6rU1QjZek0NinAFR3"

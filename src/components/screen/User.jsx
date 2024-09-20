@@ -33,15 +33,17 @@ const User = () => {
   const { t } = useTranslation();
   const schema = yup.object().shape({
     name: yup.string().required(t('required')),
-    primary_phone: yup.string().required(t('required')),
+    primary_phone: yup
+      .string()
+      .matches(/^\d{10}$/, t('validation_phone')) // Ensure 10-digit number
+      .required(t('required')),
     password: yup.string().required(t('required')),
     conpassword: yup
-    .string()
-    .oneOf([yup.ref('password'), null], t('passwordMatch'))
-    .required(t('required')),
-  email: yup.string().email(t('invalidEmail')).nullable(),
+      .string()
+      .oneOf([yup.ref('password'), null], t('passwordMatch'))
+      .required(t('required')),
+    email: yup.string().email(t('invalidEmail')).nullable(),
   });
-
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -61,7 +63,7 @@ const User = () => {
     createdDt: "2024-07-06T10:07:21.637Z",
     updateddBy: "SYSTEM",
     updatedDt: "2024-07-06T10:07:21.637Z",
-    isActive: false,
+    isActive: true,
     password: "Welcome@24",
     userType:"NU"
   });
@@ -122,6 +124,7 @@ const User = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         customerId: userDetail.customerID,
+        updatedBy: String(userDetail.id),
       }));
     } else {
       setIsAuthenticated(false);
@@ -129,11 +132,7 @@ const User = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (i18n.language === "ta") {
-      // Additional setup for Tamil language if needed
-    }
-  }, [i18n.language]);
+
 
  useEffect(() => {
    fetchUserList();
@@ -167,17 +166,14 @@ const User = () => {
     if (value.endsWith(" ")) {
       setFieldBeingTranslated(name);
     }
-  };
-
-  
-  const handleTranslation = (translatedText) => {
-    if (fieldBeingTranslated) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [fieldBeingTranslated]: translatedText,
-      }));
-      setFieldBeingTranslated(null);
-    }
+    // Re-validate the field dynamically
+    schema.validateAt(name, { ...formData, [name]: value })
+      .then(() => {
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+      })
+      .catch((err) => {
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: err.message }));
+      });
   };
 
 
@@ -253,14 +249,15 @@ const User = () => {
     setIsEditing(true); // Set the flag to true for edit mode
   };
 
-  const handleKeyDown = (e, nextRef) => {
-    if (e.key === "Enter" || e.key === "Tab") {
-      e.preventDefault();
-      if (nextRef && nextRef.current) {
-        nextRef.current.focus();
-      }
+ // Handle Enter/Tab key to move to the next field
+ const handleKeyDown = (e, nextRef) => {
+  if (e.key === "Enter" || e.key === "Tab") {
+    e.preventDefault();
+    if (nextRef && nextRef.current) {
+      nextRef.current.focus();
     }
-  };
+  }
+};
 
   const startRecording = (fieldName) => {
     setIsRecording(true);
@@ -303,6 +300,8 @@ const User = () => {
     );
   }
 
+ 
+
   return (
     <Card>
       <Header
@@ -328,7 +327,7 @@ const User = () => {
                     onChange={handleChange}
                     isInvalid={!!errors.name}
                     ref={nameRef}
-                    onKeyDown={(e) => handleKeyDown(e, nameRef)}
+                    onKeyDown={(e) => handleKeyDown(e, primaryRef)}
                   />
             
                   <Button
@@ -369,7 +368,7 @@ const User = () => {
                     onChange={handleChange}
                     isInvalid={!!errors.primary_phone}
                     ref={primaryRef}
-                    onKeyDown={(e) => handleKeyDown(e, primaryRef)}
+                    onKeyDown={(e) => handleKeyDown(e, passwordRef)}
                   />
                   <FormControl.Feedback type="invalid">
                     {errors.primary_phone}
@@ -417,7 +416,7 @@ const User = () => {
                     onChange={handleChange}
                     isInvalid={!!errors.password}
                     ref={passwordRef}
-                    onKeyDown={(e) => handleKeyDown(e, passwordRef)}
+                    onKeyDown={(e) => handleKeyDown(e, conpasswordRef)}
                   />
                   <Button
                     variant={
@@ -443,7 +442,9 @@ const User = () => {
             </Col>
             <Col xs={12} md={3}>
               <FormGroup controlId="conpassword">
-                <FormLabel>{t("confirm_password")}</FormLabel>
+                <FormLabel>{t("confirm_password")}
+                <span className="text-danger">*</span>
+                </FormLabel>
                 <InputGroup>
                   <FormControl
                     type="password"
@@ -454,7 +455,7 @@ const User = () => {
                     onChange={handleChange}
                     ref={conpasswordRef}
                     isInvalid={!!errors.conpassword}
-                    onKeyDown={(e) => handleKeyDown(e, conpasswordRef)}
+                    onKeyDown={(e) => handleKeyDown(e, emailRef)}
                   />
                   <Button
                     variant={
