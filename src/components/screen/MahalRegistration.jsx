@@ -45,9 +45,9 @@ const MahalRegistration = () => {
     is_secondary_phone_whatsup: false,
     pincode: 0,
     userType:"MU",
-    createdBy: "APPLICATION",
+    createdBy: "0",
     createdDt: "2024-07-06T10:07:21.637Z",
-    updateddBy: "APPLICATION",
+    updateddBy: "0",
     updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: true,
     password: "",
@@ -180,10 +180,10 @@ const MahalRegistration = () => {
         customerId:0,
         country_code:'+91',
         appName:'MOI',
-        createdBy:'SYSTEM',
+        createdBy:'0',
         createdDt:new Date()
       };
- 
+ console.log(payload,'payload')
     axios.post(SAVE_REGISTRATION_INITIAL_API, payload)
   .then(response => {
     // Handle the response
@@ -530,7 +530,7 @@ const MahalRegistration = () => {
                 <Button 
                 type="submit"
                  variant="success"
-                 disabled={!otpVerified}
+                 //disabled={!otpVerified}
                  >
                 <FaUserPlus  className="me-1" />{t("register")}
                 </Button>

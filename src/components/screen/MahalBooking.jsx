@@ -340,7 +340,7 @@ const MahalBooking = () => {
                       <InputWithMicrophone
                         {...field}
                         type="number"
-                        placeholder={t("Enter Advance")}
+                        placeholder={t("enterAdvance")}
                         error={errors.advance?.message}
                         onFocus={() => clearError("advance")}
                       />
