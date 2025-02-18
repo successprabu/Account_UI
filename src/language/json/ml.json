@@ -82,7 +82,7 @@
   "seconds": "സെക്കൻഡുകൾ",
   "resendIn": "വീണ്ടും അയയ്ക്കുക",
   "verifyOTP": "OTP സ്ഥിരീകരിക്കുക",
-  "mahalBooking" :"മഹൽ ബുക്കിംഗ്",
+  "mahalBooking": "മഹൽ ബുക്കിംഗ്",
   "toDate": "തീയതി & സമയം",
   "fromDate": "ആരംഭ തീയതി & സമയം",
   "customerContactNum": "ഉപഭോക്താവിന്റെ ബന്ധപ്പെടാനുള്ള നമ്പർ",
@@ -102,6 +102,17 @@
   "isCancelled": "റദ്ദാക്കി",
   "canceReason": "റദ്ദാക്കാനുള്ള കാരണം",
   "enterCanceReason": "റദ്ദാക്കാനുള്ള കാരണം നൽകുക",
-    "checkAval":"ലഭ്യത പരിശോധിക്കുക",
-     "addMoiTechCustomer":"മോയിറ്റെക്കിന് രജിസ്ട്രേഷൻ"
+  "checkAval": "ലഭ്യത പരിശോധിക്കുക",
+  "addMoiTechCustomer": "മോയിറ്റെക്കിന് രജിസ്ട്രേഷൻ",
+  "mahalOwnerName": "മഹാൽ ഉടമയുടെ പേര്",
+  "enter_mahal_ower_name": "മഹാൽ ഉടമയുടെ പേര് നൽകുക",
+  "mahalRegistration": "സൗന്ദര്യം നിങ്ങളെ കാത്തിരിക്കുന്നു: ഇന്ന് തന്നെ നിങ്ങളുടെ മഹാൽ രജിസ്റ്റർ ചെയ്യൂ",
+  "addMahal": "പുതിയ മഹൽ ചേർക്കുക",
+  "contactPerson": "സമ്പർക്ക വ്യക്തി",
+  "enterContactPerson": "ദയവായി സമ്പർക്ക വ്യക്തിയുടെ പേര് നൽകുക",
+  "contactNumber": "സമ്പർക്ക നമ്പർ",
+  "enterContactNumber": "ദയവായി സമ്പർക്ക നമ്പർ നൽകുക",
+  "landmark": "ലാൻഡ്മാർക്ക്",
+  "enterLandmark": "ദയവായി ലാൻഡ്മാർക്ക് നൽകുക",
+  "onlineBooking": "ഓൺലൈൻ ബുക്കിംഗ്"
 }

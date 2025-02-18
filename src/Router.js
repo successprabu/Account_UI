@@ -32,6 +32,7 @@ import MahalRegistration from "./components/screen/MahalRegistration";
 import MahalBooking from "./components/screen/MahalBooking";
 import MahalBookingList from "./components/screen/MahalBookingList";
 import AddMoitechCustomer from "./components/screen/AddMoitechCustomer";
+import NewMahal from "./components/screen/mahal/NewMahal";
 
 const Router = () => {
   return (
@@ -50,7 +51,7 @@ const Router = () => {
         <Route path="*" element={<PageNotFound />} />
 
         <Route path="/" element={<Rootlayout />}>
-          <Route path="dashboard" element={<RoleBasedDashboard/>} />
+          <Route path="dashboard" element={<RoleBasedDashboard />} />
           <Route
             path="client-list"
             element={
@@ -171,7 +172,15 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
+            path="add-new-mahal"
+            element={
+              <ProtectedRoute allowedRoles={["MU"]}>
+                <NewMahal />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="mahal-booking"
             element={
               <ProtectedRoute allowedRoles={["MU"]}>
@@ -179,7 +188,7 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-             <Route
+          <Route
             path="mahal-booking-list"
             element={
               <ProtectedRoute allowedRoles={["MU"]}>
@@ -187,7 +196,7 @@ const Router = () => {
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="add-moitech-customer"
             element={
               <ProtectedRoute allowedRoles={["MU"]}>

@@ -21,15 +21,18 @@ const MahalBookingList = () => {
         fromDate: null,
         toDate: null,
         customerName: "",
-        primary_phone: ""
+        primary_phone: "",
       });
 
       if (response.data.result) {
         setBookings(response.data.data); // Set bookings from API response
-        setBookedDates(response.data.data.map((booking) => new Date(booking.date))); // Set booked dates from API response
+        setBookedDates(
+          response.data.data.map((booking) => new Date(booking.date))
+        ); // Set booked dates from API response
       } else {
         toast.error(
-          response.data.message || "Something went wrong while fetching functions"
+          response.data.message ||
+            "Something went wrong while fetching BookingList"
         );
       }
     } catch (error) {
@@ -60,28 +63,29 @@ const MahalBookingList = () => {
       />
       <Row>
         <Col md={3}>
-          <h4>{t("selectDate")}</h4>
           <Calendar
             tileClassName={tileClassName} // Apply class based on booked/available status
           />
         </Col>
 
         {/* Vertical Divider */}
-        <Col md={1} className="d-flex justify-content-center align-items-center">
+        <Col
+          md={1}
+          className="d-flex justify-content-center align-items-center"
+        >
           <div className="vertical-divider" />
         </Col>
 
         {/* Right Column: Booking List */}
         <Col md={8}>
-        <h4>{t("mahalBookingList")}</h4>
           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>{t("customerName")}</th>
                 <th>{t("mobile")}</th>
-                <th>{t("functionDate")}</th>
+                <th>{t("fromDate")}</th>
+                <th>{t("toDate")}</th>
                 <th>{t("venue")}</th>
-        
               </tr>
             </thead>
             <tbody>
@@ -89,9 +93,9 @@ const MahalBookingList = () => {
                 <tr key={booking.id}>
                   <td>{booking.name}</td>
                   <td>{booking.mobile}</td>
-                  <td>{new Date(booking.date).toLocaleDateString('en-GB')}</td>
+                  <td>{booking.fromDate}</td>
+                  <td>{booking.toDate}</td>
                   <td>{booking.venue}</td>
-          
                 </tr>
               ))}
             </tbody>

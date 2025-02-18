@@ -1,293 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Card, Row, Col } from "react-bootstrap";
+import React from "react";
+import { Line } from "react-chartjs-2";
+import { Card } from "react-bootstrap";
 import {
-  FaMoneyBillWave,
-  FaClipboardCheck,
-  FaMapMarkerAlt,
-  FaWallet,
+  FaCalendar,
+  FaRupeeSign,
+  FaBell,
+  FaUserCog,
+  FaPlusSquare,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import Header from "../common/Header";
+import { MdEventSeat } from "react-icons/md";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/Dashboard.css";
+
+// Import Chart.js components and register them
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend,
-  AreaChart,
-  Area,
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
-import {jwtDecode} from "jwt-decode";
-import { DASHBOARD_SUMMARY_API, DASHBOARD_DETAIL_API } from "../common/CommonApiURL";
-import { API_SERVICE } from "../common/CommonMethod";
-import Unauthorized from "../common/UnauthorizedAccess";
+} from "chart.js";
+
+// Register the necessary components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const DashboardMahal = () => {
-  const [showClientListModal, setShowClientListModal] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [dashboardData, setDashboardData] = useState({});
-  const [dashboardDetail, setDashboardDetail] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const userDetail = JSON.parse(localStorage.getItem("user"));
+  const chartData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Bookings",
+        data: [10, 30, 20, 50, 40, 70],
+        borderColor: "rgba(0, 123, 255, 1)",
+        backgroundColor: "rgba(0, 123, 255, 0.2)",
+      },
+    ],
+  };
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        if (userDetail.customerID === 0) {
-          setIsAuthenticated(false);
-        }
-
-        if (!isAuthenticated) {
-          return;
-        }
-
-        const [summaryResponse, detailResponse] = await Promise.all([
-          API_SERVICE.get(DASHBOARD_SUMMARY_API, {
-            customer_id: userDetail.customerID,
-            function_id: userDetail.functionId,
-            user_type: userDetail.userType,
-            userId:userDetail.id
-          }),
-          API_SERVICE.get(DASHBOARD_DETAIL_API, {
-            customer_id: userDetail.customerID,
-            function_id: userDetail.functionId,
-            user_type: userDetail.userType,
-            userId:userDetail.id
-          }),
-        ]);
-
-        if (summaryResponse.data.result && detailResponse.data.result) {
-          setDashboardData(summaryResponse.data.data);
-          setDashboardDetail(detailResponse.data.data);
-        } else {
-          setError("Failed to fetch dashboard data");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching dashboard data: " + error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [isAuthenticated, userDetail]);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return <Unauthorized />;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  
-  const tiles = [
-    {
-      title: t("dashbordTotalAmount"),
-      total: `Rs.${dashboardData.totalRcdAmount?.toFixed(2) || 0}`,
-      icon: <FaMoneyBillWave size={50} />,
-      handleClick: () => setShowClientListModal(true),
-      color: "#0088FE",
+  const chartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
     },
-    {
-      title: t("dashbordTotalTrans"),
-      total: dashboardData.totalRcdTransaction || 0,
-      icon: <FaClipboardCheck size={50} />,
-      color: "#FFBB28",
-    },
-    {
-      title: t("dashbordTotalPlaces"),
-      total: dashboardData.totalPlaces || 0,
-      icon: <FaMapMarkerAlt size={50} />,
-      color: "#00C49F",
-    },
-    {
-      title: t("dashbordTotalExpenase"),
-      total: dashboardData.totalExpenses || 0,
-      icon: <FaWallet size={50} />,
-      color: "#FF8042",
-    },
-  ];
-
-  const COLORSFORRECORDS = ["#FFBB28", "#00C49F"];
-  const COLORSFORAMOUNT = ["#0088FE", "#FF8042"];
+  };
 
   return (
-    <div>
-      <Header
-        titles={[t("dashboard")]}
-        links={[{ to: "/purchase", label: t("addClient") }]}
-      />
-      <div className="tiles-container">
-        <Row>
-          {tiles.map((tile, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-2">
-              <Card style={{ backgroundColor: tile.color, color: "white" }}>
-                <Card.Body
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "10px",
-                  }}
-                >
-                  <div style={{ marginRight: "10px" }}>{tile.icon}</div>
-                  <div
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Card.Title style={{ textAlign: "center" }}>
-                      {t(tile.title)}
-                    </Card.Title>
-                    <Card.Text
-                      style={{
-                        fontSize: "2rem",
-                        fontWeight: "bold",
-                        textAlign: "center",
-                      }}
-                    >
-                      <a
-                        href="#"
-                        onClick={tile.handleClick}
-                        style={{ color: "white" }}
-                      >
-                        {tile.total}
-                      </a>
-                    </Card.Text>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+    <div className="container">
+      {/* Overview Cards */}
+      <div className="card-row">
+        <Card className="custom-card">
+          <MdEventSeat size={40} color="#4CAF50" />
+          <h3 className="card-title">Bookings</h3>
+          <p className="card-value">125</p>
+        </Card>
+        <Card className="custom-card">
+          <FaRupeeSign size={40} color="#FF9800" />
+          <h3 className="card-title">Revenue</h3>
+          <p className="card-value">₹2,50,000</p>
+        </Card>
       </div>
 
-      <Row className="mt-4 mb-4">
-        <Col xs={12} lg={6} className="mb-4">
-          <h4>{t("totalRcdNosVsTotalExpenses")}</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dashboardDetail}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="transactionCount" fill="#ffc658" />
-              <Bar dataKey="expenseCount" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Col>
-        <Col xs={12} lg={6} className="mb-4">
-          <h4>{t("totalRcdAmountVsTotalExpenses")}</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={dashboardDetail}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="transactions"
-                stroke="#ffc658"
-                fill="#ffc658"
-              />
-              <Area
-                type="monotone"
-                dataKey="expenses"
-                stroke="#82ca9d"
-                fill="#82ca9d"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </Col>
-      </Row>
+      <div className="card-row">
+        <Card className="custom-card">
+          <FaCalendar size={40} color="#2196F3" />
+          <h3 className="card-title">Available Slots</h3>
+          <p className="card-value">8</p>
+        </Card>
+        <Card className="custom-card">
+          <FaBell size={40} color="#E91E63" />
+          <h3 className="card-title">Pending</h3>
+          <p className="card-value">3</p>
+        </Card>
+      </div>
 
-      <hr style={{ borderWidth: "2px", borderColor: "#ccc" }} />
+      {/* Line Chart */}
+      <h2 className="chart-title">Booking Trends</h2>
+      <Line data={chartData} options={chartOptions} />
 
-      <Row className="mt-4 mb-4">
-        <Col xs={12} lg={6} className="mb-4">
-          <h4>{t("totalRcdNosVsTotalExpenses")}</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={dashboardDetail.map((item) => ({
-                  name: t("totalRcdNos"),
-                  value: item.transactionCount,
-                }))}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label
-              >
-                {dashboardDetail.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORSFORRECORDS[index % COLORSFORRECORDS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Col>
-        <Col xs={12} lg={6} className="mb-4">
-          <h4>{t("totalRcdAmountVsTotalExpenses")}</h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={dashboardDetail.map((item) => ({
-                  name: t("totalRcdAmount"),
-                  value: item.transactions,
-                }))}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#FF8042"
-                dataKey="value"
-                label
-              >
-                {dashboardDetail.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORSFORAMOUNT[index % COLORSFORAMOUNT.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Col>
-      </Row>
-
-      <Modal
-        size="lg"
-        show={showClientListModal}
-        onHide={() => setShowClientListModal(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{t("recentlyCreatedClients")}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{/* Add content here for client list */}</Modal.Body>
-      </Modal>
+      {/* Quick Actions */}
+      <h2 className="section-title">Quick Actions</h2>
+      <div className="action-row">
+        <button className="action-button">
+          <FaPlusSquare size={30} color="#4CAF50" />
+          <span>Add Booking</span>
+        </button>
+        <button className="action-button">
+          <FaCalendar size={30} color="#FF9800" />
+          <span>View Calendar</span>
+        </button>
+        <button className="action-button">
+          <FaUserCog size={30} color="#2196F3" />
+          <span>Manage Services</span>
+        </button>
+      </div>
     </div>
   );
 };

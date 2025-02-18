@@ -10,8 +10,13 @@ import {
   BiExit,
   BiHelpCircle,
 } from "react-icons/bi";
-import { MdEventAvailable  } from 'react-icons/md';
-import { FaTachometerAlt,FaCalendarAlt,FaHandsHelping } from "react-icons/fa";
+import { MdEventAvailable } from "react-icons/md";
+import {
+  FaTachometerAlt,
+  FaCalendarAlt,
+  FaHandsHelping,
+  FaHotel,
+} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./css/sidebar.css";
@@ -56,7 +61,7 @@ const SideBar = () => {
   };
 
   const renderMenuItems = () => {
-    if (!userType) return null; 
+    if (!userType) return null;
     const isSuperAdmin = userType === "SU";
     const isAdminUser = userType === "AU";
     const isNormalUser = userType === "NU";
@@ -64,7 +69,7 @@ const SideBar = () => {
 
     return (
       <>
-        {(isSuperAdmin || isAdminUser || isNormalUser ||isMahalAdmin) && (
+        {(isSuperAdmin || isAdminUser || isNormalUser || isMahalAdmin) && (
           <li className="sidebar-item">
             <NavLink
               to="/dashboard"
@@ -92,7 +97,21 @@ const SideBar = () => {
             </NavLink>
           </li>
         )}
-        {isMahalAdmin && (
+        {(isSuperAdmin || isMahalAdmin) && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/add-new-mahal"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <FaHotel />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("addMahal")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+        {(isSuperAdmin || isMahalAdmin) && (
           <li className="sidebar-item">
             <NavLink
               to="/mahal-booking"
@@ -106,21 +125,22 @@ const SideBar = () => {
             </NavLink>
           </li>
         )}
-          {isMahalAdmin && (
-          <li className="sidebar-item">
-            <NavLink
-              to="/mahal-booking-list"
-              className="sidebar-link"
-              onClick={handleExpand}
-            >
-              <FaCalendarAlt />
-              <span className={isExpanded ? "nav-text" : "hidden"}>
-                {t("mahalBookingList")}
-              </span>
-            </NavLink>
-          </li>
-        )}
-         {isMahalAdmin && (
+        {isSuperAdmin ||
+          (isMahalAdmin && (
+            <li className="sidebar-item">
+              <NavLink
+                to="/mahal-booking-list"
+                className="sidebar-link"
+                onClick={handleExpand}
+              >
+                <FaCalendarAlt />
+                <span className={isExpanded ? "nav-text" : "hidden"}>
+                  {t("mahalBookingList")}
+                </span>
+              </NavLink>
+            </li>
+          ))}
+        {(isSuperAdmin || isMahalAdmin) && (
           <li className="sidebar-item">
             <NavLink
               to="/add-moitech-customer"
@@ -136,7 +156,9 @@ const SideBar = () => {
         )}
         {(isSuperAdmin || isAdminUser) && (
           <li
-            className={`sidebar-item has-dropdown ${authOpen ? "expanded" : ""}`}
+            className={`sidebar-item has-dropdown ${
+              authOpen ? "expanded" : ""
+            }`}
           >
             <NavLink
               className="sidebar-link"
@@ -164,10 +186,7 @@ const SideBar = () => {
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink
-                    to="/user"
-                    className="sidebar-link sidebar-sublink"
-                  >
+                  <NavLink to="/user" className="sidebar-link sidebar-sublink">
                     {t("userMaster")}
                   </NavLink>
                 </li>
@@ -177,7 +196,9 @@ const SideBar = () => {
         )}
         {(isSuperAdmin || isAdminUser || isNormalUser) && (
           <li
-            className={`sidebar-item has-dropdown ${multiOpen ? "expanded" : ""}`}
+            className={`sidebar-item has-dropdown ${
+              multiOpen ? "expanded" : ""
+            }`}
           >
             <NavLink
               className="sidebar-link"
@@ -192,7 +213,9 @@ const SideBar = () => {
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("transactions")}
               </span>
-              <span className={`dropdown-icon ${multiOpen ? "expanded" : ""}`} />
+              <span
+                className={`dropdown-icon ${multiOpen ? "expanded" : ""}`}
+              />
             </NavLink>
             <Collapse in={multiOpen}>
               <ul id="multi" className="sidebar-dropdown list-unstyled">
@@ -258,7 +281,9 @@ const SideBar = () => {
         )}
         {(isSuperAdmin || isAdminUser) && (
           <li
-            className={`sidebar-item has-dropdown ${reportOpen ? "expanded" : ""}`}
+            className={`sidebar-item has-dropdown ${
+              reportOpen ? "expanded" : ""
+            }`}
           >
             <NavLink
               className="sidebar-link"
@@ -273,32 +298,49 @@ const SideBar = () => {
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("Reports")}
               </span>
-              <span className={`dropdown-icon ${reportOpen ? "expanded" : ""}`} />
+              <span
+                className={`dropdown-icon ${reportOpen ? "expanded" : ""}`}
+              />
             </NavLink>
             <Collapse in={reportOpen}>
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
-                  <NavLink to="/income-report" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="/income-report"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("receiptReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink to="/expenses-report" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="/expenses-report"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("expenseReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink to="/others-report" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="/others-report"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("othersReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink to="/regional-report#" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="/regional-report#"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("locationAmountReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink to="/summary-report" className="sidebar-link sidebar-sublink">
+                  <NavLink
+                    to="/summary-report"
+                    className="sidebar-link sidebar-sublink"
+                  >
                     {t("summaryReport")}
                   </NavLink>
                 </li>
@@ -331,7 +373,7 @@ const SideBar = () => {
 
   return (
     <div className="wrapper">
-      <aside id="sidebar" className={isExpanded ? "expand" : ''}>
+      <aside id="sidebar" className={isExpanded ? "expand" : ""}>
         <div className="d-flex">
           <button className="toggle-btn" type="button" onClick={handleToggle}>
             <BiMenu />
@@ -347,9 +389,11 @@ const SideBar = () => {
             <div>{userName}</div>
             <div>{designation}</div>
           </div>
-          <span className={`dropdown-icon ${userDetailsOpen ? "expanded" : ""}`}></span>
-        </div> 
-        {userDetailsOpen &&  (
+          <span
+            className={`dropdown-icon ${userDetailsOpen ? "expanded" : ""}`}
+          ></span>
+        </div>
+        {userDetailsOpen && (
           <div className="user-menu">
             <NavLink to="/" onClick={handleLogout} className="sidebar-link">
               <BiExit />

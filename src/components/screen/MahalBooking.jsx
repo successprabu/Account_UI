@@ -88,8 +88,8 @@ const MahalBooking = () => {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      id:0,
-      mahalId:0,
+      id: 0,
+      mahalId: 0,
       customerName: "",
       primary_phone: "",
       fromDate: null,
@@ -137,9 +137,8 @@ const MahalBooking = () => {
   };
 
   return (
-    
     <StyledCard>
-       <Header
+      <Header
         titles={[t("mahalBooking")]}
         links={[
           { to: "/dashboard", label: t("dashboard") },
@@ -163,57 +162,80 @@ const MahalBooking = () => {
             className="text-primary w-100"
             onSubmit={handleSubmit(onSubmit)}
           >
-         <Row className="mb-3">
-  <Col xs={12} md={4}>
-    <FormGroup controlId="fromDate">
-      <FormLabel>{t("fromDate")}<span className="text-danger">*</span></FormLabel>
-      <Controller
-        name="fromDate"
-        control={control}
-        render={({ field }) => (
-          <DatePicker
-            selected={field.value}
-            onChange={handleFromDateChange} // Updated handler
-            minDate={new Date()}
-            showTimeSelect
-            timeIntervals={15}
-            dateFormat="dd/MM/yyyy hh:mm aa"
-            className={`form-control ${errors.fromDate ? 'is-invalid' : ''}`}
-            placeholderText={t("Select From Date & Time")}
-          />
-        )}
-      />
-      <div className="invalid-feedback">{errors.fromDate?.message}</div>
-    </FormGroup>
-  </Col>
-  <Col xs={12} md={4}>
-    <FormGroup controlId="toDate">
-      <FormLabel>{t("toDate")}<span className="text-danger">*</span></FormLabel>
-      <Controller
-        name="toDate"
-        control={control}
-        render={({ field }) => (
-          <DatePicker
-            selected={field.value}
-            onChange={(date) => setValue("toDate", date)}
-            minDate={watch("fromDate") ? new Date(watch("fromDate")).setDate(new Date(watch("fromDate")).getDate()) : new Date()}
-            showTimeSelect
-            timeIntervals={15}
-            dateFormat="dd/MM/yyyy hh:mm aa"
-            className={`form-control ${errors.toDate ? 'is-invalid' : ''}`}
-            placeholderText={t("Select To Date & Time")}
-          />
-        )}
-      />
-      <div className="invalid-feedback">{errors.toDate?.message}</div>
-    </FormGroup>
-  </Col>
-  <Col xs={12} md={4}>
-    <Button variant="outline-primary" onClick={handleCheckAvailability}>
-      {t("checkAval")}
-    </Button>
-  </Col>
-</Row>
+            <Row className="mb-3">
+              <Col xs={12} md={4}>
+                <FormGroup controlId="fromDate">
+                  <FormLabel>
+                    {t("fromDate")}
+                    <span className="text-danger">*</span>
+                  </FormLabel>
+                  <Controller
+                    name="fromDate"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        selected={field.value}
+                        onChange={handleFromDateChange} // Updated handler
+                        minDate={new Date()}
+                        showTimeSelect
+                        timeIntervals={15}
+                        dateFormat="dd/MM/yyyy hh:mm aa"
+                        className={`form-control ${
+                          errors.fromDate ? "is-invalid" : ""
+                        }`}
+                        placeholderText={t("Select From Date & Time")}
+                      />
+                    )}
+                  />
+                  <div className="invalid-feedback">
+                    {errors.fromDate?.message}
+                  </div>
+                </FormGroup>
+              </Col>
+              <Col xs={12} md={4}>
+                <FormGroup controlId="toDate">
+                  <FormLabel>
+                    {t("toDate")}
+                    <span className="text-danger">*</span>
+                  </FormLabel>
+                  <Controller
+                    name="toDate"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        selected={field.value}
+                        onChange={(date) => setValue("toDate", date)}
+                        minDate={
+                          watch("fromDate")
+                            ? new Date(watch("fromDate")).setDate(
+                                new Date(watch("fromDate")).getDate()
+                              )
+                            : new Date()
+                        }
+                        showTimeSelect
+                        timeIntervals={15}
+                        dateFormat="dd/MM/yyyy hh:mm aa"
+                        className={`form-control ${
+                          errors.toDate ? "is-invalid" : ""
+                        }`}
+                        placeholderText={t("Select To Date & Time")}
+                      />
+                    )}
+                  />
+                  <div className="invalid-feedback">
+                    {errors.toDate?.message}
+                  </div>
+                </FormGroup>
+              </Col>
+              <Col xs={12} md={4}>
+                <Button
+                  variant="outline-primary"
+                  onClick={handleCheckAvailability}
+                >
+                  {t("checkAval")}
+                </Button>
+              </Col>
+            </Row>
             <Separator />
             <Row className="mb-3">
               <Col xs={12} md={4}>
@@ -229,7 +251,7 @@ const MahalBooking = () => {
                       <InputWithMicrophone
                         {...field}
                         placeholder={t("enterCustomerName")}
-                       // error={errors.customerName?.message}
+                        // error={errors.customerName?.message}
                         onFocus={() => clearError("customerName")}
                       />
                     )}
@@ -253,7 +275,7 @@ const MahalBooking = () => {
                         {...field}
                         type="number"
                         placeholder={t("enterContactNum")}
-                       // error={errors.primary_phone?.message}
+                        // error={errors.primary_phone?.message}
                         onFocus={() => clearError("primary_phone")}
                       />
                     )}
@@ -395,7 +417,7 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-              <Col xs={12}  md={4}>
+              <Col xs={12} md={4}>
                 <FormGroup controlId="remarks">
                   <FormLabel>{t("remarks")}</FormLabel>
                   <Controller
@@ -415,8 +437,8 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-              </Row>
-              <Row className="mb-3">
+            </Row>
+            <Row className="mb-3">
               <Col xs={12} md={4}>
                 <FormGroup controlId="isCancelled">
                   <Controller
@@ -442,7 +464,7 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-              <Col xs={12} md={8} >
+              <Col xs={12} md={8}>
                 <FormGroup controlId="cancelReason">
                   <FormLabel>{t("canceReason")}</FormLabel>
                   <Controller
@@ -463,7 +485,6 @@ const MahalBooking = () => {
                   </div>
                 </FormGroup>
               </Col>
-             
             </Row>
             <Row className="mb-3">
               <Col xs={12}>
