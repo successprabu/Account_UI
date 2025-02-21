@@ -111,5 +111,9 @@
   "enterContactNumber": "దయచేసి సంప్రదింపు నంబర్ నమోదు చేయండి",
   "landmark": "ల్యాండ్‌మార్క్",
   "enterLandmark": "దయచేసి ల్యాండ్‌మార్క్ నమోదు చేయండి",
-  "onlineBooking": "ఆన్‌లైన్ బుకింగ్"
+  "onlineBooking": "ఆన్‌లైన్ బుకింగ్",
+  "clearButton": "తుడిచేయి",
+  "mahalName": "మహల్ పేరు",
+  "enter_mahal_name": "మహల్ పేరు నమోదు చేయండి",
+  "saveSuccessMessage": "డేటా విజయవంతంగా సేవ్ చేయబడింది!"
 }

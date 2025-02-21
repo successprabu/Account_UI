@@ -115,5 +115,9 @@
   "enterContactNumber": "कृपया संपर्क नंबर दर्ज करें",
   "landmark": "सीमा चिन्ह",
   "enterLandmark": "कृपया सीमा चिन्ह दर्ज करें",
-  "onlineBooking": "ऑनलाइन बुकिंग"
+  "onlineBooking": "ऑनलाइन बुकिंग",
+  "clearButton": "साफ करें",
+  "mahalName": "महल का नाम",
+  "enter_mahal_name": "महल का नाम दर्ज करें",
+  "saveSuccessMessage": "डेटा सफलतापूर्वक सहेजा गया!"
 }

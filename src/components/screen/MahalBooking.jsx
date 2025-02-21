@@ -109,9 +109,9 @@ const MahalBooking = () => {
     try {
       // Example API call
       await API_SERVICE.post(SAVE_MAHAL_BOOKING_API, data);
-      toast.success(t("Data saved successfully!"));
+      toast.success(t("saveSuccessMessage"));
     } catch (error) {
-      toast.error(t("Failed to save data, please try again."));
+      toast.error(t("an_error_occurred"));
     }
   };
 
@@ -155,7 +155,7 @@ const MahalBooking = () => {
               visible={true}
               ariaLabel="oval-loading"
             />
-            <LoadingText>{t("Processing your request...")}</LoadingText>
+            <LoadingText>{t("processing_your_request")}</LoadingText>
           </LoadingContainer>
         ) : (
           <form

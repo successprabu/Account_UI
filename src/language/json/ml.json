@@ -114,5 +114,9 @@
   "enterContactNumber": "ദയവായി സമ്പർക്ക നമ്പർ നൽകുക",
   "landmark": "ലാൻഡ്മാർക്ക്",
   "enterLandmark": "ദയവായി ലാൻഡ്മാർക്ക് നൽകുക",
-  "onlineBooking": "ഓൺലൈൻ ബുക്കിംഗ്"
+  "onlineBooking": "ഓൺലൈൻ ബുക്കിംഗ്",
+  "clearButton": "നീക്കം ചെയ്യുക",
+  "mahalName": "മഹൽ പേര്",
+  "enter_mahal_name": "മഹൽ പേര് നൽകുക",
+  "saveSuccessMessage": "ഡേറ്റ വിജയകരമായി സംരക്ഷിച്ചു!"
 }

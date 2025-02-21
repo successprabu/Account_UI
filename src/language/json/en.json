@@ -266,5 +266,6 @@
   "enterContactNumber": "Please Enter Conatact Number",
   "landmark": "Landmark",
   "enterLandmark": "Please Enter Landmark",
-  "onlineBooking": "Online Booking"
+  "onlineBooking": "Online Booking",
+  "saveSuccessMessage": "Data saved successfully!"
 }

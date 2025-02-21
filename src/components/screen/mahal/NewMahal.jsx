@@ -125,25 +125,17 @@ const NewMahal = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log("Form Submit Button Clicked");
-    console.log("Errors:", errors);
-    console.log("Form Data:", data);
     try {
-      console.log("Submitting Data:", data);
-
       const response = await API_SERVICE.post(SAVE_NEW_MAHAL_API, data);
 
-      console.log("API Response:", response);
-
       if (response && response.data) {
-        toast.success(t("Data saved successfully!"));
+        toast.success(t("saveSuccessMessage"));
         reset(); // Clear form on success
       } else {
-        toast.error(t("Failed to save data, please try again."));
+        toast.error(t("an_error_occurred"));
       }
     } catch (error) {
-      console.error("Error Saving Data:", error);
-      toast.error(t("Failed to save data, please try again."));
+      toast.error(t("an_error_occurred"));
     }
   };
 
@@ -172,7 +164,7 @@ const NewMahal = () => {
               visible={true}
               ariaLabel="oval-loading"
             />
-            <LoadingText>{t("Processing your request...")}</LoadingText>
+            <LoadingText>{t("processing_your_request")}</LoadingText>
           </LoadingContainer>
         ) : (
           <form

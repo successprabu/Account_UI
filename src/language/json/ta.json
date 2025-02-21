@@ -263,5 +263,6 @@
   "enterContactNumber": "தொடர்பு எண்ணை உள்ளிடவும்",
   "landmark": "முக்கிய இடம்",
   "enterLandmark": "முக்கிய இடத்தை உள்ளிடவும்",
-  "onlineBooking": "ஆன்லைன் முன்பதிவு"
+  "onlineBooking": "ஆன்லைன் முன்பதிவு",
+  "saveSuccessMessage": "தரவு வெற்றிகரமாக சேமிக்கப்பட்டது!"
 }

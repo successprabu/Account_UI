@@ -111,5 +111,9 @@
   "enterContactNumber": "ದಯವಿಟ್ಟು ಸಂಪರ್ಕ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
   "landmark": "ಮೈಲಿಗಲ್ಲು",
   "enterLandmark": "ದಯವಿಟ್ಟು ಮೈಲಿಗಲ್ಲನ್ನು ನಮೂದಿಸಿ",
-  "onlineBooking": "ಆನ್‌ಲೈನ್ ಬುಕಿಂಗ್"
+  "onlineBooking": "ಆನ್‌ಲೈನ್ ಬುಕಿಂಗ್",
+  "clearButton": "ಅಳಿಸು",
+  "mahalName": "ಮಹಲ್ ಹೆಸರು",
+  "enter_mahal_name": "ಮಹಲ್ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+  "saveSuccessMessage": "ಡೇಟಾ ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ!"
 }
