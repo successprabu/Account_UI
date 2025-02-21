@@ -3,18 +3,24 @@ import { toast } from "react-toastify";
 import { API_SERVICE } from "./CommonMethod";
 import { DROPDOWN_STATE_API } from "./CommonApiURL";
 
-const StateDropdown = ({ onChange }) => {
+const StateDropdown = ({ countryId, onChange, value }) => {
   const [states, setStates] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchStates();
-  }, []);
+    if (countryId) {
+      fetchStates(countryId);
+    } else {
+      setStates([]); // Clear states if no country is selected
+    }
+  }, [countryId]);
 
-  const fetchStates = async () => {
+  const fetchStates = async (countryId) => {
     try {
       setLoading(true);
-      const response = await API_SERVICE.get(DROPDOWN_STATE_API);
+      const response = await API_SERVICE.get(DROPDOWN_STATE_API, {
+        countryId: countryId || 1,
+      });
 
       if (response.data.result) {
         setStates(response.data.data);
@@ -33,6 +39,9 @@ const StateDropdown = ({ onChange }) => {
     <select
       className="form-control"
       onChange={(e) => onChange && onChange(e.target.value)}
+      value={value} // Bind the selected value
+      name="state" // Add a name for react-hook-form
+      disabled={!countryId || loading}
     >
       <option value="">Select State</option>
       {loading ? (

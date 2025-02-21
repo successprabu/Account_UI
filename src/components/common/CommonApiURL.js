@@ -39,5 +39,6 @@ export const REPORT_GET_OTHERSSUMMARY_API = `${REPORT}GetOthersSummaryReport?`;
 export const REPORT_GET_REGIONALSUMMARY_API = `${REPORT}GetRegionalSummaryReport?`;
 export const REPORT_GET_OVERALLSUMMARY_API = `${REPORT}GetOverallSummaryReport?`;
 export const REPORT_GET_GENERALDATA_API = `${REPORT}GetGenearalDataForReport?`;
+export const DROPDOWN_COUNTRY_API = `${DROPDOWN}GetCountryDropDown?`;
 export const DROPDOWN_STATE_API = `${DROPDOWN}GetStateDropDown?`;
 export const DROPDOWN_DISTRICT_API = `${DROPDOWN}GetDistrictDropDown?`;

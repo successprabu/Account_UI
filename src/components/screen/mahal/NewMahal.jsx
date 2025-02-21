@@ -24,6 +24,7 @@ import "./css/mahal.css";
 import { SAVE_NEW_MAHAL_API } from "../../common/CommonApiURL";
 import StateDropdown from "../../common/StateDropDown";
 import DistrictDropDown from "../../common/DistrictDropDown";
+import CountryDropdown from "../../common/CountryDropDown";
 
 const StyledCard = styled(Card)`
   margin: 0px;
@@ -51,6 +52,18 @@ const LoadingText = styled.p`
 const validationSchema = yup.object().shape({
   mahalName: yup.string().required("Please Enter Mahal name"),
   addressLine1: yup.string().required("Please Enter Mahal Address"),
+  contactPerson: yup
+    .string()
+    .required("Please enter the contact person's name"),
+  contactNumber: yup
+    .number()
+    .typeError("Contact number must be a number")
+    .test(
+      "len",
+      "Contact number must be exactly 10 digits",
+      (val) => val && val.toString().length === 10
+    )
+    .required("Please enter a contact number"),
   pincode: yup
     .number()
     .typeError("Pincode must be a number")
@@ -62,6 +75,18 @@ const validationSchema = yup.object().shape({
       (val) => val && val.toString().length === 6
     )
     .required("Pincode is required"),
+  country: yup
+    .number()
+    .moreThan(0, "Please select a Country")
+    .required("Country is required"),
+  state: yup
+    .number()
+    .moreThan(0, "Please select a State")
+    .required("State is required"),
+  district: yup
+    .number()
+    .moreThan(0, "Please select a District")
+    .required("District is required"),
 });
 
 const NewMahal = () => {
@@ -75,15 +100,16 @@ const NewMahal = () => {
     setValue,
     formState: { errors, isSubmitting },
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
       id: 0,
-      customerId: 0,
+      customerId: 7,
       mahalName: "",
-      country: 1,
-      state: 2,
+      contactPerson: "",
+      contactNumber: "",
+      country: 0,
+      state: 0,
       district: 0,
       addressLine1: "",
       addressLine2: "",
@@ -99,11 +125,24 @@ const NewMahal = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log("Form Submit Button Clicked");
+    console.log("Errors:", errors);
+    console.log("Form Data:", data);
     try {
-      // Example API call
-      await API_SERVICE.post(SAVE_NEW_MAHAL_API, data);
-      toast.success(t("Data saved successfully!"));
+      console.log("Submitting Data:", data);
+
+      const response = await API_SERVICE.post(SAVE_NEW_MAHAL_API, data);
+
+      console.log("API Response:", response);
+
+      if (response && response.data) {
+        toast.success(t("Data saved successfully!"));
+        reset(); // Clear form on success
+      } else {
+        toast.error(t("Failed to save data, please try again."));
+      }
     } catch (error) {
+      console.error("Error Saving Data:", error);
       toast.error(t("Failed to save data, please try again."));
     }
   };
@@ -154,13 +193,12 @@ const NewMahal = () => {
                       <InputWithMicrophone
                         {...field}
                         placeholder={t("enter_mahal_name")}
-                        // error={errors.customerName?.message}
                         onFocus={() => clearError("mahalName")}
                       />
                     )}
                   />
                   <div className="invalid-feedback">
-                    {errors.customerName?.message}
+                    {errors.mahalName?.message}
                   </div>
                 </FormGroup>
               </Col>
@@ -177,13 +215,13 @@ const NewMahal = () => {
                       <InputWithMicrophone
                         {...field}
                         placeholder={t("enterContactPerson")}
-                        // error={errors.customerName?.message}
+                        error={errors.contactPerson?.message}
                         onFocus={() => clearError("contactPerson")}
                       />
                     )}
                   />
                   <div className="invalid-feedback">
-                    {errors.customerName?.message}
+                    {errors.contactPerson?.message}
                   </div>
                 </FormGroup>
               </Col>
@@ -200,13 +238,13 @@ const NewMahal = () => {
                       <InputWithMicrophone
                         {...field}
                         placeholder={t("enterContactNumber")}
-                        // error={errors.customerName?.message}
+                        error={errors.contactNumber?.message}
                         onFocus={() => clearError("contactNumber")}
                       />
                     )}
                   />
                   <div className="invalid-feedback">
-                    {errors.customerName?.message}
+                    {errors.contactNumber?.message}
                   </div>
                 </FormGroup>
               </Col>
@@ -216,14 +254,25 @@ const NewMahal = () => {
                 <FormGroup controlId="country">
                   <div className="m2 text-primary">
                     <label htmlFor="country">{t("country")}</label>
+                    <span className="text-danger">*</span>
                     <div className="input-group">
-                      <StateDropdown
-                        onChange={(value) => setSelectedState(value)}
+                      <Controller
+                        name="country"
+                        control={control}
+                        render={({ field }) => (
+                          <CountryDropdown
+                            onChange={(value) => {
+                              field.onChange(value); // Update form state
+                              setSelectedCountry(value); // Update local state
+                            }}
+                            value={field.value} // Bind the selected value
+                          />
+                        )}
                       />
                     </div>
                   </div>
                   <div className="invalid-feedback">
-                    {errors.state?.message}
+                    {errors.country?.message}
                   </div>
                 </FormGroup>
               </Col>
@@ -232,9 +281,21 @@ const NewMahal = () => {
                 <FormGroup controlId="state">
                   <div className="m2 text-primary">
                     <label htmlFor="state">{t("state")}</label>
+                    <span className="text-danger">*</span>
                     <div className="input-group">
-                      <StateDropdown
-                        onChange={(value) => setSelectedState(value)}
+                      <Controller
+                        name="state"
+                        control={control}
+                        render={({ field }) => (
+                          <StateDropdown
+                            countryId={selectedCountry}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              setSelectedState(value);
+                            }}
+                            value={field.value}
+                          />
+                        )}
                       />
                     </div>
                   </div>
@@ -247,9 +308,21 @@ const NewMahal = () => {
                 <FormGroup controlId="district">
                   <div className="m2 text-primary">
                     <label htmlFor="district">{t("district")}</label>
+                    <span className="text-danger">*</span>
                     <div className="input-group">
-                      <DistrictDropDown
-                        onChange={(value) => setSelectedDistrict(value)}
+                      <Controller
+                        name="district"
+                        control={control}
+                        render={({ field }) => (
+                          <DistrictDropDown
+                            stateId={selectedState}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              setSelectedDistrict(value);
+                            }}
+                            value={field.value}
+                          />
+                        )}
                       />
                     </div>
                   </div>
@@ -261,22 +334,23 @@ const NewMahal = () => {
             </Row>
             <Row className="mb-3">
               <Col xs={12} md={4}>
-                <FormGroup controlId="address_line1">
+                <FormGroup controlId="addressLine1">
                   <FormLabel>{t("address_line1")}</FormLabel>
+                  <span className="text-danger">*</span>
                   <Controller
-                    name="address_line1"
+                    name="addressLine1"
                     control={control}
                     render={({ field }) => (
                       <InputWithMicrophone
                         {...field}
                         placeholder={t("enter_address_line1")}
                         error={errors.address_line1?.message}
-                        onFocus={() => clearError("address_line1")}
+                        onFocus={() => clearError("addressLine1")}
                       />
                     )}
                   />
                   <div className="invalid-feedback">
-                    {errors.address_line1?.message}
+                    {errors.addressLine1?.message}
                   </div>
                 </FormGroup>
               </Col>
@@ -325,6 +399,7 @@ const NewMahal = () => {
               <Col xs={12} md={4}>
                 <FormGroup controlId="pincode">
                   <FormLabel>{t("pincode")}</FormLabel>
+                  <span className="text-danger">*</span>
                   <Controller
                     name="pincode"
                     control={control}
@@ -352,6 +427,7 @@ const NewMahal = () => {
                         <input
                           type="checkbox"
                           {...field}
+                          checked={field.value}
                           className={`form-check-input ${
                             errors.isCancelled ? "is-invalid" : ""
                           }`}

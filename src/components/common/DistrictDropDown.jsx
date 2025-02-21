@@ -3,18 +3,24 @@ import { toast } from "react-toastify";
 import { API_SERVICE } from "./CommonMethod";
 import { DROPDOWN_DISTRICT_API } from "./CommonApiURL";
 
-const DistrictDropDown = ({ onChange }) => {
+const DistrictDropDown = ({ stateId, onChange, value }) => {
   const [districts, setDistrict] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDistrict();
-  }, []);
+    if (stateId) {
+      fetchDistrict(stateId);
+    } else {
+      setDistrict([]); // Clear states if no country is selected
+    }
+  }, [stateId]);
 
-  const fetchDistrict = async () => {
+  const fetchDistrict = async (stateId) => {
     try {
       setLoading(true);
-      const response = await API_SERVICE.get(DROPDOWN_DISTRICT_API);
+      const response = await API_SERVICE.get(DROPDOWN_DISTRICT_API, {
+        stateId: stateId || 2,
+      });
 
       if (response.data.result) {
         setDistrict(response.data.data);
@@ -33,6 +39,9 @@ const DistrictDropDown = ({ onChange }) => {
     <select
       className="form-control"
       onChange={(e) => onChange && onChange(e.target.value)}
+      value={value}
+      name="district"
+      disabled={!stateId || loading}
     >
       <option value="">Select District</option>
       {loading ? (
