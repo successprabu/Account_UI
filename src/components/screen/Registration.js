@@ -44,9 +44,9 @@ const Registration = () => {
     is_primary_phone_whatsup: false,
     is_secondary_phone_whatsup: false,
     pincode: 0,
-    createdBy: "APPLICATION",
+    createdBy: "0",
     createdDt: "2024-07-06T10:07:21.637Z",
-    updateddBy: "APPLICATION",
+    updateddBy: "0",
     updatedDt: "2024-07-06T10:07:21.637Z",
     isActive: true,
     password: "",
@@ -147,6 +147,7 @@ const Registration = () => {
   // Separated function to handle sending OTP
   const sendOtp = async (otp) => {
     try {
+      console.log('Sending OTP:', otp);
       await axios.get(SEND_OTP_API, {
         params: {
           authorization: OTP_KEY,

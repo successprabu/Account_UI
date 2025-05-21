@@ -1,10 +1,10 @@
 //export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`; //LOCAL URL
-export const BASE_URL = `https://mercy-daa0chgbdvd8d7ga.eastus-01.azurewebsites.net/api/`; //live URL
+export const BASE_URL = `https://mysuccessapi-erg2e5bcbchcbjd4.centralindia-01.azurewebsites.net/api/`; //live URL
 
 const GOOGLE_TRANS_API_KEY = "AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE";
 export const OTP_KEY =
-  "szienOEZ8jVR54tGk0vKfahNUBwTgdb2HmylJcpo916YXQPSFWfJVLKISTXwzPg6rU1QjZek0NinAFR3";
+  "xjOLRnX3rkQIbDWCNdKzUZrvDkh4oNE2c5piae82FQuFC0wj0hShCZvrJ1uH";
 export const GOOGLE_TRANS_API = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANS_API_KEY}`;
 export const SEND_OTP_API = `https://www.fast2sms.com/dev/bulkV2`;
 export const MASTER = `Master/`;

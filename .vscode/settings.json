@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/b43d262e-a6f4-4fe0-99ae-8327d47a106f/resourceGroups/MySuccessFree/providers/Microsoft.Web/sites/MySuccessUI",
+    "appService.deploySubpath": "."
+}
