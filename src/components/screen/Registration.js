@@ -117,7 +117,6 @@ const Registration = () => {
     // Generate and store OTP
     const otp = generateOtp();
     setGeneratedOtp(otp);
-  
     try {
       // Make the mobile check API call
       const mobileCheckResponse = await axios.get(GET_MOBILE_CHECK_API, {
@@ -147,7 +146,7 @@ const Registration = () => {
   // Separated function to handle sending OTP
   const sendOtp = async (otp) => {
     try {
-      console.log('Sending OTP:', otp);
+      //console.log('Sending OTP:', otp);
       await axios.get(SEND_OTP_API, {
         params: {
           authorization: OTP_KEY,

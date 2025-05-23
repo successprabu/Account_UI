@@ -15,10 +15,7 @@ import {
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faMicrophoneSlash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { FaSave, FaTimes } from "react-icons/fa";
 import i18n from "../../language/i18n";
 import "./css/Transaction.css";
@@ -43,11 +40,11 @@ const schema = yup
     oldAmount: yup
       .number()
       .nullable()
-      .transform((value) => (isNaN(value) ? null : value)), // Converts empty strings to null
+      .transform((value) => (isNaN(value) ? null : value)),
     newAmount: yup
       .number()
       .nullable()
-      .transform((value) => (isNaN(value) ? null : value)), // Converts empty strings to null
+      .transform((value) => (isNaN(value) ? null : value)),
     phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
     remarks: yup.string(),
   })
@@ -56,7 +53,6 @@ const schema = yup
     "Either old amount or new amount is required and must be greater than zero",
     function (values) {
       const { oldAmount, newAmount } = values;
-      // Check if at least one of the fields is provided and greater than zero
       return (oldAmount && oldAmount > 0) || (newAmount && newAmount > 0);
     }
   );
@@ -93,7 +89,11 @@ const Transaction = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [lastRecord, setLastRecord] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isSaving, setIsSaving] = useState(false); // Add this state
+  const [isSaving, setIsSaving] = useState(false);
+  const [autoTranslateEnabled, setAutoTranslateEnabled] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [activeSuggestionField, setActiveSuggestionField] = useState(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -124,14 +124,7 @@ const Transaction = () => {
     }
   }, [navigate]);
 
-  // useEffect(() => {
-  //   if (i18n.language === "ta") {
-  //     // Additional setup for Tamil language if needed
-  //   }
-  // }, [i18n.language]);
-
   useEffect(() => {
-    // Automatically update the amount field whenever oldAmount or newAmount changes
     setFormData((prevFormData) => ({
       ...prevFormData,
       amount: Number(prevFormData.oldAmount) + Number(prevFormData.newAmount),
@@ -139,18 +132,82 @@ const Transaction = () => {
     setIsSaving(false);
   }, [formData.oldAmount, formData.newAmount]);
 
+  const fetchTamilSuggestions = async (text, fieldName) => {
+    console.log(`Fetching suggestions for text: "${text}", field: ${fieldName}, autoTranslateEnabled: ${autoTranslateEnabled}`);
+    if (!autoTranslateEnabled || !text.trim()) {
+      console.log("Suggestions cleared: autoTranslateEnabled is false or text is empty");
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    try {
+      const url = `https://inputtools.google.com/request?text=${encodeURIComponent(
+        text
+      )}&itc=ta-t-i0-und&num=5`;
+      console.log(`API URL: ${url}`);
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("API response:", data);
+
+      if (data && Array.isArray(data[1]) && data[1][0] && Array.isArray(data[1][0][1])) {
+        console.log("Suggestions found:", data[1][0][1]);
+        setSuggestions(data[1][0][1]);
+        setActiveSuggestionField(fieldName);
+        setShowSuggestions(true);
+      } else {
+        console.log("No valid suggestions in response");
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    } catch (error) {
+      console.error("Error fetching Tamil suggestions:", error);
+      setSuggestions([]);
+      setShowSuggestions(false);
+      toast.error("Failed to fetch suggestions. Please try again.");
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`handleChange triggered: name=${name}, value=${value}`);
 
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
 
-    // Check if the input ends with a space to trigger translation
+    // Trigger suggestions for every letter typed in relevant fields
+    if (["villageName", "name", "initial", "remarks"].includes(name)) {
+      if (!autoTranslateEnabled || !value.trim()) {
+        console.log("Clearing suggestions: autoTranslateEnabled=false or value is empty");
+        setSuggestions([]);
+        setShowSuggestions(false);
+        setActiveSuggestionField(null);
+      } else {
+        console.log(`Fetching suggestions for ${name}: ${value}`);
+        setActiveSuggestionField(name);
+        fetchTamilSuggestions(value, name); // Temporarily bypass debounce for testing
+      }
+    }
+
+    // Trigger translation if input ends with a space (retained for compatibility)
     if (value.endsWith(" ")) {
       setFieldBeingTranslated(name);
     }
+  };
+
+  const handleSuggestionSelect = (suggestion) => {
+    console.log(`Suggestion selected: ${suggestion} for field: ${activeSuggestionField}`);
+    if (activeSuggestionField) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [activeSuggestionField]: suggestion,
+      }));
+    }
+    setSuggestions([]);
+    setShowSuggestions(false);
+    setActiveSuggestionField(null);
   };
 
   const handleTranslation = (translatedText) => {
@@ -175,14 +232,12 @@ const Transaction = () => {
       toast.error("Please Create Function Detail");
       return;
     }
-    setIsSaving(true); // Set loading state to true
+    setIsSaving(true);
     try {
       await schema.validate(formData, { abortEarly: false });
-      console.log(formData, "payload");
       API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
         .then(async (response) => {
           if (response.data.result) {
-            // Fetch updated last record
             try {
               const lastRecordResponse = response.data;
               setLastRecord(lastRecordResponse.data);
@@ -229,7 +284,7 @@ const Transaction = () => {
         newErrors[error.path] = error.message;
       });
       setErrors(newErrors);
-      setIsSaving(false); // Set loading state to false
+      setIsSaving(false);
     }
   };
 
@@ -245,7 +300,8 @@ const Transaction = () => {
   const startRecording = (fieldName) => {
     setIsRecording(true);
     setRecordingField(fieldName);
-    recognitionRef.current = new window.webkitSpeechRecognition();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.lang = i18n.language === "ta" ? "ta-IN" : "en-US";
     recognitionRef.current.onresult = (event) => {
       setFormData({
@@ -272,6 +328,35 @@ const Transaction = () => {
     }
   };
 
+  const handleClear = () => {
+    const userDetail = JSON.parse(localStorage.getItem("user"));
+    setFormData({
+      id: 0,
+      customerId: userDetail?.customerID || 0,
+      villageName: "",
+      initial: "",
+      name: "",
+      oldAmount: 0,
+      newAmount: 0,
+      amount: 0,
+      remarks: "",
+      phoneNo: "",
+      createdBy: "SYSTEM",
+      createdDt: new Date().toISOString(),
+      updatedBy: "SYSTEM",
+      updatedDt: new Date().toISOString(),
+      isActive: true,
+      type: "R",
+      returnStatus: "N",
+      returnRemark: "",
+      functionId: userDetail?.functionId || 0,
+    });
+    setErrors({});
+    setSuggestions([]);
+    setShowSuggestions(false);
+    setActiveSuggestionField(null);
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="text-danger">
@@ -280,6 +365,7 @@ const Transaction = () => {
       </div>
     );
   }
+
   return (
     <Card>
       <Header
@@ -288,9 +374,28 @@ const Transaction = () => {
           { to: "/dashboard", label: t("dashboard") },
           { to: "/transaction-list", label: t("transactionList") },
         ]}
-        bgColor="#00C49F" // Custom background color for Header
+        bgColor="#00C49F"
       />
       <CardBody>
+        <div className="mb-3">
+          <Form.Check
+            type="switch"
+            id="autoTranslateSwitch"
+            label="Enable Auto-Suggestion"
+            checked={autoTranslateEnabled}
+            onChange={() => {
+              setAutoTranslateEnabled(!autoTranslateEnabled);
+              console.log(`Auto-suggestion toggled to: ${!autoTranslateEnabled}`);
+              if (!autoTranslateEnabled) {
+                // Clear suggestions when enabling to refresh
+                setSuggestions([]);
+                setShowSuggestions(false);
+                setActiveSuggestionField(null);
+              }
+            }}
+          />
+        </div>
+
         {lastRecord && (
           <Card className="mb-3">
             <CardHeader>
@@ -351,6 +456,7 @@ const Transaction = () => {
             )}
           </Card>
         )}
+
         <Form className="text-primary w-100" onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col xs={12} md={4}>
@@ -389,6 +495,37 @@ const Transaction = () => {
                 </InputGroup>
                 {errors.villageName && (
                   <div className="text-danger">{errors.villageName}</div>
+                )}
+                {showSuggestions && activeSuggestionField === "villageName" && (
+                  <div
+                    className="suggestions-dropdown"
+                    style={{
+                      position: "absolute",
+                      zIndex: 1000,
+                      background: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      maxWidth: "200px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => handleSuggestionSelect(suggestion)}
+                        style={{
+                          padding: "8px",
+                          cursor: "pointer",
+                          background: "#fff",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
+                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </FormGroup>
             </Col>
@@ -429,6 +566,37 @@ const Transaction = () => {
                 {errors.name && (
                   <div className="text-danger">{errors.name}</div>
                 )}
+                {showSuggestions && activeSuggestionField === "name" && (
+                  <div
+                    className="suggestions-dropdown"
+                    style={{
+                      position: "absolute",
+                      zIndex: 1000,
+                      background: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      maxWidth: "200px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => handleSuggestionSelect(suggestion)}
+                        style={{
+                          padding: "8px",
+                          cursor: "pointer",
+                          background: "#fff",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
+                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </FormGroup>
             </Col>
             <Col xs={12} md={4}>
@@ -464,6 +632,37 @@ const Transaction = () => {
                 </InputGroup>
                 {errors.initial && (
                   <div className="text-danger">{errors.initial}</div>
+                )}
+                {showSuggestions && activeSuggestionField === "initial" && (
+                  <div
+                    className="suggestions-dropdown"
+                    style={{
+                      position: "absolute",
+                      zIndex: 1000,
+                      background: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      maxWidth: "200px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => handleSuggestionSelect(suggestion)}
+                        style={{
+                          padding: "8px",
+                          cursor: "pointer",
+                          background: "#fff",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
+                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
                 )}
               </FormGroup>
             </Col>
@@ -565,22 +764,6 @@ const Transaction = () => {
                     disabled
                     onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
                   />
-                  {/* <Button
-                    variant={
-                      isRecording && recordingField === "amount"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("amount")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "amount"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button> */}
                 </InputGroup>
                 {errors.amount && (
                   <div className="text-danger">{errors.amount}</div>
@@ -658,10 +841,40 @@ const Transaction = () => {
                 {errors.remarks && (
                   <div className="text-danger">{errors.remarks}</div>
                 )}
+                {showSuggestions && activeSuggestionField === "remarks" && (
+                  <div
+                    className="suggestions-dropdown"
+                    style={{
+                      position: "absolute",
+                      zIndex: 1000,
+                      background: "#fff",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      maxWidth: "200px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className="suggestion-item"
+                        onClick={() => handleSuggestionSelect(suggestion)}
+                        style={{
+                          padding: "8px",
+                          cursor: "pointer",
+                          background: "#fff",
+                        }}
+                        onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
+                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                      >
+                        {suggestion}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </FormGroup>
             </Col>
           </Row>
-          {/* Translator Component */}
           <Translator
             inputText={formData[fieldBeingTranslated] || ""}
             onTranslated={handleTranslation}
@@ -678,7 +891,7 @@ const Transaction = () => {
               <FaSave className="me-2" />
               {isSaving ? t("processing_your_request") : t("save")}
             </SaveButton>
-            <ClearButton type="button" variant="secondary">
+            <ClearButton type="button" variant="secondary" onClick={handleClear}>
               <FaTimes className="me-2" />
               {t("clearButton")}
             </ClearButton>

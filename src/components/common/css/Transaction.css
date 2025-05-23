@@ -1,0 +1,15 @@
+.suggestions-dropdown {
+    position: absolute;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-width: 200px;
+  }
+  .suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  .suggestion-item:hover {
+    background: #f0f0f0;
+  }
