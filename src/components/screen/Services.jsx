@@ -30,13 +30,13 @@ const ServicePage = () => {
       color: "#ffcccb",
       link: "school-erp"
     },
-    {
-      title: "marineERP",
-      description: "Optimize maritime operations with our Marine ERP solution. From fleet management to cargo tracking, manage your marine business effectively.",
-      icon: <FaAnchor size={50} />,
-      color: "#b0e0e6",
-      link: "http://45.136.237.19:120/Home.html"
-    },
+    // {
+    //   title: "marineERP",
+    //   description: "Optimize maritime operations with our Marine ERP solution. From fleet management to cargo tracking, manage your marine business effectively.",
+    //   icon: <FaAnchor size={50} />,
+    //   color: "#b0e0e6",
+    //   link: "http://45.136.237.19:120/Home.html"
+    // },
   ];
 
   return (

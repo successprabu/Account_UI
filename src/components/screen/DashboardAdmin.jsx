@@ -5,6 +5,9 @@ import {
   FaClipboardCheck,
   FaMapMarkerAlt,
   FaWallet,
+  FaChartBar,
+  FaChartArea,
+  FaChartPie
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -80,174 +83,296 @@ const DashboardAdmin = () => {
     fetchDashboardData();
   }, []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
+  
   if (!isAuthenticated) return <Unauthorized />;
-  if (error) return <div className="text-danger">Error: {error}</div>;
+  if (error) return <div className="alert alert-danger m-3">Error: {error}</div>;
 
-  const COLORSFORRECORDS = ["#FFBB28", "#00C49F"];
-  const COLORSFORAMOUNT = ["#0088FE", "#FF8042"];
+  const COLORSFORRECORDS = ["#6366F1", "#10B981"];
+  const COLORSFORAMOUNT = ["#3B82F6", "#F59E0B"];
 
   const tiles = [
     {
       titleKey: "dashbordTotalAmount",
       total: `Rs.${dashboardData.totalRcdAmount?.toFixed(2) || 0}`,
-      icon: <FaMoneyBillWave size={50} />,
+      icon: <FaMoneyBillWave size={24} />,
       handleClick: () => setShowClientListModal(true),
-      color: "#0088FE",
+      color: "bg-indigo-100 text-indigo-800",
+      border: "border-left-indigo",
     },
     {
       titleKey: "dashbordTotalTrans",
       total: dashboardData.totalRcdTransaction || 0,
-      icon: <FaClipboardCheck size={50} />,
-      color: "#FFBB28",
+      icon: <FaClipboardCheck size={24} />,
+      color: "bg-amber-100 text-amber-800",
+      border: "border-left-amber",
     },
     {
       titleKey: "dashbordTotalPlaces",
       total: dashboardData.totalPlaces || 0,
-      icon: <FaMapMarkerAlt size={50} />,
-      color: "#00C49F",
+      icon: <FaMapMarkerAlt size={24} />,
+      color: "bg-emerald-100 text-emerald-800",
+      border: "border-left-emerald",
     },
     {
       titleKey: "dashbordTotalExpenase",
       total: dashboardData.totalExpenses || 0,
-      icon: <FaWallet size={50} />,
-      color: "#FF8042",
+      icon: <FaWallet size={24} />,
+      color: "bg-orange-100 text-orange-800",
+      border: "border-left-orange",
     },
   ];
 
   return (
-    <div>
+    <div className="dashboard-container bg-gray-50 min-vh-100">
       <Header
         titles={[t("dashboard")]}
         links={[{ to: "/purchase", label: t("addClient") }]}
       />
 
-      <div className="tiles-container">
-        <Row>
+      <div className="container-fluid py-4">
+        {/* Summary Cards */}
+        <div className="row g-4 mb-4">
           {tiles.map((tile, index) => (
-            <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <Card style={{ backgroundColor: tile.color, color: "#fff", cursor: "pointer" }}>
-                <Card.Body className="d-flex align-items-center p-3">
-                  <div className="me-3">{tile.icon}</div>
-                  <div className="flex-grow-1 text-center">
-                    <Card.Title>{t(tile.titleKey)}</Card.Title>
-                    <Card.Text className="fs-4 fw-bold">
-                      {tile.handleClick ? (
-                        <a
-                          href="#!"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            tile.handleClick();
-                          }}
-                          style={{ color: "white", textDecoration: "none" }}
-                        >
-                          {tile.total}
-                        </a>
-                      ) : (
-                        tile.total
-                      )}
-                    </Card.Text>
+            <div key={index} className="col-12 col-sm-6 col-lg-3">
+              <div 
+                className={`card border-0 shadow-sm h-100 ${tile.color} ${tile.border} border-left-4`}
+                onClick={tile.handleClick || undefined}
+                style={{ cursor: tile.handleClick ? 'pointer' : 'default' }}
+              >
+                <div className="card-body">
+                  <div className="d-flex align-items-center">
+                    <div className={`p-3 rounded-circle ${tile.color.replace('100', '200')} me-3`}>
+                      {tile.icon}
+                    </div>
+                    <div>
+                      <h6 className="text-uppercase text-muted mb-0">{t(tile.titleKey)}</h6>
+                      <h3 className="mb-0 fw-bold">
+                        {tile.handleClick ? (
+                          <a
+                            href="#!"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              tile.handleClick();
+                            }}
+                            className="text-decoration-none"
+                            style={{ color: 'inherit' }}
+                          >
+                            {tile.total}
+                          </a>
+                        ) : (
+                          tile.total
+                        )}
+                      </h3>
+                    </div>
                   </div>
-                </Card.Body>
-              </Card>
-            </Col>
+                </div>
+              </div>
+            </div>
           ))}
-        </Row>
+        </div>
+
+        {/* Charts Row 1 */}
+        <div className="row g-4 mb-4">
+          <div className="col-12 col-lg-6">
+            <div className="card border-0 shadow-sm h-100">
+              <div className="card-header bg-white border-0 d-flex align-items-center">
+                <FaChartBar className="me-2 text-primary" />
+                <h5 className="mb-0">{t("totalRcdNosVsTotalExpenses")}</h5>
+              </div>
+              <div className="card-body">
+                <div style={{ height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={dashboardDetail}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="name" stroke="#6b7280" />
+                      <YAxis stroke="#6b7280" />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.375rem',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                      <Legend />
+                      <Bar 
+                        dataKey="transactionCount" 
+                        fill="#6366F1" 
+                        name={t("totalRcdNos")} 
+                        radius={[4, 4, 0, 0]}
+                      />
+                      <Bar 
+                        dataKey="expenseCount" 
+                        fill="#10B981" 
+                        name={t("totalExpenase")} 
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="col-12 col-lg-6">
+            <div className="card border-0 shadow-sm h-100">
+              <div className="card-header bg-white border-0 d-flex align-items-center">
+                <FaChartArea className="me-2 text-primary" />
+                <h5 className="mb-0">{t("totalRcdAmountVsTotalExpenses")}</h5>
+              </div>
+              <div className="card-body">
+                <div style={{ height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={dashboardDetail}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <XAxis dataKey="name" stroke="#6b7280" />
+                      <YAxis stroke="#6b7280" />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.375rem',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="transactions" 
+                        stroke="#6366F1" 
+                        fill="#6366F1" 
+                        fillOpacity={0.2}
+                        name={t("totalRcdAmount")} 
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="expenses" 
+                        stroke="#10B981" 
+                        fill="#10B981" 
+                        fillOpacity={0.2}
+                        name={t("totalExpenase")} 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Row 2 */}
+        <div className="row g-4">
+          <div className="col-12 col-lg-6">
+            <div className="card border-0 shadow-sm h-100">
+              <div className="card-header bg-white border-0 d-flex align-items-center">
+                <FaChartPie className="me-2 text-primary" />
+                <h5 className="mb-0">{t("totalRcdNosVsTotalExpenses")}</h5>
+              </div>
+              <div className="card-body">
+                <div style={{ height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={dashboardDetail.map((item) => ({
+                          name: t("totalRcdNos"),
+                          value: item.transactionCount,
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        innerRadius={60}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {dashboardDetail.map((_, index) => (
+                          <Cell 
+                            key={index} 
+                            fill={COLORSFORRECORDS[index % COLORSFORRECORDS.length]} 
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value) => [value, t("totalRcdNos")]}
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.375rem',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="col-12 col-lg-6">
+            <div className="card border-0 shadow-sm h-100">
+              <div className="card-header bg-white border-0 d-flex align-items-center">
+                <FaChartPie className="me-2 text-primary" />
+                <h5 className="mb-0">{t("totalRcdAmountVsTotalExpenses")}</h5>
+              </div>
+              <div className="card-body">
+                <div style={{ height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={dashboardDetail.map((item) => ({
+                          name: t("totalRcdAmount"),
+                          value: item.transactions,
+                        }))}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        innerRadius={60}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {dashboardDetail.map((_, index) => (
+                          <Cell 
+                            key={index} 
+                            fill={COLORSFORAMOUNT[index % COLORSFORAMOUNT.length]} 
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value) => [value, t("totalRcdAmount")]}
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '0.375rem',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <Row className="my-4">
-        <Col lg={6} className="mb-4">
-          <h5>{t("totalRcdNosVsTotalExpenses")}</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dashboardDetail}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="transactionCount" fill="#ffc658" name={t("totalRcdNos")} />
-              <Bar dataKey="expenseCount" fill="#82ca9d" name={t("totalExpenase")} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Col>
-        <Col lg={6} className="mb-4">
-          <h5>{t("totalRcdAmountVsTotalExpenses")}</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={dashboardDetail}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Area type="monotone" dataKey="transactions" stroke="#ffc658" fill="#ffc658" name={t("totalRcdAmount")} />
-              <Area type="monotone" dataKey="expenses" stroke="#82ca9d" fill="#82ca9d" name={t("totalExpenase")} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </Col>
-      </Row>
-
-      <hr />
-
-      <Row className="my-4">
-        <Col lg={6} className="mb-4">
-          <h5>{t("totalRcdNosVsTotalExpenses")}</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={dashboardDetail.map((item) => ({
-                  name: t("totalRcdNos"),
-                  value: item.transactionCount,
-                }))}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                dataKey="value"
-                label
-              >
-                {dashboardDetail.map((_, index) => (
-                  <Cell key={index} fill={COLORSFORRECORDS[index % COLORSFORRECORDS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Col>
-
-        <Col lg={6} className="mb-4">
-          <h5>{t("totalRcdAmountVsTotalExpenses")}</h5>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={dashboardDetail.map((item) => ({
-                  name: t("totalRcdAmount"),
-                  value: item.transactions,
-                }))}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                dataKey="value"
-                label
-              >
-                {dashboardDetail.map((_, index) => (
-                  <Cell key={index} fill={COLORSFORAMOUNT[index % COLORSFORAMOUNT.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </Col>
-      </Row>
 
       <Modal
         size="lg"
         show={showClientListModal}
         onHide={() => setShowClientListModal(false)}
+        centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>{t("recentlyCreatedClients")}</Modal.Title>
+        <Modal.Header closeButton className="border-0">
+          <Modal.Title className="fw-bold">{t("recentlyCreatedClients")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          {/* TODO: Replace with client list component or details */}
-          <p>{t("clientListWillBeShownHere")}</p>
+        <Modal.Body className="py-4">
+          <div className="alert alert-info">
+            {t("clientListWillBeShownHere")}
+          </div>
         </Modal.Body>
       </Modal>
     </div>

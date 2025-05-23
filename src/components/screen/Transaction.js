@@ -23,6 +23,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Header from "../common/Header";
 import { SaveButton, ClearButton } from "./css/styles";
 import Translator from "../common/TranslationBasedOnLanguage";
@@ -95,6 +96,7 @@ const Transaction = () => {
   const [activeSuggestionField, setActiveSuggestionField] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [showDetails, setShowDetails] = useState(false);
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -281,7 +283,7 @@ const Transaction = () => {
           } else {
             toast.error(
               response.data.message ||
-                "Something went wrong on Transaction Save..pls Try Again"
+              "Something went wrong on Transaction Save..pls Try Again"
             );
           }
         })
@@ -476,22 +478,31 @@ const Transaction = () => {
                     {lastRecord.transaction.amount}
                   </Col>
                 </Row>
-                <Row className="mb-2 row-border">
-                  <Col xs={6} className="text-primary col-border">
+                <Row className="mb-2 row-border align-items-center">
+                  <Col xs={6} className="text-primary col-border d-flex justify-content-between">
                     <strong>{t("totalRecord")}:</strong>
+                    <span
+                      onClick={() => setShowDetails(!showDetails)}
+                      style={{ cursor: "pointer" }}
+                      title={showDetails ? t("hide") : t("show")}
+                    >
+                      {showDetails ? <FaEyeSlash /> : <FaEye />}
+                    </span>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.totalTrans}
+                    {showDetails ? lastRecord.totalTrans : "•••••"}
                   </Col>
                 </Row>
-                <Row className="mb-2">
+
+                <Row className="mb-2 align-items-center">
                   <Col xs={6} className="text-primary col-border">
                     <strong>{t("totalAmount")}:</strong>
                   </Col>
                   <Col xs={6} className="text-secondary">
-                    {lastRecord.totalAmount}
+                    {showDetails ? lastRecord.totalAmount : "•••••"}
                   </Col>
                 </Row>
+
               </CardBody>
             )}
           </Card>

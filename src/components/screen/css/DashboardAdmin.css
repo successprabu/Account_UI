@@ -1,0 +1,28 @@
+/* Add to your CSS file */
+.bg-indigo-100 { background-color: #e0e7ff; }
+.text-indigo-600 { color: #4f46e5; }
+.border-indigo-500 { border-color: #6366f1; }
+
+.bg-emerald-100 { background-color: #d1fae5; }
+.text-emerald-600 { color: #059669; }
+.border-emerald-500 { border-color: #10b981; }
+
+.bg-blue-100 { background-color: #dbeafe; }
+.text-blue-600 { color: #2563eb; }
+.border-blue-500 { border-color: #3b82f6; }
+
+.bg-amber-100 { background-color: #fef3c7; }
+.text-amber-600 { color: #d97706; }
+.border-amber-500 { border-color: #f59e0b; }
+
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+
+.hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+
+.transition-shadow { transition-property: box-shadow; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+
+.bg-gray-50 { background-color: #f9fafb; }
+.text-gray-500 { color: #6b7280; }
+.text-gray-700 { color: #374151; }
+.border-gray-200 { border-color: #e5e7eb; }

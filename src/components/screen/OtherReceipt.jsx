@@ -430,7 +430,7 @@ const OtherReceipt = () => {
           { to: "/dashboard", label: t("dashboard") },
           { to: "/others-list", label: t("othersList") },
         ]}
-        bgColor="#FFD700"
+        bgColor="#B9CC74"
       />
       <CardBody>
         <div className="mb-3">
