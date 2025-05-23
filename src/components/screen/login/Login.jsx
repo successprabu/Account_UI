@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../App.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,16 +9,220 @@ import {
   FaMobileAlt,
   FaUserTag,
   FaSignInAlt,
+  FaLock,
+  FaShieldAlt
 } from "react-icons/fa";
 import { loginSchema } from "../../../validations/ValidationSchema";
-import {
-  LOGIN_API,
-  LOGIN_USER_ACCOUNT_CHECK_API,
-} from "../../common/CommonApiURL";
+import { LOGIN_API, LOGIN_USER_ACCOUNT_CHECK_API } from "../../common/CommonApiURL";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Import jwt-decode library
+import { jwtDecode } from "jwt-decode";
 import { ClipLoader } from "react-spinners";
 import AppHeader from "../../common/AppHeader";
+import styled from "styled-components";
+
+const LoginContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const AuthIllustration = styled.div`
+  flex: 1;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: white;
+  
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+    text-align: center;
+  }
+`;
+
+const IllustrationContent = styled.div`
+  max-width: 500px;
+  
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+`;
+
+const FormContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+`;
+
+const AuthForm = styled.div`
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  max-width: 500px;
+  width: 100%;
+  
+  @media (max-width: 576px) {
+    padding: 2rem;
+  }
+`;
+
+const FormTitle = styled.h3`
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: #2d3436;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: #0984e3;
+    border-radius: 2px;
+  }
+`;
+
+const InputGroup = styled.div`
+  margin-bottom: 1.5rem;
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #636e72;
+    font-weight: 500;
+  }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: #0984e3;
+    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
+  }
+
+  .input-icon {
+    padding: 0 1rem;
+    color: #636e72;
+  }
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+`;
+
+const PasswordToggle = styled.span`
+  padding: 0 1rem;
+  cursor: pointer;
+  color: #636e72;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #0984e3;
+  }
+`;
+
+const SubmitButton = styled.button`
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+const AdditionalLinks = styled.div`
+  margin-top: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  a {
+    color: #636e72;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #0984e3;
+    }
+  }
+`;
+
+const SecurityInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  color: #636e72;
+  font-size: 0.9rem;
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: #ff4757;
+  background: rgba(255, 71, 87, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 71, 87, 0.2);
+`;
 
 const Login = () => {
   const { t } = useTranslation();
@@ -168,102 +371,104 @@ const Login = () => {
 
   return (
     <>
-      <div>
-        <AppHeader />
-      </div>
-      <div className="login template d-flex justify-content-center align-items-center vh-100 bg-primary">
-        <div className="form_container p-5 rounded bg-white">
-          <form onSubmit={userLogin}>
-            <h3 className="text-center text-success">{t("sign_in")}</h3>
-            {loginError && <p className="text-danger">{loginError}</p>}
-            {errors.validation && (
-              <p className="text-danger">{errors.validation}</p>
-            )}
-            <div className="m2 text-primary">
-              <label htmlFor="username">{t("mobile_number")}</label>
+      <AppHeader />
+      <LoginContainer>
+        <AuthIllustration>
+          <IllustrationContent>
+            <h2>{t("welcome_back")}</h2>
+            <p>{t("login_illustration_text")}</p>
+            <div style={{ marginTop: '2rem' }}>
+              <FaShieldAlt size={80} opacity={0.9} />
+            </div>
+          </IllustrationContent>
+        </AuthIllustration>
 
-              <div className="input-group">
-                <span className="input-group-text">
-                  <FaMobileAlt /> {/* Mobile icon */}
-                </span>
-                <input
-                  type="text"
-                  name="username"
-                  placeholder={t("enter_mobile_number")}
-                  className="form-control"
-                  value={formData.username}
-                  onChange={handleChange}
-                  onBlur={handleUsernameBlur}
-                />
-              </div>
-            </div>
-            <div className="m2 text-primary">
-              <label htmlFor="password">{t("password")}</label>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <FaKey />
-                </span>{" "}
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder={t("enter_password")}
-                  className="form-control"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <span
-                  className="input-group-text"
-                  onClick={togglePasswordVisibility}
-                  style={{ cursor: "pointer" }}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
-              </div>
-            </div>
-            {userTypes.length > 1 && (
-              <div className="m2 text-primary">
-                <label htmlFor="userType">{t("userType")}</label>
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <FaUserTag /> {/* Display the role icon */}
-                  </span>
-                  <select
-                    name="userType"
-                    className="form-control"
-                    value={formData.userType}
-                    onChange={handleUserTypeChange}
-                  >
-                    {userTypes.map((type, index) => (
-                      <option key={index} value={type.userType}>
-                        {type.userTypeDescription}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-            <div className="d-grid">
-              <button className="btn btn-primary m-2" disabled={loading}>
+        <FormContainer>
+          <AuthForm>
+            <FormTitle>{t("sign_in")}</FormTitle>
+            
+            {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
+            {errors.validation && <ErrorMessage>{errors.validation}</ErrorMessage>}
+
+            <form onSubmit={userLogin}>
+              <InputGroup>
+                <label>{t("mobile_number")}</label>
+                <InputWrapper>
+                  <span className="input-icon"><FaMobileAlt /></span>
+                  <StyledInput
+                    type="text"
+                    name="username"
+                    placeholder={t("enter_mobile_number")}
+                    value={formData.username}
+                    onChange={handleChange}
+                    onBlur={handleUsernameBlur}
+                  />
+                </InputWrapper>
+              </InputGroup>
+
+              <InputGroup>
+                <label>{t("password")}</label>
+                <InputWrapper>
+                  <span className="input-icon"><FaKey /></span>
+                  <StyledInput
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder={t("enter_password")}
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                  <PasswordToggle onClick={togglePasswordVisibility}>
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </PasswordToggle>
+                </InputWrapper>
+              </InputGroup>
+
+              {userTypes.length > 1 && (
+                <InputGroup>
+                  <label>{t("userType")}</label>
+                  <InputWrapper>
+                    <span className="input-icon"><FaUserTag /></span>
+                    <StyledInput
+                      as="select"
+                      name="userType"
+                      value={formData.userType}
+                      onChange={handleUserTypeChange}
+                    >
+                      {userTypes.map((type, index) => (
+                        <option key={index} value={type.userType}>
+                          {type.userTypeDescription}
+                        </option>
+                      ))}
+                    </StyledInput>
+                  </InputWrapper>
+                </InputGroup>
+              )}
+
+              <SubmitButton type="submit" disabled={loading}>
                 {loading ? (
                   <ClipLoader size={20} color={"#ffffff"} />
                 ) : (
                   <>
-                    <FaSignInAlt style={{ marginRight: "8px" }} />{" "}
-                    {/* Add Sign In Icon */}
+                    <FaSignInAlt />
                     {t("sign_in")}
                   </>
                 )}
-              </button>
-            </div>
-            <p className="text-center">
-              <a href="">{t("forgot_password")} </a>
-              <Link to="/purchase" className="m-5">
-                {t("sign_up")}
-              </Link>
-            </p>
-          </form>
-        </div>
-      </div>
+              </SubmitButton>
+            </form>
+
+            <AdditionalLinks>
+              <Link to="/forgot-password">{t("forgot_password")}</Link>
+              <span style={{ color: '#e0e0e0' }}>|</span>
+              <Link to="/purchase">{t("sign_up")}</Link>
+            </AdditionalLinks>
+
+            <SecurityInfo>
+              <FaLock />
+              <span>{t("login_security_note")}</span>
+            </SecurityInfo>
+          </AuthForm>
+        </FormContainer>
+      </LoginContainer>
     </>
   );
 };

@@ -11,10 +11,21 @@
     font-family: inherit;
   }
   
+  .react-calendar__navigation {
+    margin-bottom: 0;
+  }
+  
+  .react-calendar__month-view__weekdays {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+  
   .react-calendar__tile {
     padding: 0.75em 0.5em;
     border-radius: 8px;
     transition: all 0.2s ease;
+    position: relative;
   }
   
   .react-calendar__tile--now {
@@ -86,6 +97,7 @@
     font-size: 0.8rem;
     letter-spacing: 0.5px;
     color: #6c757d;
+    white-space: nowrap;
   }
   
   .table tbody tr {
@@ -100,4 +112,45 @@
   .card {
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .card-header {
+    padding: 1rem 1.25rem;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .table thead {
+      display: none;
+    }
+    
+    .card-body {
+      padding: 0.5rem;
+    }
+    
+    .react-datepicker-wrapper {
+      width: 150px;
+    }
+  }
+  
+  /* Smooth transitions */
+  .card, .table, .react-calendar__tile, .btn {
+    transition: all 0.3s ease;
+  }
+  
+  /* Better focus states */
+  .btn:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  
+  /* List group items */
+  .list-group-item {
+    padding: 1rem;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .list-group-item:first-child {
+    border-top: none;
   }

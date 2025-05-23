@@ -1,8 +1,10 @@
 import React from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Carousel } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import "./css/HomePage.css"; // Import the CSS file for styling
 import AppHeader from "../common/AppHeader";
+import "./css/HomePage.css";
+import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
+import { FaLightbulb, FaHandsHelping, FaHeadset } from "react-icons/fa";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -10,78 +12,202 @@ const Home = () => {
   const features = [
     {
       title: "Innovative Solutions",
-      description:
-        "Leverage cutting-edge technology to drive your business forward with our comprehensive suite of services. Our solutions are designed to meet the unique needs of your industry, helping you stay ahead of the competition.",
-      imgSrc: "/images/innovation.png", // Ensure these images exist in your public directory
+      description: "Leverage cutting-edge technology to drive your business forward with our comprehensive suite of services.",
+      icon: <FaLightbulb className="feature-icon" />,
+      color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
     },
     {
       title: "Tailored Services",
-      description:
-        "Experience personalized service with our custom solutions that fit your specific business requirements. From ERP systems to accounting software, we provide tools that are as unique as your business.",
-      imgSrc: "/images/services.png",
+      description: "Experience personalized service with custom solutions that fit your specific business requirements.",
+      icon: <FaHandsHelping className="feature-icon" />,
+      color: "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)"
     },
     {
       title: "Expert Support",
-      description:
-        "Our dedicated support team is here to assist you every step of the way. Whether you need troubleshooting, guidance, or advice, we're committed to ensuring your success and satisfaction.",
-      imgSrc: "/images/support.png",
+      description: "Our dedicated support team is here to assist you every step of the way.",
+      icon: <FaHeadset className="feature-icon" />,
+      color: "linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)"
+    }
+  ];
+
+  const testimonials = [
+    {
+      quote: "This software transformed our business operations completely. Highly recommended!",
+      author: "Sarah Johnson, CEO at TechCorp"
     },
+    {
+      quote: "The best decision we made was choosing this platform. Exceptional service!",
+      author: "Michael Chen, Director at FinServe"
+    },
+    {
+      quote: "Reliable, intuitive, and packed with features. Exactly what we needed.",
+      author: "Emma Williams, Manager at RetailPlus"
+    }
+  ];
+
+  const benefits = [
+    "24/7 Customer Support",
+    "99.9% Uptime Guarantee",
+    "Enterprise-grade Security",
+    "Regular Feature Updates",
+    "Custom Integration Options"
   ];
 
   return (
-    <div>
+    <div className="home-page">
       <AppHeader />
-      <section className="hero">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
         <Container>
-          <Row className="align-items-center">
-            <Col md={12} className="text-center">
-              <div className="hero-content animated fadeInDown">
-                <h2>{t("homeHeadermessage")}</h2>
-                <p>
-                  {t("At ")}
-                  <strong className="company-name">
-                    {t("companyName")}
-                  </strong>
-                  {t("homeIntro")}
-                </p>
-                <Button variant="primary" className="explore-btn">
-                  {t("exploreServices")}
+          <Row className="align-items-center min-vh-80 py-5">
+            <Col lg={6} className="hero-content">
+              <h1 className="hero-title">
+                {t("homeHeadermessage")}
+                <span className="highlight">{t("companyName")}</span>
+              </h1>
+              <p className="hero-subtitle">
+                {t("homeIntro")}
+              </p>
+              <div className="hero-cta">
+                <Button variant="primary" className="cta-button me-3">
+                  {t("exploreServices")} <FiArrowRight />
                 </Button>
+                <Button variant="outline-light" className="cta-button">
+                  Watch Demo
+                </Button>
+              </div>
+            </Col>
+            <Col lg={6} className="hero-image-col">
+              <div className="hero-image-container">
+                <div className="hero-image"></div>
+                <div className="shape shape-1"></div>
+                <div className="shape shape-2"></div>
               </div>
             </Col>
           </Row>
         </Container>
-        <div className="background-animation"></div> {/* Add a moving background */}
       </section>
 
-      <section className="why-choose-us">
+      {/* Clients Logo Section */}
+      <section className="clients-section py-4">
         <Container>
-          <Row>
-            <Col md={12} className="text-center">
-              <h2>{t("whyChooseUs")}</h2>
-              <p>{t("whyChooseMessage")}</p>
+          <Row className="justify-content-center">
+            <Col xs={12} className="text-center mb-4">
+              <p className="trusted-by">Trusted by industry leaders</p>
             </Col>
+            {[1, 2, 3, 4, 5].map((item) => (
+              <Col xs={4} md={2} key={item} className="client-logo-container">
+                <div className={`client-logo client-${item}`}></div>
+              </Col>
+            ))}
           </Row>
         </Container>
       </section>
 
-      <section className="features">
+      {/* Features Section */}
+      <section className="features-section py-5">
         <Container>
+          <Row className="justify-content-center mb-5">
+            <Col lg={8} className="text-center">
+              <h2 className="section-title">{t("whyChooseUs")}</h2>
+              <p className="section-subtitle">{t("whyChooseMessage")}</p>
+            </Col>
+          </Row>
           <Row>
             {features.map((feature, index) => (
-              <Col key={index} xs={12} sm={6} md={4} lg={4} className="mb-4">
-                <Card className="feature-card animated zoomIn">
-                  <Card.Img variant="top" src={feature.imgSrc} className="card-img-3d" />
+              <Col key={index} lg={4} md={6} className="mb-4">
+                <Card className="feature-card h-100">
+                  <div 
+                    className="feature-icon-container"
+                    style={{ background: feature.color }}
+                  >
+                    {feature.icon}
+                  </div>
                   <Card.Body>
-                    <Card.Title>{t(feature.title)}</Card.Title>
-                    <Card.Text>{t(feature.description)}</Card.Text>
-                    <Button variant="primary" className="learn-more-btn">
-                      {t("learnMore")}
+                    <h3 className="feature-title">{feature.title}</h3>
+                    <p className="feature-text">{feature.description}</p>
+                    <Button variant="link" className="feature-link">
+                      Learn more <FiArrowRight />
                     </Button>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="benefits-section py-5">
+        <Container>
+          <Row className="align-items-center">
+            <Col lg={6} className="mb-4 mb-lg-0">
+              <div className="benefits-image"></div>
+            </Col>
+            <Col lg={6}>
+              <h2 className="section-title">Why Our Solution Stands Out</h2>
+              <ul className="benefits-list">
+                {benefits.map((benefit, index) => (
+                  <li key={index} className="benefit-item">
+                    <FiCheckCircle className="benefit-icon" />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button variant="primary" className="mt-3">
+                See All Features
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="testimonials-section py-5">
+        <Container>
+          <Row className="justify-content-center mb-5">
+            <Col lg={8} className="text-center">
+              <h2 className="section-title">What Our Clients Say</h2>
+              <p className="section-subtitle">Hear from businesses that transformed their operations with our solution</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <Carousel indicators={false} interval={5000}>
+                {testimonials.map((testimonial, index) => (
+                  <Carousel.Item key={index}>
+                    <div className="testimonial-card">
+                      <div className="testimonial-content">
+                        <p className="testimonial-quote">"{testimonial.quote}"</p>
+                        <p className="testimonial-author">— {testimonial.author}</p>
+                      </div>
+                    </div>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section py-5">
+        <div className="cta-overlay"></div>
+        <Container>
+          <Row className="justify-content-center">
+            <Col lg={8} className="text-center">
+              <h2 className="cta-title">Ready to Transform Your Business?</h2>
+              <p className="cta-text">Join thousands of satisfied customers who trust our solution</p>
+              <div className="cta-buttons">
+                <Button variant="primary" size="lg" className="me-3">
+                  Get Started
+                </Button>
+                <Button variant="outline-light" size="lg">
+                  Contact Sales
+                </Button>
+              </div>
+            </Col>
           </Row>
         </Container>
       </section>

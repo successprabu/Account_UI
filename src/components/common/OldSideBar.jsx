@@ -1,6 +1,5 @@
-//working as expected
 import React, { useState, useEffect } from "react";
-import { Collapse } from "react-bootstrap";
+import { Collapse, Nav } from "react-bootstrap";
 import {
   BiUser,
   BiMenu,
@@ -9,8 +8,15 @@ import {
   BiBook,
   BiCog,
   BiExit,
+  BiHelpCircle,
 } from "react-icons/bi";
-import { FaTachometerAlt } from "react-icons/fa";
+import { MdEventAvailable } from "react-icons/md";
+import {
+  FaTachometerAlt,
+  FaCalendarAlt,
+  FaHandsHelping,
+  FaHotel,
+} from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./css/sidebar.css";
@@ -21,19 +27,20 @@ const SideBar = () => {
   const [multiOpen, setMultiOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [userType, setUserType] = useState(null);
-  const [appName, setAppName] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [designation, setDesignation] = useState(null);
+  const [userDetailsOpen, setUserDetailsOpen] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       setUserType(user.userType);
-      setAppName(user.appName);
-      setUserName(user.userName);
+      setUserName(user.name);
+      setDesignation(user.userTypeDescription);
     }
-  }, []);
+  }, [user]);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
@@ -45,28 +52,24 @@ const SideBar = () => {
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("expand");
   };
 
   const handleExpand = () => {
     if (!isExpanded) {
       setIsExpanded(true);
-      const sidebar = document.getElementById("sidebar");
-      sidebar.classList.add("expand");
     }
   };
 
   const renderMenuItems = () => {
     if (!userType) return null;
-
     const isSuperAdmin = userType === "SU";
     const isAdminUser = userType === "AU";
     const isNormalUser = userType === "NU";
+    const isMahalAdmin = userType === "MU";
 
     return (
       <>
-        {(isSuperAdmin || isAdminUser || isNormalUser) && (
+        {(isSuperAdmin || isAdminUser || isNormalUser || isMahalAdmin) && (
           <li className="sidebar-item">
             <NavLink
               to="/dashboard"
@@ -90,6 +93,63 @@ const SideBar = () => {
               <BiUser />
               <span className={isExpanded ? "nav-text" : "hidden"}>
                 {t("Clients")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+        {(isSuperAdmin || isMahalAdmin) && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/add-new-mahal"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <FaHotel />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("addMahal")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+        {(isSuperAdmin || isMahalAdmin) && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/mahal-booking"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <MdEventAvailable />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("mahalBooking")}
+              </span>
+            </NavLink>
+          </li>
+        )}
+        {isSuperAdmin ||
+          (isMahalAdmin && (
+            <li className="sidebar-item">
+              <NavLink
+                to="/mahal-booking-list"
+                className="sidebar-link"
+                onClick={handleExpand}
+              >
+                <FaCalendarAlt />
+                <span className={isExpanded ? "nav-text" : "hidden"}>
+                  {t("mahalBookingList")}
+                </span>
+              </NavLink>
+            </li>
+          ))}
+        {(isSuperAdmin || isMahalAdmin) && (
+          <li className="sidebar-item">
+            <NavLink
+              to="/add-moitech-customer"
+              className="sidebar-link"
+              onClick={handleExpand}
+            >
+              <FaHandsHelping />
+              <span className={isExpanded ? "nav-text" : "hidden"}>
+                {t("addMoiTechCustomer")}
               </span>
             </NavLink>
           </li>
@@ -126,19 +186,8 @@ const SideBar = () => {
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
-                  <NavLink
-                    to="/user"
-                    className="sidebar-link sidebar-sublink"
-                  >
+                  <NavLink to="/user" className="sidebar-link sidebar-sublink">
                     {t("userMaster")}
-                  </NavLink>
-                </li>
-                <li className="sidebar-item">
-                  <NavLink
-                    to="/purchase"
-                    className="sidebar-link sidebar-sublink"
-                  >
-                    {t("clientMaster")}
                   </NavLink>
                 </li>
               </ul>
@@ -186,6 +235,46 @@ const SideBar = () => {
                     {t("transactionList")}
                   </NavLink>
                 </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/addExpenses"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("addExpenses")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/expenses-list"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("expensesList")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/others"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("addOthers")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/others-list"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("othersList")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/handover"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("handOver")}
+                  </NavLink>
+                </li>
               </ul>
             </Collapse>
           </li>
@@ -217,26 +306,47 @@ const SideBar = () => {
               <ul id="report" className="sidebar-dropdown list-unstyled">
                 <li className="sidebar-item">
                   <NavLink
-                    to="#"
+                    to="/income-report"
                     className="sidebar-link sidebar-sublink"
                   >
-                    {t("Name Reports")}
+                    {t("receiptReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
                   <NavLink
-                    to="#"
+                    to="/expenses-report"
                     className="sidebar-link sidebar-sublink"
                   >
-                    {t("Village Reports")}
+                    {t("expenseReport")}
                   </NavLink>
                 </li>
                 <li className="sidebar-item">
                   <NavLink
-                    to="#"
+                    to="/others-report"
                     className="sidebar-link sidebar-sublink"
                   >
-                    {t("Transaction Report")}
+                    {t("othersReport")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/regional-report#"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("locationAmountReport")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink
+                    to="/summary-report"
+                    className="sidebar-link sidebar-sublink"
+                  >
+                    {t("summaryReport")}
+                  </NavLink>
+                </li>
+                <li className="sidebar-item">
+                  <NavLink to="#" className="sidebar-link sidebar-sublink">
+                    {t("rankingReport")}
                   </NavLink>
                 </li>
               </ul>
@@ -257,6 +367,10 @@ const SideBar = () => {
     );
   };
 
+  const handleUserDetailsToggle = () => {
+    setUserDetailsOpen(!userDetailsOpen);
+  };
+
   return (
     <div className="wrapper">
       <aside id="sidebar" className={isExpanded ? "expand" : ""}>
@@ -265,18 +379,32 @@ const SideBar = () => {
             <BiMenu />
           </button>
           <div className="sidebar-logo">
-            <a href="#">{t("my_accounts")}</a>
+            <NavLink to="#"> {t("my_accounts")}</NavLink>
           </div>
         </div>
         <ul className="sidebar-nav">{renderMenuItems()}</ul>
-        <div className="sidebar-footer">
-          <NavLink to="#" onClick={handleLogout} className="sidebar-link">
-            <BiExit />
-            <span className={isExpanded ? "nav-text" : "hidden"}>
-              {t("Logout")}
-            </span>
-          </NavLink>
+        <div className="user-details" onClick={handleUserDetailsToggle}>
+          <BiUser />
+          <div className="user-info">
+            <div>{userName}</div>
+            <div>{designation}</div>
+          </div>
+          <span
+            className={`dropdown-icon ${userDetailsOpen ? "expanded" : ""}`}
+          ></span>
         </div>
+        {userDetailsOpen && (
+          <div className="user-menu">
+            <NavLink to="/" onClick={handleLogout} className="sidebar-link">
+              <BiExit />
+              <span className="nav-text">{t("Logout")}</span>
+            </NavLink>
+            <NavLink to="/help" className="sidebar-link">
+              <BiHelpCircle />
+              <span className="nav-text">{t("help")}</span>
+            </NavLink>
+          </div>
+        )}
       </aside>
     </div>
   );
