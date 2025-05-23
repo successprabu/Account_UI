@@ -89,6 +89,7 @@ const OtherReceipt = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [activeSuggestionField, setActiveSuggestionField] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
 
   // Refs for form controls
   const villageNameRef = useRef(null);
@@ -132,6 +133,7 @@ const OtherReceipt = () => {
       console.log("Suggestions cleared: autoTranslateEnabled is false or text is empty");
       setSuggestions([]);
       setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
       return;
     }
 
@@ -151,15 +153,18 @@ const OtherReceipt = () => {
         setSuggestions(data[1][0][1]);
         setActiveSuggestionField(fieldName);
         setShowSuggestions(true);
+        setSelectedSuggestionIndex(-1); // Reset selection when new suggestions load
       } else {
         console.log("No valid suggestions in response");
         setSuggestions([]);
         setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
       }
     } catch (error) {
       console.error("Error fetching Tamil suggestions:", error);
       setSuggestions([]);
       setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
       toast.error("Failed to fetch suggestions. Please try again.");
     }
   };
@@ -180,6 +185,7 @@ const OtherReceipt = () => {
         setSuggestions([]);
         setShowSuggestions(false);
         setActiveSuggestionField(null);
+        setSelectedSuggestionIndex(-1);
       } else {
         console.log(`Fetching suggestions for ${name}: ${value}`);
         setActiveSuggestionField(name);
@@ -204,6 +210,7 @@ const OtherReceipt = () => {
     setSuggestions([]);
     setShowSuggestions(false);
     setActiveSuggestionField(null);
+    setSelectedSuggestionIndex(-1);
   };
 
   const handleTranslation = (translatedText) => {
@@ -268,6 +275,7 @@ const OtherReceipt = () => {
             setSuggestions([]);
             setShowSuggestions(false);
             setActiveSuggestionField(null);
+            setSelectedSuggestionIndex(-1);
             setErrors({});
             toast.success("Details Saved Successfully");
           } else {
@@ -291,10 +299,35 @@ const OtherReceipt = () => {
   };
 
   const handleKeyDown = (e, nextRef) => {
-    if (e.key === "Enter" || e.key === "Tab") {
+    console.log(`Key pressed: ${e.key}, showSuggestions: ${showSuggestions}`);
+    if (showSuggestions && suggestions.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        console.log(`ArrowDown: selectedSuggestionIndex set to ${selectedSuggestionIndex + 1}`);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) => (prev > -1 ? prev - 1 : prev));
+        console.log(`ArrowUp: selectedSuggestionIndex set to ${selectedSuggestionIndex - 1}`);
+      } else if (e.key === "Enter" && selectedSuggestionIndex >= 0) {
+        e.preventDefault();
+        handleSuggestionSelect(suggestions[selectedSuggestionIndex]);
+        console.log(`Enter: Selected suggestion ${suggestions[selectedSuggestionIndex]}`);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setSuggestions([]);
+        setShowSuggestions(false);
+        setActiveSuggestionField(null);
+        setSelectedSuggestionIndex(-1);
+        console.log("Escape: Suggestions cleared");
+      }
+    } else if (e.key === "Enter" || e.key === "Tab") {
       e.preventDefault();
       if (nextRef && nextRef.current) {
         nextRef.current.focus();
+        console.log(`Enter/Tab: Focused next field`);
       }
     }
   };
@@ -362,7 +395,7 @@ const OtherReceipt = () => {
       phoneNo: "",
       createdBy: "SYSTEM",
       createdDt: new Date().toISOString(),
-      updated: "SYSTEM",
+      updatedBy: "SYSTEM",
       updatedDt: new Date().toISOString(),
       isActive: true,
       type: "O",
@@ -377,6 +410,7 @@ const OtherReceipt = () => {
     setSuggestions([]);
     setShowSuggestions(false);
     setActiveSuggestionField(null);
+    setSelectedSuggestionIndex(-1);
   };
 
   if (!isAuthenticated) {
@@ -412,6 +446,7 @@ const OtherReceipt = () => {
                 setSuggestions([]);
                 setShowSuggestions(false);
                 setActiveSuggestionField(null);
+                setSelectedSuggestionIndex(-1);
               }
             }}
           />
@@ -538,10 +573,12 @@ const OtherReceipt = () => {
                         style={{
                           padding: "8px",
                           cursor: "pointer",
-                          background: "#fff",
+                          background: index === selectedSuggestionIndex ? "#e0e0e0" : "#fff",
                         }}
                         onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
-                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.background = index === selectedSuggestionIndex ? "#e0e0e0" : "#fff")
+                        }
                       >
                         {suggestion}
                       </div>
@@ -608,10 +645,12 @@ const OtherReceipt = () => {
                         style={{
                           padding: "8px",
                           cursor: "pointer",
-                          background: "#fff",
+                          background: index === selectedSuggestionIndex ? "#e0e0e0" : "#fff",
                         }}
                         onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
-                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.background = index === selectedSuggestionIndex ? "#e0e0e0" : "#fff")
+                        }
                       >
                         {suggestion}
                       </div>
@@ -675,10 +714,12 @@ const OtherReceipt = () => {
                         style={{
                           padding: "8px",
                           cursor: "pointer",
-                          background: "#fff",
+                          background: index === selectedSuggestionIndex ? "#e0e0e0" : "#fff",
                         }}
                         onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
-                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.background = index === selectedSuggestionIndex ? "#e0e0e0" : "#fff")
+                        }
                       >
                         {suggestion}
                       </div>
@@ -845,10 +886,12 @@ const OtherReceipt = () => {
                         style={{
                           padding: "8px",
                           cursor: "pointer",
-                          background: "#fff",
+                          background: index === selectedSuggestionIndex ? "#e0e0e0" : "#fff",
                         }}
                         onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
-                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.background = index === selectedSuggestionIndex ? "#e0e0e0" : "#fff")
+                        }
                       >
                         {suggestion}
                       </div>
@@ -947,10 +990,12 @@ const OtherReceipt = () => {
                         style={{
                           padding: "8px",
                           cursor: "pointer",
-                          background: "#fff",
+                          background: index === selectedSuggestionIndex ? "#e0e0e0" : "#fff",
                         }}
                         onMouseEnter={(e) => (e.target.style.background = "#f0f0f0")}
-                        onMouseLeave={(e) => (e.target.style.background = "#fff")}
+                        onMouseLeave={(e) =>
+                          (e.target.style.background = index === selectedSuggestionIndex ? "#e0e0e0" : "#fff")
+                        }
                       >
                         {suggestion}
                       </div>
