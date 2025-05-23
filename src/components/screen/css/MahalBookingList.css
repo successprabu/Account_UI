@@ -1,0 +1,103 @@
+.mahal-booking-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+  }
+  
+  /* Calendar Styling */
+  .react-calendar {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    font-family: inherit;
+  }
+  
+  .react-calendar__tile {
+    padding: 0.75em 0.5em;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .react-calendar__tile--now {
+    background-color: #e9ecef;
+  }
+  
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #0d6efd;
+  }
+  
+  .booked-date {
+    background-color: #f8d7da;
+    color: #dc3545;
+    font-weight: 600;
+  }
+  
+  .available-date {
+    background-color: #d1e7dd;
+    color: #198754;
+  }
+  
+  .today {
+    position: relative;
+  }
+  
+  .today::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+  }
+  
+  .selected-date {
+    background-color: #0d6efd !important;
+    color: white !important;
+  }
+  
+  /* Legend dots */
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  
+  .booked-dot {
+    background-color: #dc3545;
+  }
+  
+  .available-dot {
+    background-color: #198754;
+  }
+  
+  .today-dot {
+    background-color: #0d6efd;
+  }
+  
+  /* Table styling */
+  .table thead th {
+    border-bottom: none;
+    border-top: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+  }
+  
+  .table tbody tr {
+    transition: all 0.2s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+  
+  /* Card styling */
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+  }
