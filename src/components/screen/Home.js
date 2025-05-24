@@ -5,6 +5,7 @@ import AppHeader from "../common/AppHeader";
 import "./css/HomePage.css";
 import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import { FaLightbulb, FaHandsHelping, FaHeadset } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -70,11 +71,13 @@ const Home = () => {
                 {t("homeIntro")}
               </p>
               <div className="hero-cta">
+              <Link to="/services">
                 <Button variant="primary" className="cta-button me-3">
                   {t("exploreServices")} <FiArrowRight />
                 </Button>
+                </Link>
                 <Button variant="outline-light" className="cta-button">
-                  Watch Demo
+                  {t("watchDemo")}
                 </Button>
               </div>
             </Col>

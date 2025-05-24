@@ -119,5 +119,10 @@
   "clearButton": "साफ करें",
   "mahalName": "महल का नाम",
   "enter_mahal_name": "महल का नाम दर्ज करें",
-  "saveSuccessMessage": "डेटा सफलतापूर्वक सहेजा गया!"
+  "saveSuccessMessage": "डेटा सफलतापूर्वक सहेजा गया!",
+  "watchDemo":"डेमो देखें",
+  "login_security_note": "कृपया ध्यान दें कि लॉगिन आईडी और पासवर्ड आपके मोबाइल नंबर पर भेजे जाएंगे। कृपया इसे सुरक्षित रखें।",
+  "welcome_back": "स्वागत है वापस",
+  "addMahalBooking": "महल बुकिंग जोड़ें",
+  "login_to_your_account": "अपने खाते में लॉगिन करें"
 }

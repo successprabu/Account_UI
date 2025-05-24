@@ -267,5 +267,14 @@
   "landmark": "Landmark",
   "enterLandmark": "Please Enter Landmark",
   "onlineBooking": "Online Booking",
-  "saveSuccessMessage": "Data saved successfully!"
+  "saveSuccessMessage": "Data saved successfully!",
+  "watchDemo":"Watch Demo",
+  "login_security_note": "For security reasons, please log in again to continue.",
+  "welcome_back": "Welcome Back",
+  "addMahalBooking": "Add Mahal Booking",
+  "addMahalBookingList": "Mahal Booking List",
+  "addMahalBookingDetails": "Mahal Booking Details",
+  "login_illustration_text": "Welcome to MySuccess, your one-stop solution for all your business needs. Please log in to access your account and explore our innovative services."
+
+
 }
