@@ -1,0 +1,1090 @@
+/* Base Styles */
+:root {
+  --primary: #1a3a8b;
+  --primary-light: #2a4da0;
+  --secondary: #ff6b00;
+  --accent: #00c9c8;
+  --light: #f8f9ff;
+  --dark: #2d3748;
+  --gray: #718096;
+  --light-gray: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f7fa;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+.resume-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  background: white;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* Header Styles */
+.resume-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  padding: 2.5rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+}
+.profile-photo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid white;
+  overflow: hidden !important; /* Ensure no overflow */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* Remove any inline spacing */
+  overflow: hidden !important; /* Explicitly set for image */
+}
+.name-section {
+  flex: 1;
+}
+
+.name-title-container {
+  margin-bottom: 1.5rem;
+}
+
+.name-title-container h1 {
+  font-size: 2.8rem;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.title-divider {
+  height: 4px;
+  width: 80px;
+  background: var(--accent);
+  margin: 0.8rem 0;
+  border-radius: 2px;
+}
+
+.tagline {
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: 500;
+  color: #e0f7ff;
+}
+
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.experience-badge, .tech-badge {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+}
+
+.experience-badge {
+  background: linear-gradient(90deg, var(--secondary) 0%, #ff8a00 100%);
+  font-weight: 600;
+}
+
+.badge-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.summary-icon {
+  font-size: 1.8rem;
+  margin-right: 12px;
+}
+
+.summary {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: #f0f9ff;
+}
+
+.metric-highlights {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.metric {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.metric-value {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Contact Section */
+/* Adjust contact section to accommodate photo */
+.contact-section1 {
+  width: 300px;
+  margin-top: 170px; /* Add space for photo */
+}
+.contact-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.contact-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.contact-item .icon {
+  font-size: 1.3rem;
+  color: var(--primary);
+  min-width: 24px;
+  margin-top: 3px;
+}
+
+.contact-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 3px;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--accent);
+}
+
+.social-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+}
+
+.social-icon.linkedin {
+  background: #0a66c2;
+}
+
+.social-icon.github {
+  background: #333;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: white;
+  color: var(--primary);
+  border: none;
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(26, 42, 108, 0.25);
+  margin-top: 1.5rem;
+}
+
+.download-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(26, 42, 108, 0.35);
+  background: var(--primary);
+  color: white;
+}
+
+/* Body Layout */
+.resume-body {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Section Styling */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+/* Skills Section */
+.skill-category {
+  margin-bottom: 1.5rem;
+}
+
+.skill-category h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: var(--primary);
+}
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-chip {
+  background: var(--light);
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  border: 1px solid var(--light-gray);
+  font-weight: 500;
+}
+
+/* Experience Section */
+.experience-timeline {
+  position: relative;
+  padding-left: 30px;
+  border-left: 2px solid var(--light-gray);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -38px;
+  top: 5px;
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.experience-card {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.experience-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.role-header h3 {
+  color: var(--primary);
+}
+
+.company-pill {
+  background: var(--accent);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.duration-location {
+  display: flex;
+  gap: 1rem;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.icon-sm {
+  margin-right: 5px;
+}
+
+.project-card {
+  margin-top: 1.5rem;
+}
+
+.project-title {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.achievement-list {
+  padding-left: 1.5rem;
+}
+
+.achievement-list li {
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.bullet {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.tech-used {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--light-gray);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tech-used span {
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-tag {
+  background: rgba(0, 201, 200, 0.1);
+  color: var(--accent);
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(0, 201, 200, 0.3);
+}
+
+/* Education Section */
+.education-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.education-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.education-item h3 {
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+
+.institution {
+  color: var(--gray);
+  margin: 0.3rem 0;
+}
+
+.education-details {
+  display: flex;
+  justify-content: space-between;
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.grade {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Personal Details */
+.personal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--light-gray);
+}
+
+.detail-item span:first-child {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Career Summary */
+.highlight-card {
+  display: flex;
+  gap: 1rem;
+  background: var(--light);
+  padding: 1.2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.highlight-icon {
+  font-size: 1.8rem;
+  min-width: 50px;
+  height: 50px;
+  background: rgba(0, 201, 200, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.summary-points {
+  padding-left: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.summary-points li {
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.summary-points li::before {
+  content: "•";
+  color: var(--accent);
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+  margin-left: -1em;
+}
+
+/* Footer */
+.resume-footer {
+  padding: 2rem;
+  border-top: 1px solid var(--light-gray);
+  background: var(--light);
+}
+
+.declaration {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.declaration p {
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  color: var(--gray);
+}
+
+.signature {
+  margin-top: 2rem;
+}
+
+.signature-line {
+  margin-top: 3rem;
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--primary);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .header-content {
+    flex-direction: column;
+  }
+  
+  .contact-section {
+    width: 100%;
+  }
+  
+  .resume-body {
+    grid-template-columns: 1fr;
+  }
+  
+  .personal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .resume-header {
+    padding: 1.5rem;
+  }
+  
+  .metric-highlights {
+    flex-direction: column;
+  }
+  
+  .name-title-container h1 {
+    font-size: 2.2rem;
+  }
+  
+  .role-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .company-pill {
+    align-self: flex-start;
+  }
+}
+.declaration {
+  text-align: center;
+  max-width: 700px;
+  margin: 2rem auto 0;
+  padding: 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8f9ff;
+  border-radius: 10px;
+}
+
+.declaration p {
+  font-style: italic;
+  margin-bottom: 2rem;
+  color: #4a5568;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.signature-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 3rem;
+}
+
+.place-date {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.place, .date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.place .icon, .date .icon {
+  color: #1a3a8b;
+  min-width: 20px;
+}
+
+.signature {
+  position: relative;
+  text-align: right;
+}
+
+.signature-line {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a3a8b;
+  position: relative;
+  padding: 0 1rem;
+}
+
+.signature-underline {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #1a3a8b;
+  width: 100%;
+}
+
+/* Signature flourish effect */
+.signature-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='40' viewBox='0 0 150 40'%3E%3Cpath fill='none' stroke='%231a3a8b' stroke-width='0.5' stroke-dasharray='2,4' d='M0,20 Q30,5 60,20 T120,20'/%3E%3C/svg%3E") no-repeat center;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .signature-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .place-date {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .signature {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .signature-line {
+    display: inline-block;
+  }
+}
+
+/* PDF Export Styles */
+.pdf-export {
+  width: 210mm !important;
+  margin: 0 auto !important;
+  padding: 15mm !important;
+  box-shadow: none !important;
+  background: white !important;
+  transform: scale(1) !important;
+}
+
+.pdf-export .resume-container {
+  box-shadow: none !important;
+}
+
+/* Ensure all sections are visible in PDF */
+.pdf-export .resume-section .section-content {
+  display: block !important;
+  max-height: none !important;
+  opacity: 1 !important;
+}
+
+/* Hide interactive elements in PDF */
+.pdf-export .section-header svg {
+  display: none;
+}
+
+/* Download Button Styles */
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: white;
+  color: #1a3a8b;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(26, 58, 139, 0.2);
+  margin-top: 20px;
+}
+
+.download-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(26, 58, 139, 0.3);
+  background: hsl(0, 93%, 45%);
+  color: white;
+}
+
+.download-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+/* Add this to your CSS */
+.contact-item div,
+.contact-item a {
+  color: #1a3a8b; /* Dark blue for better contrast */
+  font-weight: 500;
+}
+
+.contact-item a {
+  color: #1a3a8b;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-item a:hover {
+  color: #00c9c8; /* Accent color on hover */
+  text-decoration: underline;
+}
+/* Add these to your CSS file */
+
+/* Technical Expertise */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.skill-category h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.8rem;
+  color: #1a3a8b;
+  font-size: 1.1rem;
+  border-bottom: 1px dashed #e2e8f0;
+  padding-bottom: 0.5rem;
+}
+
+.skill-category h3 .category-icon {
+  color: #00c9c8;
+}
+
+.skill-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.8rem;
+}
+
+.skill-chip {
+  background: #f8f9ff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.chip-icon {
+  color: #00c9c8;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* Personal Details */
+.personal-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #1a3a8b;
+}
+
+.detail-value {
+  color: #4a5568;
+  text-align: right;
+}
+
+/* Career Summary */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.highlight-card {
+  background: #f8f9ff;
+  border-radius: 10px;
+  padding: 1.2rem;
+  border: 1px solid #e2e8f0;
+  transition: transform 0.3s;
+}
+
+.highlight-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.highlight-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  color: #1a3a8b;
+}
+
+.highlight-content h3 {
+  color: #1a3a8b;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+.highlight-content p {
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.summary-points {
+  background: #f8f9ff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-subheader {
+  color: #1a3a8b;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.summary-points ul {
+  padding-left: 1.2rem;
+}
+
+.summary-points li {
+  margin-bottom: 0.8rem;
+  color: #4a5568;
+  position: relative;
+}
+
+.summary-points li::before {
+  content: "•";
+  color: #00c9c8;
+  font-weight: bold;
+  position: absolute;
+  left: -1.2rem;
+}
+
+/* PDF Export Styles */
+.pdf-export {
+  width: 210mm !important;
+  margin: 0 auto !important;
+  padding: 15mm !important;
+  box-shadow: none !important;
+  background: white !important;
+  transform: scale(1) !important;
+  font-size: 10pt !important;
+}
+
+.pdf-export .resume-container {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.pdf-export .resume-header {
+  background: linear-gradient(135deg, #1a3a8b 0%, #2a4da0 100%) !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.pdf-export .profile-photo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.pdf-export .section-header svg,
+.pdf-export .download-btn,
+.pdf-export .social-icon,
+.pdf-export .badge-icon,
+.pdf-export .summary-icon,
+.pdf-export .category-icon,
+.pdf-export .icon,
+.pdf-export .icon-sm {
+  display: none !important; /* Hide icons that may not render well in PDF */
+}
+
+.pdf-export .resume-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.pdf-export .left-column,
+.pdf-export .right-column {
+  width: 100% !important;
+}
+
+.pdf-export .skill-chips,
+.pdf-export .tech-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+}
+
+.pdf-export .signature-line::after {
+  display: none !important; /* Remove SVG flourish for PDF */
+}
+
+.pdf-export * {
+  visibility: visible !important;
+  overflow: visible !important;
+  max-height: none !important;
+  opacity: 1 !important;
+}
+
+/* Ensure text is not cut off */
+.pdf-export h1,
+.pdf-export h2,
+.pdf-export h3,
+.pdf-export h4,
+.pdf-export p,
+.pdf-export li {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+
+/* Force colors to render correctly */
+.pdf-export .experience-badge,
+.pdf-export .tech-badge,
+.pdf-export .company-pill,
+.pdf-export .tech-tag,
+.pdf-export .skill-chip {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .profile-photo {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contact-section {
+    width: 100%;
+    margin-top: 0;
+  }
+  
+  .name-section {
+    text-align: center;
+  }
+  
+  .title-divider {
+    margin: 0.8rem auto;
+  }
+  
+  .badge-container {
+    justify-content: center;
+  }
+}
+

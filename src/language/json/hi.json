@@ -120,9 +120,11 @@
   "mahalName": "महल का नाम",
   "enter_mahal_name": "महल का नाम दर्ज करें",
   "saveSuccessMessage": "डेटा सफलतापूर्वक सहेजा गया!",
-  "watchDemo":"डेमो देखें",
+  "watchDemo":"डेमो आज़माएं",
   "login_security_note": "कृपया ध्यान दें कि लॉगिन आईडी और पासवर्ड आपके मोबाइल नंबर पर भेजे जाएंगे। कृपया इसे सुरक्षित रखें।",
   "welcome_back": "स्वागत है वापस",
   "addMahalBooking": "महल बुकिंग जोड़ें",
-  "login_to_your_account": "अपने खाते में लॉगिन करें"
+  "login_to_your_account": "अपने खाते में लॉगिन करें",
+    "getStarted": "शुरू करें",
+  "contactSales": "बिक्री से संपर्क करें"
 }

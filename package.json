@@ -23,6 +23,7 @@
     "framer-motion": "^11.2.9",
     "gitbook-plugin-download-pdf-link": "^2.0.0",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.10.3",
     "i18next": "^23.11.5",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
@@ -75,5 +76,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@react-aria/ssr": "^3.9.8"
   }
 }

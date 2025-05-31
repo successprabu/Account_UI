@@ -76,9 +76,12 @@ const Home = () => {
                   {t("exploreServices")} <FiArrowRight />
                 </Button>
                 </Link>
+
+                <Link to="/services">
                 <Button variant="outline-light" className="cta-button">
                   {t("watchDemo")}
                 </Button>
+                </Link>
               </div>
             </Col>
             <Col lg={6} className="hero-image-col">
@@ -92,7 +95,7 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* Clients Logo Section */}
+      {/* //Clients Logo Section
       <section className="clients-section py-4">
         <Container>
           <Row className="justify-content-center">
@@ -106,7 +109,7 @@ const Home = () => {
             ))}
           </Row>
         </Container>
-      </section>
+      </section> */}
 
       {/* Features Section */}
       <section className="features-section py-5">
@@ -131,7 +134,7 @@ const Home = () => {
                     <h3 className="feature-title">{feature.title}</h3>
                     <p className="feature-text">{feature.description}</p>
                     <Button variant="link" className="feature-link">
-                      Learn more <FiArrowRight />
+                     {t("learnMore")} <FiArrowRight />
                     </Button>
                   </Card.Body>
                 </Card>
@@ -203,12 +206,18 @@ const Home = () => {
               <h2 className="cta-title">Ready to Transform Your Business?</h2>
               <p className="cta-text">Join thousands of satisfied customers who trust our solution</p>
               <div className="cta-buttons">
+              <Link to="/purchase">
                 <Button variant="primary" size="lg" className="me-3">
-                  Get Started
+                {t("getStarted")} 
                 </Button>
+                </Link>
+                <Link to="/contactus">
+             
                 <Button variant="outline-light" size="lg">
-                  Contact Sales
+                {t("contactSales")} 
                 </Button>
+                </Link>
+         
               </div>
             </Col>
           </Row>

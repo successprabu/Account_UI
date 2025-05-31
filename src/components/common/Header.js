@@ -108,7 +108,7 @@ const Header = ({ titles, links, showLanguageSelector = true }) => {
             ))}
             {showLanguageSelector && (
               <LanguageSelector
-                backgroundColor="rgba(255,255,255,0.1)"
+                backgroundColor="#0e2238"
                 textColor="#fff"
                 hoverColor="#0984e3"
                 className="ms-3"

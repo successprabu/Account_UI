@@ -20,6 +20,7 @@ import Home from "./components/screen/Home";
 // import ExpensesList from "./components/screen/list/ExpensesList";
 // import TranslationDemo from "./components/common/TranslationDemo";
 import ReportComponent from "./components/screen/reports/ReportComponent";
+import Resume from "./components/screen/AntonyResume/Resume ";
 // import OtherReceipt from "./components/screen/OtherReceipt";
 // import OthersList from "./components/screen/list/OthersList";
 // import IncomeReport from "./components/screen/reports/IncomeReport";
@@ -287,6 +288,7 @@ const Router = () => {
             }
           />
           <Route path="services" element={<ServicePage />} />
+          <Route path="antony-resume" element={<Resume />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
