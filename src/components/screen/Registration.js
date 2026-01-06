@@ -116,6 +116,7 @@ const Registration = () => {
   
     // Generate and store OTP
     const otp = generateOtp();
+    console.log(otp,'OTP TESTING')
     setGeneratedOtp(otp);
     try {
       // Make the mobile check API call

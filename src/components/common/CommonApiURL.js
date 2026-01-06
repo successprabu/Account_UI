@@ -1,6 +1,6 @@
 //export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`; //LOCAL URL
-export const BASE_URL = `https://mysuccessapi-erg2e5bcbchcbjd4.centralindia-01.azurewebsites.net/api/`; //live URL
+export const BASE_URL = `https://successapi.azurewebsites.net/api/`; //live URL
 
 const GOOGLE_TRANS_API_KEY = "AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE";
 export const OTP_KEY =
