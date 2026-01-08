@@ -103,7 +103,7 @@ const AppHeader = () => {
   return (
     <StyledNavbar expand="lg" collapseOnSelect>
       <Container fluid>
-        <Navbar.Brand href="#home" className="d-flex align-items-center">
+        <Navbar.Brand href="/" className="d-flex align-items-center">
           <BrandLogo
             alt="Logo"
             src="logo.png"
@@ -118,7 +118,7 @@ const AppHeader = () => {
         
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto align-items-lg-center">
-            <StyledNavLink exact to='/'>{t('home')}</StyledNavLink>
+            <StyledNavLink to='/'>{t('home')}</StyledNavLink>
             <StyledNavLink to='/about'>{t('about_us')}</StyledNavLink>
             <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
             <StyledNavLink to='/contactus'>{t('contact_us')}</StyledNavLink>

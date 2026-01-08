@@ -152,10 +152,10 @@ const testimonials = [
                       <HiArrowRight />
                     </Button>
                   </Link>
-                  <Link to="/demo">
+                  <Link to="/purchase">
                     <Button variant="outline-light" className="cta-button demo-btn">
                       <HiPlay />
-                      <span>Watch Demo</span>
+                      <span>{t("watchDemo")}</span>
                     </Button>
                   </Link>
                 </div>
@@ -261,8 +261,8 @@ const testimonials = [
                   <div className="feature-body">
                     <h3 className="feature-title">{feature.title}</h3>
                     <p className="feature-text">{feature.description}</p>
-                    <Link to="/features" className="feature-link">
-                      <span>Learn more</span>
+                    <Link to="/services" className="feature-link">
+                      <span>{t("LearnMore")}</span>
                       <HiArrowRight />
                     </Link>
                   </div>
@@ -317,10 +317,12 @@ const testimonials = [
                   </div>
                 ))}
               </div>
+              <Link to="/services">
               <Button variant="primary" className="mt-5 px-4 py-3">
                 <span>Explore All Features</span>
                 <HiArrowRight />
               </Button>
+              </Link>
             </Col>
           </Row>
         </Container>
@@ -394,19 +396,19 @@ const testimonials = [
                 </h2>
                 <p className="cta-text">
                   Join industry leaders and experience the future of business solutions. 
-                  Get started with a 14-day free trial.
+                  Get started with a 30-day free trial.
                 </p>
                 <div className="cta-buttons">
-                  <Link to="/signup">
+                  <Link to="/purchase">
                     <Button variant="primary" size="lg" className="px-5 py-3">
                       <span>Start Free Trial</span>
                       <HiArrowRight />
                     </Button>
                   </Link>
-                  <Link to="/demo">
+                  <Link to="/services">
                     <Button variant="outline-light" size="lg" className="px-5 py-3 ms-3">
                       <HiPlay />
-                      <span>Book a Demo</span>
+                      <span>{t("watchDemo")}</span>
                     </Button>
                   </Link>
                 </div>

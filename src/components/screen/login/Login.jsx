@@ -458,7 +458,7 @@ const Login = () => {
 
             <AdditionalLinks>
               <Link to="/forgot-password">{t("forgot_password")}</Link>
-              <span style={{ color: '#e0e0e0' }}>|</span>
+             
               <Link to="/purchase">{t("sign_up")}</Link>
             </AdditionalLinks>
 

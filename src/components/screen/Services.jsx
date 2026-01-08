@@ -27,7 +27,6 @@ import {
   FaLock
 } from 'react-icons/fa';
 import { HiSparkles, HiTemplate, HiUserGroup, HiArrowRight, HiLightningBolt } from 'react-icons/hi';
-import AppHeader from '../common/AppHeader';
 import './css/ServicePage.css';
 import { Link } from 'react-router-dom';
 
@@ -59,7 +58,7 @@ const ServicePage = () => {
       icon: <HiUserGroup className="service-icon" />,
       gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
       features: ["Student Management", "Academic Tracking", "Parent Portal", "Fee Collection"],
-      link: "school-erp",
+      link: "inprogress",
       stats: "Complete Solution"
     },
   ];
@@ -137,17 +136,18 @@ const ServicePage = () => {
                   for efficiency, growth, and unparalleled success.
                 </p>
                 <div className="hero-cta">
-                  <Link to="/contact">
+                    <Link to="/purchase">
+                    <Button variant="outline-light" className="cta-button">
+                      <span>{t("watchDemo")}</span>
+                    </Button>
+                  </Link>
+                  <Link to="/contactus">
                     <Button variant="primary" className="cta-button me-3">
                       <span>Get Free Consultation</span>
                       <HiArrowRight />
                     </Button>
                   </Link>
-                  <Link to="/demo">
-                    <Button variant="outline-light" className="cta-button">
-                      <span>View Live Demo</span>
-                    </Button>
-                  </Link>
+                
                 </div>
               </motion.div>
             </Col>
@@ -333,7 +333,7 @@ const ServicePage = () => {
                   your success. No commitment required.
                 </p>
                 <div className="cta-buttons">
-                  <Link to="/contact">
+                  <Link to="/contactUs">
                     <Button variant="primary" size="lg" className="px-5 py-3">
                       <span>Book Free Demo</span>
                       <HiArrowRight />

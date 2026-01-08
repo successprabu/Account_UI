@@ -45,6 +45,7 @@ const Router = () => {
     import("./components/screen/MahalRegistration")
   );
   const ContactUs = lazy(() => import("./components/screen/ContactUs"));
+  const InProgress = lazy(() => import("./components/screen/InProgress"));
   const TranslationDemo = lazy(() =>
     import("./components/common/TranslationDemo")
   );
@@ -126,6 +127,11 @@ const Router = () => {
         <Route path="purchase" element={<Registration />} />
         <Route path="mahal-reg" element={<MahalRegistration />} />
         <Route path="contactus" element={<ContactUs />} />
+        <Route path="inprogress" element={<InProgress />} />
+        <Route path="services/purchase" element={<Registration />} />
+        <Route path="services/mahal-reg" element={<MahalRegistration />} />
+        <Route path="services/inprogress" element={<InProgress />} />
+        <Route path="services/contactus" element={<ContactUs />} />
         <Route path="try-translation" element={<TranslationDemo />} />
         <Route index element={<Home />} />
         <Route path="unauthorized" element={<Unauthorized />} />
@@ -258,7 +264,7 @@ const Router = () => {
           <Route
             path="add-new-mahal"
             element={
-              <ProtectedRoute allowedRoles={["MU"]}>
+              <ProtectedRoute allowedRoles={["SU","MU"]}>
                 <NewMahal />
               </ProtectedRoute>
             }
@@ -266,7 +272,7 @@ const Router = () => {
           <Route
             path="mahal-booking"
             element={
-              <ProtectedRoute allowedRoles={["MU"]}>
+              <ProtectedRoute allowedRoles={["SU","MU"]}>
                 <MahalBooking />
               </ProtectedRoute>
             }
@@ -274,7 +280,7 @@ const Router = () => {
           <Route
             path="mahal-booking-list"
             element={
-              <ProtectedRoute allowedRoles={["MU"]}>
+              <ProtectedRoute allowedRoles={["SU","MU"]}>
                 <MahalBookingList />
               </ProtectedRoute>
             }
@@ -282,7 +288,7 @@ const Router = () => {
           <Route
             path="add-moitech-customer"
             element={
-              <ProtectedRoute allowedRoles={["MU"]}>
+              <ProtectedRoute allowedRoles={["SU","MU"]}>
                 <AddMoitechCustomer />
               </ProtectedRoute>
             }
