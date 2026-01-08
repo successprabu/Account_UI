@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from "react";
-import { FaCheck, FaRedo,FaUserPlus  } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { FaCheck, FaRedo, FaUserPlus } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
 import { AiOutlineSend } from 'react-icons/ai';
 import {
@@ -105,7 +105,7 @@ const Registration = () => {
 
   const handleOtpSend = async () => {
     const validationErrors = {};
-  
+
     // Validate mobile number
     if (!/^\d{10}$/.test(formData.primary_phone)) {
       toast.error("Mobile number must be 10 digits");
@@ -113,10 +113,10 @@ const Registration = () => {
       setErrors(validationErrors);
       return;
     }
-  
+
     // Generate and store OTP
     const otp = generateOtp();
-    console.log(otp,'OTP TESTING')
+    //console.log(otp,'OTP TESTING')
     setGeneratedOtp(otp);
     try {
       // Make the mobile check API call
@@ -127,9 +127,9 @@ const Registration = () => {
           userType: "AU",
         },
       });
-  
+
       const mobileCheck = mobileCheckResponse.data;
-  
+
       // Check if mobile number is valid to send OTP
       if (mobileCheck.result) {
         // Send OTP if mobile check passed
@@ -143,7 +143,7 @@ const Registration = () => {
       toast.error(error.response?.data?.message || "Error checking mobile number. Please try again.");
     }
   };
-  
+
   // Separated function to handle sending OTP
   const sendOtp = async (otp) => {
     try {
@@ -157,7 +157,7 @@ const Registration = () => {
           numbers: formData.primary_phone,
         },
       });
-  
+
       toast.success("OTP sent successfully!");
       setOtpSent(true);
       setOtpTimer(180); // Restart OTP timer
@@ -167,33 +167,33 @@ const Registration = () => {
       toast.error("Error sending OTP. Please try again.");
     }
   };
-  
+
 
   const handleOtpVerify = () => {
     // Verify the entered OTP against the stored OTP
     if (formData.otp === generatedOtp) {
       setOtpVerified(true);
       const payload = {
-        id:0,
-        primary_phone:formData.primary_phone,
-        userType:'AU',
-        customerId:0,
-        country_code:'+91',
-        appName:'MOI',
-        createdBy:'SYSTEM',
-        createdDt:new Date()
+        id: 0,
+        primary_phone: formData.primary_phone,
+        userType: 'AU',
+        customerId: 0,
+        country_code: '+91',
+        appName: 'MOI',
+        createdBy: 'SYSTEM',
+        createdDt: new Date()
       };
- 
-    axios.post(SAVE_REGISTRATION_INITIAL_API, payload)
-  .then(response => {
-    // Handle the response
-    console.log('Success:', response.data);
-  })
-  .catch(error => {
-    // Handle the error
-    console.error('Error:', error);
-  });
-  
+
+      axios.post(SAVE_REGISTRATION_INITIAL_API, payload)
+        .then(response => {
+          // Handle the response
+          console.log('Success:', response.data);
+        })
+        .catch(error => {
+          // Handle the error
+          console.error('Error:', error);
+        });
+
       toast.success("OTP Verified!");
     } else {
       toast.error("Invalid OTP");
@@ -210,7 +210,7 @@ const Registration = () => {
     }
 
     if (!formData.primary_phone.trim()) {
-      validationErrors.primary_phone ="Please Enter valid 10 digit Mobile Number";
+      validationErrors.primary_phone = "Please Enter valid 10 digit Mobile Number";
     } else if (!/^\d{10}$/.test(formData.primary_phone)) {
       validationErrors.primary_phone = "Mobile number must be 10 digits";
     }
@@ -220,7 +220,7 @@ const Registration = () => {
     if (!/^\d{6}$/.test(formData.pincode)) {
       validationErrors.pincode = "Please Enter valid 6 digit pincode";
     }
-    
+
 
     if (!formData.password.trim()) {
       validationErrors.password = "Password is required";
@@ -308,7 +308,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_name")}
                     error={errors.name}
-                    onFocus={handleFocus} 
+                    onFocus={handleFocus}
                   />
                 </FormGroup>
               </Col>
@@ -326,14 +326,14 @@ const Registration = () => {
                       placeholder={t("enter_primary_phone")}
                       error={errors.primary_phone}
                       disabled={otpVerified}
-                      onFocus={handleFocus} 
+                      onFocus={handleFocus}
                       className="me-2 flex-grow-1"
                     />
                     <Button
                       className="btn-sm d-flex align-items-center justify-content-center"
                       variant="primary"
                       onClick={handleOtpSend}
-                      disabled={(otpSent && !resendEnabled) || otpVerified} 
+                      disabled={(otpSent && !resendEnabled) || otpVerified}
                       style={{ height: "38px" }}
                     >
                       <AiOutlineSend className="me-1" /> {t("sendOTP")}
@@ -354,7 +354,7 @@ const Registration = () => {
                       placeholder={t("enter_otp")}
                       disabled={otpVerified}
                       error={errors.otp}
-                      onFocus={handleFocus} 
+                      onFocus={handleFocus}
                       className="me-1 flex-grow-1"
                     />
                     <Button
@@ -367,31 +367,31 @@ const Registration = () => {
                       <FaCheck className="me-1" /> {t("verifyOTP")}
                     </Button>
                     {resendEnabled && !otpVerified && (
-                  <Button
-                    className="me-1 btn-sm d-flex align-items-center justify-content-center"
-                    variant="primary"
-                    onClick={handleOtpSend}
-                    disabled={otpVerified}
-                    style={{ height: '38px' }}
-                  >
-                    <FaRedo className="me-1" /> {t("resendOTP")}
-                  </Button>
-                )}
+                      <Button
+                        className="me-1 btn-sm d-flex align-items-center justify-content-center"
+                        variant="primary"
+                        onClick={handleOtpSend}
+                        disabled={otpVerified}
+                        style={{ height: '38px' }}
+                      >
+                        <FaRedo className="me-1" /> {t("resendOTP")}
+                      </Button>
+                    )}
                   </div>
                 </FormGroup>
                 {otpSent && !otpVerified && (
-                 <div>
-                  {otpTimer > 0 && otpSent && (
-                    <Col xs={12}>
-                      <p className="mt-1">
-                        {t("resendIn")} {otpTimer} {t("seconds")}
-                      </p>
-                    </Col>
-                  )}
+                  <div>
+                    {otpTimer > 0 && otpSent && (
+                      <Col xs={12}>
+                        <p className="mt-1">
+                          {t("resendIn")} {otpTimer} {t("seconds")}
+                        </p>
+                      </Col>
+                    )}
                   </div>
-      )}
+                )}
               </Col>
-              
+
             </Row>
             <Row className="mb-3">
               <Col xs={12} md={4}>
@@ -406,7 +406,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_password")}
                     error={errors.password}
-                    onFocus={handleFocus} 
+                    onFocus={handleFocus}
                   />
                 </FormGroup>
               </Col>
@@ -423,7 +423,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("confirm_password")}
                     error={errors.conpassword}
-                    onFocus={handleFocus} 
+                    onFocus={handleFocus}
                   />
                 </FormGroup>
               </Col>
@@ -439,7 +439,7 @@ const Registration = () => {
                     onChange={handleChange}
                     placeholder={t("enter_pincode")}
                     error={errors.pincode}
-                    onFocus={handleFocus} 
+                    onFocus={handleFocus}
                   />
                 </FormGroup>
               </Col>
@@ -526,12 +526,12 @@ const Registration = () => {
             )}
             <Row>
               <Col xs={12} className="text-center">
-                <Button 
-                type="submit"
-                 variant="success"
-                 disabled={!otpVerified}
-                 >
-                <FaUserPlus  className="me-1" />{t("register")}
+                <Button
+                  type="submit"
+                  variant="success"
+                  disabled={!otpVerified}
+                >
+                  <FaUserPlus className="me-2" />{t("register")}
                 </Button>
               </Col>
             </Row>
