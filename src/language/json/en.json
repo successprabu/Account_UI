@@ -134,7 +134,7 @@
   "funPersionNames": "Function Hero/Heroine",
   "funMessage": "Message to Send your wellwishers",
   "enter_fun_message": "Enter Message to Send your wellwishers",
-  "enter_fun_person_names": "Enter name of the Persons",
+  "enter_fun_person": "Enter name of the Persons",
   "function_list": "Function List",
   "userCreate": "Create User",
   "user_list": "User List",
@@ -276,7 +276,18 @@
   "addMahalBookingDetails": "Mahal Booking Details",
   "login_illustration_text": "Welcome to MySuccess, your one-stop solution for all your business needs. Please log in to access your account and explore our innovative services.",
   "getStarted": "Get Started",
-  "contactSales": "Contact Sales"
+  "contactSales": "Contact Sales",
+  "transactionsBreakdown": "Transactions Breakdown",
+  "totalRcdNos": "Total Records Received",
+  "totalExpenses": "Total Expenses",
+  "totalRcdAmount": "Total Amount Received",
+  "revenueVsExpensesTrend": "Revenue Vs Expenses Trend ",
+  "revenue": "Revenues",
+  "performanceOverview": "Performance Overview",
+  "performanceMetrics": "Performance Metrics",
+  "keyPerformanceIndicators": "Key Performance Indicators (KPIs)",
+  "recentActivity": "Recent Activity",
+  "viewAll": "View All"
 
 
 }

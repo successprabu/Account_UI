@@ -369,7 +369,7 @@ const FunctionForm = () => {
                 <InputGroup>
                   <FormControl
                     type="text"
-                    placeholder={t("enter_fun_person_names")}
+                    placeholder={t("enter_fun_person")}
                     name="funPersionNames"
                     id="funPersionNames"
                     value={formData.funPersionNames}
