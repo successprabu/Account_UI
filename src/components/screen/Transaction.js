@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
 import { FaSave, FaTimes } from "react-icons/fa";
-import i18n from "../../language/i18n";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -59,7 +58,7 @@ const schema = yup
   );
 
 const Transaction = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: 0,
@@ -135,10 +134,12 @@ const Transaction = () => {
     setIsSaving(false);
   }, [formData.oldAmount, formData.newAmount]);
 
-  const fetchTamilSuggestions = async (text, fieldName) => {
-    console.log(`Fetching suggestions for text: "${text}", field: ${fieldName}, autoTranslateEnabled: ${autoTranslateEnabled}`);
-    if (!autoTranslateEnabled || !text.trim()) {
-      console.log("Suggestions cleared: autoTranslateEnabled is false or text is empty");
+  const fetchSuggestions = async (text, fieldName) => {
+    const langCode = (i18n && i18n.language ? String(i18n.language).split("-")[0] : "en");
+    const supported = new Set(["ta", "hi", "ml", "te", "kn"]);
+
+    // Only fetch suggestions when auto-translate is enabled and the selected language is supported
+    if (!autoTranslateEnabled || !text.trim() || !supported.has(langCode)) {
       setSuggestions([]);
       setShowSuggestions(false);
       setSelectedSuggestionIndex(-1);
@@ -146,28 +147,22 @@ const Transaction = () => {
     }
 
     try {
-      const url = `https://inputtools.google.com/request?text=${encodeURIComponent(
-        text
-      )}&itc=ta-t-i0-und&num=5`;
-      console.log(`API URL: ${url}`);
+      const itc = `${langCode}-t-i0-und`;
+      const url = `https://inputtools.google.com/request?text=${encodeURIComponent(text)}&itc=${itc}&num=5`;
       const response = await fetch(url);
       const data = await response.json();
-      console.log("API response:", data);
 
       if (data && Array.isArray(data[1]) && data[1][0] && Array.isArray(data[1][0][1])) {
-        console.log("Suggestions found:", data[1][0][1]);
         setSuggestions(data[1][0][1]);
         setActiveSuggestionField(fieldName);
         setShowSuggestions(true);
         setSelectedSuggestionIndex(-1); // Reset selection when new suggestions load
       } else {
-        console.log("No valid suggestions in response");
         setSuggestions([]);
         setShowSuggestions(false);
         setSelectedSuggestionIndex(-1);
       }
     } catch (error) {
-      console.error("Error fetching Tamil suggestions:", error);
       setSuggestions([]);
       setShowSuggestions(false);
       setSelectedSuggestionIndex(-1);
@@ -177,7 +172,7 @@ const Transaction = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`handleChange triggered: name=${name}, value=${value}`);
+    //console.log(`handleChange triggered: name=${name}, value=${value}`);
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -187,15 +182,14 @@ const Transaction = () => {
     // Trigger suggestions for every letter typed in relevant fields
     if (["villageName", "name", "initial", "remarks"].includes(name)) {
       if (!autoTranslateEnabled || !value.trim()) {
-        console.log("Clearing suggestions: autoTranslateEnabled=false or value is empty");
+       // console.log("Clearing suggestions: autoTranslateEnabled=false or value is empty");
         setSuggestions([]);
         setShowSuggestions(false);
         setActiveSuggestionField(null);
         setSelectedSuggestionIndex(-1);
       } else {
-        console.log(`Fetching suggestions for ${name}: ${value}`);
         setActiveSuggestionField(name);
-        fetchTamilSuggestions(value, name);
+        fetchSuggestions(value, name);
       }
     }
 
@@ -206,7 +200,6 @@ const Transaction = () => {
   };
 
   const handleSuggestionSelect = (suggestion) => {
-    console.log(`Suggestion selected: ${suggestion} for field: ${activeSuggestionField}`);
     if (activeSuggestionField) {
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -423,11 +416,10 @@ const Transaction = () => {
           <Form.Check
             type="switch"
             id="autoTranslateSwitch"
-            label="Enable Auto-Suggestion"
+            label="Enable Translation suggestions"
             checked={autoTranslateEnabled}
             onChange={() => {
               setAutoTranslateEnabled(!autoTranslateEnabled);
-              console.log(`Auto-suggestion toggled to: ${!autoTranslateEnabled}`);
               if (!autoTranslateEnabled) {
                 setSuggestions([]);
                 setShowSuggestions(false);

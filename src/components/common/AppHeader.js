@@ -119,8 +119,8 @@ const AppHeader = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ms-auto align-items-lg-center">
             <StyledNavLink to='/'>{t('home')}</StyledNavLink>
+           <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
             <StyledNavLink to='/about'>{t('about_us')}</StyledNavLink>
-            <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
             <StyledNavLink to='/contactus'>{t('contact_us')}</StyledNavLink>
             <StyledNavLink to='/login' className="gradient-btn">
               {t('login')}

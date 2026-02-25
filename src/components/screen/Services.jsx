@@ -141,10 +141,9 @@ const ServicePage = () => {
                       <span>{t("watchDemo")}</span>
                     </Button>
                   </Link>
-                  <Link to="/contactus">
-                    <Button variant="primary" className="cta-button me-3">
-                      <span>Get Free Consultation</span>
-                      <HiArrowRight />
+                      <Link to="/pricing">
+                    <Button variant="outline-light" className="cta-button">
+                      <span>{t("pricing")}</span>
                     </Button>
                   </Link>
                 
@@ -333,22 +332,23 @@ const ServicePage = () => {
                   your success. No commitment required.
                 </p>
                 <div className="cta-buttons">
-                  <Link to="/contactUs">
-                    <Button variant="primary" size="lg" className="px-5 py-3">
-                      <span>Book Free Demo</span>
-                      <HiArrowRight />
+                  <Link to="/contactus">
+                    <Button variant="outline-light"  className="cta-button">
+                      <span>{t("contact_us")}</span>
+            
                     </Button>
                   </Link>
+  
                   <Link to="/pricing">
-                    <Button variant="outline-light" size="lg" className="px-5 py-3 ms-3">
-                      <span>View Pricing</span>
+                    <Button variant="outline-light" className="cta-button">
+                      <span>{t("pricing")}</span>
                     </Button>
                   </Link>
                 </div>
                 <div className="cta-guarantee">
                   <div className="guarantee-item">
                     <FiCheckCircle />
-                    <span>30-day free trial</span>
+                    <span>7-days free trial</span>
                   </div>
                   <div className="guarantee-item">
                     <FiCheckCircle />

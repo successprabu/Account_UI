@@ -148,7 +148,7 @@ const testimonials = [
                 <div className="hero-cta">
                   <Link to="/services">
                     <Button variant="primary" className="cta-button me-3">
-                      <span>Start Free Trial</span>
+                      <span>{t("ourServices")}</span>
                       <HiArrowRight />
                     </Button>
                   </Link>
@@ -399,14 +399,13 @@ const testimonials = [
                   Get started with a 30-day free trial.
                 </p>
                 <div className="cta-buttons">
-                  <Link to="/purchase">
-                    <Button variant="primary" size="lg" className="px-5 py-3">
-                      <span>Start Free Trial</span>
-                      <HiArrowRight />
+                  <Link to="/pricing">
+                    <Button variant="outline-light" size="lg" className="cta-button">
+                      <span>{t("pricing")}</span>
                     </Button>
                   </Link>
-                  <Link to="/services">
-                    <Button variant="outline-light" size="lg" className="px-5 py-3 ms-3">
+                  <Link to="/purchase">
+                    <Button variant="outline-light" size="lg" className="cta-button">
                       <HiPlay />
                       <span>{t("watchDemo")}</span>
                     </Button>

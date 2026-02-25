@@ -5,6 +5,7 @@ export const BASE_URL = `https://successapi.azurewebsites.net/api/`; //live URL
 const GOOGLE_TRANS_API_KEY = "AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE";
 export const OTP_KEY =
   "xjOLRnX3rkQIbDWCNdKzUZrvDkh4oNE2c5piae82FQuFC0wj0hShCZvrJ1uH";
+export const REACT_APP_RAZORPAY_KEY_ID = 'rzp_test_S6TYVkdYVjDELZ';
 export const GOOGLE_TRANS_API = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANS_API_KEY}`;
 export const SEND_OTP_API = `https://www.fast2sms.com/dev/bulkV2`;
 export const MASTER = `Master/`;
@@ -13,6 +14,7 @@ export const TRANSACTION = `Transaction/`;
 export const REPORT = `Report/`;
 export const MAHAL = `Mahal/`;
 export const DROPDOWN = `DropDown/`;
+export const PAYMENT = `Payment/`;
 export const GET_MOBILE_CHECK_API = `${BASE_URL}${AUTH}MobileExistingCheck`;
 export const LOGIN_API = `${BASE_URL}${AUTH}UserLogin`;
 export const LOGIN_USER_ACCOUNT_CHECK_API = `${BASE_URL}${AUTH}UserAccountCheck?`;
@@ -24,6 +26,8 @@ export const SAVE_NEW_TRANS_API = `${TRANSACTION}UpdateTransaction`;
 export const SAVE_HANDOVER_API = `${TRANSACTION}UpdateHandover`;
 export const SAVE_MAHAL_BOOKING_API = `${MAHAL}MahalBookingByOwner`;
 export const SAVE_NEW_MAHAL_API = `${MAHAL}UpdateMahal`;
+export const SAVE_PAYMENT_ORDER_API = `${BASE_URL}${PAYMENT}createorder`;
+export const VERIFY_PAYMENT_API = `${BASE_URL}${PAYMENT}verifypayment`;
 export const UPDATE_CUSTOMER_API = `${MASTER}UpdateCustomer`;
 export const LIST_CLIENT_API = `${MASTER}GetCustomer`;
 export const LIST_FUNCTION_API = `${MASTER}GetFunction`;
