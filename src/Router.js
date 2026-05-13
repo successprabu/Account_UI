@@ -119,6 +119,7 @@ const Router = () => {
    const Pricing = lazy(() =>
     import("./components/screen/PricingPage")
   );
+  const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage"));
   
 
   return (
@@ -298,6 +299,7 @@ const Router = () => {
           />
           <Route path="services" element={<ServicePage />} />
           <Route path="pricing" element={<Pricing/>} />
+          <Route path="settings" element={<ThemeSettings/>} />
           <Route path="antony-resume" element={<Resume />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>

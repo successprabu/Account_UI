@@ -1,31 +1,42 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
-const darkTheme = {
-  sidebarBackground: '#1a1a1a',
-  sidebarLinkColor: '#d3d3d3',
-  sidebarLogoColor: '#ffffff',
-};
-
-const lightTheme = {
-  sidebarBackground: '#ffffff',
-  sidebarLinkColor: '#333',
-  sidebarLogoColor: '#333',
+const defaultState = {
+  mode: 'light', // 'light' | 'dark'
+  colorScheme: 'dentalBlue',
+  sidebarPosition: 'left', // 'left' | 'right' | 'top'
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(lightTheme); // Default theme
+  const [mode, setMode] = useState(defaultState.mode);
+  const [colorScheme, setColorScheme] = useState(defaultState.colorScheme);
+  const [sidebarPosition, setSidebarPosition] = useState(defaultState.sidebarPosition);
 
-  const toggleTheme = () => {
-    setTheme(theme === lightTheme ? darkTheme : lightTheme);
-  };
+  const toggleTheme = () => setMode((m) => (m === 'light' ? 'dark' : 'light'));
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  const value = useMemo(() => ({
+    mode,
+    colorScheme,
+    sidebarPosition,
+    toggleTheme,
+    setColorScheme,
+    setSidebarPosition,
+  }), [mode, colorScheme, sidebarPosition]);
+  useEffect(() => {
+    try {
+      window.__THEME_PROVIDER = value;
+    } catch (e) {
+      // ignore in non-browser env
+    }
+    return () => {
+      try {
+        if (window.__THEME_PROVIDER === value) delete window.__THEME_PROVIDER;
+      } catch (e) {}
+    };
+  }, [value]);
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => useContext(ThemeContext);

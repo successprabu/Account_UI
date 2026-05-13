@@ -1,0 +1,18 @@
+export const colorPalettes = {
+  dentalBlue: { primary: '#1976d2', secondary: '#64b5f6' },
+  dentalGreen: { primary: '#10B981', secondary: '#6EE7B7' },
+  dentalTeal: { primary: '#14B8A6', secondary: '#5EEAD4' },
+  dentalPurple: { primary: '#7C3AED', secondary: '#C4B5FD' },
+  professionalDark: { primary: '#111827', secondary: '#374151' },
+  warm: { primary: '#F59E0B', secondary: '#FCD34D' },
+  minimal: { primary: '#6B7280', secondary: '#D1D5DB' },
+  elegant: { primary: '#4B5563', secondary: '#9CA3AF' },
+  midnightBlue: { primary: '#0F172A', secondary: '#1E293B' },
+  forestGreen: { primary: '#065F46', secondary: '#34D399' },
+  royalPurple: { primary: '#5B21B6', secondary: '#A78BFA' },
+  charcoal: { primary: '#334155', secondary: '#64748B' },
+  ocean: { primary: '#0369A1', secondary: '#38BDF8' },
+  sunset: { primary: '#D97706', secondary: '#FB923C' },
+  mint: { primary: '#059669', secondary: '#34D399' },
+  coral: { primary: '#F97316', secondary: '#FDBA74' },
+};

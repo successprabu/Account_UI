@@ -4,15 +4,21 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { LanguageProvider } from "./language/LanguageContext";
+import { ThemeProvider } from './ThemeProvider';
+import { ThemeMui } from './mui/ThemeMui';
 import Router from "./Router"; 
 
 function App() {
-  return (   
-    <LanguageProvider>
-      <Router />
-      <ToastContainer />
-    </LanguageProvider>
-    );
+  return (
+    <ThemeProvider>
+      <ThemeMui>
+        <LanguageProvider>
+          <Router />
+          <ToastContainer />
+        </LanguageProvider>
+      </ThemeMui>
+    </ThemeProvider>
+  );
 }
 
 export default App;

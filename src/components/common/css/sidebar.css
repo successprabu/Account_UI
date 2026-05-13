@@ -37,7 +37,7 @@ body {
     width: 100%;
     overflow: hidden;
     transition: all 0.35s ease-in-out;
-    background-color: #fafbfe;
+    background-color: var(--app-bg, #fafbfe);
 }
 
 #sidebar {
@@ -45,7 +45,7 @@ body {
     width: 70px; /* Default width */
     min-width: 70px;
     max-width: 200px;
-    background-color: #0e2238; /* Sidebar background color */
+    background-color: var(--sidebar-bg, #0e2238); /* Sidebar background color */
     display: flex;
     flex-direction: column;
     transition: width 0.25s ease-in-out;
@@ -62,7 +62,7 @@ body {
     cursor: pointer;
     border: 0;
     padding: 1rem 1.5rem;
-    color: #FFF;
+    color: var(--sidebar-text, #FFF);
 }
 
 .toggle-btn i {
@@ -75,7 +75,7 @@ body {
 }
 
 .sidebar-logo a {
-    color: #FFF;
+    color: var(--sidebar-text, #FFF);
     font-size: 1.15rem;
     font-weight: 600;
 }
@@ -92,7 +92,7 @@ body {
 
 a.sidebar-link {
     padding: .625rem 1.625rem;
-    color: #FFF;
+    color: var(--sidebar-text, #FFF);
     display: flex;
     align-items: center;
     font-size: 0.9rem;
@@ -104,9 +104,9 @@ a.sidebar-link {
 
 a.sidebar-link:hover,
 a.sidebar-link:focus {
-    background-color: #3b7ddd;
-    border-left: 3px solid #fff;
-    color: #fff;
+    background-color: var(--sidebar-hover, #3b7ddd);
+    border-left: 3px solid var(--sidebar-border, #fff);
+    color: var(--sidebar-text, #fff);
 }
 
 .sidebar-link i {
@@ -125,7 +125,7 @@ a.sidebar-link:focus {
     margin-left: auto;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid #FFF;
+    border-top: 5px solid var(--sidebar-text, #FFF);
     transform: rotate(0);
     transition: transform 0.2s;
 }
@@ -146,7 +146,7 @@ a.sidebar-link:focus {
     position: absolute;
     top: 0;
     left: 70px;
-    background-color: #0e2238;
+    background-color: var(--sidebar-bg, #0e2238);
     padding: 0;
     min-width: 30rem;
     display: none;
@@ -191,12 +191,12 @@ a.sidebar-link:focus {
 
 .sidebar-footer {
     padding: .75rem 1.625rem;
-    border-top: 1px solid #3b7ddd;
+    border-top: 1px solid var(--sidebar-border, #3b7ddd);
     margin-top: auto; /* Ensure the logout button is at the bottom */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #0e2238;
+    background-color: var(--sidebar-bg, #0e2238);
 }
 
 .nav-text.hidden {

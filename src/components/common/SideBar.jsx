@@ -354,14 +354,22 @@ const SideBar = () => {
           </li>
         )}
         {(isSuperAdmin || isAdminUser || isNormalUser) && (
-          <li className="sidebar-item">
-            <NavLink to="#" className="sidebar-link" onClick={handleExpand}>
-              <BiCog />
-              <span className={isExpanded ? "nav-text" : "hidden"}>
-                {t("Setting")}
-              </span>
-            </NavLink>
-          </li>
+          <>
+            <li className="sidebar-item">
+              <NavLink to="#" className="sidebar-link" onClick={handleExpand}>
+                <BiCog />
+                <span className={isExpanded ? "nav-text" : "hidden"}>
+                  {t("Setting")}
+                </span>
+              </NavLink>
+            </li>
+            <li className="sidebar-item">
+              <NavLink to="/settings" className="sidebar-link" onClick={handleExpand}>
+                <BiCog />
+                <span className={isExpanded ? "nav-text" : "hidden"}>{t("Theme Settings")}</span>
+              </NavLink>
+            </li>
+          </>
         )}
       </>
     );
