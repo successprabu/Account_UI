@@ -55,7 +55,7 @@ const LANGS = [
 
 const Swatch = ({ color, name, hex }) => (
   <Stack spacing={0.75} sx={{ minWidth: 96 }}>
-    <Box sx={{ height: 56, borderRadius: 2, bgcolor: color, border: 1, borderColor: 'divider' }} />
+    <Box sx={{ height: 56, borderRadius: 2, background: color, border: 1, borderColor: 'divider' }} />
     <Typography variant="body2" fontWeight={600}>
       {name}
     </Typography>
