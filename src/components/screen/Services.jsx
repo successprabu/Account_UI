@@ -58,7 +58,8 @@ const ServicePage = () => {
       icon: <HiUserGroup className="service-icon" />,
       gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
       features: ["Student Management", "Academic Tracking", "Parent Portal", "Fee Collection"],
-      link: "inprogress",
+      link: "https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/",
+      external: true,
       stats: "Complete Solution"
     },
   ];
@@ -227,10 +228,22 @@ const ServicePage = () => {
                         </div>
                       ))}
                     </div>
-                    <Link to={service.link} className="service-link">
-                      <span>Explore Platform</span>
-                      <HiArrowRight />
-                    </Link>
+                    {service.external ? (
+                      <a
+                        href={service.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="service-link"
+                      >
+                        <span>Explore Platform</span>
+                        <HiArrowRight />
+                      </a>
+                    ) : (
+                      <Link to={service.link} className="service-link">
+                        <span>Explore Platform</span>
+                        <HiArrowRight />
+                      </Link>
+                    )}
                   </div>
                 </motion.div>
               </Col>
