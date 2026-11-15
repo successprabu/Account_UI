@@ -97,7 +97,7 @@ const ThemeSettingsPage = () => {
   const { mode, colorScheme, sidebarPosition } = themeState;
 
   return (
-    <Box sx={{ pb: 4 }}>
+    <Box sx={{ px: { xs: 2, md: 3 }, pt: { xs: 2, md: 3 }, pb: 4 }}>
       <Paper sx={{ p: 2, mb: 3 }}>
         <Breadcrumbs 
           separator={<NavigateNext fontSize="small" />}
