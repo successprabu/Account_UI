@@ -1,4 +1,8 @@
+// 'mysuccess' is the default brand scheme (indigo + violet). Others stay selectable in Theme Settings.
+export const DEFAULT_COLOR_SCHEME = 'mysuccess';
+
 export const colorPalettes = {
+  mysuccess: { primary: '#6366f1', secondary: '#8b5cf6' },
   dentalBlue: { primary: '#1976d2', secondary: '#64b5f6' },
   dentalGreen: { primary: '#10B981', secondary: '#6EE7B7' },
   dentalTeal: { primary: '#14B8A6', secondary: '#5EEAD4' },

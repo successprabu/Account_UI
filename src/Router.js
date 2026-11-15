@@ -120,6 +120,7 @@ const NewMahal = lazy(() =>
 const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage"));
 
 
+const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
 const ReportComponent = lazy(() =>
   import("./components/screen/reports/ReportComponent")
 );
@@ -144,6 +145,7 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="about" element={<AboutUs />} />
+        <Route path="design-system" element={<DesignSystem />} />
         <Route path="report" element={<ReportComponent />} />
         <Route path="*" element={<PageNotFound />} />
 
