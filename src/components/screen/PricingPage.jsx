@@ -15,6 +15,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -34,11 +36,11 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BoltIcon from '@mui/icons-material/FlashOn';
 
-import './css/PricingPage.css';
 import { REACT_APP_RAZORPAY_KEY_ID, SAVE_PAYMENT_ORDER_API, VERIFY_PAYMENT_API } from '../common/CommonApiURL';
 
 const PricingPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState('premium');
   const [billingCycle, setBillingCycle] = useState('monthly');
@@ -127,10 +129,10 @@ const PricingPage = () => {
   ];
 
   const benefits = [
-    { icon: <SecurityIcon />, title: 'Bank-Level Security', description: 'Your payments are safe with 256-bit SSL encryption' },
-    { icon: <PublicIcon />, title: 'Global Payments', description: 'Accept payments from anywhere in the world' },
+    { icon: <SecurityIcon />, title: 'Secure payments', description: 'Payments are handled by Razorpay over an encrypted connection' },
+    { icon: <PublicIcon />, title: 'UPI, cards and net banking', description: 'Pay the way you prefer, including UPI apps and wallets' },
     { icon: <AccessTimeIcon />, title: 'Instant Activation', description: 'Get started immediately after payment' },
-    { icon: <GroupsIcon />, title: '24/7 Support', description: 'Round-the-clock customer support' }
+    { icon: <GroupsIcon />, title: 'Help when you need it', description: 'Reach us by phone, email or WhatsApp' }
   ];
 
   // Load Razorpay script
@@ -253,12 +255,13 @@ const PricingPage = () => {
     }
   };
 
+  // The free trial starts by registering for the demo account.
   const handleFreeTrial = () => {
-    alert('Free trial activated! You now have 7 days of free access.');
+    navigate('/purchase');
   };
 
   return (
-    <Box sx={{ py: 6 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 8 } }}>
       {/* Hero */}
       <Box sx={{ textAlign: 'center', mb: 6 }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -266,7 +269,7 @@ const PricingPage = () => {
             <AutoAwesomeIcon color="primary" />
             <Typography variant="overline">Simple Pricing</Typography>
           </Stack>
-          <Typography variant="h3" component="h1" gutterBottom>
+          <Typography variant="h1" component="h1" gutterBottom sx={{ fontSize: { xs: 32, md: 44 } }}>
             Choose the Perfect Plan for Your <Box component="span" sx={{ color: 'primary.main' }}>Business</Box>
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
@@ -292,12 +295,20 @@ const PricingPage = () => {
       <Grid container spacing={3} justifyContent="center">
         {plans.map((plan, index) => (
           <Grid item xs={12} sm={6} md={4} key={plan.id}>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }}>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} style={{ height: '100%' }}>
               <Card
                 onClick={() => setSelectedPlan(plan.id)}
-                sx={{ borderTop: plan.popular ? '4px solid' : 'none', borderColor: plan.popular ? 'secondary.main' : 'transparent' }}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderWidth: plan.popular ? 2 : 1,
+                  borderColor: plan.popular ? 'primary.main' : 'divider',
+                  position: 'relative',
+                }}
               >
-                <CardContent>
+                <CardContent sx={{ flex: 1 }}>
+                  {plan.popular && <Chip label="Most popular" color="primary" size="small" sx={{ mb: 2 }} />}
                   <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                     <Box sx={{ color: plan.color }}>{plan.icon}</Box>
                     <Box>
@@ -307,7 +318,7 @@ const PricingPage = () => {
                   </Stack>
 
                   <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
-                    <Typography variant="h5">₹{plan.price}</Typography>
+                    <Typography variant="h2" component="p" sx={{ fontVariantNumeric: 'tabular-nums' }}>₹{plan.price}</Typography>
                     <Typography variant="body2" color="text.secondary">{plan.period}</Typography>
                   </Box>
 
@@ -320,13 +331,15 @@ const PricingPage = () => {
                     ))}
                   </Box>
                 </CardContent>
-                <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
+                <CardActions sx={{ flexDirection: 'column', alignItems: 'stretch', gap: 1.5, px: 2.5, pb: 2.5, '& > :not(style) ~ :not(style)': { ml: 0 } }}>
                   {plan.id === 'free' ? (
-                    <Button variant="outlined" startIcon={<RocketLaunchIcon />} onClick={() => { setSelectedPlan(plan.id); handleFreeTrial(); }}>
+                    <Button fullWidth size="large" variant="outlined" startIcon={<RocketLaunchIcon />} onClick={() => { setSelectedPlan(plan.id); handleFreeTrial(); }}>
                       {plan.buttonText}
                     </Button>
                   ) : (
                     <Button
+                      fullWidth
+                      size="large"
                       variant={plan.popular ? 'contained' : 'outlined'}
                       startIcon={<CreditCardIcon />}
                       onClick={() => { setSelectedPlan(plan.id); handlePayment(plan); }}
@@ -338,7 +351,7 @@ const PricingPage = () => {
                   )}
 
                   {plan.id !== 'free' && (
-                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
                       <LockIcon fontSize="small" /> Secure payment powered by Razorpay
                     </Typography>
                   )}
@@ -389,7 +402,7 @@ const PricingPage = () => {
           ))}
         </Grid>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

@@ -1,436 +1,237 @@
-import React, { useEffect } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import AppHeader from "../common/AppHeader";
-import "./css/HomePage.css";
-import { 
-  FiArrowRight, 
-  FiCheckCircle, 
-  FiStar,
-  FiTrendingUp,
-  FiShield,
-  FiGlobe,
-  FiZap
-} from "react-icons/fi";
-import { 
-  FaLightbulb, 
-  FaHandsHelping, 
-  FaHeadset,
-  FaQuoteLeft,
-  FaRegCheckCircle,
-  FaRocket,
-  FaChartLine
-} from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Box, Button, Card, Chip, Container, Divider, Grid, Stack, Typography } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import TranslateIcon from '@mui/icons-material/Translate';
+import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import KeyboardOutlinedIcon from '@mui/icons-material/KeyboardOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import AppHeader from '../common/AppHeader';
+import PublicFooter from '../public/PublicFooter';
+import { Section, CtaBand, IconTile } from '../public/Section';
+import { PRODUCTS } from '../public/products';
+import { StatusChip } from '../ui';
 
-// Import modern icons
-import { 
-  HiSparkles, 
-  HiUserGroup, 
-  HiTemplate,
-  HiArrowRight,
-  HiPlay
-} from "react-icons/hi";
+const inr = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
+
+// Illustration of the Moitech screen for the hero (sample figures).
+const ProductPreview = () => (
+  <Card sx={{ p: { xs: 2, sm: 3 }, borderRadius: 4, boxShadow: 'var(--ms-shadow-lg)' }} aria-label="Moitech screen preview">
+    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <Box>
+        <Typography variant="caption" color="text.secondary">
+          Moitech · Function summary
+        </Typography>
+        <Typography variant="h5" component="p">
+          திருமண விழா · Thiruvarur
+        </Typography>
+      </Box>
+      <Chip label="Live" size="small" color="success" variant="outlined" />
+    </Stack>
+    <Grid container spacing={1.5} sx={{ mb: 2 }}>
+      {[
+        ['Moi received', inr(184500), 'primary.main'],
+        ['Expenses', inr(62300), 'warning.main'],
+        ['Entries', '246', 'success.main'],
+      ].map(([label, value, color]) => (
+        <Grid item xs={4} key={label}>
+          <Box sx={{ p: 1.5, borderRadius: 2.5, bgcolor: 'background.default', border: 1, borderColor: 'divider' }}>
+            <Typography variant="caption" color="text.secondary" noWrap component="p">
+              {label}
+            </Typography>
+            <Typography sx={{ fontWeight: 700, fontSize: { xs: 15, sm: 19 }, color, fontVariantNumeric: 'tabular-nums' }}>{value}</Typography>
+          </Box>
+        </Grid>
+      ))}
+    </Grid>
+    <Stack divider={<Divider flexItem />} sx={{ border: 1, borderColor: 'divider', borderRadius: 2.5 }}>
+      {[
+        ['முருகன் K', 'Mannargudi', 5000, 'Paid'],
+        ['Lakshmi Devi', 'Kumbakonam', 2500, 'Paid'],
+        ['செல்வி R', 'Needamangalam', 1500, 'Pending'],
+      ].map(([name, village, amount, st]) => (
+        <Stack key={name} direction="row" alignItems="center" spacing={1.5} sx={{ px: 1.5, py: 1.25 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="body2" fontWeight={600} noWrap>
+              {name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {village}
+            </Typography>
+          </Box>
+          <Typography variant="body2" fontWeight={600} sx={{ fontVariantNumeric: 'tabular-nums' }}>
+            {inr(amount)}
+          </Typography>
+          <StatusChip label={st} tone={st === 'Paid' ? 'success' : 'warning'} />
+        </Stack>
+      ))}
+    </Stack>
+  </Card>
+);
+
+const STEPS = [
+  { n: '1', title: 'Register for the demo', text: 'Sign up with your mobile number. The 7-day trial needs no card.' },
+  { n: '2', title: 'Add your entries', text: 'Type names in Tamil or English on a phone, tablet or computer.' },
+  { n: '3', title: 'Share the reports', text: 'Totals update as you go. Download PDF or Excel reports when you are done.' },
+];
+
+const FEATURES = [
+  { icon: <TranslateIcon />, color: '#6366f1', title: 'Six languages', text: 'English, Tamil, Hindi, Telugu, Kannada and Malayalam.' },
+  { icon: <KeyboardOutlinedIcon />, color: '#8b5cf6', title: 'Tamil typing', text: 'Type a name in English letters and get it in Tamil script.' },
+  { icon: <PhoneIphoneOutlinedIcon />, color: '#10b981', title: 'Works on any device', text: 'Use it on a phone at the function or on a computer at the office.' },
+  { icon: <DescriptionOutlinedIcon />, color: '#f59e0b', title: 'PDF and Excel reports', text: 'Income, expense, village-wise and summary reports, ready to print.' },
+  { icon: <AdminPanelSettingsOutlinedIcon />, color: '#0ea5e9', title: 'Roles for your team', text: 'Separate access for owners, admins and the people taking entries.' },
+  { icon: <PaymentsOutlinedIcon />, color: '#ef4444', title: 'Simple pricing', text: 'Start free, then plans from ₹99 a month. Pay by UPI, card or net banking.' },
+];
 
 const Home = () => {
   const { t } = useTranslation();
 
-  const features = [
-    {
-      title: "AI-Powered Solutions",
-      description: "Leverage cutting-edge AI technology to drive your business forward with our intelligent suite of services.",
-      icon: <HiSparkles className="feature-icon" />,
-      gradient: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-      stats: "40% faster"
-    },
-    {
-      title: "Tailored Experiences",
-      description: "Personalized solutions that adapt to your unique business requirements and scale with your growth.",
-      icon: <HiTemplate className="feature-icon" />,
-      gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
-      stats: "100% customizable"
-    },
-    {
-      title: "Dedicated Partnership",
-      description: "Our expert team provides ongoing support and strategic guidance every step of the way.",
-      icon: <HiUserGroup className="feature-icon" />,
-      gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-      stats: "24/7 support"
-    }
-  ];
-
-// Using DiceBear for consistent, always-available avatars
-const testimonials = [
-  {
-    quote: "This platform transformed our operations completely. The AI integration alone boosted our efficiency by 60%.",
-    author: "Sarah Johnson",
-    role: "CEO at TechCorp",
-    rating: 5,
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
-  },
-  {
-    quote: "The best decision we made this year. Their solutions scale perfectly with our growing business needs.",
-    author: "Michael Chen",
-    role: "Director at FinServe",
-    rating: 5,
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
-  },
-  {
-    quote: "Reliable, intuitive, and packed with innovative features. The ROI was immediate and substantial.",
-    author: "Emma Williams",
-    role: "Manager at RetailPlus",
-    rating: 5,
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma"
-  }
-];
-
-  const benefits = [
-    { text: "24/7 Priority Support", icon: <FaHeadset />, color: "#3b82f6" },
-    { text: "99.9% Uptime SLA", icon: <FiTrendingUp />, color: "#10b981" },
-    { text: "Enterprise Security", icon: <FiShield />, color: "#ef4444" },
-    { text: "Global Infrastructure", icon: <FiGlobe />, color: "#8b5cf6" },
-    { text: "AI-Powered Analytics", icon: <FiZap />, color: "#f59e0b" },
-    { text: "Custom Integration", icon: <FaRocket />, color: "#ec4899" }
-  ];
-
-  const stats = [
-    { value: "10K+", label: "Active Users", icon: <HiUserGroup /> },
-    { value: "99.9%", label: "Satisfaction Rate", icon: <FiStar /> },
-    { value: "50+", label: "Countries", icon: <FiGlobe /> },
-    { value: "24/7", label: "Support", icon: <FaHeadset /> }
-  ];
-
-  useEffect(() => {
-    // Add intersection observer for scroll animations
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="home-page">
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
       <AppHeader />
-      
-      {/* Hero Section - Modern Design */}
-      <section className="hero-section">
-        <div className="hero-bg-gradient"></div>
-        <Container>
-          <Row className="align-items-center min-vh-90 py-6">
-            <Col lg={6} className="hero-content">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="badge">
-                  <span className="badge-text">🚀 Next-Gen Platform</span>
-                </div>
-                <h1 className="hero-title">
-                  Transform Your Business with{" "}
-                  <span className="gradient-text">{t("companyName")}</span>
-                </h1>
-                <p className="hero-subtitle">
-                  Experience the future of business solutions with our AI-driven platform that delivers 
-                  unprecedented efficiency and growth.
-                </p>
-                <div className="hero-cta">
-                  <Link to="/services">
-                    <Button variant="primary" className="cta-button me-3">
-                      <span>{t("ourServices")}</span>
-                      <HiArrowRight />
-                    </Button>
-                  </Link>
-                  <Link to="/purchase">
-                    <Button variant="outline-light" className="cta-button demo-btn">
-                      <HiPlay />
-                      <span>{t("watchDemo")}</span>
-                    </Button>
-                  </Link>
-                </div>
-                <div className="trust-badges">
-                  <div className="trust-item">
-                    <FiCheckCircle />
-                    <span>No credit card required</span>
-                  </div>
-                  <div className="trust-item">
-                    <FiCheckCircle />
-                    <span>Free 30-day trial</span>
-                  </div>
-                  <div className="trust-item">
-                    <FiCheckCircle />
-                    <span>24/7 support</span>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-            <Col lg={6} className="hero-visual">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="hero-dashboard"
-              >
-                <div className="dashboard-grid">
-                  <div className="dashboard-card card-1">
-                    <FaChartLine />
-                    <span>Revenue +45%</span>
-                  </div>
-                  <div className="dashboard-card card-2">
-                    <FiTrendingUp />
-                    <span>Growth +60%</span>
-                  </div>
-                  <div className="dashboard-card card-3">
-                    <FiStar />
-                    <span>Rating 4.9/5</span>
-                  </div>
-                  <div className="dashboard-main">
-                    <div className="chart-line"></div>
-                    <div className="chart-bar"></div>
-                    <div className="chart-dots"></div>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
 
-      {/* Stats Section */}
-      <section className="stats-section py-5">
-        <Container>
-          <Row>
-            {stats.map((stat, index) => (
-              <Col key={index} lg={3} md={6} className="mb-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="stat-card"
-                >
-                  <div className="stat-icon">{stat.icon}</div>
-                  <h3 className="stat-value">{stat.value}</h3>
-                  <p className="stat-label">{stat.label}</p>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
-
-      {/* Features Section - Modern Cards */}
-      <section className="features-section py-6">
-        <Container>
-          <Row className="justify-content-center mb-6">
-            <Col lg={8} className="text-center">
-              <div className="section-badge">Features</div>
-              <h2 className="section-title">Why Industry Leaders Choose Us</h2>
-              <p className="section-subtitle">
-                Power your business with cutting-edge solutions designed for tomorrow's challenges
-              </p>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            {features.map((feature, index) => (
-              <Col key={index} lg={4} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -10 }}
-                  className="feature-card-modern"
-                >
-                  <div 
-                    className="feature-header"
-                    style={{ background: feature.gradient }}
-                  >
-                    {feature.icon}
-                    <span className="feature-stats">{feature.stats}</span>
-                  </div>
-                  <div className="feature-body">
-                    <h3 className="feature-title">{feature.title}</h3>
-                    <p className="feature-text">{feature.description}</p>
-                    <Link to="/services" className="feature-link">
-                      <span>{t("LearnMore")}</span>
-                      <HiArrowRight />
-                    </Link>
-                  </div>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
-
-      {/* Benefits Section - Grid Layout */}
-      <section className="benefits-section py-6 bg-light">
-        <Container>
-          <Row className="align-items-center">
-            <Col lg={6} className="mb-5 mb-lg-0">
-              <div className="benefits-visual">
-                <div className="visual-container">
-                  <div className="floating-card card-1">
-                    <FiShield />
-                    <span>Security</span>
-                  </div>
-                  <div className="floating-card card-2">
-                    <FiZap />
-                    <span>Speed</span>
-                  </div>
-                  <div className="floating-card card-3">
-                    <FiGlobe />
-                    <span>Global</span>
-                  </div>
-                  <div className="main-visual"></div>
-                </div>
-              </div>
-            </Col>
-            <Col lg={6}>
-              <div className="section-badge">Benefits</div>
-              <h2 className="section-title mb-4">Enterprise-Grade Features</h2>
-              <p className="section-subtitle mb-5">
-                Built with security, scalability, and performance at the core
-              </p>
-              <div className="benefits-grid">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="benefit-item-modern">
-                    <div 
-                      className="benefit-icon-wrapper"
-                      style={{ backgroundColor: `${benefit.color}15` }}
-                    >
-                      <div className="benefit-icon" style={{ color: benefit.color }}>
-                        {benefit.icon}
-                      </div>
-                    </div>
-                    <span className="benefit-text">{benefit.text}</span>
-                  </div>
+      {/* Hero */}
+      <Box component="section" sx={{ position: 'relative', overflow: 'hidden', pt: { xs: 6, md: 10 }, pb: { xs: 7, md: 11 } }}>
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(60% 50% at 85% 10%, rgba(139,92,246,0.14) 0%, transparent 70%), radial-gradient(50% 40% at 10% 0%, rgba(99,102,241,0.12) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <Container maxWidth="lg" sx={{ position: 'relative' }}>
+          <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <Chip label="Made for Tamil Nadu and South India" variant="outlined" color="primary" sx={{ mb: 2.5, bgcolor: 'background.paper' }} />
+              <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 34, sm: 44, md: 52 }, letterSpacing: '-0.02em' }}>
+                Run functions, halls and schools{' '}
+                <Box component="span" sx={{ background: 'var(--ms-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  without the paperwork
+                </Box>
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 2.5, fontSize: { xs: 17, md: 19 }, maxWidth: 540 }}>
+                MySuccess keeps moi records, hall bookings and school office work in one simple app, in your language, on any phone or computer.
+              </Typography>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 4 }}>
+                <Button component={RouterLink} to="/purchase" variant="contained" size="large" endIcon={<ArrowForwardIcon />}>
+                  {t('watchDemo', { defaultValue: 'Try Demo' })}
+                </Button>
+                <Button component={RouterLink} to="/services" variant="outlined" color="inherit" size="large">
+                  See the products
+                </Button>
+              </Stack>
+              <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap sx={{ mt: 3 }}>
+                {['7-day free trial', 'No card needed', 'Plans from ₹99/month'].map((x) => (
+                  <Stack key={x} direction="row" spacing={0.75} alignItems="center">
+                    <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
+                    <Typography variant="body2" color="text.secondary">
+                      {x}
+                    </Typography>
+                  </Stack>
                 ))}
-              </div>
-              <Link to="/services">
-              <Button variant="primary" className="mt-5 px-4 py-3">
-                <span>Explore All Features</span>
-                <HiArrowRight />
-              </Button>
-              </Link>
-            </Col>
-          </Row>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <ProductPreview />
+            </Grid>
+          </Grid>
         </Container>
-      </section>
+      </Box>
 
-      {/* Testimonials Section - Modern */}
-      <section className="testimonials-section py-6">
-        <Container>
-          <Row className="justify-content-center mb-6">
-            <Col lg={8} className="text-center">
-              <div className="section-badge">Testimonials</div>
-              <h2 className="section-title">Trusted by Innovators Worldwide</h2>
-              <p className="section-subtitle">
-                Join thousands of companies accelerating their growth
-              </p>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            {testimonials.map((testimonial, index) => (
-              <Col key={index} lg={4} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="testimonial-card-modern"
+      {/* Products */}
+      <Section tinted eyebrow="Products" title="Three apps, one account" intro="Pick the one you need today. Everything shares the same login, languages and reports.">
+        <Grid container spacing={3}>
+          {PRODUCTS.map((p) => (
+            <Grid item xs={12} md={4} key={p.id}>
+              <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', transition: 'box-shadow .2s, transform .2s', '&:hover': { boxShadow: 'var(--ms-shadow-md)', transform: 'translateY(-2px)' } }}>
+                <IconTile color={p.color}>{p.icon}</IconTile>
+                <Typography variant="h4" component="h3" sx={{ mt: 2.5 }}>
+                  {t(p.titleKey, { defaultValue: p.title })}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1, flex: 1 }}>
+                  {p.summary}
+                </Typography>
+                <Button
+                  {...(p.cta.href ? { href: p.cta.href, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: p.cta.to })}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{ mt: 2.5, alignSelf: 'flex-start', px: 0, '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}
                 >
-                  <div className="testimonial-header">
-                    <img 
-                      src={testimonial.avatar} 
-                      alt={testimonial.author}
-                      className="testimonial-avatar"
-                    />
-                    <div className="testimonial-info">
-                      <h4 className="testimonial-name">{testimonial.author}</h4>
-                      <p className="testimonial-role">{testimonial.role}</p>
-                    </div>
-                    <div className="testimonial-rating">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <FiStar key={i} />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="testimonial-body">
-                    <FaQuoteLeft className="quote-icon" />
-                    <p className="testimonial-quote">"{testimonial.quote}"</p>
-                  </div>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
+                  {p.cta.label}
+                </Button>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
 
-      {/* CTA Section - Modern */}
-      <section className="cta-section-modern py-6">
-        <div className="cta-bg-gradient"></div>
-        <Container>
-          <Row className="justify-content-center">
-            <Col lg={8} className="text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="cta-badge">
-                  <FiZap />
-                  <span>Limited Time Offer</span>
-                </div>
-                <h2 className="cta-title">
-                  Start Your Digital Transformation Today
-                </h2>
-                <p className="cta-text">
-                  Join industry leaders and experience the future of business solutions. 
-                  Get started with a 30-day free trial.
-                </p>
-                <div className="cta-buttons">
-                  <Link to="/pricing">
-                    <Button variant="outline-light" size="lg" className="cta-button">
-                      <span>{t("pricing")}</span>
-                    </Button>
-                  </Link>
-                  <Link to="/purchase">
-                    <Button variant="outline-light" size="lg" className="cta-button">
-                      <HiPlay />
-                      <span>{t("watchDemo")}</span>
-                    </Button>
-                  </Link>
-                </div>
-                <div className="cta-footer">
-                  <div className="cta-feature">
-                    <FaRegCheckCircle />
-                    <span>No credit card required</span>
-                  </div>
-                  <div className="cta-feature">
-                    <FaRegCheckCircle />
-                    <span>Cancel anytime</span>
-                  </div>
-                  <div className="cta-feature">
-                    <FaRegCheckCircle />
-                    <span>Full access to all features</span>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+      {/* How it works */}
+      <Section eyebrow="How it works" title="Up and running in one evening">
+        <Grid container spacing={3}>
+          {STEPS.map((s) => (
+            <Grid item xs={12} md={4} key={s.n}>
+              <Stack spacing={1.5}>
+                <Box sx={{ width: 40, height: 40, borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'var(--ms-gradient)', color: '#fff', fontWeight: 700 }}>
+                  {s.n}
+                </Box>
+                <Typography variant="h5" component="h3">
+                  {s.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {s.text}
+                </Typography>
+              </Stack>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
+
+      {/* What's included */}
+      <Section tinted eyebrow="What you get" title="Built for the way you work">
+        <Grid container spacing={3}>
+          {FEATURES.map((f) => (
+            <Grid item xs={12} sm={6} md={4} key={f.title}>
+              <Stack direction="row" spacing={2}>
+                <IconTile color={f.color} size={44}>
+                  {f.icon}
+                </IconTile>
+                <Box>
+                  <Typography variant="h6" component="h3">
+                    {f.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    {f.text}
+                  </Typography>
+                </Box>
+              </Stack>
+            </Grid>
+          ))}
+        </Grid>
+      </Section>
+
+      <CtaBand
+        title="Try MySuccess free for 7 days"
+        text="Register with your mobile number and record your first function today. Upgrade only if it helps."
+        actions={
+          <>
+            <Button component={RouterLink} to="/purchase" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
+              {t('watchDemo', { defaultValue: 'Try Demo' })}
+            </Button>
+            <Button component={RouterLink} to="/pricing" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
+              See pricing
+            </Button>
+          </>
+        }
+      />
+
+      <PublicFooter />
+    </Box>
   );
 };
 

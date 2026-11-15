@@ -3,226 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  FaEye,
-  FaEyeSlash,
-  FaKey,
-  FaMobileAlt,
-  FaUserTag,
-  FaSignInAlt,
-  FaLock,
-  FaShieldAlt
-} from "react-icons/fa";
+  Alert,
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  Container,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link as MuiLink,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import PhoneIphoneOutlinedIcon from "@mui/icons-material/PhoneIphoneOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LoginIcon from "@mui/icons-material/Login";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { loginSchema } from "../../../validations/ValidationSchema";
 import { LOGIN_API, LOGIN_USER_ACCOUNT_CHECK_API } from "../../common/CommonApiURL";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { ClipLoader } from "react-spinners";
 import AppHeader from "../../common/AppHeader";
-import styled from "styled-components";
-
-const LoginContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const AuthIllustration = styled.div`
-  flex: 1;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  color: white;
-  
-  @media (max-width: 768px) {
-    padding: 4rem 1rem;
-    text-align: center;
-  }
-`;
-
-const IllustrationContent = styled.div`
-  max-width: 500px;
-  
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-  }
-  
-  p {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    line-height: 1.6;
-  }
-`;
-
-const FormContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-`;
-
-const AuthForm = styled.div`
-  background: white;
-  padding: 3rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-  max-width: 500px;
-  width: 100%;
-  
-  @media (max-width: 576px) {
-    padding: 2rem;
-  }
-`;
-
-const FormTitle = styled.h3`
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  color: #2d3436;
-  position: relative;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 3px;
-    background: #0984e3;
-    border-radius: 2px;
-  }
-`;
-
-const InputGroup = styled.div`
-  margin-bottom: 1.5rem;
-  
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #636e72;
-    font-weight: 500;
-  }
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-
-  &:focus-within {
-    border-color: #0984e3;
-    box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1);
-  }
-
-  .input-icon {
-    padding: 0 1rem;
-    color: #636e72;
-  }
-`;
-
-const StyledInput = styled.input`
-  width: 100%;
-  padding: 0.75rem;
-  border: none;
-  background: none;
-  font-size: 1rem;
-  
-  &:focus {
-    outline: none;
-    box-shadow: none;
-  }
-`;
-
-const PasswordToggle = styled.span`
-  padding: 0 1rem;
-  cursor: pointer;
-  color: #636e72;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #0984e3;
-  }
-`;
-
-const SubmitButton = styled.button`
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-`;
-
-const AdditionalLinks = styled.div`
-  margin-top: 1.5rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  a {
-    color: #636e72;
-    text-decoration: none;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #0984e3;
-    }
-  }
-`;
-
-const SecurityInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 10px;
-  color: #636e72;
-  font-size: 0.9rem;
-
-  svg {
-    flex-shrink: 0;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: #ff4757;
-  background: rgba(255, 71, 87, 0.1);
-  padding: 1rem;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(255, 71, 87, 0.2);
-`;
 
 const Login = () => {
   const { t } = useTranslation();
@@ -370,106 +176,127 @@ const Login = () => {
   };
 
   return (
-    <>
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>
       <AppHeader />
-      <LoginContainer>
-        <AuthIllustration>
-          <IllustrationContent>
-            <h2>{t("welcome_back")}</h2>
-            <p>{t("login_illustration_text")}</p>
-            <div style={{ marginTop: '2rem' }}>
-              <FaShieldAlt size={80} opacity={0.9} />
-            </div>
-          </IllustrationContent>
-        </AuthIllustration>
+      <Container maxWidth="lg" sx={{ flex: 1, display: "flex", alignItems: "center", py: { xs: 4, md: 8 } }}>
+        <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
+          <Grid item xs={12} md={6} sx={{ display: { xs: "none", md: "block" } }}>
+            <Box sx={{ background: "var(--ms-gradient)", color: "#fff", borderRadius: 5, p: 6 }}>
+              <Typography variant="h2" component="h2" sx={{ color: "#fff" }}>
+                {t("welcome_back")}
+              </Typography>
+              <Typography sx={{ mt: 2, opacity: 0.9, fontSize: 17 }}>{t("login_illustration_text")}</Typography>
+              <Stack spacing={1.5} sx={{ mt: 4 }}>
+                {["Moitech", "Mahal Management", "Reports in PDF and Excel"].map((x) => (
+                  <Stack key={x} direction="row" spacing={1.25} alignItems="center">
+                    <CheckCircleIcon sx={{ fontSize: 20, opacity: 0.9 }} />
+                    <Typography>{x}</Typography>
+                  </Stack>
+                ))}
+              </Stack>
+            </Box>
+          </Grid>
 
-        <FormContainer>
-          <AuthForm>
-            <FormTitle>{t("sign_in")}</FormTitle>
-            
-            {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
-            {errors.validation && <ErrorMessage>{errors.validation}</ErrorMessage>}
+          <Grid item xs={12} md={6}>
+            <Card sx={{ p: { xs: 3, sm: 5 }, maxWidth: 480, mx: "auto", boxShadow: "var(--ms-shadow-md)" }}>
+              <Typography variant="h3" component="h1">
+                {t("sign_in")}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>
+                {t("login_security_note")}
+              </Typography>
 
-            <form onSubmit={userLogin}>
-              <InputGroup>
-                <label>{t("mobile_number")}</label>
-                <InputWrapper>
-                  <span className="input-icon"><FaMobileAlt /></span>
-                  <StyledInput
-                    type="text"
+              {(loginError || errors.validation) && (
+                <Alert severity="error" sx={{ mb: 2.5 }}>
+                  {loginError || errors.validation}
+                </Alert>
+              )}
+
+              <Box component="form" onSubmit={userLogin} noValidate>
+                <Stack spacing={2.5}>
+                  <TextField
+                    label={t("mobile_number")}
                     name="username"
                     placeholder={t("enter_mobile_number")}
                     value={formData.username}
                     onChange={handleChange}
                     onBlur={handleUsernameBlur}
+                    autoComplete="username"
+                    inputProps={{ inputMode: "tel" }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PhoneIphoneOutlinedIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
-                </InputWrapper>
-              </InputGroup>
 
-              <InputGroup>
-                <label>{t("password")}</label>
-                <InputWrapper>
-                  <span className="input-icon"><FaKey /></span>
-                  <StyledInput
-                    type={showPassword ? "text" : "password"}
+                  <TextField
+                    label={t("password")}
                     name="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder={t("enter_password")}
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="current-password"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockOutlinedIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={togglePasswordVisibility}
+                            edge="end"
+                            size="small"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                          >
+                            {showPassword ? <VisibilityOffOutlinedIcon fontSize="small" /> : <VisibilityOutlinedIcon fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
-                  <PasswordToggle onClick={togglePasswordVisibility}>
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </PasswordToggle>
-                </InputWrapper>
-              </InputGroup>
 
-              {userTypes.length > 1 && (
-                <InputGroup>
-                  <label>{t("userType")}</label>
-                  <InputWrapper>
-                    <span className="input-icon"><FaUserTag /></span>
-                    <StyledInput
-                      as="select"
-                      name="userType"
-                      value={formData.userType}
-                      onChange={handleUserTypeChange}
-                    >
+                  {userTypes.length > 1 && (
+                    <TextField select label={t("userType")} name="userType" value={formData.userType} onChange={handleUserTypeChange}>
                       {userTypes.map((type, index) => (
-                        <option key={index} value={type.userType}>
+                        <MenuItem key={index} value={type.userType}>
                           {type.userTypeDescription}
-                        </option>
+                        </MenuItem>
                       ))}
-                    </StyledInput>
-                  </InputWrapper>
-                </InputGroup>
-              )}
+                    </TextField>
+                  )}
 
-              <SubmitButton type="submit" disabled={loading}>
-                {loading ? (
-                  <ClipLoader size={20} color={"#ffffff"} />
-                ) : (
-                  <>
-                    <FaSignInAlt />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={18} color="inherit" /> : <LoginIcon />}
+                  >
                     {t("sign_in")}
-                  </>
-                )}
-              </SubmitButton>
-            </form>
+                  </Button>
+                </Stack>
+              </Box>
 
-            <AdditionalLinks>
-              <Link to="/forgot-password">{t("forgot_password")}</Link>
-             
-              <Link to="/purchase">{t("sign_up")}</Link>
-            </AdditionalLinks>
-
-            <SecurityInfo>
-              <FaLock />
-              <span>{t("login_security_note")}</span>
-            </SecurityInfo>
-          </AuthForm>
-        </FormContainer>
-      </LoginContainer>
-    </>
+              <Stack direction="row" justifyContent="space-between" sx={{ mt: 3 }}>
+                <MuiLink component={Link} to="/forgot-password" underline="hover" variant="body2">
+                  {t("forgot_password")}
+                </MuiLink>
+                <MuiLink component={Link} to="/purchase" underline="hover" variant="body2" fontWeight={600}>
+                  {t("sign_up")}
+                </MuiLink>
+              </Stack>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

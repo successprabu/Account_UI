@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import AppHeader from './AppHeader';
 import { Outlet } from 'react-router-dom';
 import PageLoader from './PageLoader';
+import PublicFooter from '../public/PublicFooter';
 import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
 
@@ -24,6 +25,7 @@ const Rootlayout = () => {
           <Suspense fallback={<PageLoader inline />}>
             <Outlet />
           </Suspense>
+          <PublicFooter />
         </div>
       )}
     </div>

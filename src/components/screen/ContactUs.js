@@ -1,433 +1,177 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import {
-  FiMail,
-  FiPhone,
-  FiMapPin,
-  FiSend,
-  FiClock,
-  FiMessageSquare,
-  FiCheckCircle,
-  FiArrowRight
-} from 'react-icons/fi';
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaLinkedinIn,
-  FaInstagram,
-  FaWhatsapp,
-  FaPaperPlane
-} from 'react-icons/fa';
-import { HiSparkles, HiArrowRight } from 'react-icons/hi';
+import { Alert, Box, Button, Card, Container, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import AppHeader from '../common/AppHeader';
-import './css/ContactPage.css';
+import PublicFooter from '../public/PublicFooter';
+import { IconTile } from '../public/Section';
+import { CONTACT, PRODUCTS } from '../public/products';
+
+const TOPICS = [...PRODUCTS.map((p) => p.title), 'Pricing and plans', 'Help with my account', 'Something else'];
+
+const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '' };
 
 const ContactUs = () => {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    phone: ''
-  });
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [errors, setErrors] = useState({});
+  const [sentVia, setSentVia] = useState('');
 
-  const contactInfo = [
-    {
-      title: "Email Us",
-      info: "mysuccesstechnologies@gmail.com",
-      icon: <FiMail className="contact-icon" />,
-      color: "#6366f1",
-      link: "mailto:mysuccesstechnologies@gmail.com",
-      action: "Send Email"
-    },
-    {
-      title: "Call Us",
-      info: "+91 80503 86769",
-      icon: <FiPhone className="contact-icon" />,
-      color: "#10b981",
-      link: "tel:+918050386769",
-      action: "Call Now"
-    },
-    {
-      title: "Visit Us",
-      info: "Bangalore, India",
-      icon: <FiMapPin className="contact-icon" />,
-      color: "#f59e0b",
-      link: "https://maps.google.com",
-      action: "View Map"
-    },
-    {
-      title: "Business Hours",
-      info: "Mon - Fri: 9:00 AM - 6:00 PM",
-      icon: <FiClock className="contact-icon" />,
-      color: "#8b5cf6",
-      action: "Schedule Call"
-    }
-  ];
+  const set = (k) => (e) => {
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+    if (errors[k]) setErrors((er) => ({ ...er, [k]: undefined }));
+  };
 
-  const socialLinks = [
-    { icon: <FaFacebookF />, link: "#", color: "#1877F2", label: "Facebook" },
-    { icon: <FaTwitter />, link: "#", color: "#1DA1F2", label: "Twitter" },
-    { icon: <FaLinkedinIn />, link: "#", color: "#0A66C2", label: "LinkedIn" },
-    { icon: <FaInstagram />, link: "#", color: "#E4405F", label: "Instagram" },
-    { icon: <FaWhatsapp />, link: "#", color: "#25D366", label: "WhatsApp" }
-  ];
+  const validate = () => {
+    const er = {};
+    if (!form.name.trim()) er.name = 'Please enter your name';
+    if (form.phone && !/^[+\d][\d\s-]{7,}$/.test(form.phone.trim())) er.phone = 'Enter a valid phone number';
+    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email.trim())) er.email = 'Enter a valid email address';
+    if (!form.phone.trim() && !form.email.trim()) er.phone = 'Give a phone number or email so we can reply';
+    if (!form.message.trim()) er.message = 'Please write a short message';
+    setErrors(er);
+    return Object.keys(er).length === 0;
+  };
 
-  const handleSubmit = (e) => {
+  const body = () =>
+    [`Name: ${form.name}`, form.phone && `Phone: ${form.phone}`, form.email && `Email: ${form.email}`, `Topic: ${form.topic}`, '', form.message]
+      .filter((x) => x !== false && x !== undefined && x !== '')
+      .join('\n');
+
+  // There is no contact API yet, so the message is handed to the visitor's email app or WhatsApp.
+  const sendEmail = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    if (!validate()) return;
+    window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent(`[MySuccess] ${form.topic}`)}&body=${encodeURIComponent(body())}`;
+    setSentVia('email');
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const sendWhatsApp = () => {
+    if (!validate()) return;
+    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(body())}`, '_blank', 'noopener,noreferrer');
+    setSentVia('WhatsApp');
   };
+
+  const cards = [
+    { icon: <PhoneOutlinedIcon />, color: '#10b981', label: 'Call us', value: CONTACT.phoneDisplay, href: `tel:${CONTACT.phoneTel}` },
+    { icon: <WhatsAppIcon />, color: '#22c55e', label: 'WhatsApp', value: CONTACT.phoneDisplay, href: `https://wa.me/${CONTACT.whatsapp}` },
+    { icon: <MailOutlineIcon />, color: '#6366f1', label: 'Email', value: CONTACT.email, href: `mailto:${CONTACT.email}` },
+    { icon: <PlaceOutlinedIcon />, color: '#f59e0b', label: 'Office', value: CONTACT.city },
+    { icon: <ScheduleOutlinedIcon />, color: '#8b5cf6', label: 'Hours', value: CONTACT.hours },
+  ];
 
   return (
-    <div className="contact-page">
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
       <AppHeader />
-      
-      {/* Hero Section */}
-      <section className="contact-hero-modern">
-        <div className="hero-bg-gradient"></div>
-        <Container>
-          <Row className="justify-content-center align-items-center min-vh-60">
-            <Col lg={8} className="text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="hero-badge">
-                  <span>Get in Touch</span>
-                </div>
-                <h1 className="hero-title">
-                  Let's Build Something{" "}
-                  <span className="gradient-text">Amazing Together</span>
-                </h1>
-                <p className="hero-subtitle">
-                  Have questions about our solutions? Ready to start your digital transformation? 
-                  Our team is here to help you succeed.
-                </p>
-              </motion.div>
-            </Col>
-          </Row>
+
+      <Box component="section" sx={{ pt: { xs: 6, md: 9 }, pb: { xs: 3, md: 4 }, textAlign: 'center' }}>
+        <Container maxWidth="md">
+          <Typography variant="overline" color="primary.main">
+            {t('contact_us', { defaultValue: 'Contact us' })}
+          </Typography>
+          <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1 }}>
+            How can we help?
+          </Typography>
+          <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
+            Questions about a product, pricing or your account. Call, WhatsApp or send us a message below.
+          </Typography>
         </Container>
-      </section>
+      </Box>
 
-      {/* Contact Info Section */}
-      <section className="contact-info-section py-6">
-        <Container>
-          <Row className="g-4">
-            {contactInfo.map((info, index) => (
-              <Col key={index} lg={3} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="contact-info-card-modern"
-                >
-                  <div className="contact-icon-wrapper" style={{ color: info.color }}>
-                    {info.icon}
-                  </div>
-                  <h4 className="contact-info-title">{info.title}</h4>
-                  <p className="contact-info-detail">{info.info}</p>
-                  {info.link ? (
-                    <a href={info.link} className="contact-action-link">
-                      <span>{info.action}</span>
-                      <HiArrowRight />
-                    </a>
-                  ) : (
-                    <div className="contact-action-text">
-                      <span>{info.action}</span>
-                    </div>
-                  )}
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
+      <Container maxWidth="lg" sx={{ pb: { xs: 7, md: 10 } }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={5}>
+            <Stack spacing={2}>
+              {cards.map((c) => (
+                <Card key={c.label} sx={{ p: 2.5 }}>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <IconTile color={c.color} size={44}>
+                      {c.icon}
+                    </IconTile>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        {c.label}
+                      </Typography>
+                      {c.href ? (
+                        <Typography
+                          component="a"
+                          href={c.href}
+                          target={c.href.startsWith('http') ? '_blank' : undefined}
+                          rel="noopener noreferrer"
+                          sx={{ fontWeight: 600, color: 'text.primary', textDecoration: 'none', wordBreak: 'break-word', '&:hover': { color: 'primary.main' } }}
+                        >
+                          {c.value}
+                        </Typography>
+                      ) : (
+                        <Typography fontWeight={600}>{c.value}</Typography>
+                      )}
+                    </Box>
+                  </Stack>
+                </Card>
+              ))}
+            </Stack>
+          </Grid>
 
-      {/* Main Contact Section */}
-      <section className="main-contact-section py-6 bg-light-modern">
-        <Container>
-          <Row className="g-5 align-items-start">
-            {/* Contact Form */}
-            <Col lg={7}>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className="contact-form-modern"
-              >
-                <div className="form-header">
-                  <div className="form-badge">
-                    <FiMessageSquare />
-                    <span>Send Message</span>
-                  </div>
-                  <h2 className="form-title">Get Personalized Assistance</h2>
-                  <p className="form-subtitle">
-                    Fill out the form below and our experts will get back to you within 24 hours.
-                  </p>
-                </div>
-
-                {submitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="success-message"
-                  >
-                    <FiCheckCircle />
-                    <div>
-                      <h4>Message Sent Successfully!</h4>
-                      <p>We'll get back to you shortly. Thank you for contacting us.</p>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <Form onSubmit={handleSubmit} className="modern-form">
-                    <Row className="g-3">
-                      <Col md={6}>
-                        <Form.Group controlId="formName">
-                          <Form.Label>Full Name *</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="John Doe"
-                            required
-                            className="modern-input"
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group controlId="formEmail">
-                          <Form.Label>Email Address *</Form.Label>
-                          <Form.Control
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="john@example.com"
-                            required
-                            className="modern-input"
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <Row className="g-3 mt-3">
-                      <Col md={6}>
-                        <Form.Group controlId="formPhone">
-                          <Form.Label>Phone Number</Form.Label>
-                          <Form.Control
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="+91 98765 43210"
-                            className="modern-input"
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group controlId="formSubject">
-                          <Form.Label>Subject *</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="subject"
-                            value={formData.subject}
-                            onChange={handleChange}
-                            placeholder="Project Inquiry"
-                            required
-                            className="modern-input"
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <Form.Group controlId="formMessage" className="mt-3">
-                      <Form.Label>Your Message *</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={6}
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="Tell us about your project or inquiry..."
-                        required
-                        className="modern-textarea"
-                      />
-                    </Form.Group>
-
-                    <div className="form-footer mt-4">
-                      <Button type="submit" className="submit-btn-modern">
-                        <span>Send Message</span>
-                        <FiSend />
+          <Grid item xs={12} md={7}>
+            <Card sx={{ p: { xs: 2.5, md: 4 } }}>
+              <Typography variant="h4" component="h2">
+                Send a message
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>
+                Your message opens in your email app or WhatsApp, ready to send.
+              </Typography>
+              {sentVia && (
+                <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSentVia('')}>
+                  Your message is ready in {sentVia}. Press send there and we will reply within one working day.
+                </Alert>
+              )}
+              <Box component="form" noValidate onSubmit={sendEmail}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField label="Your name" required value={form.name} onChange={set('name')} error={!!errors.name} helperText={errors.name} autoComplete="name" />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField label="Phone number" value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={errors.phone} autoComplete="tel" inputProps={{ inputMode: 'tel' }} />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField label="Email" value={form.email} onChange={set('email')} error={!!errors.email} helperText={errors.email} autoComplete="email" inputProps={{ inputMode: 'email' }} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField select label="Topic" value={form.topic} onChange={set('topic')}>
+                      {TOPICS.map((tp) => (
+                        <MenuItem key={tp} value={tp}>
+                          {tp}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField label="Message" required multiline minRows={4} value={form.message} onChange={set('message')} error={!!errors.message} helperText={errors.message} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                      <Button type="submit" variant="contained" size="large" startIcon={<SendOutlinedIcon />}>
+                        Send by email
                       </Button>
-                      <p className="form-note">
-                        By submitting this form, you agree to our Privacy Policy.
-                      </p>
-                    </div>
-                  </Form>
-                )}
-              </motion.div>
-            </Col>
+                      <Button variant="outlined" size="large" color="success" startIcon={<WhatsAppIcon />} onClick={sendWhatsApp}>
+                        Send on WhatsApp
+                      </Button>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
 
-            {/* Contact Details & Social */}
-            <Col lg={5}>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className="contact-details-modern"
-              >
-                <div className="details-header">
-                  <div className="details-badge">
-                    <HiSparkles />
-                    <span>Quick Connect</span>
-                  </div>
-                  <h2 className="details-title">Connect With Us</h2>
-                  <p className="details-subtitle">
-                    Prefer other ways to get in touch? Here are more options.
-                  </p>
-                </div>
-
-                <div className="social-links-modern">
-                  <h4>Follow Us</h4>
-                  <div className="social-icons-grid">
-                    {socialLinks.map((social, index) => (
-                      <motion.a
-                        key={index}
-                        href={social.link}
-                        className="social-icon-modern"
-                        style={{ backgroundColor: `${social.color}15`, color: social.color }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        aria-label={social.label}
-                      >
-                        {social.icon}
-                      </motion.a>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="support-info">
-                  <h4>Support Hours</h4>
-                  <div className="support-schedule">
-                    <div className="support-item">
-                      <FiClock />
-                      <div>
-                        <strong>Monday - Saturday </strong>
-                        <p>9:00 AM - 8:00 PM IST</p>
-                      </div>
-                    </div>
-                    <div className="support-item">
-                      <FiClock />
-                      <div>
-                        <strong>Weekend Support</strong>
-                        <p>Emergency support available</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="quick-links">
-                  <h4>Quick Links</h4>
-                  <div className="links-grid">
-                    <a href="/faq" className="quick-link">
-                      <FiArrowRight />
-                      <span>FAQ & Help Center</span>
-                    </a>
-                    <a href="/support" className="quick-link">
-                      <FiArrowRight />
-                      <span>Technical Support</span>
-                    </a>
-                    <a href="/demo" className="quick-link">
-                      <FiArrowRight />
-                      <span>Book a Demo</span>
-                    </a>
-                    <a href="/pricing" className="quick-link">
-                      <FiArrowRight />
-                      <span>Pricing Plans</span>
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      {/* Map Section */}
-      <section className="map-section-modern">
-        <Container fluid className="px-0">
-          <div className="map-header">
-            <h3 className="map-title">Our Location</h3>
-            <p className="map-subtitle">Visit our headquarters in Bangalore</p>
-          </div>
-          <div className="map-container-modern">
-            <iframe
-              title="office-location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9864420549655!2d77.59412331582056!3d12.93498039088509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c49c040309%3A0x6553433f72187b01!2sBangalore%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1647856781234!5m2!1sen!2sin"
-              className="modern-map-iframe"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </Container>
-      </section>
-
-      {/* CTA Section */}
-      <section className="contact-cta-section py-6">
-        <div className="cta-bg-gradient"></div>
-        <Container>
-          <Row className="justify-content-center">
-            <Col lg={8} className="text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="cta-badge">
-                  <FaPaperPlane />
-                  <span>Ready to Start?</span>
-                </div>
-                <h2 className="cta-title">
-                  Let's Discuss Your Next Project
-                </h2>
-                <p className="cta-text">
-                  Schedule a free consultation with our experts and discover how we can 
-                  transform your business with our cutting-edge solutions.
-                </p>
-                <div className="cta-buttons">
-                  <a href="/demo" className="cta-btn-primary">
-                    <span>Schedule Free Consultation</span>
-                    <HiArrowRight />
-                  </a>
-                  <a href="tel:+918050386769" className="cta-btn-secondary">
-                    <FiPhone />
-                    <span>Call Now: +91 80503 86769</span>
-                  </a>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+      <PublicFooter />
+    </Box>
   );
 };
 
