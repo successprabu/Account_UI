@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../../common/CommonApiURL';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -14,7 +15,7 @@ const ReportComponent = () => {
   // Function to fetch data from the API
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://localhost:44393/api/Report/GetTransactionReport', {
+      const response = await axios.get(`${BASE_URL}Report/GetTransactionReport`, {
         params: {
           customer_id: 2,
           report_type: 'TEST',

@@ -1,0 +1,41 @@
+# Builds every pull request so problems are caught before anything reaches the live site.
+name: Build check
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        env:
+          CI: false
+        run: npm run build
+
+      - name: Report bundle sizes
+        run: |
+          echo "### Bundle sizes" >> "$GITHUB_STEP_SUMMARY"
+          echo '| File | Size | Gzipped |' >> "$GITHUB_STEP_SUMMARY"
+          echo '| --- | --- | --- |' >> "$GITHUB_STEP_SUMMARY"
+          for f in $(ls -S build/static/js/*.js | head -15); do
+            echo "| $(basename "$f") | $(du -h "$f" | cut -f1) | $(gzip -c "$f" | wc -c | numfmt --to=iec) |" >> "$GITHUB_STEP_SUMMARY"
+          done
+          echo "Entry: $(grep -o 'static/js/main[^"]*' build/index.html)" >> "$GITHUB_STEP_SUMMARY"

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import AppHeader from './AppHeader';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import PageLoader from './PageLoader';
 import SideBar from './SideBar';
 import './css/Rootlayout.css'; // Import the CSS file
 
@@ -12,13 +13,17 @@ const Rootlayout = () => {
         <div className="content-container">
           <SideBar />
           <div className="outlet">
-            <Outlet />
+            <Suspense fallback={<PageLoader inline />}>
+              <Outlet />
+            </Suspense>
           </div>
         </div>
       ) : (
         <div>
           <AppHeader />
-          <Outlet />
+          <Suspense fallback={<PageLoader inline />}>
+            <Outlet />
+          </Suspense>
         </div>
       )}
     </div>

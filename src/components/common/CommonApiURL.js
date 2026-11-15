@@ -1,6 +1,8 @@
 //export const BASE_URL = `http://localhost/api/`
 //export const BASE_URL = `https://localhost:44393/api/`; //LOCAL URL
-export const BASE_URL = `https://successapi.azurewebsites.net/api/`; //live URL
+// Set REACT_APP_API_BASE_URL (e.g. in .env.local) to point at another API; defaults to live.
+export const BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || `https://successapi.azurewebsites.net/api/`;
 
 const GOOGLE_TRANS_API_KEY = "AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE";
 export const OTP_KEY =
