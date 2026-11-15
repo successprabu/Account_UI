@@ -35,7 +35,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          # Only the compiled React app; the App Service serves /home/site/wwwroot with pm2
+          path: build
 
   deploy:
     runs-on: ubuntu-latest
