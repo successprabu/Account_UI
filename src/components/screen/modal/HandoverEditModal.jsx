@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import InputWithMicrophone from "../../common/InputWithMicrophone";

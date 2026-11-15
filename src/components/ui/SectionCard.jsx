@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 
 /** A titled card that groups related content (a form section, a chart, a table). */

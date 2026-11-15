@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Form,
@@ -25,7 +25,6 @@ import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_FUNCTION_API } from "../common/CommonApiURL";
 import { ClearButton, SaveButton } from "./css/styles";
 import { FaSave, FaTimes } from "react-icons/fa";
-import { format } from "date-fns";
 import * as yup from "yup";
 import Header from "../common/Header";
 import FunctionList from "./list/FunctionList";
@@ -38,10 +37,6 @@ const schema = yup.object().shape({
   remarks: yup.string(),
   funMessage: yup.string(),
 });
-
-const formatDate = (dateString) => {
-  return format(new Date(dateString), "dd/MM/yyyy");
-};
 
 const FunctionForm = () => {
   const { t } = useTranslation();

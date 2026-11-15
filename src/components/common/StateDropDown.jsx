@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { API_SERVICE } from "./CommonMethod";
 import { DROPDOWN_STATE_API } from "./CommonApiURL";

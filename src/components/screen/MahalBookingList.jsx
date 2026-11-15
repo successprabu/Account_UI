@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useTranslation } from "react-i18next";
@@ -18,17 +18,7 @@ import Header from "../common/Header";
 import { API_SERVICE } from "../common/CommonMethod";
 import { toast } from "react-toastify";
 import { LIST_MAHAL_BOOKING_LIST_API } from "../common/CommonApiURL";
-import { 
-  FaCalendarAlt, 
-  FaUser, 
-  FaPhone, 
-  FaMapMarkerAlt,
-  FaFileExport,
-  FaEye,
-  FaEdit,
-  FaTrash,
-  FaFilter
-} from "react-icons/fa";
+import { FaCalendarAlt, FaUser, FaPhone, FaMapMarkerAlt, FaFileExport, FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./css/MahalBookingList.css";

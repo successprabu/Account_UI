@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -12,7 +11,7 @@ const QuickActions = ({ actions }) => {
       {actions.map((a) => {
         const color = a.color || theme.palette.primary.main;
         return (
-          <Grid item xs={12} sm={6} lg={3} key={a.to + a.label}>
+          <Grid item xs={12} sm={6} xl={3} key={a.to + a.label}>
             <Card
               component={RouterLink}
               to={a.to}
@@ -30,11 +29,11 @@ const QuickActions = ({ actions }) => {
             >
               <Box sx={{ width: 48, height: 48, borderRadius: 2.5, display: 'grid', placeItems: 'center', color, bgcolor: alpha(color, 0.12), flexShrink: 0, '& svg': { fontSize: 26 } }}>{a.icon}</Box>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography fontWeight={600} noWrap>
+                <Typography fontWeight={600} sx={{ lineHeight: 1.3 }}>
                   {a.label}
                 </Typography>
                 {a.description && (
-                  <Typography variant="body2" color="text.secondary" noWrap>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25 }}>
                     {a.description}
                   </Typography>
                 )}

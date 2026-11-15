@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -91,7 +91,7 @@ const validationSchema = yup.object().shape({
 
 const NewMahal = () => {
   const [selectedState, setSelectedState] = useState();
-  const [selectedDistrict, setSelectedDistrict] = useState();
+  const [, setSelectedDistrict] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const { t } = useTranslation();
   const {

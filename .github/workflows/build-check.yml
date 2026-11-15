@@ -25,9 +25,13 @@ jobs:
       - name: Install
         run: npm install --no-audit --no-fund
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
       - name: Build
-        env:
-          CI: false
         run: npm run build
 
       - name: Report bundle sizes
@@ -35,7 +39,7 @@ jobs:
           echo "### Bundle sizes" >> "$GITHUB_STEP_SUMMARY"
           echo '| File | Size | Gzipped |' >> "$GITHUB_STEP_SUMMARY"
           echo '| --- | --- | --- |' >> "$GITHUB_STEP_SUMMARY"
-          for f in $(ls -S build/static/js/*.js | head -15); do
+          for f in $(ls -S build/assets/*.js | head -15); do
             echo "| $(basename "$f") | $(du -h "$f" | cut -f1) | $(gzip -c "$f" | wc -c | numfmt --to=iec) |" >> "$GITHUB_STEP_SUMMARY"
           done
-          echo "Entry: $(grep -o 'static/js/main[^"]*' build/index.html)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Entry: $(grep -o 'assets/index[^"]*\.js' build/index.html)" >> "$GITHUB_STEP_SUMMARY"

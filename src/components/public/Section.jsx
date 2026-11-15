@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Container, Stack, Typography } from '@mui/material';
 
 /** A page section with an optional eyebrow, title and intro, centred or left-aligned. */

@@ -1,5 +1,4 @@
 // HeaderFooter.js
-import { jsPDF } from 'jspdf';
 import { format } from 'date-fns';
 
 export const addHeader = (pdf, headerData) => {

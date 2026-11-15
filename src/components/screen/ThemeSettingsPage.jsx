@@ -1,36 +1,7 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Typography,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  Alert,
-  Snackbar,
-  Fade,
-  Divider,
-  Breadcrumbs,
-  Link,
-  Button,
-} from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography, Paper, Grid, Card, CardContent, Alert, Snackbar, Fade, Breadcrumbs, Link } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import {
-  CheckCircle,
-  Palette,
-  Computer,
-  WbSunny,
-  NightsStay,
-  Dashboard,
-  FormatAlignLeft,
-  FormatAlignRight,
-  VerticalAlignTop,
-  Info,
-  Home as HomeIcon,
-  NavigateNext,
-  Settings as SettingsIcon,
-  ColorLens,
-} from '@mui/icons-material';
+import { CheckCircle, Home as HomeIcon, NavigateNext, Settings as SettingsIcon, ColorLens } from '@mui/icons-material';
 import { colorPalettes } from '../../theme/themeConfig';
 import { useTheme as useAppTheme } from '../../ThemeProvider';
 import { Link as RouterLink } from 'react-router-dom';
@@ -88,11 +59,6 @@ const ThemeSettingsPage = () => {
     setSnackbarOpen(false);
   };
 
-  const colorSchemeEntries = Object.entries(colorPalettes);
-  const medicalColors = colorSchemeEntries.slice(0, 4);
-  const professionalColors = colorSchemeEntries.slice(4, 8);
-  const darkModeColors = colorSchemeEntries.slice(8, 12);
-  const vibrantColors = colorSchemeEntries.slice(12, 16);
 
   const { mode, colorScheme, sidebarPosition } = themeState;
 

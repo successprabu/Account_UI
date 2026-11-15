@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Rootlayout from "./components/common/Rootlayout";
 import Home from "./components/screen/Home";
@@ -121,10 +121,7 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 
 
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
-const ReportComponent = lazy(() =>
-  import("./components/screen/reports/ReportComponent")
-);
-const Resume = lazy(() => import("./components/screen/AntonyResume/Resume "));
+const Resume = lazy(() => import("./components/screen/AntonyResume/Resume"));
 
 const Router = () => {
   return (
@@ -146,7 +143,6 @@ const Router = () => {
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="about" element={<AboutUs />} />
         <Route path="design-system" element={<DesignSystem />} />
-        <Route path="report" element={<ReportComponent />} />
         <Route path="*" element={<PageNotFound />} />
 
         <Route path="/" element={<Rootlayout />}>

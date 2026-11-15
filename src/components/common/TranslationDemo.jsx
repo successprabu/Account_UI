@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../screen/css/TranslationDemo.css'; // Ensure to import the CSS file
 import Translator from './TranslationBasedOnLanguage';
 

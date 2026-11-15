@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Row, Col, InputGroup, Form, Table, Pagination, Button } from "react-bootstrap";
 import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -9,7 +9,6 @@ import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
-import { StyleSheet } from "@react-pdf/renderer";
 import {
   SearchButton,
   ClearButton,
@@ -20,36 +19,10 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
-import OthersSummaryModal from "../modal/OthersSummaryModal ";
+import OthersSummaryModal from "../modal/OthersSummaryModal";
 import { addFooter, addHeader } from "./HeaderFooter";
 import { addInstructionPage } from "./InstructionPage";
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-  },
-  table: {
-    display: "table",
-    width: "auto",
-    margin: "0 auto",
-    borderCollapse: "collapse",
-  },
-  page: {
-    padding: 20,
-    fontFamily: "Noto Sans Tamil, sans-serif",
-  },
-  tableHeader: {
-    borderBottom: "1px solid black",
-    padding: 10,
-  },
-  tableCell: {
-    padding: 10,
-    borderBottom: "1px solid black",
-  },
-  total: {
-    fontWeight: "bold",
-  },
-});
 
 const OthersReport = () => {
   const [reportData, setReportData] = useState([]);

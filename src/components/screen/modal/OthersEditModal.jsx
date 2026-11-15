@@ -1,4 +1,3 @@
-import React from "react";
 import { Modal, Form, Button, FormLabel, FormSelect  } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import InputWithMicrophone from "../../common/InputWithMicrophone";

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import DashboardUser from './DashboardUser';
 import DashboardAdmin from './DashboardAdmin';
