@@ -20,6 +20,7 @@ export const ThemeMui = ({ children }) => {
       const root = document.documentElement;
       Object.entries(cssVariables(mode, paletteColors)).forEach(([k, v]) => root.style.setProperty(k, v));
       root.dataset.theme = mode;
+      root.setAttribute('data-bs-theme', mode); // Bootstrap's own dark mode for older screens
       // Legacy variables kept for existing CSS files
       root.style.setProperty('--primary-main', paletteColors.primary);
       root.style.setProperty('--secondary-main', paletteColors.secondary);

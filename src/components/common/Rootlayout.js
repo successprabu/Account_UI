@@ -1,33 +1,36 @@
 import React, { Suspense } from 'react';
-import AppHeader from './AppHeader';
 import { Outlet } from 'react-router-dom';
+import AppHeader from './AppHeader';
+import AppShell from './AppShell';
 import PageLoader from './PageLoader';
 import PublicFooter from '../public/PublicFooter';
-import SideBar from './SideBar';
-import './css/Rootlayout.css'; // Import the CSS file
+
+const readUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem('user'));
+  } catch (e) {
+    return null;
+  }
+};
 
 const Rootlayout = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = readUser();
+  if (user) {
+    return (
+      <AppShell>
+        <Suspense fallback={<PageLoader inline />}>
+          <Outlet />
+        </Suspense>
+      </AppShell>
+    );
+  }
   return (
     <div>
-      {user ? (
-        <div className="content-container">
-          <SideBar />
-          <div className="outlet">
-            <Suspense fallback={<PageLoader inline />}>
-              <Outlet />
-            </Suspense>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <AppHeader />
-          <Suspense fallback={<PageLoader inline />}>
-            <Outlet />
-          </Suspense>
-          <PublicFooter />
-        </div>
-      )}
+      <AppHeader />
+      <Suspense fallback={<PageLoader inline />}>
+        <Outlet />
+      </Suspense>
+      <PublicFooter />
     </div>
   );
 };
