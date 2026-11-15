@@ -38,7 +38,7 @@ import { Link as RouterLink } from 'react-router-dom';
 const ThemeSettingsPage = () => {
   // Prefer ThemeProvider hook; fallback to global window provider
   const provider = useAppTheme() || (typeof window !== 'undefined' ? window.__THEME_PROVIDER : null);
-  const themeState = provider || { mode: 'light', colorScheme: 'dentalBlue', sidebarPosition: 'left' };
+  const themeState = provider || { mode: 'light', colorScheme: 'mysuccess', sidebarPosition: 'left' };
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -55,6 +55,7 @@ const ThemeSettingsPage = () => {
     if (!provider) return;
     if (typeof provider.setColorScheme === 'function') provider.setColorScheme(scheme);
     const schemeNames = {
+      mysuccess: 'MySuccess (default)',
       dentalBlue: 'Dental Blue',
       dentalGreen: 'Dental Green',
       dentalTeal: 'Dental Teal',

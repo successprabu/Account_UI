@@ -1,0 +1,43 @@
+/* Global styles driven by the design tokens (CSS variables set in mui/ThemeMui.js). */
+
+:root {
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--ms-font, Inter, sans-serif);
+  background: var(--ms-bg, #f8fafc);
+  color: var(--ms-text, #0f172a);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ms-primary, #6366f1);
+  outline-offset: 2px;
+}
+
+/* Toast notifications (react-toastify) in the app's style */
+.Toastify__toast {
+  font-family: var(--ms-font);
+  border-radius: var(--ms-radius-md, 10px);
+  box-shadow: var(--ms-shadow-md);
+  background: var(--ms-paper, #fff);
+  color: var(--ms-text, #0f172a);
+  border: 1px solid var(--ms-border, #e2e8f0);
+  font-size: 14px;
+  min-height: 52px;
+}
+.Toastify__toast--success { border-left: 4px solid var(--ms-success); }
+.Toastify__toast--error { border-left: 4px solid var(--ms-error); }
+.Toastify__toast--warning { border-left: 4px solid var(--ms-warning); }
+.Toastify__toast--info { border-left: 4px solid var(--ms-info); }
+.Toastify__close-button { color: var(--ms-text-secondary); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
