@@ -10,16 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      output: {
-        // Keep the big libraries in their own long-cached files
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-router-dom'],
-          mui: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
-          charts: ['recharts'],
-        },
-      },
-    },
+    // No manualChunks: splitting React and MUI into separate chunks breaks their load order.
   },
   test: {
     environment: 'jsdom',
