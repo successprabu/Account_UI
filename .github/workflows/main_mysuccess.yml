@@ -55,4 +55,6 @@ jobs:
           app-name: 'mysuccess'
           slot-name: 'Production'
           package: .
+          # Replace wwwroot completely so no stale files (old builds, node_modules) linger
+          clean: true
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BBD7F36E325A43649785A4DEA8F81DC1 }}
