@@ -1,14 +1,6 @@
 import styled  from 'styled-components';
 import Table  from 'react-bootstrap/Table';
-import {
-  Row,
-  Col,
-  Form,
-  Button,
-  InputGroup,
-  Pagination,
-  FormLabel,
-} from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 
 
 /* Shared table for list and report screens; colours follow the design tokens (--ms-*). */

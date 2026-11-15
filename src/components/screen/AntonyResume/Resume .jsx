@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import {
   FiDownload,
   FiMail,
@@ -7,7 +7,6 @@ import {
   FiCalendar,
   FiUser,
   FiGlobe,
-  FiDatabase,
   FiCode,
   FiCloud,
   FiServer,
@@ -15,7 +14,6 @@ import {
   FiAward,
   FiBook,
   FiBriefcase,
-  FiGitBranch
 } from 'react-icons/fi';
 import html2pdf from 'html2pdf.js';
 import './Resume.css';

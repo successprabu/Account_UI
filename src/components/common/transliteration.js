@@ -19,7 +19,7 @@ export const transliterateToTamil = (tanglishText) => {
       
       "t": "ட்", "ta": "ட", "taa": "டா", "ti": "டி", "tii": "டீ", "tu": "டு", "tuu": "டூ", "te": "டெ", "tee": "டே", "tai": "டை", "to": "டொ", "too": "டோ", "tau": "டௌ",
       
-      "n": "ண்", "na": "ண", "naa": "ணா", "ni": "ணி", "nii": "ணீ", "nu": "ணு", "nuu": "ணூ", "ne": "ணெ", "nee": "ணே", "nai": "ணை", "no": "ணொ", "noo": "ணோ", "nau": "ணௌ",
+      
       
       "th": "த்", "tha": "த", "thaa": "தா", "thi": "தி", "thii": "தீ", "thu": "து", "thuu": "தூ", "the": "தெ", "thee": "தே", "thai": "தை", "tho": "தொ", "thoo": "தோ", "thau": "தௌ",
       
@@ -31,7 +31,7 @@ export const transliterateToTamil = (tanglishText) => {
       
       "r": "ர்", "ra": "ர", "raa": "ரா", "ri": "ரி", "rii": "ரீ", "ru": "ரு", "ruu": "ரூ", "re": "ரெ", "ree": "ரே", "rai": "ரை", "ro": "ரொ", "roo": "ரோ", "rau": "ரௌ",
       
-      "l": "ல்", "la": "ல", "laa": "லா", "li": "லி", "lii": "லீ", "lu": "லு", "luu": "லூ", "le": "லெ", "lee": "லே", "lai": "லை", "lo": "லொ", "loo": "லோ", "lau": "லௌ",
+      "la": "ல", "laa": "லா", "li": "லி", "lii": "லீ", "lu": "லு", "luu": "லூ", "le": "லெ", "lee": "லே", "lai": "லை", "lo": "லொ", "loo": "லோ", "lau": "லௌ",
       
       "v": "வ்", "va": "வ", "vaa": "வா", "vi": "வி", "vii": "வீ", "vu": "வு", "vuu": "வூ", "ve": "வெ", "vee": "வே", "vai": "வை", "vo": "வொ", "voo": "வோ", "vau": "வௌ",
       
@@ -45,7 +45,7 @@ export const transliterateToTamil = (tanglishText) => {
       
       "s": "ச்", "sa": "ச", "saa": "சா", "si": "சி", "sii": "சீ", "su": "சு", "suu": "சூ", "se": "செ", "see": "சே", "sai": "சை", "so": "சொ", "soo": "சோ", "sau": "சௌ",
       
-      "sh": "ஷ்", "sha": "ஷ", "shaa": "ஷா", "shi": "ஷி", "shii": "ஷீ", 
+      
   
         "q": "ஃ",
         "x": "ஃ",

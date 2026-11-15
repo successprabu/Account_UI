@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Row, Col, InputGroup, Form, Table, Pagination } from "react-bootstrap";
 import { FaSearch, FaTimes, FaFilePdf, FaFileExcel } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -9,9 +9,6 @@ import jsPDF from 'jspdf';
 import * as XLSX from "xlsx";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
-import {
-  StyleSheet,
-} from "@react-pdf/renderer";
 import {
   SearchButton,
   ClearButton,
@@ -26,34 +23,6 @@ import { addFooter, addHeader } from "./HeaderFooter";
 import { addInstructionPage } from "./InstructionPage";
 
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-  },
-  table: {
-    display: "table",
-    width: "auto",
-    margin: "0 auto",
-    borderCollapse: "collapse",
-  },
-  page: {
-    padding: 20,
-    fontFamily: 'Noto Sans Tamil, sans-serif',
-  },
-  tableHeader: {
-    borderBottom: "1px solid black",
-    padding: 10,
-    fontFamily: "'Noto Sans Tamil', sans-serif", 
-  },
-  tableCell: {
-    padding: 10,
-    borderBottom: "1px solid black",
-    fontFamily: "'Noto Sans Tamil', sans-serif"
-  },
-  total: {
-    fontWeight: "bold",
-  },
-});
 
 const IncomeReport = () => {
   const [reportData, setReportData] = useState([]);
@@ -217,7 +186,6 @@ const IncomeReport = () => {
       );
       const contentImgData = contentCanvas.toDataURL('images/png');
 // Adjust position and size as needed
-      const imgData = contentCanvas.toDataURL('images/png');
       const imgWidth = contentCanvas.width;
       const imgHeight = contentCanvas.height;
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);

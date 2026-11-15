@@ -1,4 +1,3 @@
-import { jsPDF } from 'jspdf';
 import { format } from 'date-fns';
 
 export const addInstructionPage = (pdf, instructionData) => {
@@ -28,7 +27,6 @@ export const addInstructionPage = (pdf, instructionData) => {
 
   // Set the margins and spacing
   const leftMargin = 40;
-  const columnSpacing = 10; // Space between title and value columns
   const lineSpacing = 12; // Space between each row
   const initialY = 120; // Starting y position for the first text line
   const boxPadding = 2; // Padding inside the border box

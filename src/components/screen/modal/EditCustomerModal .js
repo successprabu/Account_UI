@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Col, Row, InputGroup, FormControl, FormLabel, FormGroup, FormCheck, Modal } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { Oval } from 'react-loader-spinner';
@@ -37,8 +36,6 @@ const EditCustomerModal = ({ show, onHide, customerId, onSave }) => {
     country_code: ""
   });
   const [errors, setErrors] = useState({});
-  const [isRecording, setIsRecording] = useState(false);
-  const recognitionRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

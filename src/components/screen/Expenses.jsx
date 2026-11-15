@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Form,
@@ -19,7 +19,6 @@ import {
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import i18n from "../../language/i18n";
-import { transliterateToTamil } from "../common/transliteration";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup"; // Import yup for validation
@@ -67,12 +66,10 @@ const Expenses = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-  const [exCategory, setCategory] = useState("");
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   // Refs for form controls
   const villageNameRef = useRef(null);
   const nameRef = useRef(null);
-  const initialRef = useRef(null);
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);

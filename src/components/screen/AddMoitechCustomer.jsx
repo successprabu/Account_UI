@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Form,
@@ -80,7 +80,7 @@ const AddMoitechCustomer = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingField, setRecordingField] = useState(null);
   const recognitionRef = useRef(null);
-  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
+  const [, setFieldBeingTranslated] = useState(null);
   const [userList, setUserList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isEditing, setIsEditing] = useState(false); // Flag to determine if editing or creating a new user

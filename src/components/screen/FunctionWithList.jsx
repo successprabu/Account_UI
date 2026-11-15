@@ -1,17 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Form,
-  FormGroup,
-  FormControl,
-  FormLabel,
-  Button,
-  Card,
-  CardBody,
-  Col,
-  Row,
-  InputGroup,
-} from "react-bootstrap";
+import { Form, FormGroup, FormControl, FormLabel, Card, CardBody, Col, Row, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,7 +17,6 @@ import { SAVE_FUNCTION_API, LIST_FUNCTION_API } from "../common/CommonApiURL";
 import Header from "../common/Header";
 import { ClientTable, ClearButton, SaveButton } from "./css/styles";
 import { FaSave , FaTimes } from "react-icons/fa";
-import { format } from "date-fns";
 
 const schema = yup.object().shape({
   functionName: yup.string().required(),

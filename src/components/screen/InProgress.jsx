@@ -1,21 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { motion, useAnimation } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import {
-  FiHome,
-  FiRefreshCw,
-  FiClock,
-  FiZap,
-  FiCpu,
-  FiMail,
-  FiArrowRight,
-  FiCoffee,
-  FiTarget,
-  FiTrendingUp,
-  FiAward,
-  FiUser
-} from 'react-icons/fi';
+import { FiHome, FiRefreshCw, FiClock, FiZap, FiCpu, FiMail, FiCoffee } from 'react-icons/fi';
 import {
   FaRocket,
   FaRegLightbulb,
@@ -23,7 +10,7 @@ import {
   FaRegCalendarCheck,
   FaRegSmileWink
 } from 'react-icons/fa';
-import { HiSparkles, HiArrowRight, HiLightningBolt } from 'react-icons/hi';
+import { HiSparkles, HiLightningBolt } from 'react-icons/hi';
 import './css/InProgressPage.css';
 import AppHeader from '../common/AppHeader';
 

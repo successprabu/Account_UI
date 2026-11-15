@@ -1,4 +1,3 @@
-import React from "react";
 import "./css/PageLoader.css";
 
 // Shown while a page's code is downloading, so visitors never see a blank screen.

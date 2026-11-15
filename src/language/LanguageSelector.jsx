@@ -1,4 +1,3 @@
-import React from "react";
 import { useLanguage } from "./LanguageContext";
 import { Dropdown } from "react-bootstrap";
 import { FaLanguage } from "react-icons/fa";

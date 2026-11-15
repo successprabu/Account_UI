@@ -1,4 +1,3 @@
-import React from 'react';
 import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';

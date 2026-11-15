@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Card, Skeleton, Stack, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';

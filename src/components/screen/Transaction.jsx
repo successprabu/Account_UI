@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Form,
@@ -27,11 +27,9 @@ import {
   FaDownload,
   FaUpload,
   FaMicrophone,
-  FaMicrophoneSlash,
   FaPlus,
   FaTrash,
-  FaEdit,
-  FaTable
+  FaTable,
 } from "react-icons/fa";
 import "./css/Transaction.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -115,7 +113,7 @@ const Transaction = () => {
 
   // Import related states
   const [showImportModal, setShowImportModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [extractedRecords, setExtractedRecords] = useState([]);
@@ -141,7 +139,6 @@ const Transaction = () => {
   const initialRef = useRef(null);
   const oldAmountRef = useRef(null);
   const newAmountRef = useRef(null);
-  const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -504,9 +501,8 @@ const Transaction = () => {
             processedImageData,
             'eng',
             {
-              logger: (m) => {
-                if (m.status === 'recognizing text') {
-                }
+              logger: () => {
+                // progress is not shown in the UI
               }
             }
           );

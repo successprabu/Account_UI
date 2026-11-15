@@ -99,7 +99,7 @@ function send(req, res, file, stat, status = 200) {
     "Cache-Control":
       ext === ".html"
         ? "no-cache"
-        : rel.startsWith("static/")
+        : rel.startsWith("assets/") || rel.startsWith("static/")
         ? "public, max-age=31536000, immutable"
         : "public, max-age=86400",
     "Last-Modified": stat.mtime.toUTCString(),

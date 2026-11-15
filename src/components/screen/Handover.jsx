@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { API_SERVICE } from "../common/CommonMethod";

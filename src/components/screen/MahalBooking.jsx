@@ -1,8 +1,7 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { FaCheck, FaRedo, FaCalendarAlt } from "react-icons/fa";
+import { FaCheck, FaRedo } from "react-icons/fa";
 import {
   Button,
   Card,
