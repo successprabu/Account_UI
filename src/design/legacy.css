@@ -1,0 +1,216 @@
+/*
+ * Bridges Bootstrap (still used by older app screens) to the MySuccess design tokens,
+ * so screens not yet rebuilt on MUI match the new look. Remove rules as screens move to MUI.
+ */
+
+:root,
+[data-bs-theme='light'],
+[data-bs-theme='dark'] {
+  --bs-primary: var(--ms-primary);
+  --bs-primary-rgb: 99, 102, 241;
+  --bs-secondary-color: var(--ms-text-secondary);
+  --bs-success: var(--ms-success);
+  --bs-danger: var(--ms-error);
+  --bs-warning: var(--ms-warning);
+  --bs-info: var(--ms-info);
+  --bs-body-font-family: var(--ms-font);
+  --bs-body-font-size: 0.9375rem;
+  --bs-body-color: var(--ms-text);
+  --bs-body-bg: var(--ms-bg);
+  --bs-emphasis-color: var(--ms-text);
+  --bs-border-color: var(--ms-border);
+  --bs-border-radius: var(--ms-radius-md);
+  --bs-border-radius-lg: var(--ms-radius-lg);
+  --bs-link-color: var(--ms-primary);
+  --bs-link-hover-color: var(--ms-primary);
+  --bs-link-color-rgb: 99, 102, 241;
+  --bs-focus-ring-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Buttons */
+.btn {
+  --bs-btn-font-weight: 600;
+  --bs-btn-border-radius: var(--ms-radius-md);
+  --bs-btn-padding-x: 1.1rem;
+  --bs-btn-padding-y: 0.5rem;
+  --bs-btn-font-size: 0.875rem;
+  min-height: 40px;
+  box-shadow: none !important;
+}
+.btn-sm {
+  min-height: 32px;
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.3rem;
+}
+.btn-primary {
+  --bs-btn-bg: var(--ms-primary);
+  --bs-btn-border-color: var(--ms-primary);
+  --bs-btn-hover-bg: #4f46e5;
+  --bs-btn-hover-border-color: #4f46e5;
+  --bs-btn-active-bg: #4338ca;
+  --bs-btn-active-border-color: #4338ca;
+  --bs-btn-disabled-bg: var(--ms-primary);
+  --bs-btn-disabled-border-color: var(--ms-primary);
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--ms-primary);
+  --bs-btn-border-color: var(--ms-primary);
+  --bs-btn-hover-bg: var(--ms-primary);
+  --bs-btn-hover-border-color: var(--ms-primary);
+  --bs-btn-active-bg: var(--ms-primary);
+}
+.btn-success {
+  --bs-btn-bg: var(--ms-success);
+  --bs-btn-border-color: var(--ms-success);
+  --bs-btn-hover-bg: #059669;
+  --bs-btn-hover-border-color: #059669;
+}
+.btn-danger {
+  --bs-btn-bg: var(--ms-error);
+  --bs-btn-border-color: var(--ms-error);
+  --bs-btn-hover-bg: #dc2626;
+  --bs-btn-hover-border-color: #dc2626;
+}
+.btn-secondary {
+  --bs-btn-color: var(--ms-text);
+  --bs-btn-bg: var(--ms-paper);
+  --bs-btn-border-color: var(--ms-border);
+  --bs-btn-hover-color: var(--ms-text);
+  --bs-btn-hover-bg: var(--ms-sunken);
+  --bs-btn-hover-border-color: var(--ms-border);
+}
+
+/* Cards */
+.card {
+  --bs-card-bg: var(--ms-paper);
+  --bs-card-border-color: var(--ms-border);
+  --bs-card-border-radius: var(--ms-radius-lg);
+  --bs-card-inner-border-radius: calc(var(--ms-radius-lg) - 1px);
+  --bs-card-cap-bg: transparent;
+  --bs-card-spacer-x: 1.25rem;
+  --bs-card-spacer-y: 1.25rem;
+  box-shadow: var(--ms-shadow-sm);
+}
+.card-header {
+  font-weight: 600;
+  border-bottom-color: var(--ms-border);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+  border-radius: var(--ms-radius-md);
+  border-color: #cbd5e1;
+  background-color: var(--ms-paper);
+  color: var(--ms-text);
+  min-height: 40px;
+  font-size: 0.9375rem;
+}
+[data-theme='dark'] .form-control,
+[data-theme='dark'] .form-select {
+  border-color: #2c3a52;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--ms-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+.form-label {
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--ms-text-secondary);
+  margin-bottom: 0.35rem;
+}
+.form-check-input:checked {
+  background-color: var(--ms-primary);
+  border-color: var(--ms-primary);
+}
+.invalid-feedback,
+.text-danger {
+  color: var(--ms-error) !important;
+}
+.form-text {
+  color: var(--ms-text-secondary);
+}
+/* Forms that set text-primary on the whole <form> made every label blue */
+form.text-primary {
+  color: var(--ms-text) !important;
+}
+
+/* Tables */
+.table {
+  --bs-table-bg: var(--ms-paper);
+  --bs-table-color: var(--ms-text);
+  --bs-table-border-color: var(--ms-border);
+  --bs-table-striped-bg: var(--ms-sunken);
+  --bs-table-hover-bg: rgba(99, 102, 241, 0.05);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+.table > thead th,
+.table > thead > tr > th {
+  background: var(--ms-sunken) !important;
+  color: var(--ms-text-secondary) !important;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  border-bottom-width: 1px;
+}
+.table-responsive {
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius-lg);
+}
+.table-responsive > .table {
+  margin-bottom: 0;
+}
+
+/* Modals, badges, alerts, pagination */
+.modal-content {
+  border: 0;
+  border-radius: var(--ms-radius-lg);
+  box-shadow: var(--ms-shadow-lg);
+  background: var(--ms-paper);
+}
+.modal-header,
+.modal-footer {
+  border-color: var(--ms-border);
+}
+.modal-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+.badge {
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.35em 0.7em;
+}
+.alert {
+  border-radius: var(--ms-radius-md);
+}
+.page-link {
+  color: var(--ms-primary);
+  border-color: var(--ms-border);
+}
+.active > .page-link,
+.page-link.active {
+  background-color: var(--ms-primary);
+  border-color: var(--ms-primary);
+}
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active {
+  font-weight: 600;
+}
+.nav-pills .nav-link.active {
+  background-color: var(--ms-primary);
+}
+
+/* Older screens wrap content in .container-fluid / CardBody without spacing */
+main > .container-fluid,
+main > div > .container-fluid {
+  padding-inline: clamp(16px, 2.5vw, 24px);
+}
+main .card-body > form,
+main > .card-body,
+main > div > .card-body {
+  padding-inline: clamp(16px, 2.5vw, 24px);
+}
