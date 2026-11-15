@@ -35,7 +35,7 @@ const PublicFooter = () => {
           <Grid item xs={12} md={4}>
             <BrandLink />
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2, maxWidth: 320 }}>
-              Simple software for functions, marriage halls and schools, in English and five Indian languages.
+              We help businesses modernize, go digital and grow with AI, in English and five Indian languages.
             </Typography>
           </Grid>
           <Grid item xs={6} md={3}>
