@@ -1,140 +1,171 @@
-import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
-import LanguageSelector from "../../language/LanguageSelector";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { NavLink, Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Stack,
+  Toolbar,
+  Typography,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import TranslateIcon from '@mui/icons-material/Translate';
+import CheckIcon from '@mui/icons-material/Check';
+import { useLanguage } from '../../language/LanguageContext';
 
-const StyledNavbar = styled(Navbar)`
-  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
+export const LANGUAGES = [
+  { code: 'en', label: 'English' },
+  { code: 'ta', label: 'தமிழ்' },
+  { code: 'hi', label: 'हिन्दी' },
+  { code: 'te', label: 'తెలుగు' },
+  { code: 'kn', label: 'ಕನ್ನಡ' },
+  { code: 'ml', label: 'മലയാളം' },
+];
 
-  @media (max-width: 991px) {
-    background: rgba(255,255,255,0.98);
-    backdrop-filter: blur(10px);
-  }
-`;
+const NAV = [
+  { to: '/', key: 'home', fallback: 'Home', end: true },
+  { to: '/services', key: 'ourServices', fallback: 'Products' },
+  { to: '/pricing', key: 'pricing', fallback: 'Pricing' },
+  { to: '/about', key: 'about_us', fallback: 'About' },
+  { to: '/contactus', key: 'contact_us', fallback: 'Contact' },
+];
 
-const BrandLogo = styled.img`
-  transition: transform 0.3s ease;
-  &:hover {
-    transform: rotate(-15deg);
-  }
-`;
+const navSx = {
+  color: 'text.secondary',
+  fontWeight: 500,
+  fontSize: 15,
+  px: 1.5,
+  py: 1,
+  borderRadius: 2,
+  textDecoration: 'none',
+  '&:hover': { color: 'text.primary', bgcolor: 'action.hover' },
+  '&.active': { color: 'primary.main', fontWeight: 600 },
+};
 
-const StyledNavLink = styled(NavLink)`
-  color: #2d3436 !important;
-  text-decoration: none;
-  padding: 0.8rem 1.2rem;
-  margin: 0 0.5rem;
-  border-radius: 8px;
-  position: relative;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
+const LanguageMenu = ({ fullWidth = false }) => {
+  const { language, changeLanguage } = useLanguage() || {};
+  const [anchor, setAnchor] = useState(null);
+  const current = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
+  return (
+    <>
+      <Button
+        color="inherit"
+        variant={fullWidth ? 'outlined' : 'text'}
+        fullWidth={fullWidth}
+        startIcon={<TranslateIcon fontSize="small" />}
+        onClick={(e) => setAnchor(e.currentTarget)}
+        aria-label="Change language"
+        aria-haspopup="menu"
+        sx={{ color: 'text.secondary', fontWeight: 500 }}
+      >
+        {current.label}
+      </Button>
+      <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}>
+        {LANGUAGES.map((l) => (
+          <MenuItem
+            key={l.code}
+            selected={l.code === current.code}
+            onClick={() => {
+              changeLanguage && changeLanguage(l.code);
+              setAnchor(null);
+            }}
+            sx={{ minWidth: 160, justifyContent: 'space-between', gap: 2 }}
+          >
+            {l.label}
+            {l.code === current.code && <CheckIcon fontSize="small" color="primary" />}
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+};
 
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #0984e3 0%, #6c5ce7 100%);
-    transition: width 0.3s ease;
-  }
+export const BrandLink = () => {
+  const { t } = useTranslation();
+  return (
+    <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', color: 'text.primary' }}>
+      <Box component="img" src="/logo.png" alt="" width={36} height={36} sx={{ borderRadius: 1.5 }} />
+      <Typography component="span" sx={{ fontWeight: 700, fontSize: 19, letterSpacing: '-0.01em' }}>
+        {t('my_accounts', { defaultValue: 'My Success' })}
+      </Typography>
+    </Box>
+  );
+};
 
-  &:hover {
-    color: #0984e3 !important;
-    background: rgba(9, 132, 227, 0.05);
-    transform: translateY(-2px);
-
-    &::before {
-      width: 100%;
-    }
-  }
-
-  &.active {
-    color: #0984e3 !important;
-    background: rgba(9, 132, 227, 0.1);
-    
-    &::before {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 991px) {
-    margin: 0.5rem 0;
-    padding: 1rem;
-    justify-content: center;
-    border-radius: 12px;
-    
-    &:hover {
-      transform: none;
-    }
-  }
-`;
-
-const NavbarBrandText = styled.span`
-  font-weight: 700;
-  background: linear-gradient(90deg, #0984e3 0%, #6c5ce7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-left: 0.5rem;
-`;
-
-const CustomToggle = styled(Navbar.Toggle)`
-  border: none;
-  &:focus {
-    box-shadow: none;
-  }
-
-  .navbar-toggler-icon {
-    background-image: url("data:image/svg2charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(9, 132, 227, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-  }
-`;
-
+/** Header for all public pages: brand, navigation, language, login and demo. */
 const AppHeader = () => {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
 
   return (
-    <StyledNavbar expand="lg" collapseOnSelect>
-      <Container fluid>
-        <Navbar.Brand href="/" className="d-flex align-items-center">
-          <BrandLogo
-            alt="Logo"
-            src="logo.png"
-            width="40"
-            height="40"
-            className="d-inline-block align-top"
-          />
-          <NavbarBrandText className="h4 mb-0">{t('my_accounts')}</NavbarBrandText>
-        </Navbar.Brand>
-        
-        <CustomToggle aria-controls="responsive-navbar-nav" />
-        
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ms-auto align-items-lg-center">
-            <StyledNavLink to='/'>{t('home')}</StyledNavLink>
-           <StyledNavLink to='/services'>{t('ourServices')}</StyledNavLink>
-            <StyledNavLink to='/about'>{t('about_us')}</StyledNavLink>
-            <StyledNavLink to='/contactus'>{t('contact_us')}</StyledNavLink>
-            <StyledNavLink to='/login' className="gradient-btn">
-              {t('login')}
-            </StyledNavLink>
-            <LanguageSelector
-              backgroundColor="rgba(9, 132, 227, 0.1)"
-              textColor="#0984e3"
-              hoverColor="#6c5ce7"
-              className="ms-2"
-            />
-          </Nav>
-        </Navbar.Collapse>
+    <AppBar position="sticky" sx={{ backdropFilter: 'saturate(180%) blur(8px)', bgcolor: (th) => `${th.palette.background.paper}e6` }}>
+      <Container maxWidth="lg">
+        <Toolbar disableGutters sx={{ minHeight: { xs: 64, md: 72 }, gap: 2 }}>
+          <BrandLink />
+
+          <Stack component="nav" direction="row" spacing={0.5} sx={{ ml: 4, display: { xs: 'none', md: 'flex' } }} aria-label="Main">
+            {NAV.map((n) => (
+              <Box key={n.to} component={NavLink} to={n.to} end={n.end} sx={navSx}>
+                {t(n.key, { defaultValue: n.fallback })}
+              </Box>
+            ))}
+          </Stack>
+
+          <Box sx={{ flex: 1 }} />
+
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <LanguageMenu />
+            <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
+              {t('login', { defaultValue: 'Login' })}
+            </Button>
+            <Button component={RouterLink} to="/purchase" variant="contained">
+              {t('watchDemo', { defaultValue: 'Try Demo' })}
+            </Button>
+          </Stack>
+
+          <IconButton sx={{ display: { md: 'none' } }} onClick={() => setOpen(true)} aria-label="Open menu">
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
       </Container>
-    </StyledNavbar>
+
+      <Drawer anchor="right" open={open} onClose={() => setOpen(false)} PaperProps={{ sx: { width: 300, p: 2 } }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+          <BrandLink />
+          <IconButton onClick={() => setOpen(false)} aria-label="Close menu">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+        <List component="nav" aria-label="Main">
+          {NAV.map((n) => (
+            <ListItemButton key={n.to} component={NavLink} to={n.to} end={n.end} onClick={() => setOpen(false)} sx={{ borderRadius: 2, '&.active': { color: 'primary.main', bgcolor: 'action.selected' } }}>
+              <ListItemText primary={t(n.key, { defaultValue: n.fallback })} primaryTypographyProps={{ fontWeight: 500 }} />
+            </ListItemButton>
+          ))}
+        </List>
+        <Divider sx={{ my: 2 }} />
+        <Stack spacing={1.5}>
+          <LanguageMenu fullWidth />
+          <Button component={RouterLink} to="/login" variant="outlined" color="inherit" fullWidth onClick={() => setOpen(false)}>
+            {t('login', { defaultValue: 'Login' })}
+          </Button>
+          <Button component={RouterLink} to="/purchase" variant="contained" fullWidth onClick={() => setOpen(false)}>
+            {t('watchDemo', { defaultValue: 'Try Demo' })}
+          </Button>
+        </Stack>
+      </Drawer>
+    </AppBar>
   );
 };
 

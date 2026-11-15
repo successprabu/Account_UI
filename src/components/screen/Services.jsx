@@ -1,383 +1,110 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
-import { 
-  FiArrowRight, 
-  FiZap, 
-  FiTrendingUp,
-  FiShield,
-  FiGlobe,
-  FiCheckCircle,
-  FiBookOpen,
-  FiCalendar,
-  FiHome,
-  FiUsers
-} from 'react-icons/fi';
-import { 
-  FaSchool, 
-  FaHandsHelping, 
-  FaCalendarAlt, 
-  FaAnchor,
-  FaRobot,
-  FaChartLine,
-  FaDatabase,
-  FaMobileAlt,
-  FaCloud,
-  FaLock
-} from 'react-icons/fa';
-import { HiSparkles, HiTemplate, HiUserGroup, HiArrowRight, HiLightningBolt } from 'react-icons/hi';
-import './css/ServicePage.css';
-import { Link } from 'react-router-dom';
+import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import CheckIcon from '@mui/icons-material/Check';
+import { CtaBand, IconTile } from '../public/Section';
+import { PRODUCTS } from '../public/products';
+
+const ProductBlock = ({ product, reverse }) => {
+  const { t } = useTranslation();
+  const p = product;
+  const ctaProps = p.cta.href ? { href: p.cta.href, target: '_blank', rel: 'noopener noreferrer', endIcon: <OpenInNewIcon /> } : { component: RouterLink, to: p.cta.to, endIcon: <ArrowForwardIcon /> };
+  return (
+    <Box component="section" id={p.id} sx={{ py: { xs: 6, md: 8 }, scrollMarginTop: 80 }}>
+      <Container maxWidth="lg">
+        <Grid container spacing={{ xs: 4, md: 8 }} alignItems="flex-start" direction={reverse ? 'row-reverse' : 'row'}>
+          <Grid item xs={12} md={6}>
+            <IconTile color={p.color} size={56}>
+              {p.icon}
+            </IconTile>
+            <Typography variant="overline" sx={{ display: 'block', mt: 2.5, color: p.color }}>
+              {p.tagline}
+            </Typography>
+            <Typography variant="h2" component="h2" sx={{ mt: 0.5 }}>
+              {t(p.titleKey, { defaultValue: p.title })}
+            </Typography>
+            <Typography color="text.secondary" sx={{ mt: 2, fontSize: 17 }}>
+              {t(p.descriptionKey, { defaultValue: p.summary })}
+            </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 3.5 }}>
+              <Button variant="contained" size="large" {...ctaProps}>
+                {p.cta.label}
+              </Button>
+              <Button component={RouterLink} to="/pricing" variant="outlined" color="inherit" size="large">
+                Pricing
+              </Button>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ p: { xs: 2.5, md: 3.5 }, borderRadius: 4 }}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
+                What it does
+              </Typography>
+              <Stack spacing={1.75}>
+                {p.features.map((f) => (
+                  <Stack key={f} direction="row" spacing={1.5} alignItems="flex-start">
+                    <Box sx={{ width: 24, height: 24, borderRadius: '50%', display: 'grid', placeItems: 'center', bgcolor: `${p.color}1a`, color: p.color, flexShrink: 0, mt: '1px' }}>
+                      <CheckIcon sx={{ fontSize: 16 }} />
+                    </Box>
+                    <Typography>{f}</Typography>
+                  </Stack>
+                ))}
+              </Stack>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+    </Box>
+  );
+};
 
 const ServicePage = () => {
   const { t } = useTranslation();
-
-  const services = [
-    {
-      title: "moitech",
-      description: "moitechDescription",
-      icon: <HiSparkles className="service-icon" />,
-      gradient: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)",
-      features: ["AI-Powered", "Real-time Analytics", "Automation", "Scalable"],
-      link: "purchase",
-      stats: "40% Efficiency Gain"
-    },
-    {
-      title: "mahalManagement",
-      description: "mahalDescription",
-      icon: <HiTemplate className="service-icon" />,
-      gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
-      features: ["Event Planning", "Resource Management", "Booking System", "Reporting"],
-      link: "mahal-reg",
-      stats: "Streamlined Operations"
-    },
-    {
-      title: "schoolWebsiteERP",
-      description: "schoolDescription",
-      icon: <HiUserGroup className="service-icon" />,
-      gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-      features: ["Student Management", "Academic Tracking", "Parent Portal", "Fee Collection"],
-      link: "https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/",
-      external: true,
-      stats: "Complete Solution"
-    },
-  ];
-
-  const serviceFeatures = [
-    {
-      title: "AI-Powered Solutions",
-      description: "Leverage cutting-edge artificial intelligence for intelligent automation",
-      icon: <FaRobot />,
-      color: "#6366f1"
-    },
-    {
-      title: "Real-time Analytics",
-      description: "Make data-driven decisions with live insights and dashboards",
-      icon: <FaChartLine />,
-      color: "#10b981"
-    },
-    {
-      title: "Enterprise Security",
-      description: "Bank-grade security with end-to-end encryption",
-      icon: <FaLock />,
-      color: "#ef4444"
-    },
-    {
-      title: "Cloud Native",
-      description: "Built for the cloud with 99.9% uptime guarantee",
-      icon: <FaCloud />,
-      color: "#8b5cf6"
-    },
-    {
-      title: "Mobile First",
-      description: "Fully responsive design with dedicated mobile apps",
-      icon: <FaMobileAlt />,
-      color: "#f59e0b"
-    },
-    {
-      title: "Scalable Architecture",
-      description: "Grow with your business needs without limitations",
-      icon: <FaDatabase />,
-      color: "#ec4899"
-    },
-  ];
-
-  const industries = [
-    { name: "Education", icon: <FaSchool />, count: "500+ Schools" },
-    { name: "Events & Hospitality", icon: <FaCalendarAlt />, count: "200+ Venues" },
-    { name: "Technology", icon: <FiZap />, count: "100+ Startups" },
-    { name: "Enterprise", icon: <FiGlobe />, count: "50+ Corporations" },
-  ];
-
   return (
-    <div className="service-page">
-      {/* <AppHeader /> */}
-      
-      {/* Hero Section */}
-      <section className="service-hero-modern">
-        <div className="hero-bg-gradient"></div>
-        <Container>
-          <Row className="justify-content-center align-items-center min-vh-80">
-            <Col lg={10} className="text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="hero-badge">
-                  <span>Our Solutions</span>
-                </div>
-                <h1 className="hero-title">
-                  Transformative{" "}
-                  <span className="gradient-text">Digital Solutions</span>
-                </h1>
-                <p className="hero-subtitle">
-                  Power your business with our cutting-edge, AI-driven platforms designed 
-                  for efficiency, growth, and unparalleled success.
-                </p>
-                <div className="hero-cta">
-                    <Link to="/purchase">
-                    <Button variant="outline-light" className="cta-button">
-                      <span>{t("watchDemo")}</span>
-                    </Button>
-                  </Link>
-                      <Link to="/pricing">
-                    <Button variant="outline-light" className="cta-button">
-                      <span>{t("pricing")}</span>
-                    </Button>
-                  </Link>
-                
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-
-      {/* Stats Section */}
-      <section className="service-stats-section py-5">
-        <Container>
-          <Row>
-            {[
-              { value: "500+", label: "Happy Clients", icon: <FiUsers />, color: "#6366f1" },
-              { value: "99.7%", label: "Satisfaction Rate", icon: <FiTrendingUp />, color: "#10b981" },
-              { value: "24/7", label: "Expert Support", icon: <FiShield />, color: "#f59e0b" },
-              { value: "3M+", label: "Users Served", icon: <FiGlobe />, color: "#8b5cf6" },
-            ].map((stat, index) => (
-              <Col key={index} lg={3} md={6} className="mb-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="stat-card-modern"
-                >
-                  <div className="stat-icon-wrapper" style={{ color: stat.color }}>
-                    {stat.icon}
-                  </div>
-                  <h3 className="stat-value">{stat.value}</h3>
-                  <p className="stat-label">{stat.label}</p>
-                </motion.div>
-              </Col>
+    <Box sx={{ bgcolor: 'background.default' }}>
+      <Box component="section" sx={{ pt: { xs: 6, md: 9 }, pb: { xs: 2, md: 3 }, textAlign: 'center' }}>
+        <Container maxWidth="md">
+          <Typography variant="overline" color="primary.main">
+            {t('ourServices', { defaultValue: 'Our products' })}
+          </Typography>
+          <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1 }}>
+            Software for the work you already do
+          </Typography>
+          <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
+            Moi accounting for functions, bookings for marriage halls and office tools for schools. Each one works in six languages and on any device.
+          </Typography>
+          <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ mt: 3.5 }}>
+            {PRODUCTS.map((p) => (
+              <Chip key={p.id} component="a" href={`#${p.id}`} clickable label={t(p.titleKey, { defaultValue: p.title })} icon={<Box sx={{ display: 'flex', color: p.color, '& svg': { fontSize: 18 } }}>{p.icon}</Box>} variant="outlined" sx={{ bgcolor: 'background.paper', px: 0.5 }} />
             ))}
-          </Row>
+          </Stack>
         </Container>
-      </section>
+      </Box>
 
-      {/* Services Grid */}
-      <section className="services-grid-section py-6">
-        <Container>
-          <Row className="justify-content-center mb-6">
-            <Col lg={8} className="text-center">
-              <div className="section-badge">Our Platforms</div>
-              <h2 className="section-title">Comprehensive Digital Solutions</h2>
-              <p className="section-subtitle">
-                Each platform is engineered with precision to solve specific business challenges
-              </p>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            {services.map((service, index) => (
-              <Col key={index} lg={4} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -10 }}
-                  className="service-card-modern"
-                >
-                  <div 
-                    className="service-card-header"
-                    style={{ background: service.gradient }}
-                  >
-                    <div className="service-icon-wrapper">
-                      {service.icon}
-                    </div>
-                    <div className="service-stats-badge">
-                      {service.stats}
-                    </div>
-                  </div>
-                  <div className="service-card-body">
-                    <h3 className="service-title">{t(service.title)}</h3>
-                    <p className="service-description">{t(service.description)}</p>
-                    <div className="service-features">
-                      {service.features.map((feature, idx) => (
-                        <div key={idx} className="feature-tag">
-                          <FiCheckCircle />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {service.external ? (
-                      <a
-                        href={service.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="service-link"
-                      >
-                        <span>Explore Platform</span>
-                        <HiArrowRight />
-                      </a>
-                    ) : (
-                      <Link to={service.link} className="service-link">
-                        <span>Explore Platform</span>
-                        <HiArrowRight />
-                      </Link>
-                    )}
-                  </div>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
+      {PRODUCTS.map((p, i) => (
+        <Box key={p.id} sx={{ bgcolor: i % 2 === 1 ? 'background.paper' : 'transparent', borderBlock: i % 2 === 1 ? 1 : 0, borderColor: 'divider' }}>
+          <ProductBlock product={p} reverse={i % 2 === 1} />
+        </Box>
+      ))}
 
-      {/* Features Section */}
-      <section className="features-section-modern py-6 bg-light-modern">
-        <Container>
-          <Row className="justify-content-center mb-6">
-            <Col lg={8} className="text-center">
-              <div className="section-badge">Why Choose Us</div>
-              <h2 className="section-title">Built for Excellence</h2>
-              <p className="section-subtitle">
-                Every solution is crafted with industry-leading features
-              </p>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            {serviceFeatures.map((feature, index) => (
-              <Col key={index} lg={4} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="feature-card-modern"
-                >
-                  <div className="feature-icon-wrapper" style={{ backgroundColor: `${feature.color}15` }}>
-                    <div className="feature-icon" style={{ color: feature.color }}>
-                      {feature.icon}
-                    </div>
-                  </div>
-                  <h4 className="feature-title">{feature.title}</h4>
-                  <p className="feature-description">{feature.description}</p>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
-
-      {/* Industries Section */}
-      <section className="industries-section py-6">
-        <Container>
-          <Row className="justify-content-center mb-6">
-            <Col lg={8} className="text-center">
-              <div className="section-badge">Industries We Serve</div>
-              <h2 className="section-title">Trusted Across Sectors</h2>
-              <p className="section-subtitle">
-                Our solutions are tailored for diverse industry needs
-              </p>
-            </Col>
-          </Row>
-          <Row className="g-4">
-            {industries.map((industry, index) => (
-              <Col key={index} lg={3} md={6}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="industry-card-modern"
-                >
-                  <div className="industry-icon">
-                    {industry.icon}
-                  </div>
-                  <h4 className="industry-name">{industry.name}</h4>
-                  <p className="industry-count">{industry.count}</p>
-                </motion.div>
-              </Col>
-            ))}
-          </Row>
-        </Container>
-      </section>
-
-      {/* CTA Section */}
-      <section className="service-cta-section py-6">
-        <div className="cta-bg-gradient"></div>
-        <Container>
-          <Row className="justify-content-center">
-            <Col lg={8} className="text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="cta-badge">
-                  <HiLightningBolt />
-                  <span>Get Started Today</span>
-                </div>
-                <h2 className="cta-title">
-                  Ready to Transform Your Business?
-                </h2>
-                <p className="cta-text">
-                  Schedule a personalized demo and see how our solutions can drive 
-                  your success. No commitment required.
-                </p>
-                <div className="cta-buttons">
-                  <Link to="/contactus">
-                    <Button variant="outline-light"  className="cta-button">
-                      <span>{t("contact_us")}</span>
-            
-                    </Button>
-                  </Link>
-  
-                  <Link to="/pricing">
-                    <Button variant="outline-light" className="cta-button">
-                      <span>{t("pricing")}</span>
-                    </Button>
-                  </Link>
-                </div>
-                <div className="cta-guarantee">
-                  <div className="guarantee-item">
-                    <FiCheckCircle />
-                    <span>7-days free trial</span>
-                  </div>
-                  <div className="guarantee-item">
-                    <FiCheckCircle />
-                    <span>No credit card required</span>
-                  </div>
-                  <div className="guarantee-item">
-                    <FiCheckCircle />
-                    <span>24/7 expert support</span>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </div>
+      <CtaBand
+        title="Not sure which one fits?"
+        text="Call or message us and we will set it up with you, in Tamil or English."
+        actions={
+          <>
+            <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
+              {t('contact_us', { defaultValue: 'Contact us' })}
+            </Button>
+            <Button component={RouterLink} to="/purchase" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
+              {t('watchDemo', { defaultValue: 'Try Demo' })}
+            </Button>
+          </>
+        }
+      />
+    </Box>
   );
 };
 
