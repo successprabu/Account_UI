@@ -370,7 +370,7 @@ const AppShell = ({ children }) => {
           </Toolbar>
         </AppBar>
 
-        <Box component="main" sx={{ flex: 1, minWidth: 0 }}>
+        <Box component="main" sx={{ flex: 1, minWidth: 0, px: { xs: 2, md: 3 }, pb: 4 }}>
           {children}
         </Box>
       </Box>

@@ -1,0 +1,63 @@
+/* One print layout for every list and report screen. */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* App chrome and controls do not print */
+  .MuiDrawer-root,
+  .MuiAppBar-root,
+  .MuiToolbar-root,
+  .page-title-bar .MuiButton-root,
+  nav,
+  footer,
+  form,
+  .btn,
+  button,
+  .pagination,
+  .Toastify,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  .page-title-bar {
+    padding: 0 0 8px !important;
+    border-bottom: 1px solid #000;
+    margin-bottom: 8px;
+  }
+  .page-title-bar h1 {
+    font-size: 16pt !important;
+  }
+  table {
+    width: 100% !important;
+    font-size: 9.5pt !important;
+    border-collapse: collapse !important;
+  }
+  th,
+  td {
+    border: 1px solid #999 !important;
+    padding: 4px 6px !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr {
+    page-break-inside: avoid;
+  }
+  .table-responsive {
+    border: 0 !important;
+    overflow: visible !important;
+  }
+  a[href]::after {
+    content: '';
+  }
+}

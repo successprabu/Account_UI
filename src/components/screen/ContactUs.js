@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Button, Card, Container, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -18,7 +19,9 @@ const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '
 
 const ContactUs = () => {
   const { t } = useTranslation();
-  const [form, setForm] = useState(emptyForm);
+  const [params] = useSearchParams();
+  const requested = params.get('topic');
+  const [form, setForm] = useState(() => ({ ...emptyForm, topic: TOPICS.includes(requested) ? requested : emptyForm.topic }));
   const [errors, setErrors] = useState({});
   const [sentVia, setSentVia] = useState('');
 

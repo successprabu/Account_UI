@@ -23,9 +23,12 @@ const ProductBlock = ({ product, reverse }) => {
             <Typography variant="overline" sx={{ display: 'block', mt: 2.5, color: p.color }}>
               {p.tagline}
             </Typography>
-            <Typography variant="h2" component="h2" sx={{ mt: 0.5 }}>
-              {t(p.titleKey, { defaultValue: p.title })}
-            </Typography>
+            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
+              <Typography variant="h2" component="h2">
+                {t(p.titleKey, { defaultValue: p.title })}
+              </Typography>
+              {p.comingSoon && <Chip label="Coming soon" color="error" variant="outlined" />}
+            </Stack>
             <Typography color="text.secondary" sx={{ mt: 2, fontSize: 17 }}>
               {t(p.descriptionKey, { defaultValue: p.summary })}
             </Typography>
@@ -33,15 +36,17 @@ const ProductBlock = ({ product, reverse }) => {
               <Button variant="contained" size="large" {...ctaProps}>
                 {p.cta.label}
               </Button>
-              <Button component={RouterLink} to="/pricing" variant="outlined" color="inherit" size="large">
-                Pricing
-              </Button>
+              {!p.comingSoon && (
+                <Button component={RouterLink} to="/pricing" variant="outlined" color="inherit" size="large">
+                  Pricing
+                </Button>
+              )}
             </Stack>
           </Grid>
           <Grid item xs={12} md={6}>
             <Card sx={{ p: { xs: 2.5, md: 3.5 }, borderRadius: 4 }}>
               <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
-                What it does
+                {p.comingSoon ? 'What it will do' : 'What it does'}
               </Typography>
               <Stack spacing={1.75}>
                 {p.features.map((f) => (
@@ -74,7 +79,7 @@ const ServicePage = () => {
             Software for the work you already do
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
-            Moi accounting for functions, bookings for marriage halls and office tools for schools. Each one works in six languages and on any device.
+            Moi accounting for functions, bookings for marriage halls, office tools for schools, and healthcare software on the way. Each one works in six languages and on any device.
           </Typography>
           <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ mt: 3.5 }}>
             {PRODUCTS.map((p) => (

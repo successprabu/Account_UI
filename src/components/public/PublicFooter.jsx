@@ -41,8 +41,9 @@ const PublicFooter = () => {
           <Grid item xs={6} md={3}>
             <Column title="Products">
               {PRODUCTS.map((p) => (
-                <FooterLink key={p.id} to={p.cta.to ? '/services' : undefined} href={p.cta.href}>
+                <FooterLink key={p.id} to={p.cta.to ? `/services#${p.id}` : undefined} href={p.cta.href}>
                   {t(p.titleKey, { defaultValue: p.title })}
+                  {p.comingSoon ? ' (coming soon)' : ''}
                 </FooterLink>
               ))}
             </Column>
