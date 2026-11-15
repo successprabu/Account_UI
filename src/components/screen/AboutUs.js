@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
 import TranslateIcon from '@mui/icons-material/Translate';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
@@ -42,12 +42,15 @@ const AboutUs = () => {
         </Container>
       </Box>
 
-      <Section tinted eyebrow="What we build" title="Three products, one platform">
+      <Section tinted eyebrow="What we build" title="Our products">
         <Grid container spacing={3}>
           {PRODUCTS.map((p) => (
-            <Grid item xs={12} md={4} key={p.id}>
+            <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%' }}>
-                <IconTile color={p.color}>{p.icon}</IconTile>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                  <IconTile color={p.color}>{p.icon}</IconTile>
+                  {p.comingSoon && <Chip label="Coming soon" size="small" color="error" variant="outlined" />}
+                </Stack>
                 <Typography variant="h5" component="h3" sx={{ mt: 2 }}>
                   {t(p.titleKey, { defaultValue: p.title })}
                 </Typography>

@@ -268,7 +268,7 @@
   "enterLandmark": "Please Enter Landmark",
   "onlineBooking": "Online Booking",
   "saveSuccessMessage": "Data saved successfully!",
-  "watchDemo":"Try Demo",
+  "watchDemo": "Try Demo",
   "login_security_note": "For security reasons, please log in again to continue.",
   "welcome_back": "Welcome Back",
   "addMahalBooking": "Add Mahal Booking",
@@ -287,7 +287,7 @@
   "performanceMetrics": "Performance Metrics",
   "keyPerformanceIndicators": "Key Performance Indicators (KPIs)",
   "recentActivity": "Recent Activity",
-  "viewAll": "View All"
-
-
+  "viewAll": "View All",
+  "healthcareSoftware": "Healthcare Software",
+  "healthcareDescription": "Clinic and hospital management software: appointments, patient records, billing, pharmacy stock and patient reminders. Coming soon."
 }

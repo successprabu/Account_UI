@@ -2,6 +2,7 @@ import React from 'react';
 import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
 
 export const SCHOOL_ERP_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/';
 
@@ -67,7 +68,30 @@ export const PRODUCTS = [
     ],
     cta: { label: 'Open School ERP', href: SCHOOL_ERP_URL },
   },
+  {
+    id: 'healthcare',
+    titleKey: 'healthcareSoftware',
+    title: 'Healthcare Software',
+    descriptionKey: 'healthcareDescription',
+    tagline: 'Clinic and hospital management, coming soon',
+    summary:
+      'Appointments, patient records, billing and pharmacy stock for clinics and small hospitals, with reminders for patients and reports for doctors.',
+    icon: <LocalHospitalOutlinedIcon />,
+    color: '#ef4444',
+    comingSoon: true,
+    features: [
+      'Appointment booking and queue display',
+      'Patient records, prescriptions and visit history',
+      'Billing, receipts and insurance details',
+      'Pharmacy and consumables stock',
+      'SMS and WhatsApp reminders for patients',
+    ],
+    cta: { label: 'Register interest', to: '/contactus?topic=Healthcare%20Software' },
+  },
 ];
+
+/** Products people can use today. */
+export const LIVE_PRODUCTS = PRODUCTS.filter((p) => !p.comingSoon);
 
 export const CONTACT = {
   email: 'mysuccesstechnologies@gmail.com',

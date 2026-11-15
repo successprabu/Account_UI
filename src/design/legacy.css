@@ -204,13 +204,8 @@ form.text-primary {
   background-color: var(--ms-primary);
 }
 
-/* Older screens wrap content in .container-fluid / CardBody without spacing */
-main > .container-fluid,
-main > div > .container-fluid {
-  padding-inline: clamp(16px, 2.5vw, 24px);
-}
-main .card-body > form,
-main > .card-body,
-main > div > .card-body {
-  padding-inline: clamp(16px, 2.5vw, 24px);
+/* Signed-in screens that are not on MUI yet: a little breathing room under the title bar */
+main > div > .row:first-of-type,
+main > div > form:first-of-type {
+  margin-top: 4px;
 }

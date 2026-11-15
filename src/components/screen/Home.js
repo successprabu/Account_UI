@@ -234,12 +234,15 @@ const Home = () => {
       </Section>
 
       {/* Ready-made products */}
-      <Section tinted eyebrow="Ready-made products" title="Start today with our apps" intro="Use one of our ready-to-run products, or let us build something made for your business.">
+      <Section tinted eyebrow="Ready-made products" title="Start today with our apps" intro="Use one of our ready-to-run products, or let us build something made for your business. Healthcare software is next on our roadmap.">
         <Grid container spacing={3}>
           {PRODUCTS.map((p) => (
-            <Grid item xs={12} md={4} key={p.id}>
+            <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', transition: 'box-shadow .2s, transform .2s', '&:hover': { boxShadow: 'var(--ms-shadow-md)', transform: 'translateY(-2px)' } }}>
-                <IconTile color={p.color}>{p.icon}</IconTile>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                  <IconTile color={p.color}>{p.icon}</IconTile>
+                  {p.comingSoon && <Chip label="Coming soon" size="small" color="error" variant="outlined" />}
+                </Stack>
                 <Typography variant="h5" component="h3" sx={{ mt: 2.5 }}>
                   {t(p.titleKey, { defaultValue: p.title })}
                 </Typography>

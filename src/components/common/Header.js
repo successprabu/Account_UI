@@ -23,8 +23,9 @@ const Header = ({ titles = [], links = [] }) => {
       {!signedIn() && <AppHeader />}
       <Box
         component="header"
+        className="page-title-bar"
         sx={{
-          px: { xs: 2, md: 3 },
+          px: signedIn() ? 0 : { xs: 2, md: 3 },
           pt: { xs: 2.5, md: 3 },
           pb: { xs: 2, md: 2.5 },
         }}

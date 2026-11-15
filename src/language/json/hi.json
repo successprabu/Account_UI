@@ -120,12 +120,12 @@
   "mahalName": "महल का नाम",
   "enter_mahal_name": "महल का नाम दर्ज करें",
   "saveSuccessMessage": "डेटा सफलतापूर्वक सहेजा गया!",
-  "watchDemo":"डेमो आज़माएं",
+  "watchDemo": "डेमो आज़माएं",
   "login_security_note": "कृपया ध्यान दें कि लॉगिन आईडी और पासवर्ड आपके मोबाइल नंबर पर भेजे जाएंगे। कृपया इसे सुरक्षित रखें।",
   "welcome_back": "स्वागत है वापस",
   "addMahalBooking": "महल बुकिंग जोड़ें",
   "login_to_your_account": "अपने खाते में लॉगिन करें",
-    "getStarted": "शुरू करें",
+  "getStarted": "शुरू करें",
   "contactSales": "बिक्री से संपर्क करें",
   "sign_up": "साइन अप करें",
   "forgot_password": "पासवर्ड भूल गए",
@@ -170,5 +170,7 @@
   "dashbordTotalTrans": "डैशबोर्ड कुल ट्रांजेक्शन",
   "dashbordTotalPlaces": "डैशबोर्ड कुल स्थान",
   "dashbordTotalExpenase": "डैशबोर्ड कुल खरचे",
-  "expenses": "खरचे"
+  "expenses": "खरचे",
+  "healthcareSoftware": "हेल्थकेयर सॉफ्टवेयर",
+  "healthcareDescription": "क्लिनिक और अस्पताल प्रबंधन सॉफ्टवेयर: अपॉइंटमेंट, मरीज़ रिकॉर्ड, बिलिंग, फ़ार्मेसी स्टॉक और मरीज़ रिमाइंडर। जल्द आ रहा है।"
 }

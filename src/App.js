@@ -4,6 +4,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./design/design.css";
 import "./design/legacy.css";
+import "./design/print.css";
 import { ToastContainer } from "react-toastify";
 import { LanguageProvider } from "./language/LanguageContext";
 import { ThemeProvider } from './ThemeProvider';

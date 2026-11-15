@@ -11,38 +11,43 @@ import {
 } from "react-bootstrap";
 
 
+/* Shared table for list and report screens; colours follow the design tokens (--ms-*). */
 export const ClientTable = styled(Table)`
-  font-size: 10px !important;
-  border: 1px solid #DFDFDF !important;
-  border-bottom: none !important;
-  thead {
-    tr {
-      border: none;
-    }
+  font-size: 0.8125rem !important;
+  border: 1px solid var(--ms-border) !important;
+  border-radius: var(--ms-radius-lg);
+  overflow: hidden;
+  background: var(--ms-paper);
+  thead tr {
+    border: none;
   }
-
   th {
-    background-color: #F2FAFF !important;
-    color: #17A1FA !important;
-    text-transform: uppercase !important;
-    border: none !important;
+    background-color: var(--ms-sunken) !important;
+    color: var(--ms-text-secondary) !important;
     font-weight: 600 !important;
-    border-bottom: 1px solid #DFDFDF !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.02em;
+    border: none !important;
+    border-bottom: 1px solid var(--ms-border) !important;
+    white-space: nowrap;
+    padding: 0.7rem 0.75rem !important;
   }
-
   tbody {
-    color: #000080;
-    background-color: #fff;    
+    color: var(--ms-text);
+    background-color: var(--ms-paper);
     tr {
       border: none;
     }
-
+    tr:hover td {
+      background-color: rgba(99, 102, 241, 0.04);
+    }
     td {
       border: none;
-      font-size: 11px;
-      color: #000080;
+      font-size: 0.8125rem;
+      color: var(--ms-text);
       vertical-align: middle !important;
-      border-bottom:  1px solid rgba(167, 167, 167, 0.2);
+      border-bottom: 1px solid var(--ms-border);
+      padding: 0.6rem 0.75rem;
     }
   }`
 
@@ -186,106 +191,125 @@ export const FormError = styled.span`
   font-weight: 600;
 `;
 export const SearchForm = styled(Form)`
-  font-size: 1rem;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", "Arial, sans-serif";
+  font-size: 0.9375rem;
   margin-bottom: 20px;
+  padding: 16px;
+  background: var(--ms-paper);
+  border: 1px solid var(--ms-border);
+  border-radius: var(--ms-radius-lg);
 `;
 
 export const SearchInput = styled(Form.Control)`
-  font-size: 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.6rem;
-  padding: 0.375rem 0.95rem;
-  font-size: 1rem;
-  color: #044179;
+  font-size: 0.9375rem;
+  border-radius: var(--ms-radius-md);
+  padding: 0.45rem 0.85rem;
+`;
+
+const buttonBase = `
+  font-size: 0.875rem;
+  font-weight: 600;
+  width: auto;
+  min-height: 40px;
+  padding: 0.45rem 1rem;
+  border-radius: var(--ms-radius-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 20px 8px 0 0;
 `;
 
 export const SearchButton = styled(Button).attrs({
   variant: 'primary',
   type: 'submit',
 })`
-  font-size: 1rem;
-  width: auto;
-  padding:7px;
-  margin: 20px 4px 0 0;
-  display: flex;
-  align-items: center;
+  ${buttonBase}
 `;
 export const SaveButton = styled(Button).attrs({
   variant: 'success',
   type: 'submit',
 })`
-  font-size: 1rem;
-  width: auto;
-  margin: 20px 5px 0 0;
-  display: flex;
-  align-items: center;
+  ${buttonBase}
 `;
 export const ClearButton = styled(Button).attrs({
   variant: 'secondary',
 })`
-  font-size: 1rem;
-  width: auto;
-  margin: 20px 0 0 5px;
-  display: flex;
-  align-items: center;
+  ${buttonBase}
 `;
 export const SearchLabel = styled(Form.Label)`
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", "Arial, sans-serif";
-  font-size: 1rem;
-  color: #0e2238;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ms-text-secondary);
+  margin-bottom: 0.35rem;
 `;
 
 export const PageSizeSelect = styled(Form.Control)`
   width: auto;
   display: inline-block;
+  border-radius: var(--ms-radius-md);
+  min-height: 36px;
+  padding: 0.3rem 2rem 0.3rem 0.75rem;
 `;
 
 export const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 16px;
+  .pagination {
+    gap: 4px;
+    margin: 0;
+  }
+  .page-link {
+    border-radius: var(--ms-radius-md) !important;
+    min-width: 36px;
+    text-align: center;
+  }
 `;
 
 export const PageSizeWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+  color: var(--ms-text-secondary);
 `;
 
 export const TotalRow = styled.tr`
-  background-color: blue;
-  color: white;
-  font-weight: bold;
+  td {
+    background-color: rgba(99, 102, 241, 0.08) !important;
+    color: var(--ms-text) !important;
+    font-weight: 700;
+    border-top: 2px solid var(--ms-primary) !important;
+  }
 `;
 export const PdfButton = styled(Button).attrs({
-  variant: 'danger',
+  variant: 'outline-secondary',
   type: 'button',
 })`
-  font-size: 1rem;
-  width: auto;
-  margin: 20px 5px 0 0;
-  display: flex;
-  align-items: center;
-  background-color: #d32f2f; /* Adobe red color */
-  border: none;
-  &:hover {
-    background-color: #c62828;
+  ${buttonBase}
+  color: var(--ms-error);
+  border-color: var(--ms-border);
+  background: var(--ms-paper);
+  &:hover,
+  &:focus {
+    color: var(--ms-error);
+    background: rgba(239, 68, 68, 0.08);
+    border-color: var(--ms-error);
   }
 `;
 export const ExcelButton = styled(Button).attrs({
-  variant: 'success',
+  variant: 'outline-secondary',
   type: 'button',
 })`
-  font-size: 1rem;
-  width: auto;
-  margin: 20px 0 0 5px;
-  display: flex;
-  align-items: center;
-  background-color: #28a745; /* Excel green color */
-  border: none;
-  &:hover {
-    background-color: #218838;
+  ${buttonBase}
+  color: var(--ms-success);
+  border-color: var(--ms-border);
+  background: var(--ms-paper);
+  &:hover,
+  &:focus {
+    color: var(--ms-success);
+    background: rgba(16, 185, 129, 0.08);
+    border-color: var(--ms-success);
   }
 `;
