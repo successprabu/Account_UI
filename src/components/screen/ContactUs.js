@@ -12,7 +12,7 @@ import PublicFooter from '../public/PublicFooter';
 import { IconTile } from '../public/Section';
 import { CONTACT, PRODUCTS } from '../public/products';
 
-const TOPICS = [...PRODUCTS.map((p) => p.title), 'Pricing and plans', 'Help with my account', 'Something else'];
+const TOPICS = ['Website or custom software', 'Digitizing my business', 'AI and automation', ...PRODUCTS.map((p) => p.title), 'Pricing and plans', 'Help with my account', 'Something else'];
 
 const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '' };
 
