@@ -121,7 +121,7 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 
 
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
-const Resume = lazy(() => import("./components/screen/AntonyResume/Resume "));
+const Resume = lazy(() => import("./components/screen/AntonyResume/Resume"));
 
 const Router = () => {
   return (

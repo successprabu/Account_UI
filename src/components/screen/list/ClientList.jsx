@@ -31,7 +31,7 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { transliterateToTamil } from "../../common/transliteration";
 import i18n from "../../../language/i18n";
 import Header from "../../common/Header";
-import EditCustomerModal from "../modal/EditCustomerModal ";
+import EditCustomerModal from "../modal/EditCustomerModal";
 
 const ClientList = ({ showHeader = true }) => {
   const { t } = useTranslation();

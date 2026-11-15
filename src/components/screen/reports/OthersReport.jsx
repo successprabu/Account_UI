@@ -19,7 +19,7 @@ import {
   ExcelButton,
 } from "../css/styles";
 import Translator from "../../common/TranslationBasedOnLanguage";
-import OthersSummaryModal from "../modal/OthersSummaryModal ";
+import OthersSummaryModal from "../modal/OthersSummaryModal";
 import { addFooter, addHeader } from "./HeaderFooter";
 import { addInstructionPage } from "./InstructionPage";
 
