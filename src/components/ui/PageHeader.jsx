@@ -36,7 +36,7 @@ const PageHeader = ({ title, subtitle, breadcrumbs = [], actions }) => (
         )}
       </Box>
       {actions && (
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ flexShrink: 0, '& .MuiButton-root': { whiteSpace: 'nowrap' } }}>
           {actions}
         </Stack>
       )}

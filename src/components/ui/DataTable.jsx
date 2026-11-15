@@ -50,7 +50,7 @@ const toCsv = (columns, rows) => {
  * Table with search, sorting, paging and CSV export, all on the client.
  *
  * columns: [{ field, headerName, align?, width?, sortable? (default true), render?(row), value?(row),
- *             exportValue?(row), exportable? (default true) }]
+ *             exportValue?(row), exportable? (default true), wrap? (default false: one line, table scrolls sideways) }]
  * rows: array of objects
  * getRowId?(row) defaults to row.id
  */
@@ -188,7 +188,7 @@ const DataTable = ({
                   sx={{ cursor: onRowClick ? 'pointer' : undefined }}
                 >
                   {columns.map((c) => (
-                    <TableCell key={c.field} align={c.align}>
+                    <TableCell key={c.field} align={c.align} sx={{ whiteSpace: c.wrap ? 'normal' : 'nowrap' }}>
                       {c.render ? c.render(r) : valueOf(r, c)}
                     </TableCell>
                   ))}
