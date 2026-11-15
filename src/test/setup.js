@@ -10,7 +10,7 @@ afterEach(() => {
 // jsdom does not implement matchMedia (used by MUI's useMediaQuery)
 if (!window.matchMedia) {
   window.matchMedia = (query) => ({
-    matches: query.includes('min-width: 900px'),
+    matches: /min-width:\s*900px/.test(query),
     media: query,
     onchange: null,
     addListener: vi.fn(),
