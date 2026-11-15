@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Rootlayout from "./components/common/Rootlayout";
 import Home from "./components/screen/Home";
+import PageLoader from "./components/common/PageLoader";
 // import Registration from "./components/screen/Registration";
 // import AboutUs from "./components/screen/AboutUs";
 // import PageNotFound from "./components/screen/PageNotFound";
@@ -19,8 +20,6 @@ import Home from "./components/screen/Home";
 // import Expenses from "./components/screen/Expenses";
 // import ExpensesList from "./components/screen/list/ExpensesList";
 // import TranslationDemo from "./components/common/TranslationDemo";
-import ReportComponent from "./components/screen/reports/ReportComponent";
-import Resume from "./components/screen/AntonyResume/Resume ";
 // import OtherReceipt from "./components/screen/OtherReceipt";
 // import OthersList from "./components/screen/list/OthersList";
 // import IncomeReport from "./components/screen/reports/IncomeReport";
@@ -35,96 +34,101 @@ import Resume from "./components/screen/AntonyResume/Resume ";
 // import AddMoitechCustomer from "./components/screen/AddMoitechCustomer";
 // import NewMahal from "./components/screen/mahal/NewMahal";
 
+// Pages are loaded on demand so the first visit only downloads what it shows.
+const Login = lazy(() => import("./components/screen/login/Login"));
+const Registration = lazy(() =>
+  import("./components/screen/Registration")
+);
+const MahalRegistration = lazy(() =>
+  import("./components/screen/MahalRegistration")
+);
+const ContactUs = lazy(() => import("./components/screen/ContactUs"));
+const InProgress = lazy(() => import("./components/screen/InProgress"));
+const TranslationDemo = lazy(() =>
+  import("./components/common/TranslationDemo")
+);
+const Unauthorized = lazy(() =>
+  import("./components/common/UnauthorizedAccess")
+);
+const AboutUs = lazy(() => import("./components/screen/AboutUs"));
+const PageNotFound = lazy(() =>
+  import("./components/screen/PageNotFound")
+);
+const ClientList = lazy(() =>
+  import("./components/screen/list/ClientList")
+);
+const Transaction = lazy(() =>
+  import("./components/screen/Transaction")
+);
+const TransactionList = lazy(() =>
+  import("./components/screen/list/TransactionList")
+);
+const User = lazy(() => import("./components/screen/User"));
+const FunctionWithList = lazy(() =>
+  import("./components/screen/FunctionWithList")
+);
+const ServicePage = lazy(() =>
+  import("./components/screen/Services")
+);
+ const ProtectedRoute = lazy(() =>
+  import("./components/common/ProtectedRoute")
+);
+const RoleBasedDashboard = lazy(() =>
+  import("./components/screen/RoleBasedDashboard")
+);
+const Expenses = lazy(() => import("./components/screen/Expenses"));
+const ExpensesList = lazy(() =>
+  import("./components/screen/list/ExpensesList")
+);
+const OtherReceipt = lazy(() =>
+  import("./components/screen/OtherReceipt")
+);
+const OthersList = lazy(() =>
+  import("./components/screen/list/OthersList")
+);
+const IncomeReport = lazy(() =>
+  import("./components/screen/reports/IncomeReport")
+);
+const ExpensesReport = lazy(() =>
+  import("./components/screen/reports/ExpensesReport")
+);
+const OthersReport = lazy(() =>
+  import("./components/screen/reports/OthersReport")
+);
+const RegionalSummaryReport = lazy(() =>
+  import("./components/screen/reports/RegionalSummaryReport")
+);
+const OverallSummaryReport = lazy(() =>
+  import("./components/screen/reports/OverallSummaryReport")
+);
+const Handover = lazy(() => import("./components/screen/Handover"));
+const MahalBooking = lazy(() =>
+  import("./components/screen/MahalBooking")
+);
+const MahalBookingList = lazy(() =>
+  import("./components/screen/MahalBookingList")
+);
+const AddMoitechCustomer = lazy(() =>
+  import("./components/screen/AddMoitechCustomer")
+);
+const NewMahal = lazy(() =>
+  import("./components/screen/mahal/NewMahal")
+);
+ const Pricing = lazy(() =>
+  import("./components/screen/PricingPage")
+);
+const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage"));
+
+
+const ReportComponent = lazy(() =>
+  import("./components/screen/reports/ReportComponent")
+);
+const Resume = lazy(() => import("./components/screen/AntonyResume/Resume "));
+
 const Router = () => {
-
-  const Login = lazy(() => import("./components/screen/login/Login"));
-  const Registration = lazy(() =>
-    import("./components/screen/Registration")
-  );
-  const MahalRegistration = lazy(() =>
-    import("./components/screen/MahalRegistration")
-  );
-  const ContactUs = lazy(() => import("./components/screen/ContactUs"));
-  const InProgress = lazy(() => import("./components/screen/InProgress"));
-  const TranslationDemo = lazy(() =>
-    import("./components/common/TranslationDemo")
-  );
-  const Unauthorized = lazy(() =>
-    import("./components/common/UnauthorizedAccess")
-  );
-  const AboutUs = lazy(() => import("./components/screen/AboutUs"));
-  const PageNotFound = lazy(() =>
-    import("./components/screen/PageNotFound")
-  );
-  const ClientList = lazy(() =>
-    import("./components/screen/list/ClientList")
-  );
-  const Transaction = lazy(() =>
-    import("./components/screen/Transaction")
-  );
-  const TransactionList = lazy(() =>
-    import("./components/screen/list/TransactionList")
-  );
-  const User = lazy(() => import("./components/screen/User"));
-  const FunctionWithList = lazy(() =>
-    import("./components/screen/FunctionWithList")
-  );
-  const ServicePage = lazy(() =>
-    import("./components/screen/Services")
-  );
-   const ProtectedRoute = lazy(() =>
-    import("./components/common/ProtectedRoute")
-  );
-  const RoleBasedDashboard = lazy(() =>
-    import("./components/screen/RoleBasedDashboard")
-  );
-  const Expenses = lazy(() => import("./components/screen/Expenses"));
-  const ExpensesList = lazy(() =>
-    import("./components/screen/list/ExpensesList")
-  );
-  const OtherReceipt = lazy(() =>
-    import("./components/screen/OtherReceipt")
-  );
-  const OthersList = lazy(() =>
-    import("./components/screen/list/OthersList")
-  );
-  const IncomeReport = lazy(() =>
-    import("./components/screen/reports/IncomeReport")
-  );
-  const ExpensesReport = lazy(() =>
-    import("./components/screen/reports/ExpensesReport")
-  );
-  const OthersReport = lazy(() =>
-    import("./components/screen/reports/OthersReport")
-  );
-  const RegionalSummaryReport = lazy(() =>
-    import("./components/screen/reports/RegionalSummaryReport")
-  );
-  const OverallSummaryReport = lazy(() =>
-    import("./components/screen/reports/OverallSummaryReport")
-  );
-  const Handover = lazy(() => import("./components/screen/Handover"));
-  const MahalBooking = lazy(() =>
-    import("./components/screen/MahalBooking")
-  );
-  const MahalBookingList = lazy(() =>
-    import("./components/screen/MahalBookingList")
-  );
-  const AddMoitechCustomer = lazy(() =>
-    import("./components/screen/AddMoitechCustomer")
-  );
-  const NewMahal = lazy(() =>
-    import("./components/screen/mahal/NewMahal")
-  );
-   const Pricing = lazy(() =>
-    import("./components/screen/PricingPage")
-  );
-  const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage"));
-  
-
   return (
     <BrowserRouter>
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="purchase/:id" element={<Registration />} />
