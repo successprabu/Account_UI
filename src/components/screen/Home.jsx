@@ -17,7 +17,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AppHeader from '../common/AppHeader';
 import PublicFooter from '../public/PublicFooter';
 import { Section, CtaBand, IconTile } from '../public/Section';
-import { PRODUCTS } from '../public/products';
+import { PRODUCTS, SCHOOL_ERP_URL } from '../public/products';
 
 const inr = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
 
@@ -159,7 +159,7 @@ const Home = () => {
                 MySuccess modernizes the way you work: we replace paperwork with simple cloud software, automate daily tasks and use AI to help you make better decisions.
               </Typography>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 4 }}>
-                <Button component={RouterLink} to="/purchase" variant="contained" size="large" endIcon={<ArrowForwardIcon />}>
+                <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained" size="large" endIcon={<ArrowForwardIcon />}>
                   {t('watchDemo', { defaultValue: 'Try Demo' })}
                 </Button>
                 <Button component={RouterLink} to="/contactus" variant="outlined" color="inherit" size="large">
@@ -292,7 +292,7 @@ const Home = () => {
             <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
               Book a free consultation
             </Button>
-            <Button component={RouterLink} to="/purchase" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
+            <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
               {t('watchDemo', { defaultValue: 'Try Demo' })}
             </Button>
           </>

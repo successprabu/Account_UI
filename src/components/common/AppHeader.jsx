@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import { useLanguage } from '../../language/LanguageContext';
+import { SCHOOL_ERP_URL } from '../public/products';
 
 export const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -129,7 +130,7 @@ const AppHeader = () => {
             <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
               {t('login', { defaultValue: 'Login' })}
             </Button>
-            <Button component={RouterLink} to="/purchase" variant="contained">
+            <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained">
               {t('watchDemo', { defaultValue: 'Try Demo' })}
             </Button>
           </Stack>
@@ -160,7 +161,7 @@ const AppHeader = () => {
           <Button component={RouterLink} to="/login" variant="outlined" color="inherit" fullWidth onClick={() => setOpen(false)}>
             {t('login', { defaultValue: 'Login' })}
           </Button>
-          <Button component={RouterLink} to="/purchase" variant="contained" fullWidth onClick={() => setOpen(false)}>
+          <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained" fullWidth onClick={() => setOpen(false)}>
             {t('watchDemo', { defaultValue: 'Try Demo' })}
           </Button>
         </Stack>
