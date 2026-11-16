@@ -36,7 +36,12 @@ const ProductBlock = ({ product, reverse }) => {
                 {p.cta.label}
               </Button>
               {!p.comingSoon && (
-                <Button component={RouterLink} to="/pricing" variant="outlined" color="inherit" size="large">
+                <Button
+                  {...(p.pricingHref ? { href: p.pricingHref, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: '/pricing' })}
+                  variant="outlined"
+                  color="inherit"
+                  size="large"
+                >
                   Pricing
                 </Button>
               )}
