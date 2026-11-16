@@ -120,6 +120,7 @@ const NewMahal = lazy(() =>
 const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage"));
 
 
+const Enquiries = lazy(() => import("./components/screen/enquiries/Enquiries"));
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
 const Resume = lazy(() => import("./components/screen/AntonyResume/Resume"));
 
@@ -152,6 +153,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU"]}>
                 <ClientList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="enquiries"
+            element={
+              <ProtectedRoute allowedRoles={["SU"]}>
+                <Enquiries />
               </ProtectedRoute>
             }
           />

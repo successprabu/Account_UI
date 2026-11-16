@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { submitEnquiry } from '../../api/enquiries';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, Button, Card, Container, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, CircularProgress, Container, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -15,7 +16,7 @@ import { CONTACT, PRODUCTS } from '../public/products';
 
 const TOPICS = ['Website or custom software', 'Digitizing my business', 'AI and automation', ...PRODUCTS.map((p) => p.title), 'Pricing and plans', 'Help with my account', 'Something else'];
 
-const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '' };
+const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '', website: '' };
 
 const ContactUs = () => {
   const { t } = useTranslation();
@@ -24,6 +25,9 @@ const ContactUs = () => {
   const [form, setForm] = useState(() => ({ ...emptyForm, topic: TOPICS.includes(requested) ? requested : emptyForm.topic }));
   const [errors, setErrors] = useState({});
   const [sentVia, setSentVia] = useState('');
+  const [sending, setSending] = useState(false);
+  const [saved, setSaved] = useState('');
+  const [saveError, setSaveError] = useState('');
 
   const set = (k) => (e) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -46,9 +50,24 @@ const ContactUs = () => {
       .filter((x) => x !== false && x !== undefined && x !== '')
       .join('\n');
 
-  // There is no contact API yet, so the message is handed to the visitor's email app or WhatsApp.
-  const sendEmail = (e) => {
+  // Main path: store the message so the team can reply from the Enquiries inbox.
+  const submit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
+    setSending(true);
+    setSaveError('');
+    const res = await submitEnquiry(form);
+    setSending(false);
+    if (res.ok) {
+      setSaved(res.message || 'Thank you. We will reply within one working day.');
+      setForm({ ...emptyForm, topic: form.topic });
+    } else {
+      setSaveError(res.message);
+    }
+  };
+
+  // Fallbacks: hand the message to the visitor's email app or WhatsApp.
+  const sendEmail = () => {
     if (!validate()) return;
     window.location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent(`[MySuccess] ${form.topic}`)}&body=${encodeURIComponent(body())}`;
     setSentVia('email');
@@ -126,48 +145,77 @@ const ContactUs = () => {
                 Send a message
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>
-                Your message opens in your email app or WhatsApp, ready to send.
+                We reply within one working day by phone, email or WhatsApp.
               </Typography>
-              {sentVia && (
-                <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSentVia('')}>
-                  Your message is ready in {sentVia}. Press send there and we will reply within one working day.
-                </Alert>
+              {saved ? (
+                <Stack spacing={2} alignItems="flex-start">
+                  <Alert severity="success" sx={{ width: '100%' }}>
+                    {saved}
+                  </Alert>
+                  <Button variant="outlined" color="inherit" onClick={() => setSaved('')}>
+                    Send another message
+                  </Button>
+                </Stack>
+              ) : (
+                <>
+                  {saveError && (
+                    <Alert severity="error" sx={{ mb: 3 }} onClose={() => setSaveError('')}>
+                      {saveError} You can also send it by email or WhatsApp below.
+                    </Alert>
+                  )}
+                  {sentVia && (
+                    <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSentVia('')}>
+                      Your message is ready in {sentVia}. Press send there and we will reply within one working day.
+                    </Alert>
+                  )}
+                  <Box component="form" noValidate onSubmit={submit}>
+                    {/* Hidden from people; bots that fill every field are ignored by the server */}
+                    <Box aria-hidden="true" sx={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
+                      <label htmlFor="contact-website">Website</label>
+                      <input id="contact-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
+                    </Box>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField label="Your name" required value={form.name} onChange={set('name')} error={!!errors.name} helperText={errors.name} autoComplete="name" />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField label="Phone number" value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={errors.phone} autoComplete="tel" inputProps={{ inputMode: 'tel' }} />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField label="Email" value={form.email} onChange={set('email')} error={!!errors.email} helperText={errors.email} autoComplete="email" inputProps={{ inputMode: 'email' }} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField select label="Topic" value={form.topic} onChange={set('topic')}>
+                          {TOPICS.map((tp) => (
+                            <MenuItem key={tp} value={tp}>
+                              {tp}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField label="Message" required multiline minRows={4} value={form.message} onChange={set('message')} error={!!errors.message} helperText={errors.message} inputProps={{ maxLength: 2000 }} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'center' }}>
+                          <Button type="submit" variant="contained" size="large" disabled={sending} startIcon={sending ? <CircularProgress size={18} color="inherit" /> : <SendOutlinedIcon />}>
+                            {sending ? 'Sending…' : 'Send message'}
+                          </Button>
+                          <Typography variant="body2" color="text.secondary" sx={{ px: { sm: 1 } }}>
+                            or
+                          </Typography>
+                          <Button variant="text" size="large" color="inherit" onClick={sendEmail} disabled={sending}>
+                            Use my email app
+                          </Button>
+                          <Button variant="text" size="large" color="success" startIcon={<WhatsAppIcon />} onClick={sendWhatsApp} disabled={sending}>
+                            WhatsApp
+                          </Button>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </>
               )}
-              <Box component="form" noValidate onSubmit={sendEmail}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField label="Your name" required value={form.name} onChange={set('name')} error={!!errors.name} helperText={errors.name} autoComplete="name" />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField label="Phone number" value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={errors.phone} autoComplete="tel" inputProps={{ inputMode: 'tel' }} />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField label="Email" value={form.email} onChange={set('email')} error={!!errors.email} helperText={errors.email} autoComplete="email" inputProps={{ inputMode: 'email' }} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField select label="Topic" value={form.topic} onChange={set('topic')}>
-                      {TOPICS.map((tp) => (
-                        <MenuItem key={tp} value={tp}>
-                          {tp}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField label="Message" required multiline minRows={4} value={form.message} onChange={set('message')} error={!!errors.message} helperText={errors.message} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
-                      <Button type="submit" variant="contained" size="large" startIcon={<SendOutlinedIcon />}>
-                        Send by email
-                      </Button>
-                      <Button variant="outlined" size="large" color="success" startIcon={<WhatsAppIcon />} onClick={sendWhatsApp}>
-                        Send on WhatsApp
-                      </Button>
-                    </Stack>
-                  </Grid>
-                </Grid>
-              </Box>
             </Card>
           </Grid>
         </Grid>
