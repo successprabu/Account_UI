@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Box } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
@@ -40,6 +41,7 @@ const Dashboard = () => {
   }, [user, navigate]);
 
   const actions = [
+    { to: '/enquiries', label: t('enquiries', { defaultValue: 'Enquiries' }), description: t('enquiriesHint', { defaultValue: 'Messages from the website' }), icon: <MarkEmailUnreadOutlinedIcon />, color: '#ef4444' },
     { to: '/client-list', label: t('Clients'), description: t('clientsHint', { defaultValue: 'All Moitech customers' }), icon: <PeopleAltOutlinedIcon /> },
     { to: '/add-moitech-customer', label: t('addMoiTechCustomer'), description: t('addMoiTechCustomerHint', { defaultValue: 'Register a new customer' }), icon: <PersonAddAltOutlinedIcon />, color: '#10b981' },
     { to: '/add-new-mahal', label: t('addMahal'), description: t('addMahalHint', { defaultValue: 'Register a marriage hall' }), icon: <ApartmentOutlinedIcon />, color: '#f59e0b' },
