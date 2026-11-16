@@ -4,6 +4,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
 
 export const SCHOOL_ERP_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/';
+export const SCHOOL_PRICING_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/pricing';
 
 /**
  * The three MySuccess products. Titles and long descriptions come from the
@@ -66,6 +67,8 @@ export const PRODUCTS = [
       'School website with news and updates',
     ],
     cta: { label: 'Open School ERP', href: SCHOOL_ERP_URL },
+    // School has its own price list on the School ERP site
+    pricingHref: SCHOOL_PRICING_URL,
   },
   {
     id: 'healthcare',
