@@ -81,4 +81,24 @@ describe('Demo and pricing per product', () => {
     await waitFor(() => expect(window.Razorpay).toHaveBeenCalled());
     expect(window.Razorpay.mock.calls[0][0]).toMatchObject({ amount: '499900', prefill: { contact: '9876500000' } });
   });
+
+  it('footer products explain how to start and link to the right registration', async () => {
+    await renderAt('/about');
+    const footer = await screen.findByRole('contentinfo', {}, { timeout: 5000 });
+    const { within } = await import('@testing-library/react');
+    fireEvent.click(within(footer).getByRole('button', { name: /^moitech$/i }));
+    expect(await screen.findByRole('heading', { name: /want to try moitech/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /register for free/i })).toHaveAttribute('href', '/purchase');
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    await waitFor(() => expect(screen.queryByRole('heading', { name: /want to try moitech/i })).not.toBeInTheDocument());
+
+    fireEvent.click(await within(footer).findByRole('button', { name: /^mahal management$/i }));
+    expect(await screen.findByRole('link', { name: /register your mahal/i })).toHaveAttribute('href', '/mahal-reg');
+    expect(screen.getByRole('link', { name: /already registered\? sign in/i })).toHaveAttribute('href', '/login');
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+    await waitFor(() => expect(screen.queryByRole('link', { name: /register your mahal/i })).not.toBeInTheDocument());
+
+    // School ERP still opens its demo site directly.
+    expect((await within(footer).findByRole('link', { name: /school website/i })).getAttribute('href')).toMatch(/myschool/);
+  });
 });

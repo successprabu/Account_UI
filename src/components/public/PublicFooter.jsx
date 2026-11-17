@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Divider, Grid, Link, Stack, Typography } from '@mui/material';
 import { BrandLink } from '../common/AppHeader';
 import { CONTACT, PRODUCTS } from './products';
+import ProductStartDialog from './ProductStartDialog';
 
 const FooterLink = ({ to, href, children }) =>
   href ? (
@@ -27,6 +29,7 @@ const Column = ({ title, children }) => (
 /** Footer for all public pages. */
 const PublicFooter = () => {
   const { t } = useTranslation();
+  const [starting, setStarting] = useState(null);
   return (
     <Box component="footer" sx={{ bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider', mt: 'auto' }}>
       <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
@@ -39,12 +42,28 @@ const PublicFooter = () => {
           </Grid>
           <Grid item xs={6} md={3}>
             <Column title="Products">
-              {PRODUCTS.map((p) => (
-                <FooterLink key={p.id} to={p.cta.to ? `/services#${p.id}` : undefined} href={p.cta.href}>
-                  {t(p.titleKey, { defaultValue: p.title })}
-                  {p.comingSoon ? ' (coming soon)' : ''}
-                </FooterLink>
-              ))}
+              {PRODUCTS.map((p) =>
+                p.start ? (
+                  // Opens "how to get started" with the right register link
+                  <Link
+                    key={p.id}
+                    component="button"
+                    type="button"
+                    onClick={() => setStarting(p)}
+                    color="text.secondary"
+                    underline="hover"
+                    variant="body2"
+                    sx={{ textAlign: 'left', alignSelf: 'flex-start' }}
+                  >
+                    {t(p.titleKey, { defaultValue: p.title })}
+                    {p.comingSoon ? ' (coming soon)' : ''}
+                  </Link>
+                ) : (
+                  <FooterLink key={p.id} to={p.cta.to} href={p.cta.href}>
+                    {t(p.titleKey, { defaultValue: p.title })}
+                  </FooterLink>
+                )
+              )}
             </Column>
           </Grid>
           <Grid item xs={6} md={2}>
@@ -70,6 +89,7 @@ const PublicFooter = () => {
           © {new Date().getFullYear()} MySuccess Technologies. All rights reserved.
         </Typography>
       </Container>
+      <ProductStartDialog product={starting} onClose={() => setStarting(null)} />
     </Box>
   );
 };

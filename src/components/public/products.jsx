@@ -39,6 +39,17 @@ export const PRODUCTS = [
     cta: { label: 'Try Moitech free', to: '/purchase' },
     demo: { label: 'Start the free trial', to: '/purchase' },
     pricing: { to: '/pricing?product=moitech' },
+    // Shown when someone picks Moitech from the footer.
+    start: {
+      title: 'Want to try Moitech?',
+      steps: [
+        'Register with your mobile number. The first 7 days are free.',
+        'Sign in with your mobile number and password.',
+        'Add your function and start recording moi entries.',
+      ],
+      action: { label: 'Register for free', to: '/purchase' },
+      signIn: true,
+    },
   },
   {
     id: 'mahal',
@@ -62,6 +73,18 @@ export const PRODUCTS = [
     // For hall owners: register the mahal and use the app free for 1 month.
     demo: { label: 'Register your mahal, 1 month free', to: '/mahal-reg' },
     pricing: { to: '/pricing?product=mahal' },
+    start: {
+      title: 'Own a mahal? Try it free for 1 month',
+      steps: [
+        'Register your mahal with your mobile number.',
+        'Sign in with your mobile number and password.',
+        'Add your hall details, switch on online booking and start taking bookings.',
+      ],
+      action: { label: 'Register your mahal', to: '/mahal-reg' },
+      signIn: true,
+      note: 'Looking for a hall for your event? Use Book a mahal instead.',
+      noteLink: { label: 'Book a mahal', to: '/mahals' },
+    },
   },
   {
     id: 'school',
@@ -103,6 +126,15 @@ export const PRODUCTS = [
       'Ready within a month, with training and ongoing support',
     ],
     cta: { label: 'Tell us your requirement', to: '/contactus?topic=Custom%20Software' },
+    start: {
+      title: 'Need software for your business?',
+      steps: [
+        'Tell us what your business does and how you work today.',
+        'We call you within one working day to understand the details.',
+        'Your software is ready within a month, with training.',
+      ],
+      action: { label: 'Tell us your requirement', to: '/contactus?topic=Custom%20Software' },
+    },
   },
   {
     id: 'healthcare',
@@ -123,6 +155,14 @@ export const PRODUCTS = [
       'SMS and WhatsApp reminders for patients',
     ],
     cta: { label: 'Register interest', to: '/contactus?topic=Healthcare%20Software' },
+    start: {
+      title: 'Healthcare Software is coming soon',
+      steps: [
+        'Leave your name and number with the topic "Healthcare Software".',
+        'We will tell you as soon as it is ready and set up a demo for you.',
+      ],
+      action: { label: 'Register interest', to: '/contactus?topic=Healthcare%20Software' },
+    },
   },
 ];
 

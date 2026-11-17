@@ -1,4 +1,5 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -79,6 +80,14 @@ const ProductBlock = ({ product, reverse }) => {
 
 const ServicePage = () => {
   const { t } = useTranslation();
+  const { hash } = useLocation();
+
+  // Links like /services#mahal jump to that product's section.
+  useEffect(() => {
+    if (!hash) return undefined;
+    const id = setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    return () => clearTimeout(id);
+  }, [hash]);
   return (
     <Box sx={{ bgcolor: 'background.default' }}>
       <Box component="section" sx={{ pt: { xs: 6, md: 9 }, pb: { xs: 2, md: 3 }, textAlign: 'center' }}>
