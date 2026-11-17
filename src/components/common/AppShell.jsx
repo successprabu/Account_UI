@@ -30,7 +30,6 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
-import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
@@ -59,9 +58,8 @@ const NAV = [
   { key: 'dashboard', to: '/dashboard', icon: <DashboardOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
   { key: 'Clients', to: '/client-list', icon: <PeopleAltOutlinedIcon />, roles: ['SU'] },
   { key: 'enquiries', fallback: 'Enquiries', to: '/enquiries', icon: <MarkEmailUnreadOutlinedIcon />, roles: ['SU'] },
-  { key: 'addMahal', to: '/add-new-mahal', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
-  { key: 'mahalBooking', to: '/mahal-booking', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU'] },
-  { key: 'mahalBookingList', to: '/mahal-booking-list', icon: <EventNoteOutlinedIcon />, roles: ['SU', 'MU'] },
+  { key: 'mahalBookings', fallback: 'Bookings', to: '/mahal-bookings', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU'] },
+  { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'addMoiTechCustomer', to: '/add-moitech-customer', icon: <PersonAddAltOutlinedIcon />, roles: ['SU', 'MU'] },
   {
     key: 'Masters',

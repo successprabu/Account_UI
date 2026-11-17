@@ -37,6 +37,7 @@ export const LANGUAGES = [
 const NAV = [
   { to: '/', key: 'home', fallback: 'Home', end: true },
   { to: '/services', key: 'ourServices', fallback: 'Products' },
+  { to: '/mahals', key: 'bookMahal', fallback: 'Book a mahal' },
   { to: '/pricing', key: 'pricing', fallback: 'Pricing' },
   { to: '/about', key: 'about_us', fallback: 'About' },
   { to: '/contactus', key: 'contact_us', fallback: 'Contact' },

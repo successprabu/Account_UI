@@ -41,8 +41,9 @@ export const PRODUCTS = [
     icon: <ApartmentOutlinedIcon />,
     color: '#f59e0b',
     features: [
-      'Booking calendar with real-time availability',
-      'Event bookings with customer details',
+      'Online booking site: customers find your hall, check free dates and send requests',
+      'Booking calendar with real-time availability and no double bookings',
+      'Approve requests, take direct bookings for marriages, birthdays and more',
       'Advance, balance and payment records',
       'Hall expense tracking',
       'Booking and payment reports',

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Rootlayout from "./components/common/Rootlayout";
 import Home from "./components/screen/Home";
 import PageLoader from "./components/common/PageLoader";
@@ -29,10 +29,7 @@ import PageLoader from "./components/common/PageLoader";
 // import OverallSummaryReport from "./components/screen/reports/OverallSummaryReport";
 // import Handover from "./components/screen/Handover";
 // import MahalRegistration from "./components/screen/MahalRegistration";
-// import MahalBooking from "./components/screen/MahalBooking";
-// import MahalBookingList from "./components/screen/MahalBookingList";
 // import AddMoitechCustomer from "./components/screen/AddMoitechCustomer";
-// import NewMahal from "./components/screen/mahal/NewMahal";
 
 // Pages are loaded on demand so the first visit only downloads what it shows.
 const Login = lazy(() => import("./components/screen/login/Login"));
@@ -102,17 +99,15 @@ const OverallSummaryReport = lazy(() =>
   import("./components/screen/reports/OverallSummaryReport")
 );
 const Handover = lazy(() => import("./components/screen/Handover"));
-const MahalBooking = lazy(() =>
-  import("./components/screen/MahalBooking")
+const MahalBookings = lazy(() =>
+  import("./components/screen/mahal/MahalBookings")
 );
-const MahalBookingList = lazy(() =>
-  import("./components/screen/MahalBookingList")
-);
+const MyMahals = lazy(() => import("./components/screen/mahal/MyMahals"));
+const FindMahal = lazy(() => import("./components/screen/mahal/FindMahal"));
+const MahalDetails = lazy(() => import("./components/screen/mahal/MahalDetails"));
+const MahalBookingStatus = lazy(() => import("./components/screen/mahal/BookingStatus"));
 const AddMoitechCustomer = lazy(() =>
   import("./components/screen/AddMoitechCustomer")
-);
-const NewMahal = lazy(() =>
-  import("./components/screen/mahal/NewMahal")
 );
  const Pricing = lazy(() =>
   import("./components/screen/PricingPage")
@@ -133,6 +128,9 @@ const Router = () => {
         <Route path="purchase/:id" element={<Registration />} />
         <Route path="purchase" element={<Registration />} />
         <Route path="mahal-reg" element={<MahalRegistration />} />
+        <Route path="mahals" element={<FindMahal />} />
+        <Route path="mahals/status" element={<MahalBookingStatus />} />
+        <Route path="mahals/:id" element={<MahalDetails />} />
         <Route path="contactus" element={<ContactUs />} />
         <Route path="inprogress" element={<InProgress />} />
         <Route path="services/purchase" element={<Registration />} />
@@ -277,29 +275,25 @@ const Router = () => {
             }
           />
           <Route
-            path="add-new-mahal"
+            path="mahal-bookings"
             element={
               <ProtectedRoute allowedRoles={["SU","MU"]}>
-                <NewMahal />
+                <MahalBookings />
               </ProtectedRoute>
             }
           />
           <Route
-            path="mahal-booking"
+            path="my-mahals"
             element={
               <ProtectedRoute allowedRoles={["SU","MU"]}>
-                <MahalBooking />
+                <MyMahals />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="mahal-booking-list"
-            element={
-              <ProtectedRoute allowedRoles={["SU","MU"]}>
-                <MahalBookingList />
-              </ProtectedRoute>
-            }
-          />
+          {/* Old addresses of the mahal screens */}
+          <Route path="add-new-mahal" element={<Navigate to="/my-mahals?new=1" replace />} />
+          <Route path="mahal-booking" element={<Navigate to="/mahal-bookings?new=1" replace />} />
+          <Route path="mahal-booking-list" element={<Navigate to="/mahal-bookings" replace />} />
           <Route
             path="add-moitech-customer"
             element={

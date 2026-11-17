@@ -1,0 +1,126 @@
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Alert, Box, Button, Card, CircularProgress, Container, Divider, Stack, TextField, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SearchIcon from '@mui/icons-material/Search';
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import AppHeader from '../../common/AppHeader';
+import PublicFooter from '../../public/PublicFooter';
+import { getBookingStatus } from '../../../api/mahal';
+import { effectiveStatus, fmtRange, rupees } from '../../mahal/shared';
+
+const LOOK = {
+  Pending: { icon: <HourglassTopIcon />, color: 'warning.main', title: 'Waiting for the hall', text: 'The hall has your request and will call you to confirm.' },
+  Confirmed: { icon: <CheckCircleIcon />, color: 'success.main', title: 'Booking confirmed', text: 'Your dates are reserved. See you at the event!' },
+  Completed: { icon: <TaskAltIcon />, color: 'info.main', title: 'Event completed', text: 'Thank you for choosing this hall.' },
+  Rejected: { icon: <CancelOutlinedIcon />, color: 'error.main', title: 'Request declined', text: 'The hall could not accept this request.' },
+  Cancelled: { icon: <CancelOutlinedIcon />, color: 'text.secondary', title: 'Booking cancelled', text: 'This booking was cancelled.' },
+};
+
+const Row = ({ label, value, strong }) => (
+  <Stack direction="row" justifyContent="space-between" spacing={2}>
+    <Typography color="text.secondary">{label}</Typography>
+    <Typography fontWeight={strong ? 700 : 500} textAlign="right">{value}</Typography>
+  </Stack>
+);
+
+/** Public: a customer checks their booking with the reference and phone number. */
+const BookingStatus = () => {
+  const [params] = useSearchParams();
+  const [ref, setRef] = useState(params.get('ref') || '');
+  const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [booking, setBooking] = useState(null);
+
+  useEffect(() => {
+    document.title = 'Check my mahal booking';
+  }, []);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!ref.trim() || !phone.trim()) {
+      setError('Enter your booking reference and phone number.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    const res = await getBookingStatus(ref.trim().toUpperCase(), phone.trim());
+    setLoading(false);
+    if (res.ok) setBooking(res.data);
+    else {
+      setBooking(null);
+      setError(res.message);
+    }
+  };
+
+  const status = booking ? effectiveStatus(booking) : null;
+  const look = status ? LOOK[status] || LOOK.Pending : null;
+
+  return (
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
+      <AppHeader />
+      <Container maxWidth="sm" sx={{ py: { xs: 4, md: 6 }, flex: 1 }}>
+        <Button component={RouterLink} to="/mahals" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }}>Find a hall</Button>
+        <Card component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} sx={{ p: { xs: 2.5, md: 4 } }}>
+          <Typography variant="h4" component="h1" fontWeight={800}>Check my booking</Typography>
+          <Typography color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>Use the reference you got when you sent the request.</Typography>
+          <Stack component="form" onSubmit={submit} spacing={2} noValidate>
+            <TextField label="Booking reference" placeholder="MB7K3Q9P" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} inputProps={{ maxLength: 20, style: { letterSpacing: 2, fontWeight: 700 } }} />
+            <TextField label="Phone number" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+            {error && <Alert severity="error">{error}</Alert>}
+            <Button type="submit" variant="contained" size="large" disabled={loading} startIcon={loading ? <CircularProgress size={18} color="inherit" /> : <SearchIcon />}>
+              {loading ? 'Checking…' : 'Check status'}
+            </Button>
+          </Stack>
+
+          <AnimatePresence>
+            {booking && look && (
+              <Box component={motion.div} key={booking.bookingRef + status} initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} sx={{ overflow: 'hidden' }}>
+                <Divider sx={{ my: 3 }} />
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Box component={motion.div} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }} sx={{ color: look.color, display: 'flex', '& svg': { fontSize: 48 } }}>
+                    {look.icon}
+                  </Box>
+                  <Box>
+                    <Typography variant="h6" fontWeight={700}>{look.title}</Typography>
+                    <Typography variant="body2" color="text.secondary">{look.text}</Typography>
+                  </Box>
+                </Stack>
+                {booking.reason && <Alert severity="info" sx={{ mt: 2 }}>Reason: {booking.reason}</Alert>}
+                <Stack spacing={1.25} sx={{ mt: 3 }}>
+                  <Row label="Hall" value={booking.mahalName} strong />
+                  <Row label="Dates" value={fmtRange(booking.fromDate, booking.toDate)} />
+                  {booking.eventType && <Row label="Event" value={booking.eventType} />}
+                  {booking.guestCount > 0 && <Row label="Guests" value={booking.guestCount} />}
+                  {booking.totalAmount > 0 && (
+                    <>
+                      <Divider />
+                      <Row label="Hall rent" value={rupees(booking.totalAmount)} />
+                      {booking.discount > 0 && <Row label="Discount" value={`− ${rupees(booking.discount)}`} />}
+                      {booking.paid > 0 && <Row label="Paid" value={rupees(booking.paid)} />}
+                      <Row label="Balance" value={rupees(booking.balance)} strong />
+                    </>
+                  )}
+                </Stack>
+                {booking.hallPhone && (
+                  <Button sx={{ mt: 3 }} fullWidth variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${booking.hallPhone}`}>
+                    Call the hall
+                  </Button>
+                )}
+              </Box>
+            )}
+          </AnimatePresence>
+        </Card>
+      </Container>
+      <PublicFooter />
+    </Box>
+  );
+};
+
+export default BookingStatus;
