@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Alert, Box, Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Card, Container, Grid, Link, Stack, Typography } from '@mui/material';
 import AndroidIcon from '@mui/icons-material/Android';
 import DownloadIcon from '@mui/icons-material/Download';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import CheckIcon from '@mui/icons-material/Check';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { notify } from '../ui';
 import AppHeader from '../common/AppHeader';
 import PublicFooter from '../public/PublicFooter';
 
@@ -27,6 +29,7 @@ const isAndroid = () => typeof navigator !== 'undefined' && /android/i.test(navi
 /** Public page with the Android app download. */
 const DownloadApp = () => {
   const [apkUrl, setApkUrl] = useState(APK_ON_SITE);
+  const [sizeMb, setSizeMb] = useState(null);
 
   useEffect(() => {
     document.title = 'Download the My Success app';
@@ -35,7 +38,12 @@ const DownloadApp = () => {
     fetch(APK_ON_SITE, { method: 'HEAD' })
       .then((r) => {
         const type = r.headers.get('content-type') || '';
-        if (live && (!r.ok || type.includes('text/html'))) setApkUrl(APK_ON_GITHUB);
+        if (!live) return;
+        if (!r.ok || type.includes('text/html')) setApkUrl(APK_ON_GITHUB);
+        else {
+          const bytes = Number(r.headers.get('content-length'));
+          if (bytes > 0) setSizeMb(Math.round(bytes / 1048576));
+        }
       })
       .catch(() => live && setApkUrl(APK_ON_GITHUB));
     return () => {
@@ -45,6 +53,14 @@ const DownloadApp = () => {
 
   const pageUrl = typeof window !== 'undefined' ? `${window.location.origin}/download-app` : '/download-app';
   const android = isAndroid();
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(pageUrl);
+      notify.success('Link copied. Open it on your Android phone.');
+    } catch (e) {
+      notify.info(pageUrl);
+    }
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
@@ -66,38 +82,55 @@ const DownloadApp = () => {
                   The same account as the website. Record moi at the function, check totals and share reports, right from your phone.
                 </Typography>
 
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 4 }}>
-                  <Button
-                    component={motion.a}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    href={apkUrl}
-                    download="MySuccess.apk"
-                    variant="contained"
-                    size="large"
-                    startIcon={<DownloadIcon />}
-                    sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, px: 4, py: 1.5, fontSize: 17 }}
-                  >
-                    Download for Android
-                  </Button>
-                  {!android && (
+                {android ? (
+                  <Box sx={{ mt: 4 }}>
                     <Button
-                      variant="outlined"
-                      color="success"
+                      component={motion.a}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      href={apkUrl}
+                      download="MySuccess.apk"
+                      variant="contained"
                       size="large"
-                      startIcon={<WhatsAppIcon />}
-                      href={`https://wa.me/?text=${encodeURIComponent(`Download the My Success app: ${pageUrl}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      startIcon={<DownloadIcon />}
+                      sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, px: 4, py: 1.5, fontSize: 17 }}
                     >
-                      Send the link to my phone
+                      Download for Android{sizeMb ? ` (${sizeMb} MB)` : ''}
                     </Button>
-                  )}
-                </Stack>
-                {!android && (
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
-                    On a computer? Open <b>{pageUrl.replace(/^https?:\/\//, '')}</b> on your Android phone, or send it to yourself on WhatsApp.
-                  </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
+                      One file, MySuccess.apk. Open it after it downloads to install.
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ mt: 4 }}>
+                    <Alert severity="info" icon={<PhoneAndroidIcon />} sx={{ mb: 2, maxWidth: 560 }}>
+                      The app installs on <b>Android phones</b>. Open this page on your phone, or send the link to it.
+                    </Alert>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                      <Button
+                        component={motion.a}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        variant="contained"
+                        size="large"
+                        startIcon={<WhatsAppIcon />}
+                        href={`https://wa.me/?text=${encodeURIComponent(`Download the My Success app: ${pageUrl}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, px: 3, py: 1.5, fontSize: 16 }}
+                      >
+                        Send the link to my phone
+                      </Button>
+                      <Button variant="outlined" size="large" startIcon={<ContentCopyIcon />} onClick={copyLink}>
+                        Copy link
+                      </Button>
+                    </Stack>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 2, maxWidth: 560 }}>
+                      Need the file on this computer?{' '}
+                      <Link href={apkUrl} download="MySuccess.apk">Download MySuccess.apk{sizeMb ? ` (${sizeMb} MB)` : ''}</Link>
+                      {' '}and copy it to your phone. Do not open it on the computer: an APK only installs on Android, and a computer shows it as a folder of files.
+                    </Typography>
+                  </Box>
                 )}
 
                 <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap sx={{ mt: 3 }}>
