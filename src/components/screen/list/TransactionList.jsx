@@ -1,474 +1,360 @@
-import { useEffect, useState, useRef } from "react";
-import {
-  Row,
-  Col,
-  InputGroup,
-  Pagination,
-  Form,
-  Button,
-} from "react-bootstrap";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link as RouterLink } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
 import {
-  ClientTable,
-  SearchButton,
-  SearchForm,
-  SearchInput,
-  SearchLabel,
-  PageSizeWrapper,
-  PageSizeSelect,
-  PaginationWrapper,
-  ClearButton,
-  TotalRow,
-} from "../css/styles";
+  Alert,
+  Box,
+  Button,
+  Card,
+  Chip,
+  Grid,
+  IconButton,
+  MenuItem,
+  Pagination,
+  Skeleton,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import { API_SERVICE } from "../../common/CommonMethod";
-import {
-  DELETE_TRANSACTION_API,
-  LIST_TRANSACTION_API,
-  SAVE_NEW_TRANS_API,
-} from "../../common/CommonApiURL";
+import { DELETE_TRANSACTION_API, LIST_TRANSACTION_API, SAVE_NEW_TRANS_API } from "../../common/CommonApiURL";
 import UnauthorizedAccess from "../../common/UnauthorizedAccess";
-import TransDeleteModal from "../modal/TransDeleteModal";
-import TransEditModal from "../modal/TransEditModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faMicrophoneSlash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FaSearch, FaTimes } from "react-icons/fa";
-import i18n from "../../../language/i18n";
-import Header from "../../common/Header";
 import Translator from "../../common/TranslationBasedOnLanguage";
+import { ConfirmDialog, EmptyState, PageHeader, StatusChip } from "../../ui";
+import { EntryField, rupees, useVoice } from "../../moitech/shared";
+import EntryEditDialog from "../../moitech/EntryEditDialog";
 
-const onEdit = (id, transaction, setEditingTransaction, setShowEditModal) => {
-  setEditingTransaction(transaction);
-  setShowEditModal(true);
+const readUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch (e) {
+    return null;
+  }
 };
 
-const onDelete = (id, setDeletingTransactionId, setShowDeleteModal) => {
-  setDeletingTransactionId(id);
-  setShowDeleteModal(true);
-};
+const PAGE_SIZES = [10, 25, 50, 100];
 
+/** Receipts (moi received) for the current function: search, edit and delete. */
 const TransactionList = () => {
-  const { t } = useTranslation();
-  const [transactionList, setTransactionList] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [name, setName] = useState("");
-  const [placeName, setPlaceName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [deletingTransactionId, setDeletingTransactionId] = useState(null);
-  const [editingTransaction, setEditingTransaction] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingField, setRecordingField] = useState(null);
-  const recognitionRef = useRef(null);
-  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
+  const { t, i18n } = useTranslation();
+  const theme = useTheme();
+  const wide = useMediaQuery(theme.breakpoints.up("md"));
+  const user = readUser();
+  const voice = useVoice(i18n.language);
+
+  const [filters, setFilters] = useState({ name: "", placeName: "", mobile: "" });
+  const [applied, setApplied] = useState(filters);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [editing, setEditing] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
 
-  const fetchTransactions = async () => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      setIsAuthenticated(false);
-      return;
-    }
-
+  const fetchTransactions = useCallback(async () => {
+    const u = readUser();
+    if (!u) return;
+    setLoading(true);
+    setError("");
     try {
       const response = await API_SERVICE.get(LIST_TRANSACTION_API, {
-        customer_id: JSON.parse(user).customerID,
+        customer_id: u.customerID,
         id: null,
-        customer_name: name,
-        trans_type:"R",
-        village_name: placeName,
-        mobile: mobile,
-        user_type: JSON.parse(user).userType,
-        userId: JSON.parse(user).id,
+        customer_name: applied.name,
+        trans_type: "R",
+        village_name: applied.placeName,
+        mobile: applied.mobile,
+        user_type: u.userType,
+        userId: u.id,
         current_page: currentPage,
         page_size: pageSize,
       });
-
-      if (response.data.result) {
-        setTransactionList(response.data.data.transactions);
-        setTotalPages(response.data.data.totalPages);
+      if (response?.data?.result) {
+        setRows(response.data.data?.transactions || []);
+        setTotalPages(Math.max(1, response.data.data?.totalPages || 1));
       } else {
-        return <p>{t("noData")}</p>;
+        setRows([]);
+        setTotalPages(1);
       }
-    } catch (error) {
-      console.error("There was an error fetching the client list!", error);
+    } catch (e) {
+      console.error("There was an error fetching the receipt list!", e);
+      setError(t("loadFailed", { defaultValue: "Could not load the receipts. Check your connection and try again." }));
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [applied, currentPage, pageSize, t]);
 
   useEffect(() => {
     fetchTransactions();
-  }, [currentPage, pageSize]);
+  }, [fetchTransactions]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setCurrentPage(1);
-    fetchTransactions();
-  };
+  if (!user) return <UnauthorizedAccess />;
 
-  const handleClear = () => {
-    setMobile("");
-    setName("");
-    setPlaceName("");
-  };
-
-  const handleDelete = async () => {
-    try {
-      const user = localStorage.getItem("user");
-      await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
-        id: deletingTransactionId,
-        deletedBy: JSON.parse(user).mobile ?? "system",
-      });
-      setTransactionList(
-        transactionList.filter((t) => t.id !== deletingTransactionId)
-      );
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error("There was an error deleting the transaction!", error);
-    }
-  };
-
-  const handleEditSave = async () => {
-    try {
-      await API_SERVICE.post(SAVE_NEW_TRANS_API, editingTransaction);
-      setTransactionList(
-        transactionList.map((t) =>
-          t.id === editingTransaction.id ? editingTransaction : t
-        )
-      );
-      setShowEditModal(false);
-    } catch (error) {
-      console.error("There was an error editing the transaction!", error);
-    }
-  };
-
-  const handleTranslation = (translatedText) => {
-    if (fieldBeingTranslated) {
-      if (fieldBeingTranslated === "name") {
-        setName(translatedText);
-      } else if (fieldBeingTranslated === "placeName") {
-        setPlaceName(translatedText);
-      }
-      setFieldBeingTranslated(null);
-    }
-  };
-
-  const handleChange = (e, setState, fieldName) => {
+  const setFilter = (k) => (e) => {
     const { value } = e.target;
-    setState(value);
-    if (value.endsWith(" ")) {
-      setFieldBeingTranslated(fieldName);
-      // Initiate translation
-      handleTranslation(value.trim());
+    setFilters((f) => ({ ...f, [k]: value }));
+    if (value.endsWith(" ") && k !== "mobile") setFieldBeingTranslated(k);
+  };
+  const search = (e) => {
+    e?.preventDefault();
+    setCurrentPage(1);
+    setApplied({ ...filters });
+  };
+  const clear = () => {
+    const empty = { name: "", placeName: "", mobile: "" };
+    setFilters(empty);
+    setCurrentPage(1);
+    setApplied(empty);
+  };
+  const filtered = applied.name || applied.placeName || applied.mobile;
+
+  const saveEdit = async (updated) => {
+    try {
+      const res = await API_SERVICE.post(SAVE_NEW_TRANS_API, updated);
+      if (res?.data?.result === false) return { ok: false, message: res.data.message };
+      setRows((rs) => rs.map((r) => (r.id === updated.id ? updated : r)));
+      setEditing(null);
+      toast.success(t("updatedSuccessfully", { defaultValue: "Receipt updated" }));
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, message: e?.response?.data?.message };
     }
   };
 
-  const startRecording = (fieldName, setState) => {
-    setIsRecording(true);
-    setRecordingField(fieldName);
-    recognitionRef.current = new window.webkitSpeechRecognition();
-    recognitionRef.current.lang = i18n.language === "ta" ? "ta-IN" : "en-US";
-    recognitionRef.current.onresult = (event) => {
-      setState(event.results[0][0].transcript);
-    };
-    recognitionRef.current.start();
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-    setRecordingField(null);
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
+  const confirmDelete = async () => {
+    setDeleting(true);
+    try {
+      const res = await API_SERVICE.postreq(DELETE_TRANSACTION_API, {
+        id: deletingId,
+        deletedBy: user.primary_phone || user.mobile || String(user.id ?? "system"),
+      });
+      if (res?.data?.result === false) {
+        toast.error(res.data.message || t("an_error_occurred", { defaultValue: "Could not delete" }));
+      } else {
+        setRows((rs) => rs.filter((r) => r.id !== deletingId));
+        toast.success(t("deletedSuccessfully", { defaultValue: "Receipt deleted" }));
+        setDeletingId(null);
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || t("an_error_occurred", { defaultValue: "Could not delete" }));
+    } finally {
+      setDeleting(false);
     }
   };
 
-  const toggleRecording = (fieldName, setState) => {
-    if (isRecording && recordingField === fieldName) {
-      stopRecording();
-    } else {
-      startRecording(fieldName, setState);
-    }
-  };
+  const pageTotal = rows.reduce((acc, r) => acc + parseFloat(r.amount || 0), 0);
 
-  if (!isAuthenticated) {
-    return <UnauthorizedAccess />;
-  }
+  const searchField = (k, label, extra = {}) => (
+    <EntryField
+      size="small"
+      label={label}
+      value={filters[k]}
+      onChange={setFilter(k)}
+      onKeyDown={(e) => e.key === "Enter" && search(e)}
+      recording={voice.field === k}
+      onMic={() => voice.toggle(k, (said) => setFilters((f) => ({ ...f, [k]: k === "mobile" ? said.replace(/\D/g, "") : said })))}
+      {...extra}
+    />
+  );
 
-  const calculateTotals = () => {
-    const totalAmount = transactionList.reduce(
-      (acc, trans) => acc + parseFloat(trans.amount || 0),
-      0
-    );
-    const totalRows = transactionList.length;
-    return { totalAmount, totalRows };
-  };
-
-  const { totalAmount, totalRows } = calculateTotals();
-  const list = transactionList.map((el) => (
-    <tr key={el.id}>
-      <td>{el.villageName}</td>
-      <td>{el.initial}</td>
-      <td>{el.name}</td>
-      <td>{el.oldAmount}</td>
-      <td>{el.newAmount}</td>
-      <td>{el.amount}</td>
-      <td>{el.phoneNo}</td>
-      <td>{el.isActive ? t("yes") : t("no")}</td>
-      <td>
-        <div className="d-flex justify-content-end align-items-center">
-          <i
-            className="fa-solid fa-pen-to-square text-primary me-2"
-            role="presentation"
-            title={t("edit")}
-            onClick={() =>
-              onEdit(el.id, el, setEditingTransaction, setShowEditModal)
-            }
-          ></i>
-          <i
-            className="fa-solid fa-trash text-danger me-2"
-            role="presentation"
-            title={t("delete")}
-            onClick={() =>
-              onDelete(el.id, setDeletingTransactionId, setShowDeleteModal)
-            }
-          />
-        </div>
-      </td>
-    </tr>
-  ));
+  const actions = (r) => (
+    <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+      <Tooltip title={t("edit")}>
+        <IconButton size="small" color="primary" onClick={() => setEditing(r)} aria-label={`${t("edit")} ${r.name}`}>
+          <EditOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={t("delete")}>
+        <IconButton size="small" color="error" onClick={() => setDeletingId(r.id)} aria-label={`${t("delete")} ${r.name}`}>
+          <DeleteOutlineIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
 
   return (
-    <div>
-      {/* <Header title={t("transactionList")} links={[{to: "/transaction", label: t("addTransaction")}]} /> */}
-      <Header
-        //titles={[t("transactionList"), t("anotherTitle")]}
-        titles={[t("transactionList")]}
-        links={[
-          { to: "/dashboard", label: t("dashboard") },
-          { to: "/transaction", label: t("addTransaction") },
-        ]}
+    <Box sx={{ py: { xs: 2.5, md: 3 } }}>
+      <PageHeader
+        title={t("transactionList")}
+        subtitle={t("transactionListHint", { defaultValue: "Every moi received for this function. Search, correct or remove an entry." })}
+        breadcrumbs={[{ label: t("dashboard"), to: "/dashboard" }, { label: t("transactionList") }]}
+        actions={
+          <Button component={RouterLink} to="/transaction" variant="contained" startIcon={<AddIcon />}>
+            {t("addTransaction")}
+          </Button>
+        }
       />
-      <Row>
-        <Col>
-          <SearchForm onSubmit={handleSearch} className="mb-3">
-            <Row className="align-items-end">
-              <Col xs={12} md={4}>
-                <Form.Group controlId="formName">
-                  <SearchLabel>{t("name")}</SearchLabel>
-                  <InputGroup>
-                    <SearchInput
-                      type="text"
-                      placeholder={t("name")}
-                      value={name}
-                      onChange={(e) => handleChange(e, setName, "name")}
-                    />
-                    <Button
-                      variant={
-                        isRecording && recordingField === "name"
-                          ? "danger"
-                          : "primary"
-                      }
-                      onClick={() => toggleRecording("name", setName)}
-                    >
-                      <FontAwesomeIcon
-                        icon={
-                          isRecording && recordingField === "name"
-                            ? faMicrophoneSlash
-                            : faMicrophone
-                        }
-                      />
-                    </Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-              <Col xs={12} md={4}>
-                <Form.Group controlId="formPlaceName">
-                  <SearchLabel>{t("placeName")}</SearchLabel>
-                  <InputGroup>
-                    <SearchInput
-                      type="text"
-                      placeholder={t("placeName")}
-                      value={placeName}
-                      onChange={(e) =>
-                        handleChange(e, setPlaceName, "placeName")
-                      }
-                    />
-                    <Button
-                      variant={
-                        isRecording && recordingField === "placeName"
-                          ? "danger"
-                          : "primary"
-                      }
-                      onClick={() => toggleRecording("placeName", setPlaceName)}
-                    >
-                      <FontAwesomeIcon
-                        icon={
-                          isRecording && recordingField === "placeName"
-                            ? faMicrophoneSlash
-                            : faMicrophone
-                        }
-                      />
-                    </Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-              <Col xs={12} md={4}>
-                <Form.Group controlId="formMobile">
-                  <SearchLabel>{t("mobile")}</SearchLabel>
-                  <InputGroup>
-                    <SearchInput
-                      type="text"
-                      placeholder={t("mobile")}
-                      value={mobile}
-                      onChange={(e) => handleChange(e, setMobile, "mobile")}
-                    />
-                    <Button
-                      variant={
-                        isRecording && recordingField === "mobile"
-                          ? "danger"
-                          : "primary"
-                      }
-                      onClick={() => toggleRecording("mobile", setMobile)}
-                    >
-                      <FontAwesomeIcon
-                        icon={
-                          isRecording && recordingField === "mobile"
-                            ? faMicrophoneSlash
-                            : faMicrophone
-                        }
-                      />
-                    </Button>
-                  </InputGroup>
-                </Form.Group>
-              </Col>
-            </Row>
-            {/* Translator Component */}
-            {fieldBeingTranslated && (
-              <Translator
-                inputText={
-                  fieldBeingTranslated === "name"
-                    ? name
-                    : fieldBeingTranslated === "placeName"
-                    ? placeName
-                    : ""
-                }
-                onTranslated={handleTranslation}
-                sourceLanguage="en"
-                targetLanguage={i18n.language || "en"}
-              />
-            )}
 
-            <Row className="justify-content-center align-items-end">
-              <Col xs={12} md={6} className="text-center">
-                <div className="mb-0 d-flex justify-content-center align-items-center">
-                  <SearchButton>
-                    <FaSearch className="mr-2" /> {t("search")}
-                  </SearchButton>
-                  <ClearButton onClick={handleClear}>
-                    <FaTimes className="mr-2" /> {t("clearButton")}
-                  </ClearButton>
-                </div>
-              </Col>
-              <PageSizeWrapper>
-                <Form.Group controlId="formPageSize">
-                  <SearchLabel>{t("pageSize")}</SearchLabel>
-                  <PageSizeSelect
-                    as="select"
-                    value={pageSize}
-                    onChange={(e) => setPageSize(parseInt(e.target.value, 10))}
+      <Card component="form" onSubmit={search} sx={{ p: { xs: 2, md: 2.5 }, mb: 2.5 }}>
+        <Grid container spacing={1.5} alignItems="center">
+          <Grid item xs={12} sm={6} md={3}>{searchField("name", t("name"))}</Grid>
+          <Grid item xs={12} sm={6} md={3}>{searchField("placeName", t("placeName"))}</Grid>
+          <Grid item xs={12} sm={6} md={2}>{searchField("mobile", t("mobile"), { type: "tel", inputProps: { inputMode: "numeric" } })}</Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Stack direction="row" spacing={1}>
+              <Button type="submit" variant="contained" startIcon={<SearchIcon />} sx={{ flex: 1 }}>{t("search")}</Button>
+              <Button onClick={clear} startIcon={<ClearIcon />} disabled={!filtered && !filters.name && !filters.placeName && !filters.mobile}>{t("clearButton")}</Button>
+            </Stack>
+          </Grid>
+        </Grid>
+        {fieldBeingTranslated && (
+          <Translator
+            inputText={filters[fieldBeingTranslated] || ""}
+            onTranslated={(text) => {
+              setFilters((f) => ({ ...f, [fieldBeingTranslated]: text }));
+              setFieldBeingTranslated(null);
+            }}
+            sourceLanguage="en"
+            targetLanguage={i18n.language || "en"}
+          />
+        )}
+      </Card>
+
+      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1.5 }}>
+        <Chip icon={<ReceiptLongOutlinedIcon />} label={`${t("totalRows")}: ${rows.length} ${t("pagerows")}`} />
+        <Chip color="primary" variant="outlined" label={`${t("amount")}: ${rupees(pageTotal)}`} />
+        {filtered && <Chip label={t("filtered", { defaultValue: "Filtered" })} onDelete={clear} />}
+        <Box sx={{ flex: 1 }} />
+        <TextField select size="small" label={t("pageSize")} value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }} sx={{ width: 110 }}>
+          {PAGE_SIZES.map((n) => <MenuItem key={n} value={n}>{n}</MenuItem>)}
+        </TextField>
+      </Stack>
+
+      {error && <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" onClick={fetchTransactions}>{t("retry", { defaultValue: "Retry" })}</Button>}>{error}</Alert>}
+
+      {loading && rows.length === 0 ? (
+        <Stack spacing={1}>{[0, 1, 2, 3, 4].map((i) => <Skeleton key={i} variant="rounded" height={52} />)}</Stack>
+      ) : rows.length === 0 && !error ? (
+        <Card>
+          <EmptyState
+            icon={<ReceiptLongOutlinedIcon />}
+            title={filtered ? t("noMatches", { defaultValue: "No receipts match your search" }) : t("noData")}
+            description={filtered ? t("tryOtherSearch", { defaultValue: "Try a different name, place or number." }) : t("noReceiptsYet", { defaultValue: "Receipts you add will appear here." })}
+            action={filtered ? <Button onClick={clear}>{t("clearButton")}</Button> : <Button variant="contained" component={RouterLink} to="/transaction" startIcon={<AddIcon />}>{t("addTransaction")}</Button>}
+          />
+        </Card>
+      ) : wide ? (
+        <TableContainer component={Card} sx={{ opacity: loading ? 0.6 : 1, transition: "opacity .2s" }}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>{t("placeName")}</TableCell>
+                <TableCell>{t("initial")}</TableCell>
+                <TableCell>{t("name")}</TableCell>
+                <TableCell align="right">{t("oldAmount")}</TableCell>
+                <TableCell align="right">{t("newAmount")}</TableCell>
+                <TableCell align="right">{t("amount")}</TableCell>
+                <TableCell>{t("phoneNo")}</TableCell>
+                <TableCell>{t("active")}</TableCell>
+                <TableCell align="right">{t("actions")}</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <AnimatePresence initial={false}>
+                {rows.map((r, i) => (
+                  <TableRow
+                    key={r.id}
+                    hover
+                    component={motion.tr}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: Math.min(i, 12) * 0.02 } }}
+                    exit={{ opacity: 0, x: -20 }}
                   >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                  </PageSizeSelect>
-                </Form.Group>
-              </PageSizeWrapper>
-            </Row>
-          </SearchForm>
-        </Col>
-      </Row>
-      <ClientTable responsive className="table table-striped">
-        <thead>
-          <tr>
-            <th>{t("placeName")}</th>
-            <th>{t("initial")}</th>
-            <th>{t("name")}</th>
-            <th>{t("oldAmount")}</th>
-            <th>{t("newAmount")}</th>
-            <th>{t("amount")}</th>
-            <th>{t("phoneNo")}</th>
-            <th>{t("active")}</th>
-            <th className="text-end">{t("actions")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactionList.length > 0 ? (
-            <>
-              {list}
-              <TotalRow>
-                <td colSpan="5">
-                  {t("totalRows")}: {totalRows} {t("pagerows")}
-                </td>
-                <td>{totalAmount}</td>
-              </TotalRow>
-            </>
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center danger">
-                {t("noData")}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </ClientTable>
-      <PaginationWrapper>
-        <Pagination>
-          <Pagination.First
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-          />
-          <Pagination.Prev
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-          />
-          {Array.from({ length: totalPages }, (_, i) => (
-            <Pagination.Item
-              key={i + 1}
-              active={i + 1 === currentPage}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          />
-          <Pagination.Last
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
-      </PaginationWrapper>
+                    <TableCell>{r.villageName}</TableCell>
+                    <TableCell>{r.initial}</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>{r.name}</TableCell>
+                    <TableCell align="right">{rupees(r.oldAmount)}</TableCell>
+                    <TableCell align="right">{rupees(r.newAmount)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700 }}>{rupees(r.amount)}</TableCell>
+                    <TableCell>{r.phoneNo}</TableCell>
+                    <TableCell><StatusChip label={r.isActive ? t("yes") : t("no")} tone={r.isActive ? "success" : "neutral"} /></TableCell>
+                    <TableCell align="right">{actions(r)}</TableCell>
+                  </TableRow>
+                ))}
+              </AnimatePresence>
+              <TableRow sx={{ "& td": { fontWeight: 700, bgcolor: "action.hover" } }}>
+                <TableCell colSpan={5}>{t("totalRows")}: {rows.length} {t("pagerows")}</TableCell>
+                <TableCell align="right">{rupees(pageTotal)}</TableCell>
+                <TableCell colSpan={3} />
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Stack spacing={1.25} sx={{ opacity: loading ? 0.6 : 1 }}>
+          <AnimatePresence initial={false}>
+            {rows.map((r, i) => (
+              <Card key={r.id} component={motion.div} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0, transition: { delay: Math.min(i, 10) * 0.03 } }} exit={{ opacity: 0, x: -20 }} sx={{ p: 1.75 }}>
+                <Stack direction="row" spacing={1.5} alignItems="baseline" justifyContent="space-between">
+                  <Typography fontWeight={700} sx={{ minWidth: 0, overflowWrap: "anywhere" }}>{[r.initial, r.name].filter(Boolean).join(". ")}</Typography>
+                  <Typography variant="h6" fontWeight={800} sx={{ flexShrink: 0 }}>{rupees(r.amount)}</Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary">{r.villageName}</Typography>
+                {r.oldAmount > 0 && r.newAmount > 0 && (
+                  <Typography variant="caption" color="text.secondary" display="block">
+                    {t("oldAmount")} {rupees(r.oldAmount)} · {t("newAmount")} {rupees(r.newAmount)}
+                  </Typography>
+                )}
+                {r.oldAmount > 0 && !(r.newAmount > 0) && (
+                  <Typography variant="caption" color="text.secondary" display="block">{t("oldAmount")}</Typography>
+                )}
+                {r.phoneNo && (
+                  <Stack direction="row" spacing={0.5} alignItems="center" color="text.secondary">
+                    <PhoneOutlinedIcon sx={{ fontSize: 14 }} />
+                    <Typography variant="caption">{r.phoneNo}</Typography>
+                  </Stack>
+                )}
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 1 }}>
+                  <StatusChip label={r.isActive ? t("yes") : t("no")} tone={r.isActive ? "success" : "neutral"} />
+                  {actions(r)}
+                </Stack>
+              </Card>
+            ))}
+          </AnimatePresence>
+        </Stack>
+      )}
 
-      <TransDeleteModal
-        show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
-        onDelete={handleDelete}
+      {totalPages > 1 && (
+        <Stack alignItems="center" sx={{ mt: 2.5 }}>
+          <Pagination count={totalPages} page={currentPage} onChange={(_, p) => setCurrentPage(p)} color="primary" showFirstButton showLastButton siblingCount={wide ? 1 : 0} />
+        </Stack>
+      )}
+
+      <EntryEditDialog open={!!editing} entry={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
+      <ConfirmDialog
+        open={deletingId !== null}
+        title={t("deleteReceiptTitle", { defaultValue: "Delete this receipt?" })}
+        message={t("deleteReceiptMessage", { defaultValue: "It will be removed from the list and the totals." })}
+        confirmLabel={t("delete")}
+        cancelLabel={t("cancel")}
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onClose={() => !deleting && setDeletingId(null)}
       />
-      <TransEditModal
-        show={showEditModal}
-        onHide={() => setShowEditModal(false)}
-        transaction={editingTransaction}
-        setTransaction={setEditingTransaction}
-        onSave={handleEditSave}
-      />
-    </div>
+    </Box>
   );
 };
 
