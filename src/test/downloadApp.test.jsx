@@ -1,5 +1,5 @@
 /** The download page serves the APK from the website, or from GitHub when the site has none yet. */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('axios', () => {
@@ -26,28 +26,20 @@ describe('Download app page', () => {
     vi.restoreAllMocks();
   });
 
-  it('on a phone, downloads the single APK from the website and shows its size', async () => {
+  it('on a phone, downloads the single APK from GitHub (served as an Android app) and shows its size', async () => {
     asAndroid();
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, headers: new Headers({ 'content-type': 'application/vnd.android.package-archive', 'content-length': String(18 * 1048576) }) })));
+    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({ assets: [{ name: 'MySuccess.apk', size: 14.5 * 1048576 }] }) })));
     await renderAt('/download-app');
-    const link = await screen.findByRole('link', { name: /download for android \(18 mb\)/i }, { timeout: 5000 });
-    expect(link).toHaveAttribute('href', '/downloads/MySuccess.apk');
+    const link = await screen.findByRole('link', { name: /download for android \(14\.5 mb\)/i }, { timeout: 5000 });
+    expect(link.getAttribute('href')).toMatch(/github\.com\/successprabu\/AIMobileApp\/releases\/latest\/download\/MySuccess\.apk$/);
     expect(link).toHaveAttribute('download', 'MySuccess.apk');
   });
 
   it('on a computer, offers to send the link to the phone and explains the APK file', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, headers: new Headers({ 'content-type': 'application/vnd.android.package-archive' }) })));
+    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('offline'))));
     await renderAt('/download-app');
     expect(await screen.findByRole('link', { name: /send the link to my phone/i }, { timeout: 5000 })).toHaveAttribute('href', expect.stringMatching(/^https:\/\/wa\.me\//));
     expect(screen.getAllByRole('alert').some((a) => /installs on android phones/i.test(a.textContent))).toBe(true);
-    expect(screen.getByRole('link', { name: /download mysuccess\.apk/i })).toHaveAttribute('href', '/downloads/MySuccess.apk');
-  });
-
-  it('falls back to the GitHub release when the site returns the web page instead', async () => {
-    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok: true, headers: new Headers({ 'content-type': 'text/html' }) })));
-    asAndroid();
-    await renderAt('/download-app');
-    const link = await screen.findByRole('link', { name: /download for android/i }, { timeout: 5000 });
-    await waitFor(() => expect(link.getAttribute('href')).toMatch(/github\.com\/successprabu\/AIMobileApp\/releases\/latest\/download\/MySuccess\.apk$/));
+    expect(screen.getByRole('link', { name: /download mysuccess\.apk/i }).getAttribute('href')).toMatch(/MySuccess\.apk$/);
   });
 });

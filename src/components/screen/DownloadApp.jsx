@@ -27,25 +27,25 @@ const FEATURES = ['Record moi entries and expenses', 'Type names in Tamil by voi
 const isAndroid = () => typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent);
 
 /** Public page with the Android app download. */
+/** GitHub release info: gives the APK's size for the button. */
+const LATEST_RELEASE_API = 'https://api.github.com/repos/successprabu/AIMobileApp/releases/latest';
+
 const DownloadApp = () => {
-  const [apkUrl, setApkUrl] = useState(APK_ON_SITE);
+  // GitHub serves the APK labelled as an Android app, so phones save one MySuccess.apk and offer to
+  // install it. (The copy the deploy puts on this site stays as a backup at /downloads/MySuccess.apk.)
+  const apkUrl = APK_ON_GITHUB;
   const [sizeMb, setSizeMb] = useState(null);
 
   useEffect(() => {
     document.title = 'Download the My Success app';
-    // The site answers unknown paths with the web app itself, so check it is really the APK.
     let live = true;
-    fetch(APK_ON_SITE, { method: 'HEAD' })
-      .then((r) => {
-        const type = r.headers.get('content-type') || '';
-        if (!live) return;
-        if (!r.ok || type.includes('text/html')) setApkUrl(APK_ON_GITHUB);
-        else {
-          const bytes = Number(r.headers.get('content-length'));
-          if (bytes > 0) setSizeMb(Math.round(bytes / 1048576));
-        }
+    fetch(LATEST_RELEASE_API)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((release) => {
+        const apk = release?.assets?.find((a) => a.name === 'MySuccess.apk');
+        if (live && apk?.size > 0) setSizeMb(Math.round((apk.size / 1048576) * 10) / 10);
       })
-      .catch(() => live && setApkUrl(APK_ON_GITHUB));
+      .catch(() => {});
     return () => {
       live = false;
     };
