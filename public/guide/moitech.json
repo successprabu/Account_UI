@@ -1,0 +1,184 @@
+{
+  "id": "moitech",
+  "title": "Moitech",
+  "heading": "Moitech user guide",
+  "summary": "Record every moi (gift) at your function, let helpers record from their own phones, track expenses, and close the day with a clear handover and reports.",
+  "color": "#6366f1",
+  "sections": [
+    {
+      "title": "Get started",
+      "steps": [
+        {
+          "title": "Create your account",
+          "img": "01-register.jpg",
+          "text": "Open the website, click Try Demo and choose Moitech. Your account is free for 7 days.",
+          "points": [
+            "Fill in your name and mobile number, tap Send OTP and enter the code you receive. Choose a password and tap Register."
+          ]
+        },
+        {
+          "title": "Sign in",
+          "img": "02-login.jpg",
+          "text": "Use the same mobile number and password on the website and in the Android app.",
+          "points": [
+            "Your 10 digit mobile number.",
+            "Your password.",
+            "Tap Sign In."
+          ]
+        },
+        {
+          "title": "Your dashboard",
+          "img": "03-dashboard.jpg",
+          "text": "After you sign in you see the totals for your active function: amount received, expenses, number of entries and places. The quick actions take you straight to the screens you use most."
+        }
+      ]
+    },
+    {
+      "title": "Set up your function",
+      "steps": [
+        {
+          "title": "Add your function",
+          "img": "04-function.jpg",
+          "text": "Open Masters → Function Master. Every wedding, ear piercing or house warming is a separate function with its own entries and reports.",
+          "points": [
+            "Enter the function name, date, hall and the names of the people the function is for. The message is printed on the reports.",
+            "Tap Save. A new function becomes your active function straight away."
+          ]
+        },
+        {
+          "title": "Switch to another function",
+          "img": "05-function-use.jpg",
+          "text": "The green card is the function your entries are saved to. To work on a different one, tap Use this function on its card. Tap the pencil to change a function's details.",
+          "points": [
+            "Use this function makes that function active for receipts, expenses, handover and reports."
+          ]
+        },
+        {
+          "title": "Add helpers",
+          "img": "06-users.jpg",
+          "text": "Open Masters → User Master to add the people who will record moi at the counter. Each helper signs in on their own phone and their entries go to your active function.",
+          "points": [
+            "Enter the helper's name, mobile number and a password.",
+            "Tap Save, then share the mobile number and password with the helper."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Record entries",
+      "steps": [
+        {
+          "title": "Record a moi",
+          "img": "07-receipt.jpg",
+          "text": "Open Transactions → New Receipt. Press Enter to move to the next field, so you can record quickly without the mouse.",
+          "points": [
+            "Village or place of the person.",
+            "Their name. Add the surname, mobile and remarks if you have them.",
+            "New Amount is the moi given today. Old Amount is for a moi you are returning from an earlier function.",
+            "Tap Save. The entry appears under Recently Saved Transaction with the running total."
+          ]
+        },
+        {
+          "title": "Type by voice or in your language",
+          "img": "08-receipt-voice.jpg",
+          "text": "Every field has a microphone. Tap it and speak the name or place. Turn on Spelling suggestions to type in English letters and pick the word in Tamil or your language.",
+          "points": [
+            "Tap the microphone and speak."
+          ]
+        },
+        {
+          "title": "Import a written moi list",
+          "img": "11-import.jpg",
+          "text": "Have the moi written in a notebook? Tap Import on the New Receipt screen and choose From a photo. Upload a clear photo (JPEG or PNG) of the list and the app reads the entries for you. Check them, correct anything that was misread, then save. You can also choose Type entries to add several at once.",
+          "points": [
+            "Import opens the photo upload."
+          ]
+        },
+        {
+          "title": "Find and correct an entry",
+          "img": "09-receipt-list.jpg",
+          "text": "Open Transactions → Receipt List. Search by name, place or mobile number.",
+          "points": [
+            "Type a name, place or mobile and tap Search.",
+            "The pencil opens the entry to correct it. The bin removes it."
+          ]
+        },
+        {
+          "title": "Edit an entry",
+          "img": "10-receipt-edit.jpg",
+          "text": "Change the details and tap Save. The totals update straight away."
+        },
+        {
+          "title": "Record expenses",
+          "img": "12-expenses.jpg",
+          "text": "Open Transactions → New Expenses for money spent on the function: catering, decoration, hall, photography and more.",
+          "points": [
+            "Choose the category and enter who was paid and the amount.",
+            "Tap Save."
+          ]
+        },
+        {
+          "title": "Record gold and other gifts",
+          "img": "13-others.jpg",
+          "text": "Open Transactions → Add Others for gifts that are not cash, such as rings, chains, coins and anklets.",
+          "points": [
+            "Choose the type of gift.",
+            "Enter how many. Add the weight or details in Others Remarks."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Close the function",
+      "steps": [
+        {
+          "title": "See what each helper collected",
+          "img": "14-handover.jpg",
+          "text": "Open Transactions → HandOver. Each row shows what one person received, spent and collected as other gifts, and the amount they should hand over.",
+          "points": [
+            "Tap HandOver on a person's row when they give you the money."
+          ]
+        },
+        {
+          "title": "Record the handover",
+          "img": "15-handover-dialog.jpg",
+          "text": "Enter the amount handed over and who received it. If the amount is less than expected, the difference is shown so you can sort it out on the spot. Tap Save."
+        }
+      ]
+    },
+    {
+      "title": "Reports",
+      "steps": [
+        {
+          "title": "Download reports as PDF or Excel",
+          "img": "16-report.jpg",
+          "text": "Open Reports. The Income, Expense, Others and Regional reports can be searched and downloaded. The PDF prints names in Tamil and the other languages correctly.",
+          "points": [
+            "Excel downloads every entry as a spreadsheet.",
+            "PDF downloads a print-ready report with your function details."
+          ]
+        },
+        {
+          "title": "Summary report",
+          "img": "17-summary.jpg",
+          "text": "The Summary Report shows the whole function at a glance: received, spent, other gifts and the balance for each person who recorded entries."
+        }
+      ]
+    },
+    {
+      "title": "Mobile app and plans",
+      "steps": [
+        {
+          "title": "Install the Android app",
+          "img": "18-app.jpg",
+          "text": "Open the Get the app page on your phone and tap Download. Open the downloaded MySuccess.apk and allow your browser to install it. Sign in with the same mobile number and password. On a computer you can send the link to your phone on WhatsApp."
+        },
+        {
+          "title": "Choose a plan",
+          "img": "19-pricing.jpg",
+          "text": "Open Pricing and choose the Moitech tab. Pick a monthly or yearly plan and pay online. Sign in first so the plan is added to your account."
+        }
+      ]
+    }
+  ]
+}

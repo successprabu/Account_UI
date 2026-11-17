@@ -37,6 +37,7 @@ import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import TranslateIcon from '@mui/icons-material/Translate';
@@ -99,7 +100,14 @@ const NAV = [
     ],
   },
   { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
+  // One entry per role, each opening that role's guide (the super admin gets the list of all guides).
+  { key: 'userGuide', fallback: 'User guide', to: '/user-guide/moitech', icon: <MenuBookOutlinedIcon />, roles: ['AU', 'NU'] },
+  { key: 'userGuide', fallback: 'User guide', to: '/user-guide/mahal', icon: <MenuBookOutlinedIcon />, roles: ['MU'] },
+  { key: 'userGuide', fallback: 'User guides', to: '/user-guide', icon: <MenuBookOutlinedIcon />, roles: ['SU'] },
 ];
+
+/** The user guide for a role. */
+export const guideFor = (userType) => (userType === 'MU' ? '/user-guide/mahal' : userType === 'SU' ? '/user-guide' : '/user-guide/moitech');
 
 const readUser = () => {
   try {
@@ -348,6 +356,12 @@ const AppShell = ({ children }) => {
                   <PaletteOutlinedIcon fontSize="small" />
                 </ListItemIcon>
                 {t('Theme Settings', { defaultValue: 'Theme settings' })}
+              </MenuItem>
+              <MenuItem component={RouterLink} to={guideFor(user?.userType)} onClick={() => setUserMenu(null)}>
+                <ListItemIcon>
+                  <MenuBookOutlinedIcon fontSize="small" />
+                </ListItemIcon>
+                {t('userGuide', { defaultValue: 'User guide' })}
               </MenuItem>
               <MenuItem component={RouterLink} to="/contactus" onClick={() => setUserMenu(null)}>
                 <ListItemIcon>

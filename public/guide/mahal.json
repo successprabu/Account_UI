@@ -1,0 +1,121 @@
+{
+  "id": "mahal",
+  "title": "Mahal Management",
+  "heading": "Mahal Management user guide",
+  "summary": "Put your hall online, take booking requests from customers, avoid double bookings, and keep track of advances and balances. The first month is free.",
+  "color": "#f59e0b",
+  "sections": [
+    {
+      "title": "Get started",
+      "steps": [
+        {
+          "title": "Register your mahal",
+          "img": "01-register.jpg",
+          "text": "Open the website, click Try Demo and choose Mahal Management. Your account is free for 1 month.",
+          "points": [
+            "Enter the owner's name and mobile number, tap Send OTP and enter the code you receive. Choose a password, fill in the address and tap Register."
+          ]
+        },
+        {
+          "title": "Your dashboard",
+          "img": "02-dashboard.jpg",
+          "text": "Sign in with your mobile number and password. The dashboard shows new requests waiting for your answer, upcoming events, this month's rent and the balance still to collect. Requests to answer and Coming up list the bookings that need you next."
+        }
+      ]
+    },
+    {
+      "title": "Set up your hall",
+      "steps": [
+        {
+          "title": "Your halls",
+          "img": "03-my-mahals.jpg",
+          "text": "Open My mahals. Each card shows the hall's capacity, price per day, new requests and upcoming events. Tap Edit to change a hall, or Bookings to see only that hall's bookings.",
+          "points": ["Tap Add mahal to add a hall."]
+        },
+        {
+          "title": "Add the hall details",
+          "img": "04-add-mahal.jpg",
+          "text": "Fill in the hall name, a few lines about the hall, seating and dining capacity, rooms, rent per day and the advance needed to confirm. Choose the events you host and the amenities you have. Switch on Take bookings online to show the hall on the public booking site. Tap Add mahal to save."
+        }
+      ]
+    },
+    {
+      "title": "Manage bookings",
+      "steps": [
+        {
+          "title": "All your bookings",
+          "img": "05-bookings.jpg",
+          "text": "Open Bookings. The tabs split bookings into Requests, Upcoming, Completed and Cancelled. Search by name, phone, booking reference or event.",
+          "points": [
+            "Requests are online booking requests waiting for your answer.",
+            "New booking adds a booking you took by phone or in person."
+          ]
+        },
+        {
+          "title": "See the month on a calendar",
+          "img": "06-calendar.jpg",
+          "text": "Switch to the calendar to see which days are booked. Confirmed bookings and open requests are shown in different colours, so you can spot free dates at a glance.",
+          "points": ["The calendar button switches the view."]
+        },
+        {
+          "title": "Answer a booking request",
+          "img": "07-requests.jpg",
+          "text": "When a customer asks for a date on the booking site, the request appears under Requests and on your dashboard.",
+          "points": ["Tap the request to open it."]
+        },
+        {
+          "title": "Confirm or decline",
+          "img": "08-confirm.jpg",
+          "text": "Call or WhatsApp the customer from the booking. When you agree, tap Confirm to block the dates. If the dates clash with a confirmed booking, the app warns you so you never book the hall twice. Tap Decline to turn the request down.",
+          "points": ["Confirm blocks the dates for this customer."]
+        },
+        {
+          "title": "Add a booking yourself",
+          "img": "09-new-booking.jpg",
+          "text": "Tap New booking. Choose the hall, the start and end date and time, the event, and the customer's name and phone. Enter the hall rent, any discount and the advance received. The balance is worked out for you. Tap Save booking."
+        },
+        {
+          "title": "Record a payment",
+          "img": "10-payment.jpg",
+          "text": "Open a booking to see the rent, amount received and balance. When the customer pays, tap Record payment and enter the amount and how they paid. The balance on the booking and on your dashboard updates straight away. Use Cancel booking if the event is called off.",
+          "points": ["Record payment adds a payment to this booking."]
+        }
+      ]
+    },
+    {
+      "title": "Your customers' side",
+      "steps": [
+        {
+          "title": "Customers find your hall",
+          "img": "11-find.jpg",
+          "text": "Customers open Book a mahal on the website. They search by area, event date and number of guests, and see which halls are free on that date. Share the Booking site link from your dashboard on WhatsApp and social media."
+        },
+        {
+          "title": "Customers request a date",
+          "img": "12-details.jpg",
+          "text": "Your hall page shows the photos, capacity, rent and a calendar of available, requested and booked days. The customer picks the dates, enters their name and phone and sends the request. It reaches you under Requests, and they get a booking reference."
+        },
+        {
+          "title": "Customers check their booking",
+          "img": "13-status.jpg",
+          "text": "With the booking reference and phone number, customers can check whether their booking is waiting, confirmed or completed, without calling you."
+        }
+      ]
+    },
+    {
+      "title": "More",
+      "steps": [
+        {
+          "title": "Give families Moitech for their function",
+          "img": "14-moitech-reg.jpg",
+          "text": "Open Moitech Reg to create a Moitech account for a family booking your hall. Enter their name, mobile number and a password and tap Save. They can then record the moi (gifts) at their function on their own phone."
+        },
+        {
+          "title": "Choose a plan",
+          "img": "15-pricing.jpg",
+          "text": "The first month is free. After that choose Monthly (₹4,999) or Yearly (₹49,999, about 2 months free) on the Pricing page, Mahal Management tab. Sign in first so the plan is added to your account."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "id": "school",
+  "title": "School Website with ERP",
+  "heading": "School Website & ERP user guide",
+  "summary": "Your school's own website, and one ERP for students, fees, attendance, marks, reports and a parent portal. Free for the first month.",
+  "color": "#10b981",
+  "appUrl": "https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net",
+  "sections": [
+    {
+      "title": "Your school website",
+      "steps": [
+        {
+          "title": "The website",
+          "img": "01-website.jpg",
+          "text": "Every school gets its own website with your name, logo and colours: Home, About, Academics, Facilities, Admissions, Gallery, News & Events and Contact. ERP Login and Parent Portal at the top take staff and parents to the login page."
+        },
+        {
+          "title": "Admission enquiries",
+          "img": "02-admissions.jpg",
+          "text": "Parents fill in the admission enquiry form on the Admissions or Contact page. Each enquiry reaches your ERP straight away with a notification, so no enquiry is missed."
+        }
+      ]
+    },
+    {
+      "title": "Get started",
+      "steps": [
+        {
+          "title": "Choose a plan",
+          "img": "03-pricing.jpg",
+          "text": "Free trial for 1 month with the website and the full ERP. After that choose Website (₹9,999 a year) or Website + ERP (₹29,999 a year)."
+        },
+        {
+          "title": "Register your school",
+          "img": "04-register.jpg",
+          "text": "Open Register your school. Choose a plan, then enter the school name, board, classes, address, contact details, logo, colour theme and a few lines about the school. Your website, an admin login and a temporary password are created instantly and also sent to your email."
+        },
+        {
+          "title": "Sign in to the ERP",
+          "img": "05-login.jpg",
+          "text": "Staff and parents all sign in on the same page. The first time you sign in you are asked to set your own password.",
+          "points": [
+            "School admin: the username you received, such as yourschool.admin. Staff: the username the admin created. Parents: their mobile number.",
+            "Your password. A parent's first password is their mobile number.",
+            "Tap Log in."
+          ]
+        },
+        {
+          "title": "The dashboard",
+          "img": "06-dashboard.jpg",
+          "text": "See today's picture at a glance: active students, today's attendance, staff present, fees collected today, pending dues and new enquiries. Class strength and Students needing attention (low attendance, below pass mark, top fee dues) show where to act."
+        },
+        {
+          "title": "School settings",
+          "img": "07-settings.jpg",
+          "text": "Open School settings to choose which student details are mandatory, set the academic year, classes and sections, the fee structure for each class and other options. Student name, class, parent name and parent mobile are always required."
+        },
+        {
+          "title": "Add staff logins",
+          "img": "08-staff.jpg",
+          "text": "Open Staff & logins to create logins for teaching and non-teaching staff. Teaching staff can also enter marks. Parent logins are created automatically when you register a student. Use Reset password if someone forgets theirs.",
+          "points": ["Add staff login creates a new login."]
+        }
+      ]
+    },
+    {
+      "title": "Students",
+      "steps": [
+        {
+          "title": "Student list",
+          "img": "09-students.jpg",
+          "text": "Open Students to see every student. Search by name, admission number, parent or mobile, and filter by class, section and status. Export downloads the list.",
+          "points": ["Register student adds a new admission."]
+        },
+        {
+          "title": "Register a student",
+          "img": "10-student-new.jpg",
+          "text": "Fill in the student details and the parent or guardian details. The admission number is given automatically. The parent's mobile number becomes their login for the parent portal."
+        },
+        {
+          "title": "Student profile",
+          "img": "11-student.jpg",
+          "text": "Open a student to see attendance, fee balance, latest exam result and parent login in one place. The tabs show the full profile, fees, attendance and marks. Collect fee, Edit and AI insight are at the top."
+        }
+      ]
+    },
+    {
+      "title": "Fees",
+      "steps": [
+        {
+          "title": "Collect a fee",
+          "img": "12-fees.jpg",
+          "text": "Open Fees → Collect. Find the student, check the fee items, paid amount and balance, then enter the amount, payment mode (cash, UPI, cheque...) and what it is for.",
+          "points": ["Find the student by name, admission number or parent mobile.", "Save payment creates the receipt."]
+        },
+        {
+          "title": "Print the receipt",
+          "img": "13-receipt.jpg",
+          "text": "Every payment gets a numbered receipt with the school name and logo, the amount in words and the payment mode. Tap Print / save PDF to print it or share it as a PDF."
+        },
+        {
+          "title": "Dues and reminders",
+          "img": "12b-dues.jpg",
+          "text": "Open Dues & reminders to see every student with a balance. Tap Reminder to get a polite WhatsApp message drafted for the parent, in English or Tamil, ready to copy and send. Tap Collect to take the payment."
+        }
+      ]
+    },
+    {
+      "title": "Daily work",
+      "steps": [
+        {
+          "title": "Mark attendance",
+          "img": "14-attendance.jpg",
+          "text": "Open Attendance, choose the date, class and section, and tap P (present), A (absent), L (leave) or H (half day) for each student. All present marks everyone in one tap. Tap Save attendance. Switch to Teachers & staff to mark staff attendance."
+        },
+        {
+          "title": "Enter marks",
+          "img": "15-marks.jpg",
+          "text": "Open Marks, choose the exam and class, and type each student's marks. The percentage and grade are worked out for you. Add a report-card remark, or tap the sparkle to let AI write a first draft. Tap Save marks."
+        },
+        {
+          "title": "Reports",
+          "img": "16-reports.jpg",
+          "text": "Open Reports for 18 reports and the report card: class strength, student directory, admissions, birthdays, fee collection, dues, attendance registers, low attendance, rank list, subject analysis, progress and more. Every report downloads as Excel or prints as PDF."
+        },
+        {
+          "title": "AI assistant",
+          "img": "17-ai.jpg",
+          "text": "Ask questions about your school in plain words, or tap a suggestion: this week's summary and priorities, students who need attention, fee collections and dues, or a message to parents. Answers use your school's live data."
+        },
+        {
+          "title": "Follow up enquiries",
+          "img": "18-enquiries.jpg",
+          "text": "Open Enquiries to see every enquiry from the website. Call the parent, then update the status: New, Contacted, Visit scheduled, Admitted or Closed, with a note. The bell at the top shows new enquiries."
+        }
+      ]
+    },
+    {
+      "title": "Parent portal",
+      "steps": [
+        {
+          "title": "Parent's first sign-in",
+          "img": "19-parent-password.jpg",
+          "text": "Parents sign in with their mobile number. The first password is the same mobile number, and they are asked to choose their own password straight away."
+        },
+        {
+          "title": "What parents see",
+          "img": "20-parent.jpg",
+          "text": "Parents see their own children only: an attendance calendar, fees paid and receipts, the report card, and Ask AI for questions about their child's progress. A parent with more than one child in the school sees all of them."
+        }
+      ]
+    }
+  ]
+}
