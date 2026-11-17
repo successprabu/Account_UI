@@ -9,7 +9,9 @@ export const SCHOOL_PRICING_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.
 
 /** Props that make a MUI Button or MenuItem follow a product link: in-app route or external site. */
 export const linkProps = (link) =>
-  link?.href ? { href: link.href, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: link?.to };
+  link?.href
+    ? { component: 'a', href: link.href, target: '_blank', rel: 'noopener noreferrer' } // 'a' so menu items (li by default) also open the link
+    : { component: RouterLink, to: link?.to };
 
 /**
  * The MySuccess products. Each live product has its own demo and pricing link. Titles and long descriptions come from the
@@ -56,7 +58,8 @@ export const PRODUCTS = [
       'Booking and payment reports',
     ],
     cta: { label: 'Register your mahal', to: '/mahal-reg' },
-    demo: { label: 'See the booking site', to: '/mahals' },
+    // For hall owners: register the mahal and use the app free for 1 month.
+    demo: { label: 'Register your mahal, 1 month free', to: '/mahal-reg' },
     pricing: { to: '/pricing?product=mahal' },
   },
   {

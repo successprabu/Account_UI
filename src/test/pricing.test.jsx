@@ -34,8 +34,11 @@ describe('Demo and pricing per product', () => {
     const buttons = await screen.findAllByRole('button', { name: /try demo/i }, { timeout: 5000 });
     fireEvent.click(buttons[0]);
     expect(await screen.findByRole('menuitem', { name: /moitech/i })).toHaveAttribute('href', '/purchase');
-    expect(screen.getByRole('menuitem', { name: /mahal management/i })).toHaveAttribute('href', '/mahals');
-    expect(screen.getByRole('menuitem', { name: /school website/i }).getAttribute('href')).toMatch(/myschool/);
+    expect(screen.getByRole('menuitem', { name: /mahal management/i })).toHaveAttribute('href', '/mahal-reg');
+    const school = screen.getByRole('menuitem', { name: /school website/i });
+    expect(school.tagName).toBe('A');
+    expect(school.getAttribute('href')).toMatch(/myschool/);
+    expect(school).toHaveAttribute('target', '_blank');
   });
 
   it('mahal pricing shows 1 month free, ₹4,999 a month and ₹49,999 a year', async () => {
