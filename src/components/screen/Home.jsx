@@ -1,6 +1,6 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Card, Chip, Container, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -13,75 +13,13 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AppHeader from '../common/AppHeader';
 import PublicFooter from '../public/PublicFooter';
 import { Section, CtaBand, IconTile } from '../public/Section';
 import { PRODUCTS, linkProps } from '../public/products';
 import DemoMenu from '../public/DemoMenu';
 
-const inr = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
 
-// Illustration of a business dashboard for the hero (sample figures).
-const DashboardPreview = () => (
-  <Card sx={{ p: { xs: 2, sm: 3 }, borderRadius: 4, boxShadow: 'var(--ms-shadow-lg)' }} aria-label="Business dashboard preview">
-    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-      <Box>
-        <Typography variant="caption" color="text.secondary">
-          MySuccess · Business overview
-        </Typography>
-        <Typography variant="h5" component="p">
-          This month
-        </Typography>
-      </Box>
-      <Chip label="Live" size="small" color="success" variant="outlined" />
-    </Stack>
-    <Grid container spacing={1.5} sx={{ mb: 2 }}>
-      {[
-        ['Sales', inr(482000), 'primary.main'],
-        ['Customers', '1,240', 'success.main'],
-        ['Tasks automated', '128', 'secondary.main'],
-      ].map(([label, value, color]) => (
-        <Grid item xs={4} key={label}>
-          <Box sx={{ p: 1.5, borderRadius: 2.5, bgcolor: 'background.default', border: 1, borderColor: 'divider' }}>
-            <Typography variant="caption" color="text.secondary" noWrap component="p">
-              {label}
-            </Typography>
-            <Typography sx={{ fontWeight: 700, fontSize: { xs: 15, sm: 19 }, color, fontVariantNumeric: 'tabular-nums' }}>{value}</Typography>
-          </Box>
-        </Grid>
-      ))}
-    </Grid>
-    <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2.5 }}>
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ px: 1.5, py: 1.25 }}>
-        <AutoAwesomeIcon sx={{ fontSize: 18, color: 'secondary.main' }} />
-        <Typography variant="body2" fontWeight={600}>
-          AI insights
-        </Typography>
-      </Stack>
-      <Divider />
-      <Stack divider={<Divider flexItem />}>
-        {[
-          ['Weekend sales are rising', 'Plan extra staff for Saturday'],
-          ['3 invoices are overdue', 'Reminders are ready to send'],
-          ['Top product is running low', 'Reorder before Friday'],
-        ].map(([title, action]) => (
-          <Stack key={title} direction="row" alignItems="center" spacing={1.5} sx={{ px: 1.5, py: 1.25 }}>
-            <TrendingUpIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography variant="body2" fontWeight={600} noWrap>
-                {title}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {action}
-              </Typography>
-            </Box>
-          </Stack>
-        ))}
-      </Stack>
-    </Box>
-  </Card>
-);
 
 const SERVICES = [
   {
@@ -141,8 +79,7 @@ const Home = () => {
           }}
         />
         <Container maxWidth="lg" sx={{ position: 'relative' }}>
-          <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
-            <Grid item xs={12} md={6}>
+          <Box sx={{ maxWidth: 820, mx: 'auto', textAlign: 'center' }}>
               <Chip
                 icon={<AutoAwesomeIcon sx={{ fontSize: 16 }} />}
                 label="Modernize · Digitize · AI"
@@ -156,16 +93,16 @@ const Home = () => {
                   grow it with AI
                 </Box>
               </Typography>
-              <Typography color="text.secondary" sx={{ mt: 2.5, fontSize: { xs: 17, md: 19 }, maxWidth: 540 }}>
+              <Typography color="text.secondary" sx={{ mt: 2.5, fontSize: { xs: 17, md: 19 }, maxWidth: 640, mx: 'auto' }}>
                 MySuccess modernizes the way you work: we replace paperwork with simple cloud software, automate daily tasks and use AI to help you make better decisions.
               </Typography>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 4 }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="center" sx={{ mt: 4 }}>
                 <DemoMenu size="large" />
                 <Button component={RouterLink} to="/contactus" variant="outlined" color="inherit" size="large">
                   Talk to us
                 </Button>
               </Stack>
-              <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap sx={{ mt: 3 }}>
+              <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap justifyContent="center" sx={{ mt: 3 }}>
                 {['Free consultation', '7-day free trial', 'Plans from ₹99/month'].map((x) => (
                   <Stack key={x} direction="row" spacing={0.75} alignItems="center">
                     <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
@@ -175,11 +112,7 @@ const Home = () => {
                   </Stack>
                 ))}
               </Stack>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <DashboardPreview />
-            </Grid>
-          </Grid>
+          </Box>
         </Container>
       </Box>
 
