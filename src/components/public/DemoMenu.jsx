@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { LIVE_PRODUCTS, linkProps } from './products';
+import { DEMO_PRODUCTS, linkProps } from './products';
 
 /**
  * "Try Demo" button that asks which product: each product has its own demo
- * (Moitech free trial, the mahal booking site, the School ERP demo).
+ * (Moitech free trial, mahal registration, the School ERP demo).
  * Any extra props go to the button, e.g. variant, size, sx, fullWidth.
  */
 const DemoMenu = ({ label, onPick, ...buttonProps }) => {
@@ -35,7 +35,7 @@ const DemoMenu = ({ label, onPick, ...buttonProps }) => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         slotProps={{ paper: { sx: { mt: 1, minWidth: 280 } } }}
       >
-        {LIVE_PRODUCTS.map((p) => (
+        {DEMO_PRODUCTS.map((p) => (
           <MenuItem
             key={p.id}
             {...linkProps(p.demo)}

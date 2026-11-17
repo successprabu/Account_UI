@@ -2,6 +2,7 @@ import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivism
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
+import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
 import { Link as RouterLink } from 'react-router-dom';
 
 export const SCHOOL_ERP_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/';
@@ -85,6 +86,25 @@ export const PRODUCTS = [
     pricing: { href: SCHOOL_PRICING_URL },
   },
   {
+    id: 'custom',
+    titleKey: 'customSoftware',
+    title: 'Custom Software',
+    descriptionKey: 'customSoftwareDescription',
+    tagline: 'Software built around your business',
+    summary:
+      'Tell us how your business works. We design and build software made for your process and deliver it in days, not months.',
+    icon: <DashboardCustomizeOutlinedIcon />,
+    color: '#0ea5e9',
+    features: [
+      'Free consultation to understand your business',
+      'Web and mobile apps designed around how you work',
+      'Billing, stock, bookings, customers, staff and reports',
+      'In English and Indian languages, on any device',
+      'Quick delivery, with training and ongoing support',
+    ],
+    cta: { label: 'Tell us your requirement', to: '/contactus?topic=Custom%20Software' },
+  },
+  {
     id: 'healthcare',
     titleKey: 'healthcareSoftware',
     title: 'Healthcare Software',
@@ -108,6 +128,9 @@ export const PRODUCTS = [
 
 /** Products people can use today. */
 export const LIVE_PRODUCTS = PRODUCTS.filter((p) => !p.comingSoon);
+
+/** Products with a demo to try (Custom Software starts with a conversation instead). */
+export const DEMO_PRODUCTS = LIVE_PRODUCTS.filter((p) => p.demo);
 
 export const CONTACT = {
   email: 'mysuccesstechnologies@gmail.com',

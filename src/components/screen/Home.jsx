@@ -165,8 +165,8 @@ const Home = () => {
       </Section>
 
       {/* Ready-made products */}
-      <Section tinted eyebrow="Ready-made products" title="Start today with our apps" intro="Use one of our ready-to-run products, or let us build something made for your business. Healthcare software is next on our roadmap.">
-        <Grid container spacing={3}>
+      <Section tinted eyebrow="Ready-made products" title="Start today with our apps" intro="Use one of our ready-to-run products, or tell us how your business works and we will build software made for it. Healthcare software is next on our roadmap.">
+        <Grid container spacing={3} columns={{ xs: 12, lg: 15 }}>
           {PRODUCTS.map((p) => (
             <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', transition: 'box-shadow .2s, transform .2s', '&:hover': { boxShadow: 'var(--ms-shadow-md)', transform: 'translateY(-2px)' } }}>

@@ -194,7 +194,18 @@ const ContactUs = () => {
                         </TextField>
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField label="Message" required multiline minRows={4} value={form.message} onChange={set('message')} error={!!errors.message} helperText={errors.message} inputProps={{ maxLength: 2000 }} />
+                        <TextField
+                          label="Message"
+                          required
+                          multiline
+                          minRows={4}
+                          value={form.message}
+                          onChange={set('message')}
+                          error={!!errors.message}
+                          placeholder={form.topic === 'Custom Software' ? 'What does your business do, how do you work today, and what should the software do for you?' : undefined}
+                          helperText={errors.message || (form.topic === 'Custom Software' ? 'A few lines is enough. We will call you to understand the details.' : undefined)}
+                          inputProps={{ maxLength: 2000 }}
+                        />
                       </Grid>
                       <Grid item xs={12}>
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'center' }}>

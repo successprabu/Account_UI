@@ -39,6 +39,14 @@ describe('Demo and pricing per product', () => {
     expect(school.tagName).toBe('A');
     expect(school.getAttribute('href')).toMatch(/myschool/);
     expect(school).toHaveAttribute('target', '_blank');
+    // Custom Software has no demo; it starts with a conversation.
+    expect(screen.queryByRole('menuitem', { name: /custom software/i })).not.toBeInTheDocument();
+  });
+
+  it('custom software asks the visitor to share their requirement', async () => {
+    await renderAt('/services');
+    expect(await screen.findByRole('heading', { name: 'Custom Software' }, { timeout: 5000 })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /tell us your requirement/i })).toHaveAttribute('href', '/contactus?topic=Custom%20Software');
   });
 
   it('mahal pricing shows 1 month free, ₹4,999 a month and ₹49,999 a year', async () => {

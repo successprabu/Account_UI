@@ -42,7 +42,7 @@ const AboutUs = () => {
       </Box>
 
       <Section tinted eyebrow="What we build" title="Our products">
-        <Grid container spacing={3}>
+        <Grid container spacing={3} columns={{ xs: 12, lg: 15 }}>
           {PRODUCTS.map((p) => (
             <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%' }}>

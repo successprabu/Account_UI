@@ -90,7 +90,7 @@ const ServicePage = () => {
             Software for the work you already do
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
-            Moi accounting for functions, bookings for marriage halls, office tools for schools, and healthcare software on the way. Each one works in six languages and on any device.
+            Moi accounting for functions, bookings for marriage halls, office tools for schools, custom software for any business, and healthcare software on the way. Each one works in six languages and on any device.
           </Typography>
           <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ mt: 3.5 }}>
             {PRODUCTS.map((p) => (
