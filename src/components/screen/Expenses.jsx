@@ -1,483 +1,362 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AnimatePresence, motion } from "framer-motion";
+import * as yup from "yup";
 import {
-  Form,
-  FormGroup,
-  FormControl,
-  FormLabel,
+  Alert,
+  Box,
   Button,
   Card,
-  CardBody,
-  Col,
-  Row,
-  InputGroup,
-} from "react-bootstrap";
-import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faMicrophoneSlash,
-} from "@fortawesome/free-solid-svg-icons";
-import i18n from "../../language/i18n";
-import "./css/Transaction.css";
-import { Link, useNavigate } from "react-router-dom";
-import * as yup from "yup"; // Import yup for validation
+  Chip,
+  CircularProgress,
+  Divider,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import ClearIcon from "@mui/icons-material/Clear";
+import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import { API_SERVICE } from "../common/CommonMethod";
 import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
-import Header from "../common/Header";
 import Translator from "../common/TranslationBasedOnLanguage";
+import { PageHeader } from "../ui";
+import { AnimatedNumber, EntryField, rupees, useVoice } from "../moitech/shared";
+import { EXPENSE_CATEGORIES } from "../moitech/constants";
 
+// Category is stored in villageName and the person paid / description in name (type "E").
 const schema = yup.object().shape({
-  villageName: yup
-    .string()
-    .required("This field is required.")
-    .notOneOf([""], "Please select a valid Expenase Category."), // Ensures it's not an empty string
-  name: yup.string().required(),
-  amount: yup.number().required().positive(),
+  villageName: yup.string().required("Please choose a category"),
+  name: yup.string().required("Please enter the description"),
+  amount: yup.number().typeError("Please enter the amount").required("Please enter the amount").positive("Please enter the amount"),
   phoneNo: yup.string().matches(/^\d*$/, "Please Enter Valid Number"),
   remarks: yup.string(),
 });
-const Expenses = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    id: 0,
-    customerId: 0,
-    villageName: "",
-    initial: "",
-    name: "",
-    oldAmount: 0,
-    newAmount: 0,
-    amount: 0,
-    remarks: "",
-    phoneNo: "",
-    createdBy: "SYSTEM",
-    createdDt: "2024-07-01T13:12:38.744Z",
-    updatedBy: "SYSTEM",
-    updatedDt: "2024-07-01T13:12:38.744Z",
-    isActive: true,
-    type: "E",
-    returnStatus: "N",
-    returnRemark: "",
-    functionId: 0,
-  });
 
+const readUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user"));
+  } catch (e) {
+    return null;
+  }
+};
+
+const emptyExpense = (user) => ({
+  id: 0,
+  customerId: user?.customerID || 0,
+  villageName: "",
+  initial: "",
+  name: "",
+  oldAmount: 0,
+  newAmount: 0,
+  amount: 0,
+  remarks: "",
+  phoneNo: "",
+  createdBy: user ? String(user.id) : "SYSTEM",
+  createdDt: new Date().toISOString(),
+  updatedBy: user ? String(user.id) : "SYSTEM",
+  updatedDt: new Date().toISOString(),
+  isActive: true,
+  type: "E",
+  returnStatus: "N",
+  returnRemark: "",
+  functionId: user?.functionId || 0,
+});
+
+/** New expense for the current function. */
+const Expenses = () => {
+  const { t, i18n } = useTranslation();
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const voice = useVoice(i18n.language);
+  const [formData, setFormData] = useState(() => emptyExpense(readUser()));
   const [errors, setErrors] = useState({});
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingField, setRecordingField] = useState(null);
-  const recognitionRef = useRef(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState([]);
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
-  // Refs for form controls
-  const villageNameRef = useRef(null);
+
+  const categoryRef = useRef(null);
   const nameRef = useRef(null);
   const amountRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const saveRef = useRef(null);
+
+  const user = readUser();
+  const noFunction = !user?.functionId;
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const userDetail = JSON.parse(user);
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        customerId: userDetail.customerID,
-        functionId: userDetail.functionId,
-        createdBy:String(userDetail.id),
-        updatedBy:String(userDetail.id)
-      }));
-    } else {
-      setIsAuthenticated(false);
-      navigate("/login");
-    }
+    if (!readUser()) navigate("/login");
   }, [navigate]);
 
-  useEffect(() => {
-    if (i18n.language === "ta") {
-      // Additional setup for Tamil language if needed
-    }
-  }, [i18n.language]);
+  const setField = (name, value) => {
+    setFormData((f) => ({ ...f, [name]: value }));
+    if (errors[name]) setErrors((er) => ({ ...er, [name]: undefined }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-
-    // Check if the input ends with a space to trigger translation
-    if (value.endsWith(" ")) {
-      setFieldBeingTranslated(name);
-    }
+    setField(name, value);
+    if (typeof value === "string" && value.endsWith(" ")) setFieldBeingTranslated(name);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const userDetail = JSON.parse(localStorage.getItem("user"));
-    if (!userDetail || userDetail.functionId === 0) {
-      toast.error("Please Create Function Details");
-      return;
-    }
-
-    try {
-      await schema.validate(formData, { abortEarly: false });
-      API_SERVICE.post(SAVE_NEW_TRANS_API, formData)
-        .then((response) => {
-          if (response.data.result) {
-            setFormData({
-              id: 0,
-              customerId: userDetail.customerID,
-              villageName: "",
-              initial: "",
-              name: "",
-              amount: 0,
-              remarks: "",
-              phoneNo: "",
-              createdBy: "SYSTEM",
-              createdDt: new Date().toISOString(),
-              updatedBy: "SYSTEM",
-              updatedDt: new Date().toISOString(),
-              isActive: true,
-              type: "E",
-              returnRemark: "",
-              functionId: userDetail.functionId,
-            });
-            toast.success("Expenses Saved Successfully");
-          } else {
-            toast.error(
-              response.data.message ||
-                "Something went wrong on Transaction Save..pls Try Again"
-            );
-          }
-        })
-        .catch((error) => {
-          toast.error(error.response?.data?.message || "API call error");
-        });
-    } catch (validationErrors) {
-      const newErrors = {};
-      validationErrors.inner.forEach((error) => {
-        newErrors[error.path] = error.message;
-      });
-      setErrors(newErrors);
-    }
-  };
-
-  
   const handleTranslation = (translatedText) => {
     if (fieldBeingTranslated) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [fieldBeingTranslated]: translatedText,
-      }));
+      setFormData((f) => ({ ...f, [fieldBeingTranslated]: translatedText }));
       setFieldBeingTranslated(null);
     }
   };
 
   const handleKeyDown = (e, nextRef) => {
-    if (e.key === "Enter" || e.key === "Tab") {
+    if ((e.key === "Enter" || (e.key === "Tab" && !e.shiftKey)) && nextRef?.current) {
       e.preventDefault();
-      if (nextRef && nextRef.current) {
-        nextRef.current.focus();
-      }
+      nextRef.current.focus();
     }
   };
 
-  const startRecording = (fieldName) => {
-    setIsRecording(true);
-    setRecordingField(fieldName);
-    recognitionRef.current = new window.webkitSpeechRecognition();
-    recognitionRef.current.lang = i18n.language === "ta" ? "ta-IN" : "en-US";
-    recognitionRef.current.onresult = (event) => {
-      setFormData({
-        ...formData,
-        [fieldName]: event.results[0][0].transcript,
+  const handleClear = () => {
+    setFormData(emptyExpense(readUser()));
+    setErrors({});
+    categoryRef.current?.focus();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSaving) return;
+    const userDetail = readUser();
+    if (!userDetail || !userDetail.functionId) {
+      toast.error("Please Create Function Details");
+      return;
+    }
+    try {
+      await schema.validate(formData, { abortEarly: false });
+    } catch (validationErrors) {
+      const newErrors = {};
+      (validationErrors.inner || []).forEach((err) => {
+        newErrors[err.path] = err.message;
       });
-    };
-    recognitionRef.current.start();
-  };
+      setErrors(newErrors);
+      const first = ["villageName", "name", "amount", "phoneNo"].find((k) => newErrors[k]);
+      ({ villageName: categoryRef, name: nameRef, amount: amountRef, phoneNo: phoneNoRef })[first]?.current?.focus();
+      return;
+    }
 
-  const stopRecording = () => {
-    setIsRecording(false);
-    setRecordingField(null);
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
+    setIsSaving(true);
+    try {
+      const response = await API_SERVICE.post(SAVE_NEW_TRANS_API, formData);
+      if (response?.data?.result) {
+        setSaved((s) => [{ ...formData, key: Date.now() }, ...s].slice(0, 6));
+        setFormData(emptyExpense(userDetail));
+        setErrors({});
+        toast.success("Expenses Saved Successfully");
+        setTimeout(() => categoryRef.current?.focus(), 50);
+      } else {
+        toast.error(response?.data?.message || "Something went wrong on Transaction Save..pls Try Again");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "API call error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const toggleRecording = (fieldName) => {
-    if (isRecording && recordingField === fieldName) {
-      stopRecording();
-    } else {
-      startRecording(fieldName);
-    }
-  };
+  const voiceFor = (name, digits) => ({
+    recording: voice.field === name,
+    onMic: () => voice.toggle(name, (said) => setField(name, digits ? said.replace(/[^\d]/g, "") : said)),
+  });
 
-  if (!isAuthenticated) {
-    return (
-      <div className="text-danger">
-        {t("authentication_required")}{" "}
-        <span className="text-primary">
-          <Link to="/login">{t("login_here")}</Link>
-        </span>
-      </div>
-    );
-  }
+  const sessionTotal = saved.reduce((s, x) => s + Number(x.amount || 0), 0);
 
   return (
-    <Card>
-      <Header
-        titles={[t("addExpenses")]}
-        links={[
-          { to: "/dashboard", label: t("dashboard") },
-          { to: "/expenses-list", label: t("expensesList") },
-        ]}
-        bgColor="#ff5733" 
+    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ py: { xs: 2.5, md: 3 } }}>
+      <PageHeader
+        title={t("addExpenses")}
+        subtitle={t("addExpensesHint", { defaultValue: "Record money spent on the function: catering, decoration, hall and more." })}
+        breadcrumbs={[{ label: t("dashboard"), to: "/dashboard" }, { label: t("addExpenses") }]}
+        actions={
+          <Button component={RouterLink} to="/expenses-list" variant="outlined" startIcon={<ListAltOutlinedIcon />}>
+            {t("expensesList")}
+          </Button>
+        }
       />
-      <CardBody>
-        <Form className="text-primary w-100" onSubmit={handleSubmit}>
-          <Row className="mb-3">
-            <Col xs={12} md={4}>
-              <FormGroup controlId="villageName">
-                <FormLabel>
-                  {t("expensesCategory")}
-                  <span className="text-danger">*</span>
-                </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    as="select"
-                    placeholder={t("enter_expensesCategory")}
-                    name="villageName"
-                    id="villageName"
-                    value={formData.villageName} // Bind to formData.villageName
-                    onChange={handleChange} // Use handleChange to update formData
-                    ref={villageNameRef}
-                    onKeyDown={(e) => handleKeyDown(e, nameRef)}
-                  >
-                    <option value="">{t("select")}</option>
-                    <option value="venue">{t("venue")}</option>
-                    <option value="catering">{t("catering")}</option>
-                    <option value="decoration">{t("decoration")}</option>
-                    <option value="photography">{t("photography")}</option>
-                    <option value="videography">{t("videography")}</option>
-                    <option value="bridal_wear">{t("bridal_wear")}</option>
-                    <option value="groom_wear">{t("groom_wear")}</option>
-                    <option value="jewelry">{t("jewelry")}</option>
-                    <option value="transportation">
-                      {t("transportation")}
-                    </option>
-                    <option value="accommodation">{t("accommodation")}</option>
-                    <option value="gifts">{t("gifts")}</option>
-                    <option value="invitation_cards">
-                      {t("invitation_cards")}
-                    </option>
-                    <option value="makeup">{t("makeup")}</option>
-                    <option value="music_entertainment">
-                      {t("music_entertainment")}
-                    </option>
-                    <option value="wedding_favors">
-                      {t("wedding_favors")}
-                    </option>
-                    <option value="floral_arrangements">
-                      {t("floral_arrangements")}
-                    </option>
-                    <option value="mehndi_artist">{t("mehndi_artist")}</option>
-                    <option value="priest">{t("priest")}</option>
-                    <option value="honeymoon">{t("honeymoon")}</option>
-                    <option value="miscellaneous">{t("miscellaneous")}</option>
-                  </FormControl>
-                  <Button
-                    variant={
-                      isRecording && recordingField === "villageName"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("villageName")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "villageName"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.villageName && (
-                  <div className="text-danger">{errors.villageName}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="name">
-                <FormLabel>
-                  {t("expensesRcdPerson")}
-                  <span className="text-danger">*</span>
-                </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_expensesDescription")}
-                    name="name"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    ref={nameRef}
-                    onKeyDown={(e) => handleKeyDown(e, amountRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "name"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("name")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "name"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.name && (
-                  <div className="text-danger">{errors.name}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="amount">
-                <FormLabel>
-                  {t("amount")}
-                  <span className="text-danger">*</span>
-                </FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_amount")}
-                    name="amount"
-                    value={formData.amount}
-                    onChange={handleChange}
-                    ref={amountRef}
-                    onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "amount"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("amount")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "amount"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.amount && (
-                  <div className="text-danger">{errors.amount}</div>
-                )}
-              </FormGroup>
-            </Col>
-          </Row>
 
-          <Row className="mb-3">
-            <Col xs={12} md={4}>
-              <FormGroup controlId="phoneNo">
-                <FormLabel>{t("mobile")}</FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_mobile")}
-                    name="phoneNo"
-                    value={formData.phoneNo}
-                    onChange={handleChange}
-                    ref={phoneNoRef}
-                    onKeyDown={(e) => handleKeyDown(e, remarksRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "phoneNo"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("phoneNo")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "phoneNo"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.phoneNo && (
-                  <div className="text-danger">{errors.phoneNo}</div>
-                )}
-              </FormGroup>
-            </Col>
-            <Col xs={12} md={4}>
-              <FormGroup controlId="remarks">
-                <FormLabel>{t("remarks")}</FormLabel>
-                <InputGroup>
-                  <FormControl
-                    type="text"
-                    placeholder={t("enter_remarks")}
-                    name="remarks"
-                    id="remarks"
-                    value={formData.remarks}
-                    onChange={handleChange}
-                    ref={remarksRef}
-                    onKeyDown={(e) => handleKeyDown(e, villageNameRef)}
-                  />
-                  <Button
-                    variant={
-                      isRecording && recordingField === "remarks"
-                        ? "danger"
-                        : "primary"
-                    }
-                    onClick={() => toggleRecording("remarks")}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        isRecording && recordingField === "remarks"
-                          ? faMicrophoneSlash
-                          : faMicrophone
-                      }
-                    />
-                  </Button>
-                </InputGroup>
-                {errors.remarks && (
-                  <div className="text-danger">{errors.remarks}</div>
-                )}
-              </FormGroup>
-            </Col>
-          </Row>
-            {/* Translator Component */}
-            <Translator
-            inputText={formData[fieldBeingTranslated] || ""}
-            onTranslated={handleTranslation}
-            sourceLanguage="en"
-            targetLanguage={i18n.language || "en"}
-          />
-          <div className="d-flex justify-content-center mt-3">
-            <Button type="submit" variant="success" className="me-3">
-              {t("save")}
-            </Button>
-            <Button type="button" variant="secondary">
-              {t("cancel")}
-            </Button>
-          </div>
-        </Form>
-      </CardBody>
-    </Card>
+      {noFunction && (
+        <Alert severity="warning" sx={{ mb: 2.5 }} action={<Button color="inherit" component={RouterLink} to="/function">{t("functionMaster", { defaultValue: "Add function" })}</Button>}>
+          {t("createFunctionFirst", { defaultValue: "Add your function first. Entries are saved under the selected function." })}
+        </Alert>
+      )}
+
+      <Grid container spacing={2.5} alignItems="flex-start">
+        <Grid item xs={12} lg={8}>
+          <Card component={motion.div} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} sx={{ p: { xs: 2, md: 3 } }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <EntryField
+                  select
+                  required
+                  autoFocus
+                  label={t("expensesCategory")}
+                  name="villageName"
+                  value={formData.villageName}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setTimeout(() => nameRef.current?.focus(), 0);
+                  }}
+                  inputRef={categoryRef}
+                  error={!!errors.villageName}
+                  helperText={errors.villageName}
+                  SelectProps={{ MenuProps: { PaperProps: { sx: { maxHeight: 360 } } } }}
+                >
+                  {EXPENSE_CATEGORIES.map((c) => (
+                    <MenuItem key={c} value={c}>{t(c)}</MenuItem>
+                  ))}
+                </EntryField>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <EntryField
+                  required
+                  label={t("expensesRcdPerson")}
+                  placeholder={t("enter_expensesDescription")}
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onKeyDown={(e) => handleKeyDown(e, amountRef)}
+                  inputRef={nameRef}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  {...voiceFor("name")}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <EntryField
+                  required
+                  type="number"
+                  label={t("amount")}
+                  placeholder={t("enter_amount")}
+                  name="amount"
+                  value={formData.amount}
+                  onChange={handleChange}
+                  onFocus={(e) => e.target.select()}
+                  onKeyDown={(e) => handleKeyDown(e, phoneNoRef)}
+                  inputRef={amountRef}
+                  error={!!errors.amount}
+                  helperText={errors.amount}
+                  inputProps={{ min: 0, inputMode: "numeric" }}
+                  InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }}
+                  {...voiceFor("amount", true)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <EntryField
+                  label={t("mobile")}
+                  placeholder={t("enter_mobile")}
+                  type="tel"
+                  name="phoneNo"
+                  value={formData.phoneNo}
+                  onChange={handleChange}
+                  onKeyDown={(e) => handleKeyDown(e, remarksRef)}
+                  inputRef={phoneNoRef}
+                  error={!!errors.phoneNo}
+                  helperText={errors.phoneNo}
+                  inputProps={{ inputMode: "numeric" }}
+                  {...voiceFor("phoneNo", true)}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <EntryField
+                  label={t("remarks")}
+                  placeholder={t("enter_remarks")}
+                  name="remarks"
+                  value={formData.remarks}
+                  onChange={handleChange}
+                  onKeyDown={(e) => handleKeyDown(e, saveRef)}
+                  inputRef={remarksRef}
+                  {...voiceFor("remarks")}
+                />
+              </Grid>
+            </Grid>
+
+            <Translator inputText={formData[fieldBeingTranslated] || ""} onTranslated={handleTranslation} sourceLanguage="en" targetLanguage={i18n.language || "en"} />
+
+            <Divider sx={{ my: 2.5 }} />
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ sm: "center" }} justifyContent="space-between">
+              <Box sx={{ px: 2, py: 1.25, borderRadius: 2, bgcolor: alpha(theme.palette.error.main, 0.07), minWidth: 180 }}>
+                <Typography variant="caption" color="text.secondary">{t("amount")}</Typography>
+                <Typography variant="h4" component="p" fontWeight={800} color="error.main" sx={{ fontVariantNumeric: "tabular-nums" }}>
+                  <AnimatedNumber value={formData.amount} />
+                </Typography>
+              </Box>
+              <Stack direction="row" spacing={1.5}>
+                <Button type="button" onClick={handleClear} startIcon={<ClearIcon />} disabled={isSaving}>{t("clearButton")}</Button>
+                <Button
+                  ref={saveRef}
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  disabled={isSaving}
+                  component={motion.button}
+                  whileTap={{ scale: 0.97 }}
+                  startIcon={isSaving ? <CircularProgress size={18} color="inherit" /> : <SaveOutlinedIcon />}
+                  sx={{ px: 4 }}
+                >
+                  {isSaving ? t("processing_your_request") : t("save")}
+                </Button>
+              </Stack>
+            </Stack>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} lg={4}>
+          <Card sx={{ p: 2.5 }}>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
+              <ReceiptOutlinedIcon color="error" fontSize="small" />
+              <Typography fontWeight={700}>{t("savedThisSessionTitle", { defaultValue: "Saved just now" })}</Typography>
+            </Stack>
+            {saved.length === 0 ? (
+              <Typography variant="body2" color="text.secondary">
+                {t("savedExpensesEmpty", { defaultValue: "Expenses you save here appear in this list with their total." })}
+              </Typography>
+            ) : (
+              <>
+                <AnimatePresence initial={false}>
+                  {saved.map((x) => (
+                    <Stack
+                      key={x.key}
+                      component={motion.div}
+                      layout
+                      initial={{ opacity: 0, x: 24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ py: 1, borderBottom: 1, borderColor: "divider" }}
+                    >
+                      <Box sx={{ minWidth: 0 }}>
+                        <Typography fontWeight={600} noWrap>{x.name}</Typography>
+                        <Chip size="small" variant="outlined" label={t(x.villageName)} sx={{ mt: 0.25 }} />
+                      </Box>
+                      <Typography fontWeight={700} sx={{ flexShrink: 0 }}>{rupees(x.amount)}</Typography>
+                    </Stack>
+                  ))}
+                </AnimatePresence>
+                <Stack direction="row" justifyContent="space-between" sx={{ pt: 1.5 }}>
+                  <Typography color="text.secondary">{t("total")}</Typography>
+                  <Typography fontWeight={800}>{rupees(sessionTotal)}</Typography>
+                </Stack>
+              </>
+            )}
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

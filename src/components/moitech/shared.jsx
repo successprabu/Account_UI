@@ -42,6 +42,67 @@ export const useVoice = (language = 'en') => {
   return { field, toggle, stop };
 };
 
+const SUGGEST_LANGS = new Set(['ta', 'hi', 'ml', 'te', 'kn']);
+
+/**
+ * Spelling suggestions: English letters → words in the user's language (Google Input Tools).
+ * Only active when `enabled` and the language is Tamil, Hindi, Malayalam, Telugu or Kannada.
+ * handleKey(e) returns true when it used the key (arrows, Enter on a suggestion, Escape).
+ */
+export const useSuggestions = (enabled, language, onPick) => {
+  const [list, setList] = useState([]);
+  const [field, setField] = useState(null);
+  const [index, setIndex] = useState(-1);
+  const seq = useRef(0);
+  const clear = useCallback(() => {
+    seq.current += 1;
+    setList([]);
+    setField(null);
+    setIndex(-1);
+  }, []);
+  const lookup = useCallback(
+    async (name, text) => {
+      const lang = String(language || 'en').split('-')[0];
+      if (!enabled || !String(text).trim() || !SUGGEST_LANGS.has(lang)) {
+        clear();
+        return;
+      }
+      const mine = ++seq.current;
+      try {
+        const url = `https://inputtools.google.com/request?text=${encodeURIComponent(text)}&itc=${lang}-t-i0-und&num=5`;
+        const data = await (await fetch(url)).json();
+        if (mine !== seq.current) return; // a newer lookup is on its way
+        const words = data && Array.isArray(data[1]) && data[1][0] && Array.isArray(data[1][0][1]) ? data[1][0][1] : [];
+        setList(words);
+        setField(words.length ? name : null);
+        setIndex(-1);
+      } catch (e) {
+        if (mine === seq.current) clear();
+      }
+    },
+    [enabled, language, clear]
+  );
+  const pick = useCallback(
+    (word) => {
+      if (field) onPick(field, word);
+      clear();
+    },
+    [field, onPick, clear]
+  );
+  const handleKey = (e) => {
+    if (!list.length) return false;
+    if (e.key === 'ArrowDown') setIndex((i) => Math.min(i + 1, list.length - 1));
+    else if (e.key === 'ArrowUp') setIndex((i) => Math.max(i - 1, -1));
+    else if (e.key === 'Enter' && index >= 0) pick(list[index]);
+    else if (e.key === 'Escape') clear();
+    else return false;
+    e.preventDefault();
+    return true;
+  };
+  const propsFor = (name) => ({ suggestions: field === name ? list : [], selectedIndex: index, onPick: pick });
+  return { lookup, clear, handleKey, propsFor, field };
+};
+
 export const rupees = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
 /** A number that counts to its new value. */

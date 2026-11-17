@@ -13,6 +13,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Switch,
   TextField,
   Typography,
@@ -21,12 +22,13 @@ import {
 import { alpha, useTheme } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import { rupees } from './shared';
+import { EXPENSE_CATEGORIES, OTHERS_TYPES } from './constants';
 
 /**
- * Edit one moi entry (receipt or other receipt). Total = old + new amount.
- * onSave(updated) must resolve to { ok, message }.
+ * Edit one entry. kind: 'receipt' (total = old + new amount), 'expense' (category, paid to, amount)
+ * or 'others' (gift type and count, optional amount). onSave(updated) must resolve to { ok, message }.
  */
-const EntryEditDialog = ({ open, entry, title, onClose, onSave }) => {
+const EntryEditDialog = ({ open, entry, title, kind = 'receipt', onClose, onSave }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -54,12 +56,24 @@ const EntryEditDialog = ({ open, entry, title, onClose, onSave }) => {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!String(form.name || '').trim() || !String(form.villageName || '').trim()) {
-      setError(t('nameAndVillageRequired', { defaultValue: 'Name and village are required.' }));
+    const missing = !String(form.name || '').trim() || !String(form.villageName || '').trim();
+    if (missing) {
+      setError(kind === 'expense'
+        ? t('categoryAndDescriptionRequired', { defaultValue: 'Category and description are required.' })
+        : t('nameAndVillageRequired', { defaultValue: 'Name and village are required.' }));
       return;
     }
-    if (!(Number(form.amount) > 0)) {
-      setError(t('enterOldOrNewAmount', { defaultValue: 'Enter the old or new amount.' }));
+    if (kind === 'others') {
+      if (!form.othersType) {
+        setError(t('selectOthersType', { defaultValue: 'Choose what was given.' }));
+        return;
+      }
+      if (Number(form.others) < 0 || Number(form.amount) < 0) {
+        setError(t('noNegative', { defaultValue: 'Amounts cannot be negative.' }));
+        return;
+      }
+    } else if (!(Number(form.amount) > 0)) {
+      setError(kind === 'expense' ? t('enterAmount', { defaultValue: 'Enter the amount.' }) : t('enterOldOrNewAmount', { defaultValue: 'Enter the old or new amount.' }));
       return;
     }
     setSaving(true);
@@ -68,6 +82,19 @@ const EntryEditDialog = ({ open, entry, title, onClose, onSave }) => {
     setSaving(false);
     if (!res?.ok) setError(res?.message || t('an_error_occurred', { defaultValue: 'Could not save. Please try again.' }));
   };
+
+  const moneyField = (k, label) => (
+    <TextField
+      fullWidth
+      type="number"
+      label={label}
+      value={form[k] ?? 0}
+      onChange={set(k)}
+      onFocus={(e) => e.target.select()}
+      inputProps={{ min: 0, inputMode: 'numeric' }}
+      InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }}
+    />
+  );
 
   return (
     <Dialog open={open} onClose={saving ? undefined : onClose} fullScreen={fullScreen} maxWidth="sm" fullWidth PaperProps={{ component: 'form', onSubmit: submit, noValidate: true }}>
@@ -79,22 +106,49 @@ const EntryEditDialog = ({ open, entry, title, onClose, onSave }) => {
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2}>
+          {kind === 'expense' && (
+            <>
+              <Grid item xs={12} sm={6}>
+                <TextField fullWidth select required label={t('expensesCategory')} value={form.villageName || ''} onChange={set('villageName')}>
+                  {[...new Set([...(form.villageName && !EXPENSE_CATEGORIES.includes(form.villageName) ? [form.villageName] : []), ...EXPENSE_CATEGORIES])].map((c) => (
+                    <MenuItem key={c} value={c}>{t(c, { defaultValue: c })}</MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth required label={t('expensesDescription')} value={form.name || ''} onChange={set('name')} /></Grid>
+              <Grid item xs={12} sm={6}>{moneyField('amount', t('amount'))}</Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth label={t('phoneNo')} type="tel" value={form.phoneNo || ''} onChange={set('phoneNo')} /></Grid>
+              <Grid item xs={12}><TextField fullWidth label={t('remarks')} value={form.remarks || ''} onChange={set('remarks')} /></Grid>
+            </>
+          )}
+
+          {kind === 'others' && (
+            <>
+              <Grid item xs={12} sm={6}><TextField fullWidth required label={t('placeName')} value={form.villageName || ''} onChange={set('villageName')} /></Grid>
+              <Grid item xs={8} sm={4}><TextField fullWidth required label={t('name')} value={form.name || ''} onChange={set('name')} /></Grid>
+              <Grid item xs={4} sm={2}><TextField fullWidth label={t('initial')} value={form.initial || ''} onChange={set('initial')} /></Grid>
+              <Grid item xs={6}>
+                <TextField fullWidth select required label={t('othersType')} value={form.othersType || ''} onChange={set('othersType')}>
+                  {OTHERS_TYPES.map((o) => <MenuItem key={o} value={o}>{t(o)}</MenuItem>)}
+                </TextField>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField fullWidth type="number" label={t('others')} value={form.others ?? 0} onChange={set('others')} onFocus={(e) => e.target.select()} inputProps={{ min: 0, inputMode: 'decimal' }} />
+              </Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth label={t('othersRemarks')} value={form.othersRemark || ''} onChange={set('othersRemark')} /></Grid>
+              <Grid item xs={12} sm={6}>{moneyField('amount', t('amount'))}</Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth label={t('phoneNo')} type="tel" value={form.phoneNo || ''} onChange={set('phoneNo')} /></Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth label={t('remarks')} value={form.remarks || ''} onChange={set('remarks')} /></Grid>
+            </>
+          )}
+
+          {kind === 'receipt' && (
+            <>
           <Grid item xs={12} sm={6}><TextField fullWidth required label={t('placeName')} value={form.villageName || ''} onChange={set('villageName')} /></Grid>
           <Grid item xs={8} sm={4}><TextField fullWidth required label={t('name')} value={form.name || ''} onChange={set('name')} /></Grid>
           <Grid item xs={4} sm={2}><TextField fullWidth label={t('initial')} value={form.initial || ''} onChange={set('initial')} /></Grid>
           {['oldAmount', 'newAmount'].map((k) => (
-            <Grid item xs={6} key={k}>
-              <TextField
-                fullWidth
-                type="number"
-                label={t(k)}
-                value={form[k] ?? 0}
-                onChange={set(k)}
-                onFocus={(e) => e.target.select()}
-                inputProps={{ min: 0, inputMode: 'numeric' }}
-                InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }}
-              />
-            </Grid>
+            <Grid item xs={6} key={k}>{moneyField(k, t(k))}</Grid>
           ))}
           <Grid item xs={12}>
             <Box sx={{ px: 2, py: 1.25, borderRadius: 2, bgcolor: alpha(theme.palette.primary.main, 0.08), display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -104,6 +158,8 @@ const EntryEditDialog = ({ open, entry, title, onClose, onSave }) => {
           </Grid>
           <Grid item xs={12} sm={6}><TextField fullWidth label={t('phoneNo')} type="tel" value={form.phoneNo || ''} onChange={set('phoneNo')} /></Grid>
           <Grid item xs={12} sm={6}><TextField fullWidth label={t('remarks')} value={form.remarks || ''} onChange={set('remarks')} /></Grid>
+            </>
+          )}
           <Grid item xs={12}>
             <FormControlLabel control={<Switch checked={!!form.isActive} onChange={set('isActive')} />} label={t('active')} />
           </Grid>
