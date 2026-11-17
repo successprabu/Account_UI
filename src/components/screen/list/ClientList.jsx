@@ -168,7 +168,7 @@ const ClientList = ({ showHeader = true }) => {
         <Header
           titles={[t("clientList")]}
           links={[
-            { to: "/purchase", label: t("addClient") },
+            { to: "/register-client", label: t("addClient") },
             { to: "/dashboard", label: t("dashboard") },
           ]}
         />

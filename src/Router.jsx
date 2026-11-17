@@ -116,6 +116,7 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 
 
 const Enquiries = lazy(() => import("./components/screen/enquiries/Enquiries"));
+const RegisterClient = lazy(() => import("./components/screen/admin/RegisterClient"));
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
 const Resume = lazy(() => import("./components/screen/AntonyResume/Resume"));
 
@@ -151,6 +152,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU"]}>
                 <ClientList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="register-client"
+            element={
+              <ProtectedRoute allowedRoles={["SU"]}>
+                <RegisterClient />
               </ProtectedRoute>
             }
           />

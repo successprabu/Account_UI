@@ -57,10 +57,12 @@ const COLLAPSE_KEY = 'ms-sidebar-collapsed';
 const NAV = [
   { key: 'dashboard', to: '/dashboard', icon: <DashboardOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
   { key: 'Clients', to: '/client-list', icon: <PeopleAltOutlinedIcon />, roles: ['SU'] },
+  { key: 'registerClient', fallback: 'Register client', to: '/register-client', icon: <PersonAddAltOutlinedIcon />, roles: ['SU'] },
   { key: 'enquiries', fallback: 'Enquiries', to: '/enquiries', icon: <MarkEmailUnreadOutlinedIcon />, roles: ['SU'] },
   { key: 'mahalBookings', fallback: 'Bookings', to: '/mahal-bookings', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
-  { key: 'addMoiTechCustomer', to: '/add-moitech-customer', icon: <PersonAddAltOutlinedIcon />, roles: ['SU', 'MU'] },
+  // Mahal admins add Moitech users under their own account; super admins use Register client.
+  { key: 'addMoiTechCustomer', to: '/add-moitech-customer', icon: <PersonAddAltOutlinedIcon />, roles: ['MU'] },
   {
     key: 'Masters',
     icon: <TuneOutlinedIcon />,

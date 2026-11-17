@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link as RouterLink, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Button, Grid, Skeleton, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -182,13 +182,6 @@ const MoitechDashboard = ({ role = 'NU' }) => {
         </Grid>
       </Grid>
 
-      {role === 'AU' && (
-        <Box sx={{ mt: 3, textAlign: 'right' }}>
-          <Button component={RouterLink} to="/purchase" variant="text" endIcon={<AddIcon />}>
-            {t('addClient')}
-          </Button>
-        </Box>
-      )}
     </DashboardPage>
   );
 };
