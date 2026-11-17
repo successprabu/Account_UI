@@ -30,6 +30,16 @@ jobs:
           npm test
           npm run build
 
+      - name: Add the latest Android app
+        # Built by the AIMobileApp repo on every push to its main branch. Served at /downloads/MySuccess.apk.
+        # A missing APK never blocks a website deploy; the download page then links to GitHub instead.
+        continue-on-error: true
+        run: |
+          mkdir -p build/downloads
+          curl -fsSL --retry 3 -o build/downloads/MySuccess.apk \
+            https://github.com/successprabu/AIMobileApp/releases/latest/download/MySuccess.apk
+          ls -lh build/downloads
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:

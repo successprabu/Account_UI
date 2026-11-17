@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AndroidIcon from '@mui/icons-material/Android';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -292,6 +293,9 @@ const Login = () => {
                   {t("sign_up")}
                 </MuiLink>
               </Stack>
+              <MuiLink component={Link} to="/download-app" underline="hover" variant="body2" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75, mt: 2.5, color: '#10b981' }}>
+                <AndroidIcon fontSize="small" /> {t("getAndroidApp", { defaultValue: "Get the Android app" })}
+              </MuiLink>
             </Card>
           </Grid>
         </Grid>

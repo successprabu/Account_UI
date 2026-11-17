@@ -71,6 +71,7 @@ const PublicFooter = () => {
               <FooterLink to="/about">{t('about_us', { defaultValue: 'About' })}</FooterLink>
               <FooterLink to="/pricing">Pricing</FooterLink>
               <FooterLink to="/contactus">{t('contact_us', { defaultValue: 'Contact' })}</FooterLink>
+              <FooterLink to="/download-app">{t('getAndroidApp', { defaultValue: 'Get the Android app' })}</FooterLink>
               <FooterLink to="/login">{t('login', { defaultValue: 'Login' })}</FooterLink>
             </Column>
           </Grid>

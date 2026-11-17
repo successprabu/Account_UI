@@ -1,4 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
+import AndroidIcon from '@mui/icons-material/Android';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -100,6 +101,9 @@ const Home = () => {
                 <DemoMenu size="large" />
                 <Button component={RouterLink} to="/contactus" variant="outlined" color="inherit" size="large">
                   Talk to us
+                </Button>
+                <Button component={RouterLink} to="/download-app" size="large" startIcon={<AndroidIcon />} sx={{ color: '#10b981' }}>
+                  Get the app
                 </Button>
               </Stack>
               <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap justifyContent="center" sx={{ mt: 3 }}>

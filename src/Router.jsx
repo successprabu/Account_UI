@@ -117,6 +117,7 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 
 const Enquiries = lazy(() => import("./components/screen/enquiries/Enquiries"));
 const RegisterClient = lazy(() => import("./components/screen/admin/RegisterClient"));
+const DownloadApp = lazy(() => import("./components/screen/DownloadApp"));
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
 const Resume = lazy(() => import("./components/screen/AntonyResume/Resume"));
 
@@ -129,6 +130,7 @@ const Router = () => {
         <Route path="purchase/:id" element={<Registration />} />
         <Route path="purchase" element={<Registration />} />
         <Route path="mahal-reg" element={<MahalRegistration />} />
+        <Route path="download-app" element={<DownloadApp />} />
         <Route path="mahals" element={<FindMahal />} />
         <Route path="mahals/status" element={<MahalBookingStatus />} />
         <Route path="mahals/:id" element={<MahalDetails />} />
