@@ -92,7 +92,7 @@ export const PRODUCTS = [
     descriptionKey: 'customSoftwareDescription',
     tagline: 'Software built around your business',
     summary:
-      'Tell us how your business works. We design and build software made for your process and deliver it in days, not months.',
+      'Tell us how your business works. We design and build software made for your process and deliver it within a month.',
     icon: <DashboardCustomizeOutlinedIcon />,
     color: '#0ea5e9',
     features: [
@@ -100,7 +100,7 @@ export const PRODUCTS = [
       'Web and mobile apps designed around how you work',
       'Billing, stock, bookings, customers, staff and reports',
       'In English and Indian languages, on any device',
-      'Quick delivery, with training and ongoing support',
+      'Ready within a month, with training and ongoing support',
     ],
     cta: { label: 'Tell us your requirement', to: '/contactus?topic=Custom%20Software' },
   },
