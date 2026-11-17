@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import { useLanguage } from '../../language/LanguageContext';
-import { SCHOOL_ERP_URL } from '../public/products';
+import DemoMenu from '../public/DemoMenu';
 
 export const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -51,6 +51,7 @@ const navSx = {
   py: 1,
   borderRadius: 2,
   textDecoration: 'none',
+  whiteSpace: 'nowrap',
   '&:hover': { color: 'text.primary', bgcolor: 'action.hover' },
   '&.active': { color: 'primary.main', fontWeight: 600 },
 };
@@ -98,7 +99,7 @@ export const BrandLink = () => {
   return (
     <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', color: 'text.primary' }}>
       <Box component="img" src="/logo.png" alt="" width={36} height={36} sx={{ borderRadius: 1.5 }} />
-      <Typography component="span" sx={{ fontWeight: 700, fontSize: 19, letterSpacing: '-0.01em' }}>
+      <Typography component="span" sx={{ fontWeight: 700, fontSize: 19, letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
         {t('my_accounts', { defaultValue: 'My Success' })}
       </Typography>
     </Box>
@@ -116,7 +117,7 @@ const AppHeader = () => {
         <Toolbar disableGutters sx={{ minHeight: { xs: 64, md: 72 }, gap: 2 }}>
           <BrandLink />
 
-          <Stack component="nav" direction="row" spacing={0.5} sx={{ ml: 4, display: { xs: 'none', md: 'flex' } }} aria-label="Main">
+          <Stack component="nav" direction="row" spacing={0.5} sx={{ ml: 3, display: { xs: 'none', lg: 'flex' } }} aria-label="Main">
             {NAV.map((n) => (
               <Box key={n.to} component={NavLink} to={n.to} end={n.end} sx={navSx}>
                 {t(n.key, { defaultValue: n.fallback })}
@@ -126,17 +127,15 @@ const AppHeader = () => {
 
           <Box sx={{ flex: 1 }} />
 
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ display: { xs: 'none', lg: 'flex' }, '& .MuiButton-root': { whiteSpace: 'nowrap' } }}>
             <LanguageMenu />
             <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
               {t('login', { defaultValue: 'Login' })}
             </Button>
-            <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained">
-              {t('watchDemo', { defaultValue: 'Try Demo' })}
-            </Button>
+            <DemoMenu />
           </Stack>
 
-          <IconButton sx={{ display: { md: 'none' } }} onClick={() => setOpen(true)} aria-label="Open menu">
+          <IconButton sx={{ display: { lg: 'none' } }} onClick={() => setOpen(true)} aria-label="Open menu">
             <MenuIcon />
           </IconButton>
         </Toolbar>
@@ -162,9 +161,7 @@ const AppHeader = () => {
           <Button component={RouterLink} to="/login" variant="outlined" color="inherit" fullWidth onClick={() => setOpen(false)}>
             {t('login', { defaultValue: 'Login' })}
           </Button>
-          <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained" fullWidth onClick={() => setOpen(false)}>
-            {t('watchDemo', { defaultValue: 'Try Demo' })}
-          </Button>
+          <DemoMenu fullWidth onPick={() => setOpen(false)} />
         </Stack>
       </Drawer>
     </AppBar>

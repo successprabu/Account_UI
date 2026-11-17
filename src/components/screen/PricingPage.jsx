@@ -15,7 +15,13 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
+import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -33,17 +39,39 @@ import LockIcon from '@mui/icons-material/Lock';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import { REACT_APP_RAZORPAY_KEY_ID, SAVE_PAYMENT_ORDER_API, VERIFY_PAYMENT_API } from '../common/CommonApiURL';
+import { SCHOOL_PRICING_URL } from '../public/products';
+import { notify } from '../ui';
+
+/** Products with their own price list. School ERP keeps its price list on the School ERP site. */
+const PRODUCT_TABS = [
+  { id: 'moitech', label: 'Moitech', icon: <VolunteerActivismOutlinedIcon /> },
+  { id: 'mahal', label: 'Mahal Management', icon: <ApartmentOutlinedIcon /> },
+  { id: 'school', label: 'School ERP', icon: <SchoolOutlinedIcon />, href: SCHOOL_PRICING_URL },
+];
+
+const readUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem('user'));
+  } catch (e) {
+    return null;
+  }
+};
+
+const inr = (v) => Number(v).toLocaleString('en-IN');
 
 const PricingPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const product = params.get('product') === 'mahal' ? 'mahal' : 'moitech';
   const [selectedPlan, setSelectedPlan] = useState('premium');
   const [billingCycle, setBillingCycle] = useState('monthly');
 
-  const plans = [
+  const moitechPlans = [
     {
       id: 'free',
       name: 'Free',
+      cycle: 'trial',
       price: 0,
       period: billingCycle === 'monthly' ? '7 days free trial' : 'year free',
       color: '#6366F1',
@@ -63,6 +91,7 @@ const PricingPage = () => {
     {
       id: 'standard',
       name: 'Standard',
+      cycle: billingCycle,
       price: billingCycle === 'monthly' ? 99 : 999,
       period: billingCycle === 'monthly' ? '/month' : '/year',
       color: '#10B981',
@@ -82,6 +111,7 @@ const PricingPage = () => {
     {
       id: 'premium',
       name: 'Premium',
+      cycle: billingCycle,
       price: billingCycle === 'monthly' ? 199 : 1999,
       period: billingCycle === 'monthly' ? '/month' : '/year',
       color: '#F59E0B',
@@ -100,10 +130,71 @@ const PricingPage = () => {
     }
   ];
 
+  const mahalFeatures = [
+    'Your hall on the online booking site',
+    'Customers check free dates and send requests',
+    'Unlimited bookings for marriages, birthdays and more',
+    'Booking calendar with no double bookings',
+    'Advance, balance and payment records',
+    'Dashboard and monthly booking reports',
+  ];
+  const mahalPlans = [
+    {
+      id: 'mahal-free',
+      name: 'Free trial',
+      cycle: 'trial',
+      price: 0,
+      period: 'for 1 month',
+      color: '#6366F1',
+      icon: <WbSunnyIcon />,
+      popular: false,
+      features: [...mahalFeatures.map((text) => ({ included: true, text })), { included: false, text: 'Priority support' }],
+      buttonText: 'Start 1 month free',
+      description: 'Every feature free for your first month',
+    },
+    {
+      id: 'mahal-monthly',
+      name: 'Monthly',
+      cycle: 'monthly',
+      price: 4999,
+      period: '/month',
+      color: '#10B981',
+      icon: <StarIcon />,
+      popular: false,
+      features: [...mahalFeatures.map((text) => ({ included: true, text })), { included: true, text: 'Phone and WhatsApp support' }],
+      buttonText: 'Choose Monthly',
+      description: 'Pay month by month, stop anytime',
+    },
+    {
+      id: 'mahal-yearly',
+      name: 'Yearly',
+      cycle: 'yearly',
+      price: 49999,
+      period: '/year',
+      color: '#F59E0B',
+      icon: <EmojiEventsIcon />,
+      popular: true,
+      saving: `Save ₹${inr(4999 * 12 - 49999)} a year`,
+      features: [...mahalFeatures.map((text) => ({ included: true, text })), { included: true, text: 'Priority support and free setup' }],
+      buttonText: 'Choose Yearly',
+      description: 'Best value: about 2 months free',
+    },
+  ];
+
+  const plans = product === 'mahal' ? mahalPlans : moitechPlans;
+  const switchProduct = (_, id) => {
+    const tab = PRODUCT_TABS.find((p) => p.id === id);
+    if (!tab || tab.href) return;
+    setParams(id === 'moitech' ? {} : { product: id }, { replace: true });
+    setSelectedPlan(id === 'mahal' ? 'mahal-yearly' : 'premium');
+  };
+
   const faqs = [
     {
       question: 'How does the free trial work?',
-      answer: 'Start with 7 days free access to all features. No credit card required. Upgrade anytime during or after trial.'
+      answer: product === 'mahal'
+        ? 'Register your mahal and use every feature free for one month. No card needed. Choose monthly or yearly when you are ready.'
+        : 'Start with 7 days free access to all features. No credit card required. Upgrade anytime during or after trial.'
     },
     {
       question: 'Can I change plans later?',
@@ -143,17 +234,25 @@ const PricingPage = () => {
   }, []);
 
   const handlePayment = async (plan) => {
+    // The subscription is activated for the signed-in account, so payment needs a login.
+    const user = readUser();
+    if (!user?.primary_phone) {
+      notify.info('Please sign in to your account first, then choose your plan.');
+      navigate('/login');
+      return;
+    }
+    const cycle = plan.cycle;
     setLoading(true);
 
     try {
       const payload = {
-        amount: plan.price * 100, // Amount in paise
+        amount: plan.price, // In rupees; the API converts to paise for Razorpay
         currency: 'INR',
         receipt: `receipt_${Date.now()}`,
         plan: plan.id,
-        billingCycle: billingCycle,
-        customerEmail: "test@gmail.com",
-        customerPhone: "9988776655"
+        billingCycle: cycle,
+        customerEmail: '',
+        customerPhone: user.primary_phone
       };
 
       const orderResponse = await axios.post(SAVE_PAYMENT_ORDER_API, payload);
@@ -177,7 +276,7 @@ const PricingPage = () => {
         amount: amountFromResponse,
         currency: 'INR',
         name: 'MySuccess.Com',
-        description: `${plan.name} Plan - ${billingCycle === 'monthly' ? 'Monthly' : 'Yearly'}`,
+        description: `${product === 'mahal' ? 'Mahal Management' : 'Moitech'} ${plan.name} - ${cycle === 'monthly' ? 'Monthly' : 'Yearly'}`,
         image: 'logo.png',
         order_id: orderId,
         handler: async function (response) {
@@ -193,10 +292,10 @@ const PricingPage = () => {
               RazorpayPaymentId: razorpayPaymentId,
               RazorpaySignature: razorpaySignature,
               Plan: plan.id,
-              BillingCycle: billingCycle,
-              amount: amountFromResponse || payload.amount,
-              CustomerPhone: "9988776655",
-              CustomerName: "Antony Prabu",
+              BillingCycle: cycle,
+              amount: plan.price,
+              CustomerPhone: user.primary_phone,
+              CustomerName: user.name || '',
               createdBy: "System"
             };
 
@@ -218,13 +317,12 @@ const PricingPage = () => {
           }
         },
         prefill: {
-          name: 'Mark Antony',
-          email: 'customer@example.com',
-          contact: '9988776655'
+          name: user.name || '',
+          contact: user.primary_phone
         },
         notes: {
           plan: plan.id,
-          billing_cycle: billingCycle
+          billing_cycle: cycle
         },
         theme: {
           color: plan.color
@@ -250,9 +348,9 @@ const PricingPage = () => {
     }
   };
 
-  // The free trial starts by registering for the demo account.
+  // The free trial starts by registering: Moitech for a demo account, Mahal for the hall.
   const handleFreeTrial = () => {
-    navigate('/purchase');
+    navigate(product === 'mahal' ? '/mahal-reg' : '/purchase');
   };
 
   return (
@@ -265,13 +363,33 @@ const PricingPage = () => {
             <Typography variant="overline">Simple Pricing</Typography>
           </Stack>
           <Typography variant="h1" component="h1" gutterBottom sx={{ fontSize: { xs: 32, md: 44 } }}>
-            Choose the Perfect Plan for Your <Box component="span" sx={{ color: 'primary.main' }}>Business</Box>
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Start with a 7-day free trial. No credit card required. Cancel or upgrade anytime.
+            Choose the Perfect Plan for Your <Box component="span" sx={{ color: 'primary.main' }}>{product === 'mahal' ? 'Mahal' : 'Business'}</Box>
           </Typography>
 
-          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+          <Tabs
+            value={product}
+            onChange={switchProduct}
+            variant="scrollable"
+            scrollButtons={false}
+            sx={{ mt: 2, mb: 2, '& .MuiTab-root': { minHeight: 56, px: { xs: 1.5, sm: 2 } }, '& .MuiTabs-flexContainer': { justifyContent: { md: 'center' } } }}
+            aria-label="Product"
+          >
+            {PRODUCT_TABS.map((p) =>
+              p.href ? (
+                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={<Stack direction="row" spacing={0.5} alignItems="center"><span>{p.label}</span><OpenInNewIcon sx={{ fontSize: 14 }} /></Stack>} component="a" href={p.href} target="_blank" rel="noopener noreferrer" />
+              ) : (
+                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={p.label} />
+              )
+            )}
+          </Tabs>
+
+          <Typography variant="subtitle1" color="text.secondary">
+            {product === 'mahal'
+              ? 'Take marriage, birthday and event bookings online. First month free, no card needed.'
+              : 'Start with a 7-day free trial. No credit card required. Cancel or upgrade anytime.'}
+          </Typography>
+
+          <Box sx={{ mt: 3, display: product === 'mahal' ? 'none' : 'flex', justifyContent: 'center' }}>
             <ToggleButtonGroup
               value={billingCycle}
               exclusive
@@ -289,7 +407,7 @@ const PricingPage = () => {
       {/* Pricing cards */}
       <Grid container spacing={3} justifyContent="center">
         {plans.map((plan, index) => (
-          <Grid item xs={12} sm={6} md={4} key={plan.id}>
+          <Grid item xs={12} sm={6} md={4} key={`${product}-${plan.id}`}>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} style={{ height: '100%' }}>
               <Card
                 onClick={() => setSelectedPlan(plan.id)}
@@ -303,7 +421,7 @@ const PricingPage = () => {
                 }}
               >
                 <CardContent sx={{ flex: 1 }}>
-                  {plan.popular && <Chip label="Most popular" color="primary" size="small" sx={{ mb: 2 }} />}
+                  {plan.popular && <Chip label={product === 'mahal' ? 'Best value' : 'Most popular'} color="primary" size="small" sx={{ mb: 2 }} />}
                   <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                     <Box sx={{ color: plan.color }}>{plan.icon}</Box>
                     <Box>
@@ -313,9 +431,10 @@ const PricingPage = () => {
                   </Stack>
 
                   <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
-                    <Typography variant="h2" component="p" sx={{ fontVariantNumeric: 'tabular-nums' }}>₹{plan.price}</Typography>
+                    <Typography variant="h2" component="p" sx={{ fontVariantNumeric: 'tabular-nums' }}>₹{inr(plan.price)}</Typography>
                     <Typography variant="body2" color="text.secondary">{plan.period}</Typography>
                   </Box>
+                  {plan.saving && <Chip label={plan.saving} color="success" variant="outlined" size="small" sx={{ mb: 2, mt: -1 }} />}
 
                   <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                     {plan.features.map((f, i) => (
@@ -327,7 +446,7 @@ const PricingPage = () => {
                   </Box>
                 </CardContent>
                 <CardActions sx={{ flexDirection: 'column', alignItems: 'stretch', gap: 1.5, px: 2.5, pb: 2.5, '& > :not(style) ~ :not(style)': { ml: 0 } }}>
-                  {plan.id === 'free' ? (
+                  {plan.cycle === 'trial' ? (
                     <Button fullWidth size="large" variant="outlined" startIcon={<RocketLaunchIcon />} onClick={() => { setSelectedPlan(plan.id); handleFreeTrial(); }}>
                       {plan.buttonText}
                     </Button>
@@ -345,7 +464,7 @@ const PricingPage = () => {
                     </Button>
                   )}
 
-                  {plan.id !== 'free' && (
+                  {plan.cycle !== 'trial' && (
                     <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
                       <LockIcon fontSize="small" /> Secure payment powered by Razorpay
                     </Typography>

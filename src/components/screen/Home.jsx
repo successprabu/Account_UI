@@ -17,7 +17,8 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AppHeader from '../common/AppHeader';
 import PublicFooter from '../public/PublicFooter';
 import { Section, CtaBand, IconTile } from '../public/Section';
-import { PRODUCTS, SCHOOL_ERP_URL } from '../public/products';
+import { PRODUCTS, linkProps } from '../public/products';
+import DemoMenu from '../public/DemoMenu';
 
 const inr = (n) => `₹${Number(n).toLocaleString('en-IN')}`;
 
@@ -159,9 +160,7 @@ const Home = () => {
                 MySuccess modernizes the way you work: we replace paperwork with simple cloud software, automate daily tasks and use AI to help you make better decisions.
               </Typography>
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 4 }}>
-                <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" variant="contained" size="large" endIcon={<ArrowForwardIcon />}>
-                  {t('watchDemo', { defaultValue: 'Try Demo' })}
-                </Button>
+                <DemoMenu size="large" />
                 <Button component={RouterLink} to="/contactus" variant="outlined" color="inherit" size="large">
                   Talk to us
                 </Button>
@@ -248,13 +247,20 @@ const Home = () => {
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1, flex: 1 }}>
                   {p.summary}
                 </Typography>
-                <Button
-                  {...(p.cta.href ? { href: p.cta.href, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: p.cta.to })}
-                  endIcon={<ArrowForwardIcon />}
-                  sx={{ mt: 2.5, alignSelf: 'flex-start', px: 0, '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}
-                >
-                  {p.cta.label}
-                </Button>
+                <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2.5 }}>
+                  <Button
+                    {...linkProps(p.demo || p.cta)}
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{ px: 0, '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}
+                  >
+                    {p.demo ? 'Try demo' : p.cta.label}
+                  </Button>
+                  {p.pricing && (
+                    <Button {...linkProps(p.pricing)} color="inherit" sx={{ px: 0, color: 'text.secondary', '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}>
+                      Pricing
+                    </Button>
+                  )}
+                </Stack>
               </Card>
             </Grid>
           ))}
@@ -292,9 +298,7 @@ const Home = () => {
             <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
               Book a free consultation
             </Button>
-            <Button href={SCHOOL_ERP_URL} target="_blank" rel="noopener noreferrer" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
-              {t('watchDemo', { defaultValue: 'Try Demo' })}
-            </Button>
+            <DemoMenu size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }} />
           </>
         }
       />

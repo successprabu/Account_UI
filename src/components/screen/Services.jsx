@@ -5,7 +5,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CheckIcon from '@mui/icons-material/Check';
 import { CtaBand, IconTile } from '../public/Section';
-import { PRODUCTS } from '../public/products';
+import { PRODUCTS, linkProps } from '../public/products';
+import DemoMenu from '../public/DemoMenu';
 
 const ProductBlock = ({ product, reverse }) => {
   const { t } = useTranslation();
@@ -31,18 +32,24 @@ const ProductBlock = ({ product, reverse }) => {
             <Typography color="text.secondary" sx={{ mt: 2, fontSize: 17 }}>
               {t(p.descriptionKey, { defaultValue: p.summary })}
             </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 3.5 }}>
-              <Button variant="contained" size="large" {...ctaProps}>
-                {p.cta.label}
-              </Button>
-              {!p.comingSoon && (
-                <Button
-                  {...(p.pricingHref ? { href: p.pricingHref, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: '/pricing' })}
-                  variant="outlined"
-                  color="inherit"
-                  size="large"
-                >
-                  Pricing
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 3.5 }} flexWrap="wrap" useFlexGap>
+              {p.demo ? (
+                <Button variant="contained" size="large" {...linkProps(p.demo)} endIcon={p.demo.href ? <OpenInNewIcon /> : <ArrowForwardIcon />}>
+                  Try demo
+                </Button>
+              ) : (
+                <Button variant="contained" size="large" {...ctaProps}>
+                  {p.cta.label}
+                </Button>
+              )}
+              {p.pricing && (
+                <Button {...linkProps(p.pricing)} variant="outlined" color="inherit" size="large" endIcon={p.pricing.href ? <OpenInNewIcon /> : undefined}>
+                  {t(p.titleKey, { defaultValue: p.title })} pricing
+                </Button>
+              )}
+              {p.demo && p.cta.to !== p.demo.to && p.cta.href !== p.demo.href && (
+                <Button {...ctaProps} size="large">
+                  {p.cta.label}
                 </Button>
               )}
             </Stack>
@@ -107,9 +114,7 @@ const ServicePage = () => {
             <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
               {t('contact_us', { defaultValue: 'Contact us' })}
             </Button>
-            <Button component={RouterLink} to="/purchase" size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }}>
-              {t('watchDemo', { defaultValue: 'Try Demo' })}
-            </Button>
+            <DemoMenu size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }} />
           </>
         }
       />

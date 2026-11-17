@@ -2,12 +2,17 @@ import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivism
 import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const SCHOOL_ERP_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/';
 export const SCHOOL_PRICING_URL = 'https://myschool-d5f9fueuajgvdkaj.westus3-01.azurewebsites.net/pricing';
 
+/** Props that make a MUI Button or MenuItem follow a product link: in-app route or external site. */
+export const linkProps = (link) =>
+  link?.href ? { href: link.href, target: '_blank', rel: 'noopener noreferrer' } : { component: RouterLink, to: link?.to };
+
 /**
- * The three MySuccess products. Titles and long descriptions come from the
+ * The MySuccess products. Each live product has its own demo and pricing link. Titles and long descriptions come from the
  * translation files (titleKey / descriptionKey) so they show in all languages.
  */
 export const PRODUCTS = [
@@ -29,6 +34,8 @@ export const PRODUCTS = [
       'Handover summary for the family at the end',
     ],
     cta: { label: 'Try Moitech free', to: '/purchase' },
+    demo: { label: 'Start the free trial', to: '/purchase' },
+    pricing: { to: '/pricing?product=moitech' },
   },
   {
     id: 'mahal',
@@ -49,6 +56,8 @@ export const PRODUCTS = [
       'Booking and payment reports',
     ],
     cta: { label: 'Register your mahal', to: '/mahal-reg' },
+    demo: { label: 'See the booking site', to: '/mahals' },
+    pricing: { to: '/pricing?product=mahal' },
   },
   {
     id: 'school',
@@ -68,8 +77,9 @@ export const PRODUCTS = [
       'School website with news and updates',
     ],
     cta: { label: 'Open School ERP', href: SCHOOL_ERP_URL },
+    demo: { label: 'Open the School ERP demo', href: SCHOOL_ERP_URL },
     // School has its own price list on the School ERP site
-    pricingHref: SCHOOL_PRICING_URL,
+    pricing: { href: SCHOOL_PRICING_URL },
   },
   {
     id: 'healthcare',
