@@ -203,7 +203,7 @@ const FunctionWithList = () => {
       funMessage: fn.funMessage || "",
     });
     setErrors({});
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    formRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
     setTimeout(() => functionNameRef.current?.focus(), 300);
   };
 

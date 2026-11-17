@@ -418,7 +418,7 @@ const MahalDetails = () => {
       <AnimatePresence>
         {narrow && mahal && !formVisible && !result && (
           <Box component={motion.div} initial={{ y: 80 }} animate={{ y: 0 }} exit={{ y: 80 }} sx={{ position: 'fixed', left: 16, right: 16, bottom: 16, zIndex: 10 }}>
-            <Fab variant="extended" color="primary" sx={{ width: '100%' }} onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+            <Fab variant="extended" color="primary" sx={{ width: '100%' }} onClick={() => formRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })}>
               <EventAvailableOutlinedIcon sx={{ mr: 1 }} />
               Check dates &amp; book
             </Fab>

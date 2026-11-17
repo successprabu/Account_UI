@@ -182,7 +182,7 @@ const User = () => {
       conpassword: u.password || "",
     });
     setErrors({});
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    formRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
     setTimeout(() => nameRef.current?.focus(), 300);
   };
 

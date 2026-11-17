@@ -85,7 +85,7 @@ const ServicePage = () => {
   // Links like /services#mahal jump to that product's section.
   useEffect(() => {
     if (!hash) return undefined;
-    const id = setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    const id = setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }), 50);
     return () => clearTimeout(id);
   }, [hash]);
   return (
