@@ -13,6 +13,7 @@ import AppHeader from '../common/AppHeader';
 import PublicFooter from '../public/PublicFooter';
 import { IconTile } from '../public/Section';
 import { CONTACT, PRODUCTS } from '../public/products';
+import { currentUser } from '../../utils/session';
 
 const TOPICS = ['Website or custom software', 'Digitizing my business', 'AI and automation', ...PRODUCTS.map((p) => p.title), 'Pricing and plans', 'Help with my account', 'Something else'];
 
@@ -22,7 +23,12 @@ const ContactUs = () => {
   const { t } = useTranslation();
   const [params] = useSearchParams();
   const requested = params.get('topic');
-  const [form, setForm] = useState(() => ({ ...emptyForm, topic: TOPICS.includes(requested) ? requested : emptyForm.topic }));
+  // Signed-in users (coming from Help) get their name and mobile filled in, and "Help with my account" as the topic.
+  const [form, setForm] = useState(() => {
+    const me = currentUser();
+    const topic = TOPICS.includes(requested) ? requested : me ? 'Help with my account' : emptyForm.topic;
+    return { ...emptyForm, topic, name: me?.name || '', phone: me?.primary_phone || '' };
+  });
   const [errors, setErrors] = useState({});
   const [sentVia, setSentVia] = useState('');
   const [sending, setSending] = useState(false);

@@ -56,6 +56,9 @@ const Login = () => {
       if (decodedToken.exp < currentTime) {
         localStorage.removeItem("user");
         navigate("/login");
+      } else {
+        // Already signed in: go straight to the dashboard instead of asking again.
+        navigate("/dashboard", { replace: true });
       }
     }
   }, [navigate]);

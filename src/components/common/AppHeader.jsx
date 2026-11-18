@@ -24,6 +24,8 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import { useLanguage } from '../../language/LanguageContext';
 import DemoMenu from '../public/DemoMenu';
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import { currentUser } from '../../utils/session';
 
 export const LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -110,6 +112,8 @@ export const BrandLink = () => {
 const AppHeader = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  // Signed in (e.g. came here from Help or User guide): offer the way back instead of Login / Try Demo.
+  const signedIn = !!currentUser();
 
   return (
     <AppBar position="sticky" sx={{ backdropFilter: 'saturate(180%) blur(8px)', bgcolor: (th) => `${th.palette.background.paper}e6` }}>
@@ -129,10 +133,18 @@ const AppHeader = () => {
 
           <Stack direction="row" spacing={1} alignItems="center" sx={{ display: { xs: 'none', lg: 'flex' }, '& .MuiButton-root': { whiteSpace: 'nowrap' } }}>
             <LanguageMenu />
-            <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
-              {t('login', { defaultValue: 'Login' })}
-            </Button>
-            <DemoMenu />
+            {signedIn ? (
+              <Button component={RouterLink} to="/dashboard" variant="contained" startIcon={<DashboardOutlinedIcon />}>
+                {t('myDashboard', { defaultValue: 'My dashboard' })}
+              </Button>
+            ) : (
+              <>
+                <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
+                  {t('login', { defaultValue: 'Login' })}
+                </Button>
+                <DemoMenu />
+              </>
+            )}
           </Stack>
 
           <IconButton sx={{ display: { lg: 'none' } }} onClick={() => setOpen(true)} aria-label="Open menu">
@@ -158,10 +170,18 @@ const AppHeader = () => {
         <Divider sx={{ my: 2 }} />
         <Stack spacing={1.5}>
           <LanguageMenu fullWidth />
-          <Button component={RouterLink} to="/login" variant="outlined" color="inherit" fullWidth onClick={() => setOpen(false)}>
-            {t('login', { defaultValue: 'Login' })}
-          </Button>
-          <DemoMenu fullWidth onPick={() => setOpen(false)} />
+          {signedIn ? (
+            <Button component={RouterLink} to="/dashboard" variant="contained" fullWidth startIcon={<DashboardOutlinedIcon />} onClick={() => setOpen(false)}>
+              {t('myDashboard', { defaultValue: 'My dashboard' })}
+            </Button>
+          ) : (
+            <>
+              <Button component={RouterLink} to="/login" variant="outlined" color="inherit" fullWidth onClick={() => setOpen(false)}>
+                {t('login', { defaultValue: 'Login' })}
+              </Button>
+              <DemoMenu fullWidth onPick={() => setOpen(false)} />
+            </>
+          )}
         </Stack>
       </Drawer>
     </AppBar>

@@ -5,6 +5,7 @@ import { Box, Container, Divider, Grid, Link, Stack, Typography } from '@mui/mat
 import { BrandLink } from '../common/AppHeader';
 import { CONTACT, PRODUCTS } from './products';
 import ProductStartDialog from './ProductStartDialog';
+import { currentUser } from '../../utils/session';
 
 const FooterLink = ({ to, href, children }) =>
   href ? (
@@ -73,7 +74,11 @@ const PublicFooter = () => {
               <FooterLink to="/contactus">{t('contact_us', { defaultValue: 'Contact' })}</FooterLink>
               <FooterLink to="/user-guide">{t('userGuides', { defaultValue: 'User guides' })}</FooterLink>
               <FooterLink to="/download-app">{t('getAndroidApp', { defaultValue: 'Get the Android app' })}</FooterLink>
-              <FooterLink to="/login">{t('login', { defaultValue: 'Login' })}</FooterLink>
+              {currentUser() ? (
+                <FooterLink to="/dashboard">{t('myDashboard', { defaultValue: 'My dashboard' })}</FooterLink>
+              ) : (
+                <FooterLink to="/login">{t('login', { defaultValue: 'Login' })}</FooterLink>
+              )}
             </Column>
           </Grid>
           <Grid item xs={12} md={3}>
