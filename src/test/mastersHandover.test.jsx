@@ -110,6 +110,6 @@ describe('Handover', () => {
     fireEvent.change(within(dialog).getByRole('textbox', { name: /received by/i }), { target: { value: 'Kumar' } });
     fireEvent.click(within(dialog).getByRole('button', { name: /^save$/i }));
     await waitFor(() => expect(calls(/UpdateHandover/)).toHaveLength(1));
-    expect(calls(/UpdateHandover/)[0][0].data).toMatchObject({ functionId: 3, customerId: 9, handoverBy: 21, totalRcdAmount: 50000, handoverAmount: 45000, differnceAmount: 5000, receivedBy: 'Kumar' });
+    expect(calls(/UpdateHandover/)[0][0].data).toMatchObject({ functionId: 3, customerId: 9, handoverBy: 21, totalRcdAmount: 45000, handoverAmount: 45000, differnceAmount: 0, receivedBy: 'Kumar' });
   });
 });

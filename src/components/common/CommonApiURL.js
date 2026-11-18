@@ -3,12 +3,8 @@
 // Set VITE_API_BASE_URL (e.g. in .env.local) to point at another API; defaults to live.
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL || `https://successapi.azurewebsites.net/api/`;
 
-const GOOGLE_TRANS_API_KEY = "AIzaSyC_7ciFvvyV0P8sKm7YA3S603Hv6vSpPfE";
-export const OTP_KEY =
-  "xjOLRnX3rkQIbDWCNdKzUZrvDkh4oNE2c5piae82FQuFC0wj0hShCZvrJ1uH";
 export const REACT_APP_RAZORPAY_KEY_ID = 'rzp_test_S6TYVkdYVjDELZ';
-export const GOOGLE_TRANS_API = `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANS_API_KEY}`;
-export const SEND_OTP_API = `https://www.fast2sms.com/dev/bulkV2`;
+// Registration OTPs and SMS go through our API (Auth/SendOtp, Auth/VerifyOtp): no SMS or Google keys in the website.
 export const MASTER = `Master/`;
 export const AUTH = `Auth/`;
 export const TRANSACTION = `Transaction/`;

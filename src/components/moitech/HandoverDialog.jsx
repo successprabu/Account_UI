@@ -40,8 +40,9 @@ const HandoverDialog = ({ open, person, onClose, onSaved }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  // Same rule as before: the receipts total, or the others total when there are no receipts.
-  const total = person ? (person.receipt === 0 ? person.others : person.receipt || 0) : 0;
+  // Money the collector should hand over: receipts minus the expenses they paid, plus any cash given with
+  // other gifts (gold and other items are counted separately). Same as the Total column on the Handover page.
+  const total = person ? (person.receipt || 0) + (person.others || 0) - (person.expense || 0) : 0;
   const [form, setForm] = useState({ handoverAmount: '', receivedBy: '', receivedByMoible: '', remarks: '' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -117,7 +118,7 @@ const HandoverDialog = ({ open, person, onClose, onSaved }) => {
         <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
           {[
             [t('handoverBy'), t(person.username, { defaultValue: person.username }), 'text.primary'],
-            [t('total'), rupees(total), 'primary.main'],
+            [t('handoverExpected', { defaultValue: 'Should hand over' }), rupees(total), total < 0 ? 'error.main' : 'primary.main'],
           ].map(([label, value, color]) => (
             <Grid item xs={6} key={label}>
               <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: 'action.hover' }}>
@@ -127,6 +128,11 @@ const HandoverDialog = ({ open, person, onClose, onSaved }) => {
             </Grid>
           ))}
         </Grid>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: -1.5, mb: 2.5 }}>
+          {t('receipt')} {rupees(person.receipt)} − {t('expenses')} {rupees(person.expense)}
+          {person.others ? ` + ${t('others')} ${rupees(person.others)}` : ''} = <b>{rupees(total)}</b>
+          {total < 0 ? ` · ${t('handoverOwed', { defaultValue: 'They spent more than they received: pay them back.' })}` : ''}
+        </Typography>
         <Stack spacing={2}>
           <TextField
             autoFocus

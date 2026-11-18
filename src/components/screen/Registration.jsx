@@ -14,15 +14,13 @@ import {
   FormCheck,
 } from "react-bootstrap";
 import {
-  OTP_KEY,
-  SEND_OTP_API,
   SAVE_NEW_CUSTOMER_API,
   GET_MOBILE_CHECK_API,
-  SAVE_REGISTRATION_INITIAL_API,
 } from "../common/CommonApiURL";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { sendOtp as requestOtp, verifyOtp } from "../../api/otp";
 import { Oval } from "react-loader-spinner";
 import Header from "../common/Header";
 import InputWithMicrophone from "../common/InputWithMicrophone";
@@ -56,7 +54,6 @@ const Registration = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showMandatoryOnly, setShowMandatoryOnly] = useState(true);
-  const [generatedOtp, setGeneratedOtp] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpTimer, setOtpTimer] = useState(180); // 3 minutes
@@ -98,10 +95,6 @@ const Registration = () => {
     });
   };
 
-  const generateOtp = () => {
-    // Generate a random 6-digit OTP
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  };
 
   const handleOtpSend = async () => {
     const validationErrors = {};
@@ -114,10 +107,6 @@ const Registration = () => {
       return;
     }
 
-    // Generate and store OTP
-    const otp = generateOtp();
-    //console.log(otp,'OTP TESTING')
-    setGeneratedOtp(otp);
     try {
       // Make the mobile check API call
       const mobileCheckResponse = await axios.get(GET_MOBILE_CHECK_API, {
@@ -133,7 +122,7 @@ const Registration = () => {
       // Check if mobile number is valid to send OTP
       if (mobileCheck.result) {
         // Send OTP if mobile check passed
-        await sendOtp(otp);
+        await sendOtp();
       } else {
         toast.error(mobileCheck.message || "Mobile number already exists or is invalid.");
       }
@@ -145,59 +134,28 @@ const Registration = () => {
   };
 
   // Separated function to handle sending OTP
-  const sendOtp = async (otp) => {
-    try {
-      //console.log('Sending OTP:', otp);
-      await axios.get(SEND_OTP_API, {
-        params: {
-          authorization: OTP_KEY,
-          route: "otp",
-          variables_values: otp,
-          flash: 0,
-          numbers: formData.primary_phone,
-        },
-      });
-
-      toast.success("OTP sent successfully!");
-      setOtpSent(true);
-      setOtpTimer(180); // Restart OTP timer
-      setResendEnabled(false); // Disable resend button initially
-    } catch (error) {
-      console.error("Error sending OTP:", error.response ? error.response.data : error);
-      toast.error("Error sending OTP. Please try again.");
+  const sendOtp = async () => {
+    // The server makes the code and sends the SMS (no SMS key in the website).
+    const res = await requestOtp(formData.primary_phone, "AU");
+    if (!res.ok) {
+      toast.error(res.message || "Error sending OTP. Please try again.");
+      return;
     }
+    toast.success("OTP sent successfully!");
+    setOtpSent(true);
+    setOtpTimer(180); // Restart OTP timer
+    setResendEnabled(false); // Disable resend button initially
   };
 
 
-  const handleOtpVerify = () => {
-    // Verify the entered OTP against the stored OTP
-    if (formData.otp === generatedOtp) {
+  const handleOtpVerify = async () => {
+    // The server checks the code; once it is right, this number may register.
+    const res = await verifyOtp(formData.primary_phone, formData.otp);
+    if (res.ok) {
       setOtpVerified(true);
-      const payload = {
-        id: 0,
-        primary_phone: formData.primary_phone,
-        userType: 'AU',
-        customerId: 0,
-        country_code: '+91',
-        appName: 'MOI',
-        createdBy: 'SYSTEM',
-        createdDt: new Date()
-      };
-
-      axios.post(SAVE_REGISTRATION_INITIAL_API, payload)
-        .then(response => {
-          // Handle the response
-          console.log('Success:', response.data);
-        })
-        .catch(error => {
-          // Handle the error
-          console.error('Error:', error);
-        });
-
       toast.success("OTP Verified!");
     } else {
-      toast.error("Invalid OTP");
-      // setErrors((prev) => ({ ...prev, otp: "Invalid OTP" }));
+      toast.error(res.message || "Invalid OTP");
     }
   };
 
