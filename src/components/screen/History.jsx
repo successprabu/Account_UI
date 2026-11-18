@@ -40,8 +40,9 @@ const ENTITIES = [
   { value: 'Expense', label: 'Expenses' },
   { value: 'Others', label: 'Other gifts' },
   { value: 'Handover', label: 'Handovers' },
+  { value: 'Given', label: 'Moi we gave' },
 ];
-const ENTITY_WORD = { Receipt: 'receipt', Expense: 'expense', Others: 'gift', Handover: 'handover' };
+const ENTITY_WORD = { Receipt: 'receipt', Expense: 'expense', Others: 'gift', Handover: 'handover', Given: '"moi we gave" entry' };
 
 export const FIELD_LABEL = {
   place: 'Place',
@@ -58,6 +59,8 @@ export const FIELD_LABEL = {
   returnStatus: 'Return status',
   returnRemark: 'Return remark',
   active: 'Active',
+  eventName: 'Their function',
+  eventDate: 'Function date',
 };
 const MONEY_FIELDS = new Set(['oldAmount', 'newAmount', 'amount']);
 const PAGE = 50;

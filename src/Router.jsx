@@ -100,6 +100,7 @@ const OverallSummaryReport = lazy(() =>
 );
 const Handover = lazy(() => import("./components/screen/Handover"));
 const History = lazy(() => import("./components/screen/History"));
+const MoiGiven = lazy(() => import("./components/screen/MoiGiven"));
 const MahalBookings = lazy(() =>
   import("./components/screen/mahal/MahalBookings")
 );
@@ -287,6 +288,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <Handover />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="moi-given"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU"]}>
+                <MoiGiven />
               </ProtectedRoute>
             }
           />

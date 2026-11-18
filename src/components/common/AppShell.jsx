@@ -39,6 +39,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import HistoryIcon from '@mui/icons-material/History';
+import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import TranslateIcon from '@mui/icons-material/Translate';
@@ -100,6 +101,7 @@ const NAV = [
       { key: 'summaryReport', to: '/summary-report' },
     ],
   },
+  { key: 'moiGiven', fallback: 'Moi we gave', to: '/moi-given', icon: <RedeemOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'history', fallback: 'History', to: '/history', icon: <HistoryIcon />, roles: ['SU', 'AU'] },
   { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
   // One entry per role, each opening that role's guide (the super admin gets the list of all guides).
