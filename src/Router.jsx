@@ -120,6 +120,7 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 const Enquiries = lazy(() => import("./components/screen/enquiries/Enquiries"));
 const RegisterClient = lazy(() => import("./components/screen/admin/RegisterClient"));
 const DownloadApp = lazy(() => import("./components/screen/DownloadApp"));
+const ForgotPassword = lazy(() => import("./components/screen/login/ForgotPassword"));
 const UserGuides = lazy(() => import("./components/screen/UserGuide"));
 const UserGuidePage = lazy(() => import("./components/screen/UserGuide").then((m) => ({ default: m.UserGuidePage })));
 const DesignSystem = lazy(() => import("./components/screen/DesignSystem"));
@@ -131,6 +132,7 @@ const Router = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="purchase/:id" element={<Registration />} />
         <Route path="purchase" element={<Registration />} />
         <Route path="mahal-reg" element={<MahalRegistration />} />

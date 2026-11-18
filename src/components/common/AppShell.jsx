@@ -38,6 +38,8 @@ import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
+import ChangePasswordDialog from './ChangePasswordDialog';
 import HistoryIcon from '@mui/icons-material/History';
 import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -242,6 +244,7 @@ const AppShell = ({ children }) => {
   const [userMenu, setUserMenu] = useState(null);
   const [langMenu, setLangMenu] = useState(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
 
   const side = app?.sidebarPosition === 'right' ? 'right' : 'left';
   const items = useMemo(() => NAV.filter((n) => n.roles.includes(user.userType)), [user.userType]);
@@ -361,6 +364,12 @@ const AppShell = ({ children }) => {
                 </ListItemIcon>
                 {t('Theme Settings', { defaultValue: 'Theme settings' })}
               </MenuItem>
+              <MenuItem onClick={() => { setUserMenu(null); setChangePassword(true); }}>
+                <ListItemIcon>
+                  <KeyOutlinedIcon fontSize="small" />
+                </ListItemIcon>
+                {t('changePassword', { defaultValue: 'Change password' })}
+              </MenuItem>
               <MenuItem component={RouterLink} to={guideFor(user?.userType)} onClick={() => setUserMenu(null)}>
                 <ListItemIcon>
                   <MenuBookOutlinedIcon fontSize="small" />
@@ -395,6 +404,7 @@ const AppShell = ({ children }) => {
         </Box>
       </Box>
 
+      <ChangePasswordDialog open={changePassword} onClose={() => setChangePassword(false)} />
       <ConfirmDialog
         open={confirmLogout}
         title={t('logoutConfirmTitle', { defaultValue: 'Log out?' })}

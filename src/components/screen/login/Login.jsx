@@ -30,6 +30,7 @@ import { LOGIN_API, LOGIN_USER_ACCOUNT_CHECK_API } from "../../common/CommonApiU
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import AppHeader from "../../common/AppHeader";
+import SignUpChooser from "../../common/SignUpChooser";
 
 const Login = () => {
   const { t } = useTranslation();
@@ -44,6 +45,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [userTypes, setUserTypes] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
+  const [signUpOpen, setSignUpOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -292,10 +294,12 @@ const Login = () => {
                 <MuiLink component={Link} to="/forgot-password" underline="hover" variant="body2">
                   {t("forgot_password")}
                 </MuiLink>
-                <MuiLink component={Link} to="/purchase" underline="hover" variant="body2" fontWeight={600}>
+                {/* Each product has its own sign-up: Moitech, Mahal Management or School. */}
+                <MuiLink component="button" type="button" onClick={() => setSignUpOpen(true)} underline="hover" variant="body2" fontWeight={600}>
                   {t("sign_up")}
                 </MuiLink>
               </Stack>
+              <SignUpChooser open={signUpOpen} onClose={() => setSignUpOpen(false)} />
               <MuiLink component={Link} to="/download-app" underline="hover" variant="body2" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.75, mt: 2.5, color: '#10b981' }}>
                 <AndroidIcon fontSize="small" /> {t("getAndroidApp", { defaultValue: "Get the Android app" })}
               </MuiLink>
