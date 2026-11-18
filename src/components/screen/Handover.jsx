@@ -32,6 +32,8 @@ import { REPORT_GET_OTHERSSUMMARY_API, REPORT_GET_OVERALLSUMMARY_API } from "../
 import { EmptyState, PageHeader } from "../ui";
 import { AnimatedNumber, rupees } from "../moitech/shared";
 import HandoverDialog from "../moitech/HandoverDialog";
+import { Link as RouterLink } from "react-router-dom";
+import HistoryIcon from "@mui/icons-material/History";
 
 const readUser = () => {
   try {
@@ -116,7 +118,16 @@ const Handover = () => {
         title={t("handOver")}
         subtitle={t("handOverHint", { defaultValue: "At the end of the function, see what each person collected and record who they handed it to." })}
         breadcrumbs={[{ label: t("dashboard"), to: "/dashboard" }, { label: t("handOver") }]}
-        actions={<Button startIcon={<RefreshIcon />} onClick={load} disabled={loading}>{t("refresh", { defaultValue: "Refresh" })}</Button>}
+        actions={
+          <Stack direction="row" spacing={1}>
+            {["AU", "SU"].includes(readUser()?.userType) && (
+              <Button variant="outlined" component={RouterLink} to="/history?action=Edited" startIcon={<HistoryIcon />}>
+                {t("history", { defaultValue: "History" })}
+              </Button>
+            )}
+            <Button startIcon={<RefreshIcon />} onClick={load} disabled={loading}>{t("refresh", { defaultValue: "Refresh" })}</Button>
+          </Stack>
+        }
       />
 
       {error && <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" onClick={load}>{t("retry", { defaultValue: "Retry" })}</Button>}>{error}</Alert>}
