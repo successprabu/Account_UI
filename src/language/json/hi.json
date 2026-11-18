@@ -179,5 +179,6 @@
   "history": "इतिहास",
   "myDashboard": "मेरा डैशबोर्ड",
   "moiGiven": "हमने दिया मोई",
-  "changePassword": "पासवर्ड बदलें"
+  "changePassword": "पासवर्ड बदलें",
+  "wrong_mobile_or_password": "मोबाइल नंबर या पासवर्ड गलत है। कृपया जाँचकर फिर से कोशिश करें।"
 }

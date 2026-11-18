@@ -296,5 +296,6 @@
   "history": "History",
   "myDashboard": "My dashboard",
   "moiGiven": "Moi we gave",
-  "changePassword": "Change password"
+  "changePassword": "Change password",
+  "wrong_mobile_or_password": "Wrong mobile number or password. Please check and try again."
 }

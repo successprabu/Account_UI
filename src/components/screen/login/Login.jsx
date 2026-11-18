@@ -71,6 +71,9 @@ const Login = () => {
       ...formData,
       [name]: value,
     });
+    // An old message goes away as soon as the user changes the mobile number or password.
+    if (loginError) setLoginError("");
+    if (errors.validation) setErrors({});
   };
 
   const togglePasswordVisibility = () => {
@@ -78,8 +81,10 @@ const Login = () => {
   };
 
   const handleUsernameBlur = async () => {
+    // Only check a complete 10 digit number; nothing to say while it is empty or still being typed.
+    if (!/^\d{10}$/.test(String(formData.username || "").trim())) return;
     try {
-      setLoginError([]);
+      setLoginError("");
       const response = await axios.get(
         `${LOGIN_USER_ACCOUNT_CHECK_API}userName=${formData.username}&appName=MOI`
       );
@@ -138,6 +143,12 @@ const Login = () => {
     });
   };
 
+  // The API says "Invalid User" for a wrong mobile number or password.
+  const friendly = (message) =>
+    /^invalid user$/i.test(String(message || "").trim())
+      ? t("wrong_mobile_or_password", { defaultValue: "Wrong mobile number or password. Please check and try again." })
+      : message;
+
   const userLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -161,7 +172,7 @@ const Login = () => {
             setLoginError(t("session_expired"));
           }
         } else {
-          setLoginError(data.message);
+          setLoginError(friendly(data.message));
         }
       } else {
         setErrors({ validation: t("please_enter_username_password") });
@@ -172,7 +183,7 @@ const Login = () => {
         error.response.data &&
         error.response.data.message
       ) {
-        setLoginError(error.response.data.message);
+        setLoginError(friendly(error.response.data.message));
       } else {
         setLoginError(t("an_error_occurred"));
       }
@@ -212,7 +223,8 @@ const Login = () => {
                 {t("login_security_note")}
               </Typography>
 
-              {(loginError || errors.validation) && (
+              {/* Only when there is a real message to show. */}
+              {Boolean((typeof loginError === "string" && loginError.trim()) || errors.validation) && (
                 <Alert severity="error" sx={{ mb: 2.5 }}>
                   {loginError || errors.validation}
                 </Alert>
