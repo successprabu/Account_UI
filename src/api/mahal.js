@@ -68,3 +68,18 @@ export const getMahalSummary = () => call({ method: 'get', url: `${R}Summary`, h
 // ---- location dropdowns (login needed)
 export const getStates = (countryId = 1) => call({ method: 'get', url: 'DropDown/GetStateDropDown', params: { countryId }, headers: auth() });
 export const getDistricts = (stateId) => call({ method: 'get', url: 'DropDown/GetDistrictDropDown', params: { stateId }, headers: auth() });
+
+// ---- hall photos
+/** Address of a hall photo (public). thumb: the small copy for lists. */
+export const photoUrl = (id, thumb = false) => `${BASE_URL}MahalBooking/Public/Photo/${id}${thumb ? '?size=thumb' : ''}`;
+export const listPhotos = (mahalId) => call({ method: 'get', url: `${R}Photos`, params: { mahalId }, headers: auth() });
+/** file / thumb: Blobs (already shrunk, see utils/resizeImage). */
+export const uploadPhoto = (mahalId, file, thumb) => {
+  const form = new FormData();
+  form.append('mahalId', String(mahalId));
+  form.append('file', file, 'photo.jpg');
+  if (thumb) form.append('thumb', thumb, 'thumb.jpg');
+  return call({ method: 'post', url: `${R}Photos/Upload`, data: form, headers: auth(), timeout: 60000 });
+};
+export const deletePhoto = (id) => call({ method: 'post', url: `${R}Photos/Delete`, params: { id }, headers: auth() });
+export const setCoverPhoto = (id) => call({ method: 'post', url: `${R}Photos/Cover`, params: { id }, headers: auth() });

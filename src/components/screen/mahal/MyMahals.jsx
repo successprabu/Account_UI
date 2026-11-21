@@ -39,6 +39,7 @@ import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import { PageHeader, EmptyState, notify } from '../../ui';
 import { getDistricts, getStates, listMyMahals, saveMahal } from '../../../api/mahal';
 import { AMENITIES, EVENT_TYPES, MahalImage, fadeUp, placeLine, rupees } from '../../mahal/shared';
+import PhotoManager, { uploadQueued } from '../../mahal/PhotoManager';
 
 const blank = {
   id: 0,
@@ -100,10 +101,15 @@ export const MahalFormDialog = ({ open, mahal, onClose, onSaved }) => {
   const [saveError, setSaveError] = useState('');
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
+  // Photos of a saved hall (ids, cover first), and photos chosen for a new hall, uploaded once it is saved.
+  const [photos, setPhotos] = useState([]);
+  const [queue, setQueue] = useState([]);
 
   useEffect(() => {
     if (!open) return;
     setForm(mahal ? { ...blank, ...mahal, state: mahal.state || '', district: mahal.district || '', pincode: mahal.pincode || '', amenities: mahal.amenities || [], eventTypes: mahal.eventTypes || [] } : blank);
+    setPhotos(mahal?.photos || []);
+    setQueue([]);
     setErrors({});
     setSaveError('');
   }, [open, mahal]);
@@ -157,6 +163,10 @@ export const MahalFormDialog = ({ open, mahal, onClose, onSaved }) => {
       pricePerDay: num(form.pricePerDay),
       advanceAmount: num(form.advanceAmount),
     });
+    if (res.ok && !form.id && queue.length && res.data?.id) {
+      const failed = await uploadQueued(res.data.id, queue, (i, n) => notify.info(`Uploading photo ${i} of ${n}…`, { toastId: `photo-${i}`, autoClose: 1500 }));
+      if (failed) notify.warning(`${failed} photo(s) could not be uploaded. Open the hall and add them again.`);
+    }
     setSaving(false);
     if (res.ok) {
       notify.success(res.message || 'Saved');
@@ -225,12 +235,13 @@ export const MahalFormDialog = ({ open, mahal, onClose, onSaved }) => {
             <Grid item xs={12} md={3}><TextField fullWidth required label="Pincode" value={form.pincode} onChange={set('pincode', digits(6))} error={!!errors.pincode} helperText={errors.pincode} inputProps={{ inputMode: 'numeric' }} /></Grid>
           </Grid>
 
-          <Divider textAlign="left"><Typography variant="overline">Contact and photo</Typography></Divider>
+          <Divider textAlign="left"><Typography variant="overline">Photos</Typography></Divider>
+          <PhotoManager mahalId={form.id} photos={photos} onPhotos={setPhotos} queue={queue} onQueue={setQueue} />
+
+          <Divider textAlign="left"><Typography variant="overline">Contact</Typography></Divider>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}><TextField fullWidth label="Contact person" value={form.contactPerson || ''} onChange={set('contactPerson')} /></Grid>
             <Grid item xs={12} md={6}><TextField fullWidth label="Contact number" type="tel" value={form.contactNumber || ''} onChange={set('contactNumber')} error={!!errors.contactNumber} helperText={errors.contactNumber || 'Shown to customers on the booking site'} /></Grid>
-            <Grid item xs={12} md={8}><TextField fullWidth label="Photo link" placeholder="https://…" value={form.imageUrl || ''} onChange={set('imageUrl')} error={!!errors.imageUrl} helperText={errors.imageUrl || 'Optional. Paste a link to a photo of the hall.'} /></Grid>
-            <Grid item xs={12} md={4}><MahalImage mahal={{ ...form, id: form.id || 1 }} height={96} radius={2} /></Grid>
           </Grid>
           {saveError && <Alert severity="error">{saveError}</Alert>}
         </Stack>
@@ -274,11 +285,9 @@ const MyMahals = () => {
   const close = () => {
     setOpen(false);
     if (params.get('new')) setParams({}, { replace: true });
+    load(); // photos added or removed in the form show on the cards straight away
   };
-  const saved = () => {
-    close();
-    load();
-  };
+  const saved = () => close();
 
   return (
     <Box sx={{ py: { xs: 2.5, md: 3 } }}>

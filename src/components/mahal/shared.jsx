@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
+import { photoUrl } from '../../api/mahal';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
@@ -103,7 +105,7 @@ const GRADIENTS = [
   ['#f97316', '#db2777'],
 ];
 
-/** Hall photo, or a colourful placeholder with the hall's initials when there is none. */
+/** Hall cover photo (the uploaded cover, or an older photo link), or a colourful placeholder with the hall's initials. */
 export const MahalImage = ({ mahal, height = 180, radius = 0, children }) => {
   const [broken, setBroken] = useState(false);
   const [a, b] = GRADIENTS[(mahal?.id || 0) % GRADIENTS.length];
@@ -115,10 +117,10 @@ export const MahalImage = ({ mahal, height = 180, radius = 0, children }) => {
     .join('');
   return (
     <Box sx={{ position: 'relative', height, borderRadius: radius, overflow: 'hidden', background: `linear-gradient(135deg, ${a}, ${b})` }}>
-      {mahal?.imageUrl && !broken ? (
+      {(mahal?.coverPhotoId || mahal?.imageUrl) && !broken ? (
         <Box
           component="img"
-          src={mahal.imageUrl}
+          src={mahal.coverPhotoId ? photoUrl(mahal.coverPhotoId, height <= 240) : mahal.imageUrl}
           alt={mahal.mahalName}
           loading="lazy"
           onError={() => setBroken(true)}
@@ -129,6 +131,12 @@ export const MahalImage = ({ mahal, height = 180, radius = 0, children }) => {
           <Box sx={{ position: 'absolute', inset: 0, opacity: 0.18, background: 'radial-gradient(circle at 20% 20%, #fff 0, transparent 40%), radial-gradient(circle at 80% 70%, #fff 0, transparent 35%)' }} />
           <ApartmentOutlinedIcon sx={{ fontSize: Math.min(56, height / 3), opacity: 0.9 }} />
           <Typography sx={{ fontWeight: 800, fontSize: Math.min(28, height / 6), letterSpacing: 2, mt: 0.5 }}>{initials}</Typography>
+        </Stack>
+      )}
+      {mahal?.photos?.length > 1 && (
+        <Stack direction="row" spacing={0.5} alignItems="center" sx={{ position: 'absolute', bottom: 10, left: 10, px: 1, py: 0.25, borderRadius: 99, bgcolor: 'rgba(15,23,42,.7)', color: '#fff' }}>
+          <PhotoLibraryOutlinedIcon sx={{ fontSize: 14 }} />
+          <Typography variant="caption" fontWeight={700}>{mahal.photos.length}</Typography>
         </Stack>
       )}
       {children}

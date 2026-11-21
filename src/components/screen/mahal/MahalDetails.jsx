@@ -38,6 +38,7 @@ import PublicFooter from '../../public/PublicFooter';
 import { EmptyState, notify } from '../../ui';
 import { getPublicMahal, requestBooking, toDay } from '../../../api/mahal';
 import { AvailabilityCalendar, EVENT_TYPES, MahalImage, daysBetween, fmtRange, placeLine, rupees } from '../../mahal/shared';
+import MahalGallery from '../../mahal/MahalGallery';
 
 const MAX_DAYS = 7;
 const emptyForm = { name: '', phone: '', email: '', eventType: '', guestCount: '', message: '', website: '' };
@@ -254,7 +255,7 @@ const MahalDetails = () => {
           <Grid container spacing={3} alignItems="flex-start">
             <Grid item xs={12} md={7}>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-                <MahalImage mahal={mahal} height={300} radius={4} />
+                {mahal.photos?.length ? <MahalGallery photos={mahal.photos} name={mahal.mahalName} height={340} /> : <MahalImage mahal={mahal} height={300} radius={4} />}
                 <Typography variant="h3" component="h1" sx={{ mt: 3, fontWeight: 800, fontSize: { xs: 26, md: 34 } }}>
                   {mahal.mahalName}
                 </Typography>
