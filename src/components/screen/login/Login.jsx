@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AndroidIcon from '@mui/icons-material/Android';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -42,6 +42,9 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
+  // Sent here because the login expired: a short note (not an error), gone once the user types.
+  const [params] = useSearchParams();
+  const [sessionNote, setSessionNote] = useState(params.get("session") === "expired");
   const [loading, setLoading] = useState(false);
   const [userTypes, setUserTypes] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
@@ -73,6 +76,7 @@ const Login = () => {
     });
     // An old message goes away as soon as the user changes the mobile number or password.
     if (loginError) setLoginError("");
+    if (sessionNote) setSessionNote(false);
     if (errors.validation) setErrors({});
   };
 
@@ -223,6 +227,11 @@ const Login = () => {
                 {t("login_security_note")}
               </Typography>
 
+              {sessionNote && !loginError && (
+                <Alert severity="info" sx={{ mb: 2.5 }}>
+                  {t("session_ended_sign_in", { defaultValue: "Your session has ended. Please sign in again." })}
+                </Alert>
+              )}
               {/* Only when there is a real message to show. */}
               {Boolean((typeof loginError === "string" && loginError.trim()) || errors.validation) && (
                 <Alert severity="error" sx={{ mb: 2.5 }}>

@@ -9,6 +9,11 @@ import { LanguageProvider } from "./language/LanguageContext";
 import { ThemeProvider } from './ThemeProvider';
 import { ThemeMui } from './mui/ThemeMui';
 import Router from "./Router"; 
+import axios from "axios";
+import { watchSession } from "./utils/session";
+
+// An expired login signs out and goes to the login page (any API call that gets 401).
+watchSession(axios);
 
 function App() {
   return (

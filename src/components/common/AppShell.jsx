@@ -40,6 +40,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import ChangePasswordDialog from './ChangePasswordDialog';
+import { endSession, msUntilExpiry } from '../../utils/session';
 import HistoryIcon from '@mui/icons-material/History';
 import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -245,6 +246,18 @@ const AppShell = ({ children }) => {
   const [langMenu, setLangMenu] = useState(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
+
+  // Sign out when the login expires, even if no button is pressed (timers are capped at ~24 days).
+  useEffect(() => {
+    const ms = msUntilExpiry();
+    if (ms === null) return undefined;
+    if (ms <= 0) {
+      endSession();
+      return undefined;
+    }
+    const id = setTimeout(endSession, Math.min(ms, 2147483000));
+    return () => clearTimeout(id);
+  }, []);
 
   const side = app?.sidebarPosition === 'right' ? 'right' : 'left';
   const items = useMemo(() => NAV.filter((n) => n.roles.includes(user.userType)), [user.userType]);

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
+import { endSession } from '../../utils/session';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
@@ -31,10 +32,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (!user?.token) return;
     try {
-      if (jwtDecode(user.token).exp < Date.now() / 1000) {
-        localStorage.removeItem('user');
-        navigate('/login');
-      }
+      if (jwtDecode(user.token).exp < Date.now() / 1000) endSession();
     } catch (e) {
       /* token not decodable: leave the session as it is */
     }

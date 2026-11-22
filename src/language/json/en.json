@@ -297,5 +297,6 @@
   "myDashboard": "My dashboard",
   "moiGiven": "Moi we gave",
   "changePassword": "Change password",
-  "wrong_mobile_or_password": "Wrong mobile number or password. Please check and try again."
+  "wrong_mobile_or_password": "Wrong mobile number or password. Please check and try again.",
+  "session_ended_sign_in": "Your session has ended. Please sign in again."
 }
