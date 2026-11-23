@@ -49,8 +49,12 @@ import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import UndoIcon from '@mui/icons-material/Undo';
 import PublicIcon from '@mui/icons-material/Public';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { EmptyState, PageHeader, StatusChip, notify } from '../../ui';
 import { getBooking, listBookings, listMyMahals, recordPayment, saveBooking, setBookingStatus, toDay, toLocalIso } from '../../../api/mahal';
+import { AiQuickBooking, FollowUpsPanel, draftToForm, useAiEnabled } from '../../mahal/AiBooking';
+import { listFollowUps } from '../../../api/mahalAi';
 import { AvailabilityCalendar, EVENT_TYPES, STATUS, effectiveStatus, eventMeta, fadeUp, fmtDate, fmtRange, rupees } from '../../mahal/shared';
 
 const TABS = [
@@ -84,7 +88,7 @@ const emptyBooking = (mahalId) => {
   return { id: 0, mahalId: mahalId || '', customerName: '', primary_phone: '', email: '', eventType: 'Marriage', guestCount: '', fromDate: inputValue(from), toDate: inputValue(to), totalAmount: '', discount: '', advance: '', payMethod: 'Cash', remarks: '' };
 };
 
-const BookingFormDialog = ({ open, booking, mahals, defaultMahal, onClose, onSaved }) => {
+const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose, onSaved }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [form, setForm] = useState(emptyBooking());
@@ -110,10 +114,21 @@ const BookingFormDialog = ({ open, booking, mahals, defaultMahal, onClose, onSav
         payMethod: booking.payMethod || 'Cash',
         remarks: booking.remarks || '',
       });
+    } else if (draft) {
+      // Filled by AI from the owner's words: show what is still missing.
+      setForm({ ...emptyBooking(defaultMahal || (mahals.length === 1 ? mahals[0].id : '')), ...draftToForm(draft) });
+      const er = {};
+      (draft.missing || []).forEach((m) => {
+        if (m === 'hall') er.mahalId = 'Choose the hall';
+        if (m === 'customer name') er.customerName = 'Not in your note: please type it';
+        if (m === 'phone') er.primary_phone = 'Not in your note: please type it';
+        if (m === 'date') er.fromDate = 'Not in your note: please choose';
+      });
+      setErrors(er);
     } else {
       setForm(emptyBooking(defaultMahal || (mahals.length === 1 ? mahals[0].id : '')));
     }
-  }, [open, booking, defaultMahal, mahals]);
+  }, [open, booking, draft, defaultMahal, mahals]);
 
   const mahal = mahals.find((m) => m.id === Number(form.mahalId));
   const set = (k, transform) => (e) => {
@@ -181,6 +196,11 @@ const BookingFormDialog = ({ open, booking, mahals, defaultMahal, onClose, onSav
       </DialogTitle>
       <DialogContent dividers>
         <Stack spacing={2.5} useFlexGap>
+          {draft && !booking && (
+            <Alert severity="info" icon={<AutoAwesomeIcon />} component={motion.div} initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
+              Filled by AI from your note. Please check every detail before saving.{draft.note ? ` ${draft.note}` : ''}
+            </Alert>
+          )}
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <TextField fullWidth select required label="Mahal" value={form.mahalId} onChange={set('mahalId')} error={!!errors.mahalId} helperText={errors.mahalId}>
@@ -606,10 +626,15 @@ const MahalBookings = () => {
   const [openId, setOpenId] = useState(null);
   const [formOpen, setFormOpen] = useState(params.get('new') === '1');
   const [editing, setEditing] = useState(null);
+  const [draft, setDraft] = useState(null);
+  const [followCount, setFollowCount] = useState(0);
+  const aiEnabled = useAiEnabled();
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     listMyMahals().then((r) => r.ok && setMahals(r.data || []));
+    // Rule-based on the server (no AI cost): just the count for the badge.
+    listFollowUps().then((r) => r.ok && setFollowCount(r.data.open || 0));
   }, []);
 
   const load = useCallback(async (append = false, pageNo = 1) => {
@@ -647,11 +672,18 @@ const MahalBookings = () => {
   };
   const openNew = () => {
     setEditing(null);
+    setDraft(null);
+    setFormOpen(true);
+  };
+  const openDraft = (d) => {
+    setEditing(null);
+    setDraft(d);
     setFormOpen(true);
   };
   const saved = (b) => {
     setFormOpen(false);
     setEditing(null);
+    setDraft(null);
     refresh();
     if (b?.id) setOpenId(b.id);
   };
@@ -675,8 +707,10 @@ const MahalBookings = () => {
 
       <Card sx={{ mb: 2.5 }}>
         <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} justifyContent="space-between" sx={{ px: { xs: 1, md: 2 }, pt: 1, pb: { xs: 1.5, md: 1 } }} spacing={1.5}>
-          {view === 'calendar' ? (
-            <Typography fontWeight={600} sx={{ px: 1, py: 1.5 }}>Confirmed bookings and open requests</Typography>
+          {view === 'calendar' || view === 'followups' ? (
+            <Typography fontWeight={600} sx={{ px: 1, py: 1.5 }}>
+              {view === 'calendar' ? 'Confirmed bookings and open requests' : 'Follow-ups: who to message today'}
+            </Typography>
           ) : (
           <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable" allowScrollButtonsMobile sx={{ minHeight: 48 }}>
             {TABS.map((t) => (
@@ -708,6 +742,9 @@ const MahalBookings = () => {
             <ToggleButtonGroup size="small" exclusive value={view} onChange={(_, v) => v && setView(v)} aria-label="View">
               <ToggleButton value="list" aria-label="List"><ViewListIcon fontSize="small" /></ToggleButton>
               <ToggleButton value="calendar" aria-label="Calendar"><CalendarMonthIcon fontSize="small" /></ToggleButton>
+              <ToggleButton value="followups" aria-label="Follow-ups">
+                <Badge badgeContent={followCount} color="error" max={99}><ForumOutlinedIcon fontSize="small" /></Badge>
+              </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
         </Stack>
@@ -718,10 +755,16 @@ const MahalBookings = () => {
         )}
       </Card>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" onClick={refresh}>Retry</Button>}>{error}</Alert>}
+      {aiEnabled && !noMahals && view !== 'followups' && <AiQuickBooking mahalId={mahalId ? Number(mahalId) : undefined} onDraft={openDraft} />}
+
+      {error && view !== 'followups' && <Alert severity="error" sx={{ mb: 2 }} action={<Button color="inherit" onClick={refresh}>Retry</Button>}>{error}</Alert>}
 
       <AnimatePresence mode="wait">
-        {view === 'calendar' ? (
+        {view === 'followups' ? (
+          <motion.div key="follow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <FollowUpsPanel onCount={setFollowCount} />
+          </motion.div>
+        ) : view === 'calendar' ? (
           <motion.div key="cal" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             <CalendarView mahalId={mahalId} onOpen={setOpenId} reloadKey={reloadKey} />
           </motion.div>
@@ -758,9 +801,10 @@ const MahalBookings = () => {
       <BookingFormDialog
         open={formOpen}
         booking={editing}
+        draft={draft}
         mahals={mahals}
         defaultMahal={mahalId ? Number(mahalId) : undefined}
-        onClose={() => { setFormOpen(false); setEditing(null); if (params.get('new')) setParams({}, { replace: true }); }}
+        onClose={() => { setFormOpen(false); setEditing(null); setDraft(null); if (params.get('new')) setParams({}, { replace: true }); }}
         onSaved={saved}
       />
     </Box>

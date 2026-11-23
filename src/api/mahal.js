@@ -14,7 +14,7 @@ const token = () => {
   }
 };
 
-const call = async (config) => {
+export const call = async (config) => {
   try {
     const res = await axios({ baseURL: BASE_URL, timeout: 20000, ...config });
     const body = res.data || {};
@@ -34,7 +34,7 @@ const call = async (config) => {
   }
 };
 
-const auth = () => ({ Authorization: `Bearer ${token()}` });
+export const auth = () => ({ Authorization: `Bearer ${token()}` });
 const R = 'MahalBooking/';
 
 /** "2026-11-17" for a Date, in the visitor's local calendar (never shifted to UTC). */

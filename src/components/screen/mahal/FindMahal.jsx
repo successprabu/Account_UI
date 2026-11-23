@@ -29,6 +29,7 @@ import PublicFooter from '../../public/PublicFooter';
 import { EmptyState } from '../../ui';
 import { searchMahals, toDay } from '../../../api/mahal';
 import { EVENT_TYPES, MahalImage, fadeUp, placeLine, rupees } from '../../mahal/shared';
+import AiChat from '../../mahal/AiChat';
 
 const MotionCard = motion(Card);
 
@@ -313,6 +314,7 @@ const FindMahal = () => {
       </Container>
 
       <PublicFooter />
+      <AiChat />
     </Box>
   );
 };

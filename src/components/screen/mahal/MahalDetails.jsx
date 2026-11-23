@@ -39,6 +39,7 @@ import { EmptyState, notify } from '../../ui';
 import { getPublicMahal, requestBooking, toDay } from '../../../api/mahal';
 import { AvailabilityCalendar, EVENT_TYPES, MahalImage, daysBetween, fmtRange, placeLine, rupees } from '../../mahal/shared';
 import MahalGallery from '../../mahal/MahalGallery';
+import AiChat from '../../mahal/AiChat';
 
 const MAX_DAYS = 7;
 const emptyForm = { name: '', phone: '', email: '', eventType: '', guestCount: '', message: '', website: '' };
@@ -416,6 +417,7 @@ const MahalDetails = () => {
         )}
       </Container>
       <PublicFooter />
+      {mahal && <AiChat mahalId={mahal.id} hallName={mahal.mahalName} bottomOffset={narrow && !formVisible && !result ? 72 : 0} />}
       <AnimatePresence>
         {narrow && mahal && !formVisible && !result && (
           <Box component={motion.div} initial={{ y: 80 }} animate={{ y: 0 }} exit={{ y: 80 }} sx={{ position: 'fixed', left: 16, right: 16, bottom: 16, zIndex: 10 }}>
