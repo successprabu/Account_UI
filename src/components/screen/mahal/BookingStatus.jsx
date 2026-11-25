@@ -13,7 +13,7 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import AppHeader from '../../common/AppHeader';
 import PublicFooter from '../../public/PublicFooter';
 import { getBookingStatus } from '../../../api/mahal';
-import { createPayOrder, loadCheckout, verifyPay } from '../../../api/mahalOps';
+import { payOnline } from '../../mahal/payOnline';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { effectiveStatus, fmtRange, rupees } from '../../mahal/shared';
@@ -54,47 +54,17 @@ const BookingStatus = () => {
     if (res.ok) setBooking(res.data);
   };
 
-  // Pay online: an order on the hall's own Razorpay account, Razorpay Checkout, then the server checks the signature.
+  // Pay online into the hall's own Razorpay account; the booking is refreshed once paid.
   const pay = async () => {
     setPaying(true);
     setError('');
     setPaidMsg('');
-    const bookingRef = ref.trim().toUpperCase();
-    const order = await createPayOrder(bookingRef, phone.trim());
-    const Razorpay = order.ok ? await loadCheckout() : null;
-    if (!order.ok || !Razorpay) {
-      setPaying(false);
-      setError(order.ok ? tx('Could not open the payment window. Check your connection and try again.') : order.message);
-      return;
-    }
-    const o = order.data;
-    const rzp = new Razorpay({
-      key: o.keyId,
-      order_id: o.orderId,
-      amount: Math.round(o.amount * 100),
-      currency: o.currency,
-      name: o.hallName,
-      description: tx('Booking {{ref}}', { ref: bookingRef }),
-      prefill: { name: o.customerName, contact: o.phone, email: o.email || undefined },
-      theme: { color: '#7F1D1D' },
-      modal: { ondismiss: () => setPaying(false) },
-      handler: async (r) => {
-        const res = await verifyPay({
-          bookingRef,
-          phone: phone.trim(),
-          razorpayOrderId: r.razorpay_order_id,
-          razorpayPaymentId: r.razorpay_payment_id,
-          razorpaySignature: r.razorpay_signature,
-        });
-        setPaying(false);
-        if (res.ok) {
-          setPaidMsg(res.message);
-          refresh();
-        } else setError(res.message);
-      },
-    });
-    rzp.on('payment.failed', () => setError(tx('The payment did not go through. No money was taken. Please try again.')));
-    rzp.open();
+    const r = await payOnline({ bookingRef: ref.trim().toUpperCase(), phone: phone.trim(), tx });
+    setPaying(false);
+    if (r.ok) {
+      setPaidMsg(r.message);
+      refresh();
+    } else if (!r.cancelled) setError(r.message);
   };
 
   const submit = async (e) => {

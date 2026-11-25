@@ -1,3 +1,6 @@
+import { payOnline } from '../../mahal/payOnline';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTx } from '../../../language/site';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
@@ -60,8 +63,22 @@ const Fact = ({ icon, label, value }) => (
 );
 
 /** Success panel shown after the request is saved. */
-const RequestSent = ({ result, mahal, range, onAnother }) => {
+const RequestSent = ({ result, mahal, range, phone, onAnother }) => {
   const tx = useTx();
+  const [paying, setPaying] = useState(false);
+  const [paid, setPaid] = useState(null); // { message, status } once paid
+  const [payError, setPayError] = useState('');
+  // What is paid now: the hall's advance, or the whole rent when the hall asks no advance.
+  const payAmount = mahal.advanceAmount > 0 ? Math.min(mahal.advanceAmount, result.totalAmount || mahal.advanceAmount) : result.totalAmount;
+  const canPay = mahal.payOnline && result.status === 'Pending' && payAmount > 0 && result.bookingRef !== 'MB000000';
+  const pay = async () => {
+    setPaying(true);
+    setPayError('');
+    const r = await payOnline({ bookingRef: result.bookingRef, phone, tx });
+    setPaying(false);
+    if (r.ok) setPaid({ message: r.message, status: r.data?.status });
+    else if (!r.cancelled) setPayError(r.message);
+  };
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(result.bookingRef);
@@ -75,7 +92,7 @@ const RequestSent = ({ result, mahal, range, onAnother }) => {
       <motion.div initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 15, delay: 0.1 }}>
         <CheckCircleIcon sx={{ fontSize: 72, color: 'success.main' }} />
       </motion.div>
-      <Typography variant="h5" fontWeight={700}>{tx("Request sent")}</Typography>
+      <Typography variant="h5" fontWeight={700}>{tx(paid?.status === 'Confirmed' ? 'Booking confirmed' : 'Request sent')}</Typography>
       <Typography color="text.secondary" sx={{ maxWidth: 360 }}>
         {mahal.mahalName} will call you to confirm {fmtRange(range.from, range.to)}. Your booking is confirmed only after the hall accepts it.
       </Typography>
@@ -89,6 +106,23 @@ const RequestSent = ({ result, mahal, range, onAnother }) => {
         </Stack>
       </Box>
       {result.totalAmount > 0 && <Typography variant="body2">{tx("Estimated hall rent: ")}<b>{rupees(result.totalAmount)}</b></Typography>}
+      {paid && <Alert severity="success" sx={{ width: '100%', maxWidth: 400 }}>{tx(paid.message)}</Alert>}
+      {canPay && !paid && (
+        <Box component={motion.div} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+          sx={{ width: '100%', maxWidth: 400, p: 2, borderRadius: 3, border: 2, borderColor: 'success.main', bgcolor: 'action.hover' }}>
+          <Typography fontWeight={700}>{tx('Confirm your booking now')}</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>{tx('Pay the advance online and your dates are booked straight away.')}</Typography>
+          {payError && <Alert severity="error" sx={{ mb: 1.5, textAlign: 'left' }}>{tx(payError)}</Alert>}
+          <Button fullWidth size="large" variant="contained" color="success" disabled={paying} onClick={pay}
+            startIcon={paying ? <CircularProgress size={18} color="inherit" /> : <CreditCardIcon />}>
+            {tx('Pay {{amount}} online', { amount: rupees(payAmount) })}
+          </Button>
+          <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center" sx={{ mt: 1, color: 'text.secondary' }}>
+            <LockOutlinedIcon sx={{ fontSize: 16 }} />
+            <Typography variant="caption">{tx('UPI, card or net banking, paid straight to the hall.')}</Typography>
+          </Stack>
+        </Box>
+      )}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
         <Button component={RouterLink} to={`/mahals/status?ref=${result.bookingRef}`} variant="contained">{tx("Track my request")}</Button>
         <Button onClick={onAnother}>{tx("Request other dates")}</Button>
@@ -328,7 +362,7 @@ const MahalDetails = () => {
               <Card ref={formRef} id="book" component={motion.div} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.1 }} sx={{ p: { xs: 2, md: 3 }, position: { md: 'sticky' }, top: { md: 88 }, boxShadow: theme.shadows[6] }}>
                 <AnimatePresence mode="wait">
                   {result ? (
-                    <RequestSent key="done" result={result} mahal={mahal} range={range} onAnother={another} />
+                    <RequestSent key="done" result={result} mahal={mahal} range={range} phone={form.phone} onAnother={another} />
                   ) : (
                     <Box key="form" component="form" noValidate onSubmit={submit}>
                       <Typography variant="h6" fontWeight={700}>{tx("Request a booking")}</Typography>
@@ -351,6 +385,11 @@ const MahalDetails = () => {
                                 <Typography variant="body2" sx={{ mt: 0.5 }}>
                                   {tx("Estimated rent ")}<b>{rupees(estimate)}</b>
                                   {mahal.advanceAmount > 0 && tx(' · advance {{amount}} to confirm', { amount: rupees(mahal.advanceAmount) })}
+                                  {mahal.payOnline && (
+                                    <Box component="span" sx={{ display: 'block', mt: 0.5, color: 'success.main', fontWeight: 600 }}>
+                                      {tx('You can pay the advance online right after sending the request.')}
+                                    </Box>
+                                  )}
                                 </Typography>
                               )}
                             </Box>
