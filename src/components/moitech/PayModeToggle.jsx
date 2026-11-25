@@ -29,7 +29,8 @@ export const useCurrentFunction = () => {
     const u = readUser();
     if (!u?.functionId) return;
     let live = true;
-    Promise.resolve(API_SERVICE.get(LIST_FUNCTION_API, { id: u.functionId, customer_id: u.customerID, function_name: '', current_page: 1, page_size: 50 }))
+    // async wrapper: a lookup that throws straight away (no network) still just means 'no QR'.
+    (async () => API_SERVICE.get(LIST_FUNCTION_API, { id: u.functionId, customer_id: u.customerID, function_name: '', current_page: 1, page_size: 50 }))()
       .then((r) => {
         const list = r?.data?.data?.functions || [];
         if (live) setFn(list.find((f) => f.id === u.functionId) || null);
