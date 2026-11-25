@@ -826,5 +826,6 @@
   "Payment could not be verified. If money was taken, contact us.": "ಪಾವತಿ ದೃಢೀಕರಿಸಲಾಗಲಿಲ್ಲ. ಹಣ ಕಡಿತವಾಗಿದ್ದರೆ ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ.",
   "Scan with any UPI app to give moi": "ಮೊಯ್ ನೀಡಲು ಯಾವುದೇ UPI ಆ್ಯಪ್‌ನಿಂದ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
   "Show UPI QR": "UPI QR ತೋರಿಸಿ",
-  "Stop AutoPay": "AutoPay ನಿಲ್ಲಿಸಿ"
+  "Stop AutoPay": "AutoPay ನಿಲ್ಲಿಸಿ",
+  "Please sign in. We will bring you back to pay for this plan.": "ದಯವಿಟ್ಟು ಸೈನ್ ಇನ್ ಮಾಡಿ. ಈ ಪ್ಲಾನ್‌ಗೆ ಪಾವತಿಸಲು ನಿಮ್ಮನ್ನು ಮತ್ತೆ ಇಲ್ಲಿಗೆ ಕರೆತರುತ್ತೇವೆ."
 }

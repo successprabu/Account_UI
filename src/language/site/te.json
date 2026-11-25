@@ -826,5 +826,6 @@
   "Payment could not be verified. If money was taken, contact us.": "చెల్లింపు నిర్ధారించలేకపోయాం. డబ్బు కట్ అయితే మమ్మల్ని సంప్రదించండి.",
   "Scan with any UPI app to give moi": "మొయ్ ఇవ్వడానికి ఏదైనా UPI యాప్‌తో స్కాన్ చేయండి",
   "Show UPI QR": "UPI QR చూపించు",
-  "Stop AutoPay": "AutoPay ఆపు"
+  "Stop AutoPay": "AutoPay ఆపు",
+  "Please sign in. We will bring you back to pay for this plan.": "దయచేసి సైన్ ఇన్ చేయండి. ఈ ప్లాన్‌కు చెల్లించడానికి మిమ్మల్ని తిరిగి ఇక్కడికే తీసుకొస్తాం."
 }

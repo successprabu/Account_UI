@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AndroidIcon from '@mui/icons-material/Android';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { safeNext } from "./safeNext";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
@@ -63,7 +64,7 @@ const Login = () => {
         navigate("/login");
       } else {
         // Already signed in: go straight to the dashboard instead of asking again.
-        navigate("/dashboard", { replace: true });
+        navigate(safeNext(params.get("next")), { replace: true });
       }
     }
   }, [navigate]);
@@ -171,7 +172,7 @@ const Login = () => {
 
           if (decodedToken.exp > currentTime) {
             localStorage.setItem("user", JSON.stringify(data.data));
-            navigate("/dashboard");
+            navigate(safeNext(params.get("next")), { replace: true });
           } else {
             setLoginError(t("session_expired"));
           }

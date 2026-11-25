@@ -1,5 +1,5 @@
 import { useTx } from '../../language/site';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
@@ -83,6 +83,12 @@ const PricingPage = () => {
   }, []);
   useEffect(() => { loadAutoPay(); }, [loadAutoPay]);
 
+  // Signed out: send to login with the chosen plan in ?next=, so payment opens as soon as they are back.
+  const goSignIn = (plan) => {
+    const back = `/pricing?product=${product}&plan=${plan.id}&cycle=${plan.cycle}&way=${payWay}`;
+    navigate(`/login?next=${encodeURIComponent(back)}`);
+  };
+
   const autoPayOn = autoPay && ['created', 'authenticated', 'active', 'pending'].includes(autoPay.status);
 
   const stopAutoPay = async () => {
@@ -98,8 +104,8 @@ const PricingPage = () => {
   const handleAutoPay = async (plan) => {
     const user = readUser();
     if (!user?.primary_phone) {
-      notify.info(tx('Please sign in to your account first, then choose your plan.'));
-      navigate('/login');
+      notify.info(tx('Please sign in. We will bring you back to pay for this plan.'));
+      goSignIn(plan);
       return;
     }
     setLoading(true);
@@ -250,6 +256,24 @@ const PricingPage = () => {
   ];
 
   const plans = product === 'mahal' ? mahalPlans : moitechPlans;
+
+  // Back from sign-in with ?plan=: pick the same cycle and way, then open payment once.
+  const resumed = useRef(false);
+  const wantPlan = params.get('plan');
+  const wantCycle = params.get('cycle') === 'yearly' ? 'yearly' : 'monthly';
+  const wantWay = params.get('way') === 'auto' ? 'auto' : 'once';
+  useEffect(() => {
+    if (!wantPlan || resumed.current || !readUser()?.primary_phone) return;
+    if (billingCycle !== wantCycle) { setBillingCycle(wantCycle); return; }
+    if (payWay !== wantWay) { setPayWay(wantWay); return; }
+    const plan = plans.find((p) => p.id === wantPlan && p.cycle !== 'trial');
+    resumed.current = true;
+    setParams(product === 'moitech' ? {} : { product }, { replace: true });
+    if (!plan) return;
+    setSelectedPlan(plan.id);
+    loadCheckout().then(() => (wantWay === 'auto' ? handleAutoPay : handlePayment)(plan));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wantPlan, billingCycle, payWay]);
   const switchProduct = (_, id) => {
     const tab = PRODUCT_TABS.find((p) => p.id === id);
     if (!tab || tab.href) return;
@@ -305,8 +329,8 @@ const PricingPage = () => {
     // The subscription is activated for the signed-in account, so payment needs a login.
     const user = readUser();
     if (!user?.primary_phone) {
-      notify.info(tx('Please sign in to your account first, then choose your plan.'));
-      navigate('/login');
+      notify.info(tx('Please sign in. We will bring you back to pay for this plan.'));
+      goSignIn(plan);
       return;
     }
     const cycle = plan.cycle;
@@ -340,7 +364,8 @@ const PricingPage = () => {
 
       // Initialize Razorpay
       const options = {
-        key: REACT_APP_RAZORPAY_KEY_ID,
+        // The key the server made the order with (Azure Razorpay__KeyId); the built-in one only as a fallback.
+        key: nested.key || nested.Key || orderData.key || REACT_APP_RAZORPAY_KEY_ID,
         amount: amountFromResponse,
         currency: 'INR',
         name: 'MySuccess.Com',
