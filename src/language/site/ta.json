@@ -843,5 +843,8 @@
   "Turn on AutoPay": "AutoPay இயக்கு",
   "See all plans": "எல்லா திட்டங்களும்",
   "Your plan ended on {{date}}.": "உங்கள் திட்டம் {{date}} அன்று முடிந்தது.",
-  "Your plan ends on {{date}}.": "உங்கள் திட்டம் {{date}} அன்று முடிகிறது."
+  "Your plan ends on {{date}}.": "உங்கள் திட்டம் {{date}} அன்று முடிகிறது.",
+  "Could not make the invoice PDF. Please try again.": "விலைப்பட்டியல் PDF உருவாக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+  "Could not open WhatsApp.": "WhatsApp திறக்க முடியவில்லை.",
+  "Done": "முடிந்தது"
 }

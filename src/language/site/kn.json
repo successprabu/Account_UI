@@ -843,5 +843,8 @@
   "Turn on AutoPay": "AutoPay ಆನ್ ಮಾಡಿ",
   "See all plans": "ಎಲ್ಲಾ ಪ್ಲಾನ್‌ಗಳು",
   "Your plan ended on {{date}}.": "ನಿಮ್ಮ ಪ್ಲಾನ್ {{date}} ರಂದು ಮುಗಿದಿದೆ.",
-  "Your plan ends on {{date}}.": "ನಿಮ್ಮ ಪ್ಲಾನ್ {{date}} ರಂದು ಮುಗಿಯುತ್ತದೆ."
+  "Your plan ends on {{date}}.": "ನಿಮ್ಮ ಪ್ಲಾನ್ {{date}} ರಂದು ಮುಗಿಯುತ್ತದೆ.",
+  "Could not make the invoice PDF. Please try again.": "ಇನ್‌ವಾಯ್ಸ್ PDF ಮಾಡಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "Could not open WhatsApp.": "WhatsApp ತೆರೆಯಲಾಗಲಿಲ್ಲ.",
+  "Done": "ಮುಗಿದಿದೆ"
 }
