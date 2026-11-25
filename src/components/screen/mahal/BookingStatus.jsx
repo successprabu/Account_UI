@@ -13,6 +13,9 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import AppHeader from '../../common/AppHeader';
 import PublicFooter from '../../public/PublicFooter';
 import { getBookingStatus } from '../../../api/mahal';
+import { createPayOrder, loadCheckout, verifyPay } from '../../../api/mahalOps';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { effectiveStatus, fmtRange, rupees } from '../../mahal/shared';
 
 const LOOK = {
@@ -39,13 +42,64 @@ const BookingStatus = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [booking, setBooking] = useState(null);
+  const [paying, setPaying] = useState(false);
+  const [paidMsg, setPaidMsg] = useState('');
 
   useEffect(() => {
     document.title = 'Check my mahal booking';
   }, []);
 
+  const refresh = async () => {
+    const res = await getBookingStatus(ref.trim().toUpperCase(), phone.trim());
+    if (res.ok) setBooking(res.data);
+  };
+
+  // Pay online: an order on the hall's own Razorpay account, Razorpay Checkout, then the server checks the signature.
+  const pay = async () => {
+    setPaying(true);
+    setError('');
+    setPaidMsg('');
+    const bookingRef = ref.trim().toUpperCase();
+    const order = await createPayOrder(bookingRef, phone.trim());
+    const Razorpay = order.ok ? await loadCheckout() : null;
+    if (!order.ok || !Razorpay) {
+      setPaying(false);
+      setError(order.ok ? tx('Could not open the payment window. Check your connection and try again.') : order.message);
+      return;
+    }
+    const o = order.data;
+    const rzp = new Razorpay({
+      key: o.keyId,
+      order_id: o.orderId,
+      amount: Math.round(o.amount * 100),
+      currency: o.currency,
+      name: o.hallName,
+      description: tx('Booking {{ref}}', { ref: bookingRef }),
+      prefill: { name: o.customerName, contact: o.phone, email: o.email || undefined },
+      theme: { color: '#7F1D1D' },
+      modal: { ondismiss: () => setPaying(false) },
+      handler: async (r) => {
+        const res = await verifyPay({
+          bookingRef,
+          phone: phone.trim(),
+          razorpayOrderId: r.razorpay_order_id,
+          razorpayPaymentId: r.razorpay_payment_id,
+          razorpaySignature: r.razorpay_signature,
+        });
+        setPaying(false);
+        if (res.ok) {
+          setPaidMsg(res.message);
+          refresh();
+        } else setError(res.message);
+      },
+    });
+    rzp.on('payment.failed', () => setError(tx('The payment did not go through. No money was taken. Please try again.')));
+    rzp.open();
+  };
+
   const submit = async (e) => {
     e.preventDefault();
+    setPaidMsg('');
     if (!ref.trim() || !phone.trim()) {
       setError(tx('Enter your booking reference and phone number.'));
       return;
@@ -110,6 +164,19 @@ const BookingStatus = () => {
                     </>
                   )}
                 </Stack>
+                {paidMsg && <Alert severity="success" sx={{ mt: 3 }}>{tx(paidMsg)}</Alert>}
+                {booking.payNow > 0 && (
+                  <Box sx={{ mt: 3 }}>
+                    <Button fullWidth size="large" variant="contained" color="success" disabled={paying} onClick={pay}
+                      startIcon={paying ? <CircularProgress size={18} color="inherit" /> : <CreditCardIcon />}>
+                      {tx('Pay {{amount}} online', { amount: rupees(booking.payNow) })}
+                    </Button>
+                    <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center" sx={{ mt: 1, color: 'text.secondary' }}>
+                      <LockOutlinedIcon sx={{ fontSize: 16 }} />
+                      <Typography variant="caption">{tx(booking.status === 'Pending' ? 'UPI, card or net banking. Paying the advance confirms your booking.' : 'UPI, card or net banking, paid straight to the hall.')}</Typography>
+                    </Stack>
+                  </Box>
+                )}
                 {booking.hallPhone && (
                   <Button sx={{ mt: 3 }} fullWidth variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${booking.hallPhone}`}>
                     {tx("Call the hall")}

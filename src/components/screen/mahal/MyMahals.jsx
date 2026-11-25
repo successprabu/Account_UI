@@ -40,6 +40,9 @@ import { PageHeader, EmptyState, notify } from '../../ui';
 import { getDistricts, getStates, listMyMahals, saveMahal } from '../../../api/mahal';
 import { AMENITIES, EVENT_TYPES, MahalImage, fadeUp, placeLine, rupees } from '../../mahal/shared';
 import PhotoManager, { uploadQueued } from '../../mahal/PhotoManager';
+import BillingDialog from '../../mahal/BillingDialog';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import { useTx } from '../../../language/site';
 
 const blank = {
   id: 0,
@@ -258,6 +261,8 @@ export const MahalFormDialog = ({ open, mahal, onClose, onSaved }) => {
 
 /** Owner: the halls they manage. */
 const MyMahals = () => {
+  const tx = useTx();
+  const [billing, setBilling] = useState(null);
   const [params, setParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -353,6 +358,9 @@ const MyMahals = () => {
                   <Stack direction="row" spacing={1} sx={{ p: 1.25 }}>
                     <Button size="small" startIcon={<EditOutlinedIcon />} onClick={() => { setEditing(m); setOpen(true); }}>Edit</Button>
                     <Button size="small" component={RouterLink} to={`/mahal-bookings?mahal=${m.id}`} startIcon={<EventNoteOutlinedIcon />}>Bookings</Button>
+                    <Tooltip title={tx('GST invoice and online payment')}>
+                      <Button size="small" startIcon={<ReceiptOutlinedIcon />} onClick={() => setBilling(m)} color={m.payOnline || m.gstEnabled ? 'success' : 'primary'}>{tx('Billing')}</Button>
+                    </Tooltip>
                     {m.isOnlineBooking && m.isActive && (
                       <Tooltip title="Open public page">
                         <IconButton size="small" component={RouterLink} to={`/mahals/${m.id}`} target="_blank" sx={{ ml: 'auto' }} aria-label="Open public page"><OpenInNewIcon fontSize="small" /></IconButton>
@@ -367,6 +375,8 @@ const MyMahals = () => {
       )}
 
       <MahalFormDialog open={open} mahal={editing} onClose={close} onSaved={saved} />
+      <BillingDialog open={!!billing} mahal={billing} onClose={() => setBilling(null)}
+        onSaved={(nm) => { setBilling(null); setMahals((list) => list.map((x) => (x.id === nm.id ? { ...x, ...nm } : x))); }} />
     </Box>
   );
 };

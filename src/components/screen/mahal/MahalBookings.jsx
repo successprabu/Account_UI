@@ -53,6 +53,11 @@ import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { EmptyState, PageHeader, StatusChip, notify } from '../../ui';
 import { getBooking, listBookings, listMyMahals, recordPayment, saveBooking, setBookingStatus, toDay, toLocalIso } from '../../../api/mahal';
+import { getInvoice, isStaffUser, markReminder } from '../../../api/mahalOps';
+import { hallMessage, printInvoice, waLink } from '../../mahal/hallMessages';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
+import { useTx } from '../../../language/site';
 import { AiQuickBooking, FollowUpsPanel, draftToForm, useAiEnabled } from '../../mahal/AiBooking';
 import { listFollowUps } from '../../../api/mahalAi';
 import { AvailabilityCalendar, EVENT_TYPES, STATUS, effectiveStatus, eventMeta, fadeUp, fmtDate, fmtRange, rupees } from '../../mahal/shared';
@@ -334,6 +339,27 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
   const [busy, setBusy] = useState(false);
   const [ask, setAsk] = useState(null); // 'Rejected' | 'Cancelled' | 'Completed' | 'Confirmed'
   const [paying, setPaying] = useState(false);
+  const [invoicing, setInvoicing] = useState(false);
+  const tx = useTx();
+  const staff = isStaffUser();
+  const lang = (document.documentElement.lang || localStorage.getItem('appLanguage') || 'en').startsWith('ta') ? 'ta' : 'en';
+
+  // Invoice: numbered the first time, then opened as a printable page (Save as PDF) or sent on WhatsApp.
+  const invoice = async (share) => {
+    setInvoicing(true);
+    const res = await getInvoice(b.id);
+    setInvoicing(false);
+    if (!res.ok) {
+      notify.error(tx(res.message));
+      return;
+    }
+    if (share) window.open(waLink(b.primary_phone, hallMessage('invoice', res.data, lang)), '_blank', 'noopener,noreferrer');
+    else if (!printInvoice(res.data)) notify.error(tx('Allow pop-ups for this site to open the invoice.'));
+  };
+  const offerMoitech = () => {
+    window.open(waLink(b.primary_phone, hallMessage('moitech', b, lang)), '_blank', 'noopener,noreferrer');
+    markReminder(b.id, 'moitech');
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -442,6 +468,18 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
               {live && b.balance > 0 && (
                 <Button sx={{ mt: 1.5 }} fullWidth variant="outlined" startIcon={<PaymentsOutlinedIcon />} onClick={() => setPaying(true)}>Record payment</Button>
               )}
+              {live && (
+                <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                  <Button fullWidth variant="outlined" startIcon={<ReceiptOutlinedIcon />} disabled={invoicing} onClick={() => invoice(false)}>{tx('Invoice')}</Button>
+                  <Button fullWidth variant="outlined" color="success" startIcon={<WhatsAppIcon />} disabled={invoicing} onClick={() => invoice(true)}>{tx('Send invoice')}</Button>
+                </Stack>
+              )}
+              {b.invoiceNo && <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>{tx('Invoice no. {{n}}', { n: b.invoiceNo })}</Typography>}
+              {b.status === 'Confirmed' && s !== 'Completed' && (
+                <Button sx={{ mt: 1 }} fullWidth size="small" color="secondary" startIcon={<VolunteerActivismOutlinedIcon />} onClick={offerMoitech}>
+                  {tx('Offer Moitech free to this family')}
+                </Button>
+              )}
             </Box>
 
             {b.remarks && (
@@ -455,7 +493,7 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
             <Divider sx={{ my: 3 }} />
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               {b.status === 'Confirmed' && s === 'Completed' && <Button startIcon={<TaskAltIcon />} disabled={busy} onClick={() => change('Completed')}>Mark completed</Button>}
-              {b.status === 'Confirmed' && <Button color="error" startIcon={<EventBusyOutlinedIcon />} disabled={busy} onClick={() => setAsk('Cancelled')}>Cancel booking</Button>}
+              {b.status === 'Confirmed' && !staff && <Button color="error" startIcon={<EventBusyOutlinedIcon />} disabled={busy} onClick={() => setAsk('Cancelled')}>Cancel booking</Button>}
               {b.status === 'Cancelled' && <Button startIcon={<UndoIcon />} disabled={busy} onClick={() => change('Confirmed')}>Restore booking</Button>}
               {b.status === 'Rejected' && <Button startIcon={<UndoIcon />} disabled={busy} onClick={() => change('Pending')}>Reopen request</Button>}
               {b.status === 'Completed' && <Button startIcon={<UndoIcon />} disabled={busy} onClick={() => change('Confirmed')}>Mark not completed</Button>}

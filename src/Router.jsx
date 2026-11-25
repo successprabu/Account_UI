@@ -106,6 +106,8 @@ const MahalBookings = lazy(() =>
   import("./components/screen/mahal/MahalBookings")
 );
 const MyMahals = lazy(() => import("./components/screen/mahal/MyMahals"));
+const MahalExpenses = lazy(() => import("./components/screen/mahal/MahalExpenses"));
+const MahalStaff = lazy(() => import("./components/screen/mahal/MahalStaff"));
 const FindMahal = lazy(() => import("./components/screen/mahal/FindMahal"));
 const MahalDetails = lazy(() => import("./components/screen/mahal/MahalDetails"));
 const MahalBookingStatus = lazy(() => import("./components/screen/mahal/BookingStatus"));
@@ -313,7 +315,7 @@ const Router = () => {
           <Route
             path="mahal-bookings"
             element={
-              <ProtectedRoute allowedRoles={["SU","MU"]}>
+              <ProtectedRoute allowedRoles={["SU","MU","MS"]}>
                 <MahalBookings />
               </ProtectedRoute>
             }
@@ -327,6 +329,22 @@ const Router = () => {
             }
           />
           {/* Old addresses of the mahal screens */}
+          <Route
+            path="mahal-expenses"
+            element={
+              <ProtectedRoute allowedRoles={["SU","MU","MS"]}>
+                <MahalExpenses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="mahal-staff"
+            element={
+              <ProtectedRoute allowedRoles={["MU"]}>
+                <MahalStaff />
+              </ProtectedRoute>
+            }
+          />
           <Route path="add-new-mahal" element={<Navigate to="/my-mahals?new=1" replace />} />
           <Route path="mahal-booking" element={<Navigate to="/mahal-bookings?new=1" replace />} />
           <Route path="mahal-booking-list" element={<Navigate to="/mahal-bookings" replace />} />

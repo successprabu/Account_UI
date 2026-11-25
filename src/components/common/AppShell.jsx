@@ -1,3 +1,4 @@
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import { useEffect, useMemo, useState } from 'react';
 import { NavLink, useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -57,16 +58,19 @@ const MINI = 76;
 const COLLAPSE_KEY = 'ms-sidebar-collapsed';
 
 /**
- * Navigation by role. roles: SU super admin, AU admin, NU normal user, MU mahal admin.
+ * Navigation by role. roles: SU super admin, AU admin, NU normal user, MU mahal admin, MS mahal staff.
  * Items are links; groups hold children.
  */
 const NAV = [
-  { key: 'dashboard', to: '/dashboard', icon: <DashboardOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
+  { key: 'dashboard', to: '/dashboard', icon: <DashboardOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU', 'MS'] },
   { key: 'Clients', to: '/client-list', icon: <PeopleAltOutlinedIcon />, roles: ['SU'] },
   { key: 'registerClient', fallback: 'Register client', to: '/register-client', icon: <PersonAddAltOutlinedIcon />, roles: ['SU'] },
   { key: 'enquiries', fallback: 'Enquiries', to: '/enquiries', icon: <MarkEmailUnreadOutlinedIcon />, roles: ['SU'] },
-  { key: 'mahalBookings', fallback: 'Bookings', to: '/mahal-bookings', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU'] },
+  { key: 'mahalBookings', fallback: 'Bookings', to: '/mahal-bookings', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU', 'MS'] },
   { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
+  { key: 'mahalExpenses', fallback: 'Expenses and profit', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['SU', 'MU'] },
+  { key: 'mahalExpensesStaff', fallback: 'Expenses', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['MS'] },
+  { key: 'mahalStaff', fallback: 'Staff logins', to: '/mahal-staff', icon: <BadgeOutlinedIcon />, roles: ['MU'] },
   // Mahal admins add Moitech users under their own account; super admins use Register client.
   { key: 'addMoiTechCustomer', to: '/add-moitech-customer', icon: <PersonAddAltOutlinedIcon />, roles: ['MU'] },
   {
@@ -106,15 +110,15 @@ const NAV = [
   },
   { key: 'moiGiven', fallback: 'Moi we gave', to: '/moi-given', icon: <RedeemOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'history', fallback: 'History', to: '/history', icon: <HistoryIcon />, roles: ['SU', 'AU'] },
-  { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU'] },
+  { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU', 'MS'] },
   // One entry per role, each opening that role's guide (the super admin gets the list of all guides).
   { key: 'userGuide', fallback: 'User guide', to: '/user-guide/moitech', icon: <MenuBookOutlinedIcon />, roles: ['AU', 'NU'] },
-  { key: 'userGuide', fallback: 'User guide', to: '/user-guide/mahal', icon: <MenuBookOutlinedIcon />, roles: ['MU'] },
+  { key: 'userGuide', fallback: 'User guide', to: '/user-guide/mahal', icon: <MenuBookOutlinedIcon />, roles: ['MU', 'MS'] },
   { key: 'userGuide', fallback: 'User guides', to: '/user-guide', icon: <MenuBookOutlinedIcon />, roles: ['SU'] },
 ];
 
 /** The user guide for a role. */
-export const guideFor = (userType) => (userType === 'MU' ? '/user-guide/mahal' : userType === 'SU' ? '/user-guide' : '/user-guide/moitech');
+export const guideFor = (userType) => (userType === 'MU' || userType === 'MS' ? '/user-guide/mahal' : userType === 'SU' ? '/user-guide' : '/user-guide/moitech');
 
 const readUser = () => {
   try {

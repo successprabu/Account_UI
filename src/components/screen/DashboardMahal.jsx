@@ -17,6 +17,9 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { EmptyState } from '../ui';
 import { DashboardPage } from './dashboard/QuickActions';
 import { getMahalSummary, toDay } from '../../api/mahal';
+import RemindersCard from '../mahal/RemindersCard';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import { useTx } from '../../language/site';
 import { eventMeta, fadeUp, fmtRange, rupees } from '../mahal/shared';
 
 const readUser = () => {
@@ -96,6 +99,7 @@ const ChartTip = ({ active, payload }) => {
 
 /** Mahal admin dashboard: live figures, requests to act on and upcoming events. */
 const DashboardMahal = () => {
+  const tx = useTx();
   const { t } = useTranslation();
   const theme = useTheme();
   const user = useMemo(readUser, []);
@@ -154,7 +158,7 @@ const DashboardMahal = () => {
           <Grid container spacing={2.5} sx={{ mb: 3 }}>
             <Grid item xs={6} lg={3}><Stat index={0} loading={loading} label="New requests" value={s?.pendingRequests} icon={<MarkEmailUnreadOutlinedIcon />} color="warning" to="/mahal-bookings?tab=Pending" hint="Waiting for your answer" pulse={s?.pendingRequests > 0} /></Grid>
             <Grid item xs={6} lg={3}><Stat index={1} loading={loading} label="Upcoming events" value={s?.upcomingEvents} icon={<EventAvailableOutlinedIcon />} color="primary" to="/mahal-bookings" hint="Confirmed bookings ahead" /></Grid>
-            <Grid item xs={6} lg={3}><Stat index={2} loading={loading} label="This month's rent" value={s?.monthRevenue} format={money} icon={<CurrencyRupeeIcon />} color="success" hint={`${s?.monthBookings ?? 0} bookings this month`} /></Grid>
+            {!s?.isStaff && <Grid item xs={6} lg={3}><Stat index={2} loading={loading} label="This month's rent" value={s?.monthRevenue} format={money} icon={<CurrencyRupeeIcon />} color="success" hint={`${s?.monthBookings ?? 0} bookings this month`} /></Grid>}
             <Grid item xs={6} lg={3}><Stat index={3} loading={loading} label="Balance to collect" value={s?.balanceDue} format={money} icon={<AccountBalanceWalletOutlinedIcon />} color="info" hint="From confirmed bookings" /></Grid>
           </Grid>
 
@@ -195,7 +199,11 @@ const DashboardMahal = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} lg={5}>
+              <RemindersCard />
+            </Grid>
+
+            <Grid item xs={12} lg={7}>
               <Card component={motion.div} variants={fadeUp} custom={6} initial="hidden" animate="show" sx={{ p: 2.5 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography variant="h6" fontWeight={700}>Coming up</Typography>
@@ -204,7 +212,7 @@ const DashboardMahal = () => {
                 {loading ? <Stack spacing={1} sx={{ mt: 1 }}>{[0, 1, 2].map((i) => <Skeleton key={i} height={52} />)}</Stack>
                   : s?.upcoming?.length ? (
                     <Grid container columnSpacing={4}>
-                      {s.upcoming.map((b, i) => <Grid item xs={12} md={6} key={b.id}><BookingLine b={b} index={i} /></Grid>)}
+                      {s.upcoming.map((b, i) => <Grid item xs={12} key={b.id}><BookingLine b={b} index={i} /></Grid>)}
                     </Grid>
                   ) : <EmptyState compact title="No upcoming events" description="Confirmed bookings will show here." />}
               </Card>
@@ -212,8 +220,9 @@ const DashboardMahal = () => {
           </Grid>
 
           <Stack direction="row" spacing={1} sx={{ mt: 3 }} flexWrap="wrap" useFlexGap>
-            <Button component={RouterLink} to="/my-mahals" startIcon={<ApartmentOutlinedIcon />}>My mahals ({s?.mahalCount ?? 0})</Button>
-            <Button component={RouterLink} to="/add-moitech-customer">{t('addMoiTechCustomer')}</Button>
+            {!s?.isStaff && <Button component={RouterLink} to="/my-mahals" startIcon={<ApartmentOutlinedIcon />}>My mahals ({s?.mahalCount ?? 0})</Button>}
+            <Button component={RouterLink} to="/mahal-expenses" startIcon={<ReceiptLongOutlinedIcon />}>{tx(s?.isStaff ? 'Expenses' : 'Expenses and profit')}</Button>
+            {!s?.isStaff && <Button component={RouterLink} to="/add-moitech-customer">{t('addMoiTechCustomer')}</Button>}
             <Button component={RouterLink} to="/settings">{t('Theme Settings', { defaultValue: 'Theme settings' })}</Button>
           </Stack>
         </>

@@ -33,8 +33,9 @@ const RoleBasedDashboard = () => {
         </ProtectedRoute>
       );
       case 'MU':
+      case 'MS':
         return (
-          <ProtectedRoute allowedRoles={['MU']}>
+          <ProtectedRoute allowedRoles={['MU', 'MS']}>
             <DashboardMahal />
           </ProtectedRoute>
           
