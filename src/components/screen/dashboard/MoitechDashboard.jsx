@@ -17,6 +17,7 @@ import { DASHBOARD_DETAIL_API, DASHBOARD_SUMMARY_API } from '../../common/Common
 import { API_SERVICE } from '../../common/CommonMethod';
 import { StatCard, SectionCard, EmptyState } from '../../ui';
 import QuickActions, { DashboardPage } from './QuickActions';
+import FamilyStrip from '../../moitech/FamilyStrip';
 
 const inr = (n) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(Number(n) || 0);
 const compact = (n) => new Intl.NumberFormat('en-IN', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(n) || 0);
@@ -115,6 +116,8 @@ const MoitechDashboard = ({ role = 'NU' }) => {
           <StatCard label={t('dashbordTotalPlaces')} value={(summary?.totalPlaces || 0).toLocaleString('en-IN')} icon={<PlaceOutlinedIcon />} color="success" loading={loading && !summary} />
         </Grid>
       </Grid>
+
+      <FamilyStrip role={role} />
 
       <Typography variant="h5" component="h2" sx={{ mb: 1.5 }}>
         {t('quickActions', { defaultValue: 'Quick actions' })}

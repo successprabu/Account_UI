@@ -57,6 +57,9 @@ const ClientList = lazy(() =>
 );
 const GuestEntries = lazy(() => import("./components/screen/GuestEntries"));
 const GuestMoi = lazy(() => import("./components/screen/GuestMoi"));
+const LiveTotals = lazy(() => import("./components/screen/LiveTotals"));
+const ThankGivers = lazy(() => import("./components/screen/ThankGivers"));
+const MoiReturn = lazy(() => import("./components/screen/MoiReturn"));
 const Transaction = lazy(() =>
   import("./components/screen/Transaction")
 );
@@ -151,6 +154,7 @@ const Router = () => {
         <Route path="user-guide/:id" element={<UserGuidePage />} />
         <Route path="mahals" element={<FindMahal />} />
         <Route path="moi/:token" element={<GuestMoi />} />
+        <Route path="live/:token" element={<LiveTotals />} />
         <Route path="mahals/status" element={<MahalBookingStatus />} />
         <Route path="mahals/review" element={<MahalReview />} />
         <Route path="mahals/:id" element={<MahalDetails />} />
@@ -318,6 +322,22 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["AU", "MU"]}>
                 <MyPlan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="moi-return"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU"]}>
+                <MoiReturn />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="thank-givers"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <ThankGivers />
               </ProtectedRoute>
             }
           />

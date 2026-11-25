@@ -189,5 +189,7 @@
   "savedThisSession": "इस स्क्रीन पर {{count}} सहेजे गए",
   "functionSelected": "नई एंट्री {{name}} के अंतर्गत सहेजी जाएँगी",
   "editingFunction": "{{name}} संपादित हो रहा है",
-  "guestEntries": "अतिथि प्रविष्टियाँ"
+  "guestEntries": "अतिथि प्रविष्टियाँ",
+  "thankGivers": "धन्यवाद भेजें",
+  "moiReturn": "लौटाने वाला मोई"
 }

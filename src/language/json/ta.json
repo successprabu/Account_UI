@@ -301,5 +301,7 @@
   "savedThisSession": "இந்தத் திரையில் {{count}} சேமிக்கப்பட்டன",
   "functionSelected": "புதிய பதிவுகள் {{name}} கீழ் சேமிக்கப்படும்",
   "editingFunction": "{{name}} திருத்தப்படுகிறது",
-  "guestEntries": "விருந்தினர் பதிவுகள்"
+  "guestEntries": "விருந்தினர் பதிவுகள்",
+  "thankGivers": "நன்றி அனுப்பு",
+  "moiReturn": "திருப்ப வேண்டிய மொய்"
 }

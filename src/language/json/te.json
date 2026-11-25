@@ -183,5 +183,7 @@
   "savedThisSession": "ఈ స్క్రీన్‌లో {{count}} సేవ్ అయ్యాయి",
   "functionSelected": "కొత్త ఎంట్రీలు {{name}} కింద సేవ్ అవుతాయి",
   "editingFunction": "{{name}} ఎడిట్ అవుతోంది",
-  "guestEntries": "అతిథి నమోదులు"
+  "guestEntries": "అతిథి నమోదులు",
+  "thankGivers": "ధన్యవాదాలు పంపు",
+  "moiReturn": "తిరిగి ఇవ్వాల్సిన మొయ్"
 }
