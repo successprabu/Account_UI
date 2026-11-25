@@ -1337,5 +1337,12 @@
   "Your code": "നിങ്ങളുടെ കോഡ്",
   "Your partner account is paused. Please contact us.": "നിങ്ങളുടെ പങ്കാളി അക്കൗണ്ട് നിർത്തിവച്ചു. ബന്ധപ്പെടുക.",
   "Your share ({{n}}%)": "നിങ്ങളുടെ പങ്ക് ({{n}}%)",
-  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} സ്വർണ സമ്മാനങ്ങൾ ഭാരമില്ലാതെ രേഖപ്പെടുത്തി, മൂല്യം കണക്കാക്കിയില്ല."
+  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} സ്വർണ സമ്മാനങ്ങൾ ഭാരമില്ലാതെ രേഖപ്പെടുത്തി, മൂല്യം കണക്കാക്കിയില്ല.",
+  "Family tools": "കുടുംബ ഉപകരണങ്ങൾ",
+  "Camera": "ക്യാമറ",
+  "Please allow photos for this app in your phone settings.": "ഫോൺ ക്രമീകരണങ്ങളിൽ ഈ ആപ്പിന് ഫോട്ടോ അനുമതി നൽകുക.",
+  "Your details": "നിങ്ങളുടെ വിവരങ്ങൾ",
+  "Become a partner": "പങ്കാളിയാകുക",
+  "Apply": "അപേക്ഷിക്കുക",
+  "Share": "പങ്കിടുക"
 }

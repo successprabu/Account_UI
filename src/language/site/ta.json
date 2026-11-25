@@ -1337,5 +1337,12 @@
   "Your code": "உங்கள் குறியீடு",
   "Your partner account is paused. Please contact us.": "உங்கள் கூட்டாளர் கணக்கு நிறுத்தப்பட்டுள்ளது. எங்களைத் தொடர்பு கொள்ளுங்கள்.",
   "Your share ({{n}}%)": "உங்கள் பங்கு ({{n}}%)",
-  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} தங்கப் பரிசுகள் எடை இல்லாமல் பதிவாகியுள்ளன; அவை மதிப்பிடப்படவில்லை."
+  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} தங்கப் பரிசுகள் எடை இல்லாமல் பதிவாகியுள்ளன; அவை மதிப்பிடப்படவில்லை.",
+  "Family tools": "குடும்பக் கருவிகள்",
+  "Camera": "கேமரா",
+  "Please allow photos for this app in your phone settings.": "போன் அமைப்புகளில் இந்தச் செயலிக்கு புகைப்பட அனுமதி வழங்கவும்.",
+  "Your details": "உங்கள் விவரங்கள்",
+  "Become a partner": "கூட்டாளர் ஆகுங்கள்",
+  "Apply": "விண்ணப்பி",
+  "Share": "பகிர்"
 }

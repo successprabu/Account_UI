@@ -1337,5 +1337,12 @@
   "Your code": "आपका कोड",
   "Your partner account is paused. Please contact us.": "आपका पार्टनर खाता रुका है। संपर्क करें।",
   "Your share ({{n}}%)": "आपका हिस्सा ({{n}}%)",
-  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} सोने के उपहार बिना वज़न के दर्ज हैं, इसलिए उनका मूल्य नहीं जुड़ा।"
+  "{{n}} gold gifts were recorded without a weight, so they are not valued.": "{{n}} सोने के उपहार बिना वज़न के दर्ज हैं, इसलिए उनका मूल्य नहीं जुड़ा।",
+  "Family tools": "परिवार के साधन",
+  "Camera": "कैमरा",
+  "Please allow photos for this app in your phone settings.": "फ़ोन सेटिंग में इस ऐप को फ़ोटो की अनुमति दें।",
+  "Your details": "आपका विवरण",
+  "Become a partner": "पार्टनर बनें",
+  "Apply": "आवेदन करें",
+  "Share": "साझा करें"
 }
