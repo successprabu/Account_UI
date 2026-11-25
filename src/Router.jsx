@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Rootlayout from "./components/common/Rootlayout";
 import Home from "./components/screen/Home";
 import PageLoader from "./components/common/PageLoader";
+import SupportChat from "./components/public/SupportChat";
 // import Registration from "./components/screen/Registration";
 // import AboutUs from "./components/screen/AboutUs";
 // import PageNotFound from "./components/screen/PageNotFound";
@@ -345,6 +346,7 @@ const Router = () => {
         </Route>
       </Routes>
       </Suspense>
+      <SupportChat />
     </BrowserRouter>
   );
 };
