@@ -42,6 +42,8 @@ import { AMENITIES, EVENT_TYPES, MahalImage, fadeUp, placeLine, rupees } from '.
 import PhotoManager, { uploadQueued } from '../../mahal/PhotoManager';
 import BillingDialog from '../../mahal/BillingDialog';
 import PricingDialog from '../../mahal/PricingDialog';
+import ChecklistDialog from '../../mahal/ChecklistDialog';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import { useTx } from '../../../language/site';
@@ -266,6 +268,7 @@ const MyMahals = () => {
   const tx = useTx();
   const [billing, setBilling] = useState(null);
   const [pricing, setPricing] = useState(null);
+  const [checklist, setChecklist] = useState(null);
   const [params, setParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -368,6 +371,9 @@ const MyMahals = () => {
                       <Button size="small" startIcon={<SellOutlinedIcon />} onClick={() => setPricing(m)}
                         color={m.weekendPrice || m.muhurthamPrice || m.weekdayDiscount ? 'success' : 'primary'}>{tx('Prices')}</Button>
                     </Tooltip>
+                    <Tooltip title={tx('Event-day checklist')}>
+                      <Button size="small" startIcon={<ChecklistIcon />} onClick={() => setChecklist(m)}>{tx('Checklist')}</Button>
+                    </Tooltip>
                     {m.isOnlineBooking && m.isActive && (
                       <Tooltip title="Open public page">
                         <IconButton size="small" component={RouterLink} to={`/mahals/${m.id}`} target="_blank" sx={{ ml: 'auto' }} aria-label="Open public page"><OpenInNewIcon fontSize="small" /></IconButton>
@@ -382,6 +388,7 @@ const MyMahals = () => {
       )}
 
       <MahalFormDialog open={open} mahal={editing} onClose={close} onSaved={saved} />
+      <ChecklistDialog open={!!checklist} mahal={checklist} onClose={() => setChecklist(null)} />
       <PricingDialog open={!!pricing} mahal={pricing} onClose={() => setPricing(null)}
         onSaved={(nm) => { setPricing(nm); setMahals((list) => list.map((x) => (x.id === nm.id ? { ...x, ...nm } : x))); }} />
       <BillingDialog open={!!billing} mahal={billing} onClose={() => setBilling(null)}

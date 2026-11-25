@@ -55,6 +55,7 @@ import { EmptyState, PageHeader, StatusChip, notify } from '../../ui';
 import { getBooking, listBookings, listMyMahals, recordPayment, saveBooking, setBookingStatus, toDay, toLocalIso } from '../../../api/mahal';
 import { getInvoice, isStaffUser, markReminder } from '../../../api/mahalOps';
 import { getQuote, listPackages, DAY_KIND } from '../../../api/mahalPlus';
+import EventChecklist from '../../mahal/EventChecklist';
 
 import { hallMessage, printInvoice, waLink } from '../../mahal/hallMessages';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
@@ -561,6 +562,11 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
                 </Stack>
               )}
               {b.invoiceNo && <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>{tx('Invoice no. {{n}}', { n: b.invoiceNo })}</Typography>}
+              {(b.status === 'Confirmed' || b.status === 'Completed') && (
+                <Box sx={{ mt: 2.5, p: 2, borderRadius: 2, border: 1, borderColor: 'divider' }}>
+                  <EventChecklist bookingId={b.id} />
+                </Box>
+              )}
               {b.status === 'Confirmed' && s !== 'Completed' && (
                 <Button sx={{ mt: 1 }} fullWidth size="small" color="secondary" startIcon={<VolunteerActivismOutlinedIcon />} onClick={offerMoitech}>
                   {tx('Offer Moitech free to this family')}

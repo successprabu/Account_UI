@@ -114,6 +114,8 @@ const MahalDetails = lazy(() => import("./components/screen/mahal/MahalDetails")
 const MahalBookingStatus = lazy(() => import("./components/screen/mahal/BookingStatus"));
 const MahalReview = lazy(() => import("./components/screen/mahal/MahalReview"));
 const MahalReviews = lazy(() => import("./components/screen/mahal/MahalReviews"));
+const MahalVendors = lazy(() => import("./components/screen/mahal/MahalVendors"));
+const MahalReports = lazy(() => import("./components/screen/mahal/MahalReports"));
 const AddMoitechCustomer = lazy(() =>
   import("./components/screen/AddMoitechCustomer")
 );
@@ -346,6 +348,22 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU","MU","MS"]}>
                 <MahalExpenses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="mahal-vendors"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "MU"]}>
+                <MahalVendors />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="mahal-reports"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "MU"]}>
+                <MahalReports />
               </ProtectedRoute>
             }
           />

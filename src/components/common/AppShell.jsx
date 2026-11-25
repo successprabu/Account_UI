@@ -50,6 +50,8 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
 import { useTheme as useAppTheme } from '../../ThemeProvider';
 import { useLanguage } from '../../language/LanguageContext';
 import { LANGUAGES } from './AppHeader';
@@ -72,6 +74,8 @@ const NAV = [
   { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'mahalExpenses', fallback: 'Expenses and profit', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'mahalExpensesStaff', fallback: 'Expenses', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['MS'] },
+  { key: 'mahalReports', fallback: 'Reports', to: '/mahal-reports', icon: <InsightsOutlinedIcon />, roles: ['MU'] },
+  { key: 'mahalVendors', fallback: 'Vendors', to: '/mahal-vendors', icon: <StorefrontOutlinedIcon />, roles: ['MU'] },
   { key: 'mahalReviews', fallback: 'Reviews', to: '/mahal-reviews', icon: <RateReviewOutlinedIcon />, roles: ['SU', 'MU', 'MS'] },
   { key: 'mahalStaff', fallback: 'Staff logins', to: '/mahal-staff', icon: <BadgeOutlinedIcon />, roles: ['MU'] },
   // Mahal admins add Moitech users under their own account; super admins use Register client.

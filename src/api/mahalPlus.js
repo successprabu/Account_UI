@@ -31,3 +31,20 @@ export const REVIEW_LINK = 'https://mysuccess.azurewebsites.net/mahals/review';
 
 /** Price kind of a day in a quote → short label. */
 export const DAY_KIND = { muhurtham: 'Muhurtham day', weekend: 'Weekend', weekday: 'Weekday' };
+
+// ---- vendors, event-day checklist, reports (Phase 2, part 2)
+/** data { items, categories } */
+export const listVendors = (mahalId) => call({ method: 'get', url: `${R}Vendors`, params: { mahalId: mahalId || undefined }, headers: auth() });
+export const saveVendor = (vendor) => call({ method: 'post', url: `${R}SaveVendor`, data: vendor, headers: auth() });
+export const deleteVendor = (id) => call({ method: 'post', url: `${R}DeleteVendor`, params: { id }, headers: auth() });
+export const listChecklistItems = (mahalId) => call({ method: 'get', url: `${R}Checklist/Items`, params: { mahalId }, headers: auth() });
+/** items: [{ id, text, isActive }] in order. */
+export const saveChecklistItems = (mahalId, items) => call({ method: 'post', url: `${R}Checklist/SaveItems`, data: { mahalId, items }, headers: auth() });
+/** data { items: [{ id, text, done, doneBy, doneDt }], doneCount, total, note } */
+export const getChecklist = (bookingId) => call({ method: 'get', url: `${R}Checklist`, params: { bookingId }, headers: auth() });
+export const tickChecklist = (bookingId, itemId, done) => call({ method: 'post', url: `${R}Checklist/Tick`, data: { bookingId, itemId, done }, headers: auth() });
+export const saveHandoverNote = (bookingId, note) => call({ method: 'post', url: `${R}Checklist/Note`, data: { bookingId, note }, headers: auth() });
+/** data { year, halls, months, totals, eventTypes, dues } */
+export const getMahalReport = (year, mahalId) => call({ method: 'get', url: `${R}Report`, params: { year, mahalId: mahalId || undefined }, headers: auth() });
+
+export const VENDOR_CATEGORIES = ['Catering', 'Decoration', 'Photography', 'Music', 'Flowers', 'Makeup', 'Priest', 'Transport', 'Lighting', 'Other'];

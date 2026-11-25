@@ -414,6 +414,31 @@ const MahalDetails = () => {
                   </Box>
                 )}
 
+                {extras?.vendors?.length > 0 && (
+                  <Box sx={{ mt: 4 }}>
+                    <Typography variant="h6" fontWeight={700}>{tx('Vendors the hall recommends')}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>{tx('Call them directly. Prices are agreed between you and the vendor.')}</Typography>
+                    <Grid container spacing={1.5}>
+                      {extras.vendors.map((v) => (
+                        <Grid item xs={12} sm={6} key={v.id}>
+                          <Card variant="outlined" sx={{ p: 1.5, height: '100%' }}>
+                            <Typography variant="caption" color="primary" fontWeight={700}>{tx(v.category)}</Typography>
+                            <Typography fontWeight={700}>{v.name}</Typography>
+                            {v.note && <Typography variant="body2" color="text.secondary">{v.note}</Typography>}
+                            {v.phone && (
+                              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                                <Button size="small" variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${v.phone}`}>{tx('Call')}</Button>
+                                <Button size="small" variant="outlined" color="success" startIcon={<WhatsAppIcon />} target="_blank" rel="noopener noreferrer"
+                                  href={`https://wa.me/${waDigits(v.phone)}?text=${encodeURIComponent(`Hello, I found you on ${mahal.mahalName}'s page.`)}`}>WhatsApp</Button>
+                              </Stack>
+                            )}
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                )}
+
                 <Box id="reviews"><HallReviews rating={extras?.rating} reviews={extras?.reviews || []} /></Box>
 
                 {info.contactNumber && (
