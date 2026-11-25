@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { partnerRef } from "../../utils/partnerRef";
 import { FaCheck, FaRedo, FaUserPlus } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { AiOutlineSend } from "react-icons/ai";
@@ -205,7 +206,7 @@ const MahalRegistration = () => {
     if (Object.keys(validationErrors).length === 0) {
       setIsLoading(true); // Start the loader
       try {
-        await axios.post(SAVE_NEW_CUSTOMER_API, formData);
+        await axios.post(SAVE_NEW_CUSTOMER_API, { ...formData, referedBy: partnerRef() });
         toast.success("Registration successful!");
         navigate("/login");
       } catch (error) {

@@ -136,6 +136,8 @@ const ThemeSettings = lazy(() => import("./components/screen/ThemeSettingsPage")
 
 const Enquiries = lazy(() => import("./components/screen/enquiries/Enquiries"));
 const RegisterClient = lazy(() => import("./components/screen/admin/RegisterClient"));
+const AdminPartners = lazy(() => import("./components/screen/admin/AdminPartners"));
+const PartnerDashboard = lazy(() => import("./components/screen/PartnerDashboard"));
 const DownloadApp = lazy(() => import("./components/screen/DownloadApp"));
 const ForgotPassword = lazy(() => import("./components/screen/login/ForgotPassword"));
 const UserGuides = lazy(() => import("./components/screen/UserGuide"));
@@ -183,6 +185,22 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU"]}>
                 <ClientList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="partners"
+            element={
+              <ProtectedRoute allowedRoles={["SU"]}>
+                <AdminPartners />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="partner"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "MU"]}>
+                <PartnerDashboard />
               </ProtectedRoute>
             }
           />

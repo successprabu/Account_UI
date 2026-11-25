@@ -26,6 +26,7 @@ import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -73,6 +74,7 @@ const NAV = [
   { key: 'Clients', to: '/client-list', icon: <PeopleAltOutlinedIcon />, roles: ['SU'] },
   { key: 'registerClient', fallback: 'Register client', to: '/register-client', icon: <PersonAddAltOutlinedIcon />, roles: ['SU'] },
   { key: 'enquiries', fallback: 'Enquiries', to: '/enquiries', icon: <MarkEmailUnreadOutlinedIcon />, roles: ['SU'] },
+  { key: 'partners', fallback: 'Partners', to: '/partners', icon: <HandshakeOutlinedIcon />, roles: ['SU'] },
   { key: 'mahalBookings', fallback: 'Bookings', to: '/mahal-bookings', icon: <EventAvailableOutlinedIcon />, roles: ['SU', 'MU', 'MS'] },
   { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'mahalExpenses', fallback: 'Expenses and profit', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['SU', 'MU'] },
@@ -126,6 +128,7 @@ const NAV = [
   { key: 'moiReturn', fallback: 'Moi to return', to: '/moi-return', icon: <EventOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'oldNotebooks', fallback: 'Old moi notebooks', to: '/old-notebooks', icon: <AutoStoriesOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'history', fallback: 'History', to: '/history', icon: <HistoryIcon />, roles: ['SU', 'AU'] },
+  { key: 'partnerDashboard', fallback: 'Partner dashboard', to: '/partner', icon: <HandshakeOutlinedIcon />, roles: ['AU', 'MU'] },
   { key: 'myPlan', fallback: 'My plan & billing', to: '/my-plan', icon: <WorkspacePremiumOutlinedIcon />, roles: ['AU', 'MU'] },
   { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU', 'MS'] },
   // One entry per role, each opening that role's guide (the super admin gets the list of all guides).

@@ -55,8 +55,8 @@ const EntryCard = ({ e, index, onDone }) => {
       </Stack>
       <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1.25 }} flexWrap="wrap" useFlexGap>
         <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
-          {time(e.createdDt)}{e.phoneNo ? ` · ${e.phoneNo}` : ''}{e.note ? ` · ${e.note}` : ''}
-          {f.payMode === 'Online' ? ` · ${tx('Check the UPI payment on the family phone before accepting.')}` : ''}
+          {time(e.createdDt)}{e.phoneNo ? ` · ${e.phoneNo}` : ''}{e.note ? ` · ${e.note}` : ''}{e.upiRef ? ` · UPI ref ${e.upiRef}` : ''}
+          {f.payMode === 'Online' ? ` · ${tx('Accept only after the payment shows in the family bank or UPI app. If unsure, ask the account owner to confirm.')}` : ''}
         </Typography>
         <Button color="error" startIcon={<CloseIcon />} disabled={!!busy} onClick={() => decide(false)}>{tx('Reject')}</Button>
         <Button variant="contained" color="success" startIcon={<CheckIcon />} disabled={!!busy} onClick={() => decide(true)}>{tx('Accept')}</Button>

@@ -53,3 +53,6 @@ export const buyFunctionPass = async (functionId) => {
     rz.open();
   });
 };
+
+/** One spoken sentence → receipt fields { villageName, initial, name, amount, oldAmount, phoneNo, payMode, missing }. */
+export const parseVoiceEntry = (text, language) => call({ method: 'post', url: `${R}Voice`, data: { text, language }, headers: auth() });

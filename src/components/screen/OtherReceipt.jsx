@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTx } from "../../language/site";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -77,6 +78,7 @@ const emptyOthers = (user) => ({
   returnRemark: "",
   functionId: user?.functionId || 0,
   others: 0,
+  weightGrams: "",
   othersType: "",
   othersRemark: "",
 });
@@ -100,6 +102,8 @@ const OtherReceipt = () => {
   const initialRef = useRef(null);
   const othersRef = useRef(null);
   const amountRef = useRef(null);
+  const weightRef = useRef(null);
+  const tx = useTx();
   const otherRemarkRef = useRef(null);
   const phoneNoRef = useRef(null);
   const remarksRef = useRef(null);
@@ -171,7 +175,7 @@ const OtherReceipt = () => {
 
     setIsSaving(true);
     try {
-      const response = await API_SERVICE.post(SAVE_NEW_TRANS_API, formData);
+      const response = await API_SERVICE.post(SAVE_NEW_TRANS_API, { ...formData, weightGrams: Number(formData.weightGrams) > 0 ? Number(formData.weightGrams) : null });
       if (response?.data?.result) {
         setLastRecord(response.data.data);
         setSavedCount((c) => c + 1);
@@ -280,7 +284,11 @@ const OtherReceipt = () => {
               <Grid item xs={6} md={3}>
                 <EntryField label={t("amount")} {...numberProps("amount", amountRef, otherRemarkRef, true)} />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6} md={3}>
+                <EntryField label={tx("Weight in grams (optional)")} {...numberProps("weightGrams", weightRef, otherRemarkRef)}
+                  helperText={tx("For the gold value")} />
+              </Grid>
+              <Grid item xs={12} md={3}>
                 <EntryField label={t("othersRemarks")} placeholder={t("enter_description_detail")} {...fieldProps("othersRemark", otherRemarkRef, phoneNoRef)} />
               </Grid>
               <Grid item xs={12} sm={6}>

@@ -63,7 +63,7 @@ const GoldValueDialog = ({ open, onClose }) => {
             <ToggleButton value="p">{tx('pavun')}</ToggleButton>
           </ToggleButtonGroup>
         </Stack>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{tx('Gold gifts in Others are valued at the gold rate you set. The weight in Others is read as grams.')}</Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{tx('Gold gifts in Others are valued at the gold rate you set, using the weight in grams typed for each gift.')}</Typography>
         {error ? <Alert severity="warning">{error}</Alert> : !data ? <Box sx={{ textAlign: 'center' }}><CircularProgress /></Box> : (
           <Stack spacing={1.5}>
             {data.canChange && (
@@ -76,7 +76,7 @@ const GoldValueDialog = ({ open, onClose }) => {
             {data.items.length === 0 ? <Typography color="text.secondary">{tx('No gold or other gifts recorded yet.')}</Typography> : data.items.map((i) => (
               <Stack key={i.type || '-'} direction="row" spacing={1} alignItems="center">
                 <Typography sx={{ flex: 1 }}>{tx(i.type || 'others')} <Typography component="span" variant="body2" color="text.secondary">× {i.count}</Typography></Typography>
-                <Typography variant="body2">{i.gold ? w(i.weight) : i.weight}</Typography>
+                <Typography variant="body2">{i.gold && i.weight > 0 ? w(i.weight) : ''}</Typography>
                 <Typography fontWeight={700} sx={{ minWidth: 90, textAlign: 'right' }}>{i.gold ? (data.rate ? rupees(i.value) : '—') : ''}</Typography>
               </Stack>
             ))}
@@ -85,6 +85,11 @@ const GoldValueDialog = ({ open, onClose }) => {
               <Stack direction="row"><Typography sx={{ flex: 1 }}>{tx('Gold')} ({w(data.goldWeight)})</Typography><Typography fontWeight={700}>{data.rate ? rupees(data.goldValue) : '—'}</Typography></Stack>
               <Stack direction="row" sx={{ mt: 1 }}><Typography sx={{ flex: 1 }} fontWeight={800}>{tx('Total with gold')}</Typography><Typography variant="h6" fontWeight={800}>{rupees(data.total)}</Typography></Stack>
               {!data.rate && <Typography variant="caption" color="text.secondary">{tx('Set the gold rate to see the value.')}</Typography>}
+              {data.unweighed > 0 && (
+                <Typography variant="caption" color="warning.main" display="block">
+                  {tx('{{n}} gold gifts were recorded without a weight, so they are not valued.', { n: data.unweighed })}
+                </Typography>
+              )}
             </Box>
           </Stack>
         )}

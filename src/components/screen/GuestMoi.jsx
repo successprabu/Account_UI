@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
 import {
-  Alert, Box, Button, Card, CircularProgress, Container, InputAdornment, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography,
+  Alert, Box, Button, Card, CircularProgress, Container, InputAdornment, MenuItem, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
@@ -11,9 +11,11 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import AppHeader from '../common/AppHeader';
 import { getGuestPage, sendGuestEntry } from '../../api/guestEntry';
 import { upiLink } from '../moitech/PayModeToggle';
+import { EntryField, useSuggestions, useVoice } from '../moitech/shared';
 import { useTx } from '../../language/site';
 
-const empty = { villageName: '', initial: '', name: '', phoneNo: '', amount: '', payMode: 'Cash', note: '', website: '' };
+const empty = { villageName: '', initial: '', name: '', phoneNo: '', amount: '', payMode: 'Cash', note: '', upiRef: '', website: '' };
+const LANGS = [['ta', 'தமிழ்'], ['en', 'English'], ['hi', 'हिन्दी'], ['te', 'తెలుగు'], ['kn', 'ಕನ್ನಡ'], ['ml', 'മലയാളം']];
 
 /** Public: the page a guest opens by scanning the moi-counter QR. They type their own moi; a helper accepts it. */
 const GuestMoi = () => {
@@ -33,6 +35,39 @@ const GuestMoi = () => {
   }, [token]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+  // Names in the guest's own script: type in English letters and pick the word, or speak it.
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem('moitech.guestLang') || 'ta';
+    } catch (e) {
+      return 'ta';
+    }
+  });
+  const pickLang = (v) => {
+    setLang(v);
+    try {
+      localStorage.setItem('moitech.guestLang', v);
+    } catch (e) { /* private mode */ }
+  };
+  const setField = useCallback((k, v) => setForm((f) => ({ ...f, [k]: v })), []);
+  const suggest = useSuggestions(lang !== 'en', lang, setField);
+  const voice = useVoice(lang);
+  const textProps = (k, label, extra = {}) => ({
+    label,
+    value: form[k],
+    onChange: (e) => {
+      setField(k, e.target.value);
+      const word = e.target.value.split(' ').pop();
+      if (/^[a-zA-Z]+$/.test(word)) suggest.lookup(k, e.target.value);
+      else suggest.clear();
+    },
+    onKeyDown: (e) => suggest.handleKey(e),
+    onBlur: () => setTimeout(suggest.clear, 150),
+    recording: voice.field === k,
+    onMic: () => voice.toggle(k, (said) => setField(k, said)),
+    ...suggest.propsFor(k),
+    ...extra,
+  });
   const amount = Number(form.amount) || 0;
 
   const submit = async (e) => {
@@ -69,10 +104,14 @@ const GuestMoi = () => {
               ) : (
                 <Box key="form" component="form" onSubmit={submit} noValidate sx={{ mt: 2.5 }}>
                   <Stack spacing={2}>
-                    <TextField label={tx('Your village or place')} value={form.villageName} onChange={set('villageName')} required autoComplete="address-level2" />
+                    <TextField select size="small" label={tx('Language for names')} value={lang} onChange={(e) => pickLang(e.target.value)}
+                      helperText={lang === 'en' ? '' : tx('Type in English letters and pick the word, or tap the mic and speak.')}>
+                      {LANGS.map(([v, l]) => <MenuItem key={v} value={v}>{l}</MenuItem>)}
+                    </TextField>
+                    <EntryField {...textProps('villageName', tx('Your village or place'), { required: true })} />
                     <Stack direction="row" spacing={1.5}>
-                      <TextField label={tx('Initial')} value={form.initial} onChange={set('initial')} sx={{ width: 110 }} />
-                      <TextField label={tx('Your name')} value={form.name} onChange={set('name')} required fullWidth autoComplete="name" />
+                      <EntryField {...textProps('initial', tx('Initial'))} sx={{ width: 130, flexShrink: 0 }} />
+                      <EntryField {...textProps('name', tx('Your name'), { required: true })} sx={{ flex: 1 }} />
                     </Stack>
                     <TextField label={tx('Moi amount')} value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value.replace(/[^\d]/g, '').slice(0, 7) }))} required
                       InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} inputProps={{ inputMode: 'numeric' }} />
@@ -85,9 +124,9 @@ const GuestMoi = () => {
                     </Box>
                     {form.payMode === 'Online' && fn.upiId && (
                       <Alert severity="info" icon={false}>
-                        <Typography variant="body2" sx={{ mb: 1 }}>{tx('Pay the family by UPI, then send this form.')}</Typography>
+                        <Typography variant="body2" sx={{ mb: 1 }}>{tx('Scan this QR with any UPI app (GPay, PhonePe, Paytm) and pay the family, then send this form. The helper adds your moi once the payment is received.')}</Typography>
                         <Stack direction="row" spacing={2} alignItems="center">
-                          <Box sx={{ p: 1, bgcolor: '#fff', borderRadius: 2 }}><QRCodeSVG value={upiLink(fn.upiId, fn.upiName || fn.funPersionNames, fn.functionName)} size={110} /></Box>
+                          <Box sx={{ p: 1, bgcolor: '#fff', borderRadius: 2 }}><QRCodeSVG value={`${upiLink(fn.upiId, fn.upiName || fn.funPersionNames, fn.functionName)}${amount ? `&am=${amount}` : ''}`} size={130} /></Box>
                           <Box>
                             <Typography fontWeight={700}>{fn.upiName || fn.funPersionNames}</Typography>
                             <Typography variant="body2">{fn.upiId}</Typography>
@@ -95,6 +134,10 @@ const GuestMoi = () => {
                           </Box>
                         </Stack>
                       </Alert>
+                    )}
+                    {form.payMode === 'Online' && fn.upiId && (
+                      <TextField label={tx('UPI transaction ID (optional)')} value={form.upiRef} onChange={(e) => setForm((f) => ({ ...f, upiRef: e.target.value.slice(0, 40) }))}
+                        helperText={tx('After paying, type the UPI reference or its last 6 digits, so the helper can match your payment.')} />
                     )}
                     <TextField label={tx('Phone (optional)')} type="tel" value={form.phoneNo} onChange={set('phoneNo')} autoComplete="tel" helperText={tx('So the family can thank you on WhatsApp.')} />
                     <TextField label={tx('Message for the family (optional)')} value={form.note} onChange={set('note')} inputProps={{ maxLength: 300 }} />

@@ -11,9 +11,12 @@ import { ThemeMui } from './mui/ThemeMui';
 import Router from "./Router"; 
 import axios from "axios";
 import { watchSession } from "./utils/session";
+import { capturePartnerRef } from "./utils/partnerRef";
 
 // An expired login signs out and goes to the login page (any API call that gets 401).
 watchSession(axios);
+// A partner's signup link (?ref=CODE) is remembered for registration.
+capturePartnerRef();
 
 function App() {
   return (

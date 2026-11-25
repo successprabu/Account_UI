@@ -12,6 +12,9 @@ export const canUseVoice = () => typeof window !== 'undefined' && !!(window.Spee
  * Voice input for several fields. toggle(field, onText) starts listening for that field
  * (or stops if it is already listening); onText receives what was said.
  */
+/** Speech recognition language for the app language (Tamil, Hindi, Telugu, Kannada, Malayalam, else English). */
+export const speechLang = (language) => ({ ta: 'ta-IN', hi: 'hi-IN', te: 'te-IN', kn: 'kn-IN', ml: 'ml-IN' }[String(language || 'en').split('-')[0]] || 'en-IN');
+
 export const useVoice = (language = 'en') => {
   const [field, setField] = useState(null);
   const recRef = useRef(null);
@@ -29,7 +32,7 @@ export const useVoice = (language = 'en') => {
       if (!SR) return;
       recRef.current?.stop();
       const rec = new SR();
-      rec.lang = String(language).startsWith('ta') ? 'ta-IN' : 'en-US';
+      rec.lang = speechLang(language);
       rec.onresult = (e) => onText(e.results[0][0].transcript);
       rec.onend = () => setField((f) => (f === name ? null : f));
       recRef.current = rec;

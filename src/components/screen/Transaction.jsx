@@ -27,6 +27,7 @@ import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import GuestQrDialog from "../moitech/GuestQrDialog";
+import VoiceEntryButton from "../moitech/VoiceEntryButton";
 import TranslateIcon from "@mui/icons-material/Translate";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -36,7 +37,7 @@ import { SAVE_NEW_TRANS_API } from "../common/CommonApiURL";
 import Translator from "../common/TranslationBasedOnLanguage";
 import { PageHeader } from "../ui";
 import { schema } from "../moitech/receiptSchema";
-import { AnimatedNumber, EntryField, rupees } from "../moitech/shared";
+import { AnimatedNumber, EntryField, rupees, speechLang } from "../moitech/shared";
 import ReceiptImportDialog from "../moitech/ReceiptImportDialog";
 import PayModeToggle, { useCurrentFunction } from "../moitech/PayModeToggle";
 
@@ -219,7 +220,7 @@ const Transaction = () => {
     setIsRecording(true);
     setRecordingField(fieldName);
     const rec = new SpeechRecognition();
-    rec.lang = i18n.language === "ta" ? "ta-IN" : "en-US";
+    rec.lang = speechLang(i18n.language);
     rec.onresult = (event) => {
       const said = event.results[0][0].transcript;
       // Amount and phone fields keep only the digits that were spoken.
@@ -323,6 +324,21 @@ const Transaction = () => {
         breadcrumbs={[{ label: t("dashboard"), to: "/dashboard" }, { label: t("addTransaction") }]}
         actions={
           <>
+            <VoiceEntryButton
+              language={i18n.language}
+              onFill={(v) =>
+                setFormData((f) => ({
+                  ...f,
+                  villageName: v.villageName || f.villageName,
+                  initial: v.initial || f.initial,
+                  name: v.name || f.name,
+                  newAmount: v.amount ?? f.newAmount,
+                  oldAmount: v.oldAmount ?? f.oldAmount,
+                  phoneNo: v.phoneNo || f.phoneNo,
+                  payMode: v.payMode || f.payMode,
+                }))
+              }
+            />
             <Button startIcon={<QrCode2Icon />} onClick={() => setShowGuestQr(true)}>
               {tx("Guest QR")}
             </Button>
