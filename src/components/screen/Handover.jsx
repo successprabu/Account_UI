@@ -1,3 +1,5 @@
+import { useTx } from "../../language/site";
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
@@ -48,18 +50,23 @@ const byPerson = (rows) => {
   const people = {};
   rows.forEach((item) => {
     const key = item.createdBy;
-    if (!people[key]) people[key] = { username: key, userId: item.createdById, receipt: 0, expense: 0, others: 0 };
-    if (item.type === "R") people[key].receipt += item.total;
+    if (!people[key]) people[key] = { username: key, userId: item.createdById, receipt: 0, online: 0, expense: 0, others: 0 };
+    if (item.type === "R") {
+      people[key].receipt += item.total;
+      people[key].online += item.online || 0;
+    }
     if (item.type === "E") people[key].expense += item.total;
     if (item.type === "O") people[key].others += item.total;
     people[key].userId = item.createdById;
   });
-  return Object.values(people).map((p, i) => ({ ...p, sNo: i + 1, total: p.receipt + p.others - p.expense }));
+  // Online moi went straight to the family's UPI, so the helper hands over cash only.
+  return Object.values(people).map((p, i) => ({ ...p, sNo: i + 1, total: p.receipt - p.online + p.others - p.expense }));
 };
 
 /** End of the function: how much each collector holds, and recording who they handed it to. */
 const Handover = () => {
   const { t } = useTranslation();
+  const tx = useTx();
   const theme = useTheme();
   const wide = useMediaQuery(theme.breakpoints.up("md"));
   const [reportData, setReportData] = useState([]);
@@ -95,12 +102,13 @@ const Handover = () => {
   }, [load]);
 
   const people = useMemo(() => byPerson(reportData), [reportData]);
-  const totals = useMemo(() => people.reduce((a, p) => ({ receipt: a.receipt + p.receipt, expense: a.expense + p.expense, others: a.others + p.others }), { receipt: 0, expense: 0, others: 0 }), [people]);
-  const net = totals.receipt + totals.others - totals.expense;
+  const totals = useMemo(() => people.reduce((a, p) => ({ receipt: a.receipt + p.receipt, online: a.online + p.online, expense: a.expense + p.expense, others: a.others + p.others }), { receipt: 0, online: 0, expense: 0, others: 0 }), [people]);
+  const net = totals.receipt - totals.online + totals.others - totals.expense;
   const itemsTotal = othersData.reduce((a, x) => a + (x.totalOthers || 0), 0);
 
   const stats = [
     { label: t("receipt"), value: totals.receipt, icon: <SouthWestIcon />, color: theme.palette.success.main },
+    { label: tx("Online (in family's UPI)"), value: totals.online, icon: <PhoneAndroidIcon />, color: theme.palette.info.main },
     { label: t("expenses"), value: totals.expense, icon: <NorthEastIcon />, color: theme.palette.error.main },
     { label: t("others"), value: totals.others, icon: <DiamondOutlinedIcon />, color: theme.palette.secondary.main },
     { label: t("total"), value: net, icon: <AccountBalanceWalletOutlinedIcon />, color: theme.palette.primary.main, strong: true },
@@ -163,6 +171,7 @@ const Handover = () => {
                 <TableCell>{t("sNo")}</TableCell>
                 <TableCell>{t("receivedBy")}</TableCell>
                 <TableCell align="right">{t("receipt")}</TableCell>
+                <TableCell align="right">{tx("Online")}</TableCell>
                 <TableCell align="right">{t("expenses")}</TableCell>
                 <TableCell align="right">{t("others")}</TableCell>
                 <TableCell align="right">{t("total")}</TableCell>
@@ -175,6 +184,7 @@ const Handover = () => {
                   <TableCell>{p.sNo}</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>{t(p.username, { defaultValue: p.username })}</TableCell>
                   <TableCell align="right">{rupees(p.receipt)}</TableCell>
+                  <TableCell align="right" sx={{ color: "info.main" }}>{p.online ? `− ${rupees(p.online)}` : "—"}</TableCell>
                   <TableCell align="right">{rupees(p.expense)}</TableCell>
                   <TableCell align="right">{rupees(p.others)}</TableCell>
                   <TableCell align="right" sx={{ fontWeight: 800 }}>{rupees(p.total)}</TableCell>
@@ -184,6 +194,7 @@ const Handover = () => {
               <TableRow sx={{ "& td": { fontWeight: 800, bgcolor: "action.hover" } }}>
                 <TableCell colSpan={2}>{t("total")}</TableCell>
                 <TableCell align="right">{rupees(totals.receipt)}</TableCell>
+                <TableCell align="right">{totals.online ? `− ${rupees(totals.online)}` : "—"}</TableCell>
                 <TableCell align="right">{rupees(totals.expense)}</TableCell>
                 <TableCell align="right">{rupees(totals.others)}</TableCell>
                 <TableCell align="right">{rupees(net)}</TableCell>
@@ -203,7 +214,7 @@ const Handover = () => {
                   <Typography variant="h6" fontWeight={800}>{rupees(p.total)}</Typography>
                 </Stack>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                  {t("receipt")} {rupees(p.receipt)} · {t("expenses")} {rupees(p.expense)} · {t("others")} {rupees(p.others)}
+                  {t("receipt")} {rupees(p.receipt)}{p.online ? ` · ${tx("Online")} − ${rupees(p.online)}` : ""} · {t("expenses")} {rupees(p.expense)} · {t("others")} {rupees(p.others)}
                 </Typography>
                 <Box sx={{ mt: 1.25, textAlign: "right" }}>{handButton(p)}</Box>
               </Card>

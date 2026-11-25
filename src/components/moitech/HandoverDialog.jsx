@@ -42,7 +42,8 @@ const HandoverDialog = ({ open, person, onClose, onSaved }) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   // Money the collector should hand over: receipts minus the expenses they paid, plus any cash given with
   // other gifts (gold and other items are counted separately). Same as the Total column on the Handover page.
-  const total = person ? (person.receipt || 0) + (person.others || 0) - (person.expense || 0) : 0;
+  // Online moi went to the family's UPI directly, so only the cash part is handed over.
+  const total = person ? (person.receipt || 0) - (person.online || 0) + (person.others || 0) - (person.expense || 0) : 0;
   const [form, setForm] = useState({ handoverAmount: '', receivedBy: '', receivedByMoible: '', remarks: '' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -129,7 +130,7 @@ const HandoverDialog = ({ open, person, onClose, onSaved }) => {
           ))}
         </Grid>
         <Typography variant="body2" color="text.secondary" sx={{ mt: -1.5, mb: 2.5 }}>
-          {t('receipt')} {rupees(person.receipt)} − {t('expenses')} {rupees(person.expense)}
+          {t('receipt')} {rupees(person.receipt)}{person.online ? ` − ${t('online', { defaultValue: 'Online' })} ${rupees(person.online)}` : ''} − {t('expenses')} {rupees(person.expense)}
           {person.others ? ` + ${t('others')} ${rupees(person.others)}` : ''} = <b>{rupees(total)}</b>
           {total < 0 ? ` · ${t('handoverOwed', { defaultValue: 'They spent more than they received: pay them back.' })}` : ''}
         </Typography>

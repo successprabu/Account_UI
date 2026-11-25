@@ -1,5 +1,5 @@
 import { useTx } from '../../language/site';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
@@ -39,6 +39,9 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import LockIcon from '@mui/icons-material/Lock';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import { cancelAutoPay, myAutoPay, startAutoPay, verifyAutoPay } from '../../api/autoPay';
+import { loadCheckout } from '../../api/mahalOps';
 import { REACT_APP_RAZORPAY_KEY_ID, SAVE_PAYMENT_ORDER_API, VERIFY_PAYMENT_API } from '../common/CommonApiURL';
 import { SCHOOL_PRICING_URL } from '../public/products';
 import { notify } from '../ui';
@@ -68,6 +71,69 @@ const PricingPage = () => {
   const product = params.get('product') === 'mahal' ? 'mahal' : 'moitech';
   const [selectedPlan, setSelectedPlan] = useState('premium');
   const [billingCycle, setBillingCycle] = useState('monthly');
+  // 'once' = pay for one period (old flow); 'auto' = Razorpay subscription that renews by itself.
+  const [payWay, setPayWay] = useState('auto');
+  const [autoPay, setAutoPay] = useState(null);
+  const [stopping, setStopping] = useState(false);
+
+  const loadAutoPay = useCallback(async () => {
+    if (!readUser()?.primary_phone) return;
+    const r = await myAutoPay();
+    setAutoPay(r.ok ? r.data?.autoPay || null : null);
+  }, []);
+  useEffect(() => { loadAutoPay(); }, [loadAutoPay]);
+
+  const autoPayOn = autoPay && ['created', 'authenticated', 'active', 'pending'].includes(autoPay.status);
+
+  const stopAutoPay = async () => {
+    setStopping(true);
+    const r = await cancelAutoPay();
+    setStopping(false);
+    if (r.ok) {
+      notify.success(tx('AutoPay stopped. Your plan stays on until the end of this period.'));
+      loadAutoPay();
+    } else notify.error(r.message || tx('Could not stop AutoPay. Please try again.'));
+  };
+
+  const handleAutoPay = async (plan) => {
+    const user = readUser();
+    if (!user?.primary_phone) {
+      notify.info(tx('Please sign in to your account first, then choose your plan.'));
+      navigate('/login');
+      return;
+    }
+    setLoading(true);
+    try {
+      const [Razorpay, start] = await Promise.all([loadCheckout(), startAutoPay(plan.id, plan.cycle)]);
+      if (!start.ok) {
+        notify.error(start.message || tx('Could not start AutoPay. Please try again.'));
+        return;
+      }
+      if (!Razorpay) {
+        notify.error(tx('Could not open the payment window. Check your connection and try again.'));
+        return;
+      }
+      const d = start.data;
+      const rzp = new Razorpay({
+        key: d.keyId,
+        subscription_id: d.subscriptionId,
+        name: 'My Success',
+        description: `${d.name} · ${tx(plan.cycle === 'yearly' ? 'Yearly' : 'Monthly')} AutoPay`,
+        prefill: { contact: user.primary_phone },
+        theme: { color: '#6366F1' },
+        handler: async (resp) => {
+          const v = await verifyAutoPay(resp);
+          if (v.ok) {
+            notify.success(tx('AutoPay is on. Your plan renews by itself.'));
+            loadAutoPay();
+          } else notify.error(v.message || tx('Payment could not be verified. If money was taken, contact us.'));
+        },
+      });
+      rzp.open();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const moitechPlans = [
     {
@@ -406,6 +472,26 @@ const PricingPage = () => {
         </motion.div>
       </Box>
 
+      {/* Pay once or AutoPay */}
+      <Box sx={{ textAlign: 'center', mb: 3 }}>
+        <ToggleButtonGroup exclusive size="small" color="primary" value={payWay} onChange={(e, v) => v && setPayWay(v)}>
+          <ToggleButton value="auto"><AutorenewIcon fontSize="small" sx={{ mr: 0.75 }} />{tx('AutoPay (renews by itself)')}</ToggleButton>
+          <ToggleButton value="once"><CreditCardIcon fontSize="small" sx={{ mr: 0.75 }} />{tx('Pay once')}</ToggleButton>
+        </ToggleButtonGroup>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          {tx(payWay === 'auto'
+            ? 'Approve once with UPI AutoPay or card. We charge the same price every period. Stop any time.'
+            : 'Pay for one period. Renew yourself when it ends.')}
+        </Typography>
+        {autoPayOn && (
+          <Box sx={{ mt: 2, display: 'inline-flex', alignItems: 'center', gap: 1.5, px: 2, py: 1, borderRadius: 2, border: 1, borderColor: 'success.light', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <AutorenewIcon color="success" fontSize="small" />
+            <Typography variant="body2"><b>{tx('AutoPay is on')}</b> · {autoPay.plan} · {tx(autoPay.billingCycle === 'yearly' ? 'Yearly' : 'Monthly')} · ₹{inr(autoPay.amount)}</Typography>
+            <Button size="small" color="error" disabled={stopping} onClick={stopAutoPay}>{tx('Stop AutoPay')}</Button>
+          </Box>
+        )}
+      </Box>
+
       {/* Pricing cards */}
       <Grid container spacing={3} justifyContent="center">
         {plans.map((plan, index) => (
@@ -458,11 +544,11 @@ const PricingPage = () => {
                       size="large"
                       variant={plan.popular ? 'contained' : 'outlined'}
                       startIcon={<CreditCardIcon />}
-                      onClick={() => { setSelectedPlan(plan.id); handlePayment(plan); }}
+                      onClick={() => { setSelectedPlan(plan.id); (payWay === 'auto' ? handleAutoPay : handlePayment)(plan); }}
                       disabled={loading}
                     >
                       {loading && selectedPlan === plan.id ? <CircularProgress size={18} sx={{ mr: 1 }} /> : null}
-                      {tx(plan.buttonText)}
+                      {tx(plan.buttonText)}{payWay === 'auto' ? ` · ${tx('AutoPay')}` : ''}
                     </Button>
                   )}
 

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Stack, Typography } from "@mui/material";
+import { Chip, Stack, Typography } from "@mui/material";
+import { useTx } from "../../../language/site";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import EntryListPage from "../../moitech/EntryListPage";
 import { rupees } from "../../moitech/shared";
@@ -7,6 +8,10 @@ import { rupees } from "../../moitech/shared";
 /** Receipts (moi received) for the current function: search, edit and delete. */
 const TransactionList = () => {
   const { t } = useTranslation();
+  const tx = useTx();
+  const modeChip = (r) => (r.payMode === "Online"
+    ? <Chip size="small" color="success" variant="outlined" label={tx("Online")} />
+    : <Chip size="small" variant="outlined" label={tx("Cash")} />);
   const columns = [
     { key: "villageName", label: t("placeName") },
     { key: "initial", label: t("initial") },
@@ -14,6 +19,7 @@ const TransactionList = () => {
     { key: "oldAmount", label: t("oldAmount"), align: "right", render: (r) => rupees(r.oldAmount) },
     { key: "newAmount", label: t("newAmount"), align: "right", render: (r) => rupees(r.newAmount) },
     { key: "amount", label: t("amount"), align: "right", bold: true, render: (r) => rupees(r.amount) },
+    { key: "payMode", label: tx("Paid by"), render: modeChip },
     { key: "phoneNo", label: t("phoneNo") },
   ];
 
@@ -23,7 +29,10 @@ const TransactionList = () => {
         <Typography fontWeight={700} sx={{ minWidth: 0, overflowWrap: "anywhere" }}>{[r.initial, r.name].filter(Boolean).join(". ")}</Typography>
         <Typography variant="h6" fontWeight={800} sx={{ flexShrink: 0 }}>{rupees(r.amount)}</Typography>
       </Stack>
-      <Typography variant="body2" color="text.secondary">{r.villageName}</Typography>
+      <Stack direction="row" spacing={1} alignItems="center">
+        <Typography variant="body2" color="text.secondary">{r.villageName}</Typography>
+        {r.payMode === "Online" && modeChip(r)}
+      </Stack>
       {r.oldAmount > 0 && r.newAmount > 0 && (
         <Typography variant="caption" color="text.secondary" display="block">
           {t("oldAmount")} {rupees(r.oldAmount)} · {t("newAmount")} {rupees(r.newAmount)}

@@ -35,6 +35,7 @@ import { PageHeader } from "../ui";
 import { schema } from "../moitech/receiptSchema";
 import { AnimatedNumber, EntryField, rupees } from "../moitech/shared";
 import ReceiptImportDialog from "../moitech/ReceiptImportDialog";
+import PayModeToggle, { useCurrentFunction } from "../moitech/PayModeToggle";
 
 const TEXT_FIELDS = ["villageName", "name", "initial", "remarks"];
 const SUGGEST_LANGS = new Set(["ta", "hi", "ml", "te", "kn"]);
@@ -49,6 +50,8 @@ const readUser = () => {
 
 const emptyReceipt = (user) => ({
   id: 0,
+  // Cash unless the helper switches to Online (guest paid the family's UPI); reset to Cash after each save.
+  payMode: "Cash",
   customerId: user?.customerID || 0,
   villageName: "",
   initial: "",
@@ -89,6 +92,7 @@ const Transaction = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showImport, setShowImport] = useState(false);
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
+  const currentFunction = useCurrentFunction();
 
   const villageNameRef = useRef(null);
   const nameRef = useRef(null);
@@ -362,6 +366,10 @@ const Transaction = () => {
             )}
 
             <Translator inputText={formData[fieldBeingTranslated] || ""} onTranslated={handleTranslation} sourceLanguage="en" targetLanguage={i18n.language || "en"} />
+
+            <Box sx={{ mt: 2 }}>
+              <PayModeToggle value={formData.payMode} fn={currentFunction} onChange={(m) => setFormData((f) => ({ ...f, payMode: m }))} />
+            </Box>
 
             <Divider sx={{ my: 2.5 }} />
 

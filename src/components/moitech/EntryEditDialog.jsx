@@ -1,3 +1,4 @@
+import PayModeToggle from './PayModeToggle';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -158,6 +159,7 @@ const EntryEditDialog = ({ open, entry, title, kind = 'receipt', onClose, onSave
           </Grid>
           <Grid item xs={12} sm={6}><TextField fullWidth label={t('phoneNo')} type="tel" value={form.phoneNo || ''} onChange={set('phoneNo')} /></Grid>
           <Grid item xs={12} sm={6}><TextField fullWidth label={t('remarks')} value={form.remarks || ''} onChange={set('remarks')} /></Grid>
+          <Grid item xs={12}><PayModeToggle value={form.payMode} onChange={(m) => setForm((f) => ({ ...f, payMode: m }))} /></Grid>
             </>
           )}
           <Grid item xs={12}>

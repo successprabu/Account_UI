@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -74,6 +75,8 @@ const emptyFunction = (user) => ({
   funPersionNames: "",
   remarks: "",
   funMessage: "",
+  upiId: "",
+  upiName: "",
   createdBy: user ? String(user.id) : "SYSTEM",
   createdDt: new Date().toISOString(),
   updatedBy: user ? String(user.id) : "SYSTEM",
@@ -83,6 +86,7 @@ const emptyFunction = (user) => ({
 
 /** Functions (events) of the account: add, edit, and choose which one entries are saved under. */
 const FunctionWithList = () => {
+  const tx = useTx();
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -246,6 +250,13 @@ const FunctionWithList = () => {
           <Grid item xs={12}>{field("funPersionNames", t("funPersionNames"), funPersionNamesRef, remarksRef, { required: true, placeholder: t("enter_fun_persion_names") })}</Grid>
           <Grid item xs={12} md={6}>{field("remarks", t("remarks"), remarksRef, funMessageRef, { multiline: true, minRows: 2, placeholder: t("enter_remarks") })}</Grid>
           <Grid item xs={12} md={6}>{field("funMessage", t("funMessage"), funMessageRef, saveRef, { multiline: true, minRows: 2, placeholder: t("enter_fun_message") })}</Grid>
+          <Grid item xs={12} sm={6}>
+            {field("upiId", tx("Family UPI ID for online moi (optional)"), null, saveRef, { onMic: undefined, placeholder: "ravi@okicici", inputProps: { autoCapitalize: "none", spellCheck: false } })}
+          </Grid>
+          <Grid item xs={12} sm={6}>{field("upiName", tx("Name shown in UPI apps (optional)"), null, saveRef, { onMic: undefined })}</Grid>
+          <Grid item xs={12}>
+            <Typography variant="caption" color="text.secondary">{tx("Guests can scan a QR on the receipt screen to give moi straight to this UPI ID. Mark those receipts as Online.")}</Typography>
+          </Grid>
         </Grid>
         <Translator
           inputText={formData[fieldBeingTranslated] || ""}
