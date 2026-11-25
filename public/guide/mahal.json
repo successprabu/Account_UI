@@ -2,7 +2,7 @@
   "id": "mahal",
   "title": "Mahal Management",
   "heading": "Mahal Management user guide",
-  "summary": "Put your hall online, take booking requests from customers, avoid double bookings, and keep track of advances and balances. The first month is free.",
+  "summary": "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.",
   "color": "#f59e0b",
   "sections": [
     {
@@ -19,7 +19,17 @@
         {
           "title": "Your dashboard",
           "img": "02-dashboard.jpg",
-          "text": "Sign in with your mobile number and password. The dashboard shows new requests waiting for your answer, upcoming events, this month's rent and the balance still to collect. Requests to answer and Coming up list the bookings that need you next."
+          "text": "Sign in with your mobile number and password. The dashboard shows new requests, upcoming events, this month's rent and the balance still to collect. Send today lists the WhatsApp reminders due today, and Requests to answer and Coming up list the bookings that need you next."
+        },
+        {
+          "title": "Give your manager a staff login",
+          "img": "16-staff.jpg",
+          "text": "Open Staff logins and tap Add staff login. Enter their name, mobile number and a password, and share the password with them yourself. Staff sign in with their own number on the website or the app.",
+          "points": [
+            "Staff can add and edit bookings, confirm requests, record payments, make invoices, send reminders, tick the checklist and add expenses.",
+            "Only you can see income and profit, cancel bookings, delete expenses, change hall details, prices or payment settings, and add staff.",
+            "Switch a login off to block it at any time."
+          ]
         }
       ]
     },
@@ -30,12 +40,52 @@
           "title": "Your halls",
           "img": "03-my-mahals.jpg",
           "text": "Open My mahals. Each card shows the hall's capacity, price per day, new requests and upcoming events. Tap Edit to change a hall, or Bookings to see only that hall's bookings.",
-          "points": ["Tap Add mahal to add a hall."]
+          "points": [
+            "Tap Add mahal to add a hall."
+          ]
         },
         {
           "title": "Add the hall details",
           "img": "04-add-mahal.jpg",
           "text": "Fill in the hall name, a few lines about the hall, seating and dining capacity, rooms, rent per day and the advance needed to confirm. Choose the events you host and the amenities you have. Switch on Take bookings online to show the hall on the public booking site. Tap Add mahal to save."
+        },
+        {
+          "title": "Weekend and muhurtham prices",
+          "img": "17-prices.jpg",
+          "text": "In My mahals, tap Prices on a hall. On Day prices, set a weekend rent (Saturday and Sunday), a muhurtham day rent and a weekday discount. Add your muhurtham and festival dates from the calendar. Leave a box empty to use the normal rent.",
+          "points": [
+            "The rent for each day is worked out by itself: muhurtham rent on a marked date, else weekend rent, else the normal rent less the weekday discount.",
+            "Customers see the prices and the upcoming muhurtham dates on your hall page."
+          ]
+        },
+        {
+          "title": "Packages and add-ons",
+          "img": "18-packages.jpg",
+          "text": "In Prices, open Packages and add-ons. A package (for example Hall + dining hall) is charged for every day on top of the rent; the customer picks one. Add-ons (AC, generator, decoration, sound system) are charged per day or once per event.",
+          "points": [
+            "Switch off Show to customers to hide one for a while.",
+            "Customers choose them on your hall page and the estimate includes them."
+          ]
+        },
+        {
+          "title": "GST invoices and online payment",
+          "img": "19-billing.jpg",
+          "text": "In My mahals, tap Billing. Switch on Show GST on invoices and enter your GSTIN to get tax invoices. Switch on Customers can pay online and enter the Key Id and Key Secret from your own Razorpay account, so customers can pay the advance by UPI, card or net banking.",
+          "points": [
+            "Money goes straight to your Razorpay account. The booking is confirmed by itself when the customer pays.",
+            "The secret is stored encrypted and never shown again.",
+            "Use Razorpay test keys (rzp_test_…) to try it, and live keys (rzp_live_…) for real payments."
+          ]
+        },
+        {
+          "title": "Your event-day checklist",
+          "img": "20-checklist-setup.jpg",
+          "text": "In My mahals, tap Checklist. Your hall starts with a ready list: cleaning, chairs, power and generator, AC and fans, water, stage and lights, keys handed over, damage check and keys returned. Edit the lines, add your own, move them up, or untick a line to stop using it."
+        },
+        {
+          "title": "Vendors you recommend",
+          "img": "21-vendors.jpg",
+          "text": "Open Vendors and tap Add vendor. Add the caterers, decorators, photographers, music, flowers and other vendors you work with, with their phone number and a short note. Families see them on your hall page and can call or WhatsApp them directly."
         }
       ]
     },
@@ -55,30 +105,91 @@
           "title": "See the month on a calendar",
           "img": "06-calendar.jpg",
           "text": "Switch to the calendar to see which days are booked. Confirmed bookings and open requests are shown in different colours, so you can spot free dates at a glance.",
-          "points": ["The calendar button switches the view."]
+          "points": [
+            "The calendar button switches the view."
+          ]
         },
         {
           "title": "Answer a booking request",
           "img": "07-requests.jpg",
           "text": "When a customer asks for a date on the booking site, the request appears under Requests and on your dashboard.",
-          "points": ["Tap the request to open it."]
+          "points": [
+            "Tap the request to open it."
+          ]
         },
         {
           "title": "Confirm or decline",
           "img": "08-confirm.jpg",
           "text": "Call or WhatsApp the customer from the booking. When you agree, tap Confirm to block the dates. If the dates clash with a confirmed booking, the app warns you so you never book the hall twice. Tap Decline to turn the request down.",
-          "points": ["Confirm blocks the dates for this customer."]
+          "points": [
+            "Confirm blocks the dates for this customer."
+          ]
         },
         {
           "title": "Add a booking yourself",
-          "img": "09-new-booking.jpg",
-          "text": "Tap New booking. Choose the hall, the start and end date and time, the event, and the customer's name and phone. Enter the hall rent, any discount and the advance received. The balance is worked out for you. Tap Save booking."
+          "img": "22-price-list.jpg",
+          "text": "Tap New booking. Choose the hall, the start and end date and time, the event, and the customer's name and phone. Pick a package and add-ons if the customer wants them. The Price list box shows the rent for those days (with weekend and muhurtham prices) plus the extras; tap Use it, or type your own total. Enter any discount and the advance received, and the balance is worked out for you.",
+          "points": [
+            "You can also type or speak the booking (Type or speak a booking) and check what the AI filled in."
+          ]
         },
         {
           "title": "Record a payment",
           "img": "10-payment.jpg",
-          "text": "Open a booking to see the rent, amount received and balance. When the customer pays, tap Record payment and enter the amount and how they paid. The balance on the booking and on your dashboard updates straight away. Use Cancel booking if the event is called off.",
-          "points": ["Record payment adds a payment to this booking."]
+          "text": "Open a booking to see the rent, amount received and balance. When the customer pays, tap Record payment and enter the amount and how they paid. The balance on the booking and on your dashboard updates. Payments made online by the customer are added by themselves.",
+          "points": [
+            "Record payment adds a payment to this booking."
+          ]
+        },
+        {
+          "title": "Send an invoice",
+          "img": "23-invoice.jpg",
+          "text": "On a confirmed booking, tap Invoice to open a printable invoice (Save as PDF), or Send invoice to send a summary on WhatsApp. In the app, Invoice makes a PDF you can share. Each booking gets an invoice number the first time. With GST switched on, the invoice shows the taxable value, CGST and SGST; packages and add-ons are listed on their own lines."
+        },
+        {
+          "title": "Tick the checklist on the event day",
+          "img": "24-event-checklist.jpg",
+          "text": "Open a confirmed booking and scroll to Event-day checklist. Tick each line as it is done; the app shows who ticked it and when, and a bar shows how many are done. Write any damage or handover notes (for example 2 chairs broken) and tap Save notes."
+        }
+      ]
+    },
+    {
+      "title": "Messages to customers",
+      "steps": [
+        {
+          "title": "Send today on WhatsApp",
+          "img": "25-send-today.jpg",
+          "text": "The Send today card on your dashboard lists the messages due today: event tomorrow, balance due within a week, a thank-you after the event, and a free Moitech offer for families with an upcoming function. Choose English or Tamil and tap Send: WhatsApp opens with the message ready, and the card marks it sent.",
+          "points": [
+            "The thank-you message has a link where the family can review your hall."
+          ]
+        },
+        {
+          "title": "Follow-ups",
+          "text": "Open Follow-ups for AI-written messages to customers (balance due, event soon, waiting requests, thank-you) in English or Tamil. Check the message, then send it from WhatsApp or SMS."
+        },
+        {
+          "title": "Reviews",
+          "text": "Open Reviews to see what families say after their event: the average stars, how many of each, and every comment. Tap Reply to thank them (your reply shows on your hall page), or Hide to remove a review from your hall page."
+        }
+      ]
+    },
+    {
+      "title": "Money and reports",
+      "steps": [
+        {
+          "title": "Expenses and profit",
+          "img": "26-expenses.jpg",
+          "text": "Open Expenses and profit and tap Add expense to record electricity, cleaning, staff wages, repairs, generator diesel and other costs. For each month you see the events, income, expenses and profit, where the money went, a 6-month chart, and profit by hall if you have more than one."
+        },
+        {
+          "title": "Reports",
+          "img": "27-reports.jpg",
+          "text": "Open Reports and choose the year (and the hall). You see the events, occupancy, income, expenses, profit and balances due for the year; charts of income and expenses and of occupancy per month; a month-by-month table; the top event types; and every balance still due, with a WhatsApp reminder button.",
+          "points": [
+            "Excel downloads the report with 3 sheets: months, event types and balances due.",
+            "PDF opens a printable report (Save as PDF)."
+          ]
         }
       ]
     },
@@ -88,17 +199,26 @@
         {
           "title": "Customers find your hall",
           "img": "11-find.jpg",
-          "text": "Customers open Book a mahal on the website. They search by area, event date and number of guests, and see which halls are free on that date. Share the Booking site link from your dashboard on WhatsApp and social media."
+          "text": "Customers open Book a mahal on the website. They search by area, event date and number of guests, and see which halls are free on that date. Your hall page shows the photos, star rating and reviews, weekday, weekend and muhurtham prices, packages and add-ons, and the vendors you recommend. Share the Booking site link from your dashboard on WhatsApp."
         },
         {
           "title": "Customers request a date",
           "img": "12-details.jpg",
-          "text": "Your hall page shows the photos, capacity, rent and a calendar of available, requested and booked days. The customer picks the dates, enters their name and phone and sends the request. It reaches you under Requests, and they get a booking reference."
+          "text": "The customer picks the dates on the calendar, chooses a package and add-ons, and sees the estimated rent for those days. They enter their name and phone and send the request. It reaches you as a request to confirm."
+        },
+        {
+          "title": "Customers pay the advance online",
+          "text": "If you switched on online payment, the customer can pay the advance right after sending the request, or later from Check my booking. They pay by UPI (scan the QR), card or net banking. The money goes to your Razorpay account and the booking is confirmed by itself."
         },
         {
           "title": "Customers check their booking",
           "img": "13-status.jpg",
           "text": "With the booking reference and phone number, customers can check whether their booking is waiting, confirmed or completed, without calling you."
+        },
+        {
+          "title": "Customers review your hall",
+          "img": "29-review.jpg",
+          "text": "After the event, the thank-you message links to the review page. The customer enters their booking reference and phone, gives 1 to 5 stars and a comment. Reviews show on your hall page with your reply."
         }
       ]
     },
@@ -113,7 +233,16 @@
         {
           "title": "Choose a plan",
           "img": "15-pricing.jpg",
-          "text": "The first month is free. After that choose Monthly (₹4,999) or Yearly (₹49,999, about 2 months free) on the Pricing page, Mahal Management tab. Sign in first so the plan is added to your account."
+          "text": "The first month is free. After that choose Monthly (₹4,999) or Yearly (₹49,999, about 2 months free) on the Pricing page, Mahal Management tab. Choose Pay once, or AutoPay to approve once with UPI AutoPay or a card so the plan renews by itself. If you are not signed in, the site asks you to sign in and brings you straight back to pay."
+        },
+        {
+          "title": "My plan and billing",
+          "img": "30-my-plan.jpg",
+          "text": "Open My plan & billing (in the menu, or under your name at the top) to see your plan, when it ends, and whether AutoPay is on. Tap Renew now or Turn on AutoPay, or Stop AutoPay. From 7 days before the end, a reminder appears on your dashboard."
+        },
+        {
+          "title": "Use the mobile app",
+          "text": "Download the Android app from the website (Get the app) and sign in with the same mobile number and password. Bookings, payments, invoices, reminders, expenses, prices and packages, reviews, vendors, the checklist and reports all work in the app."
         }
       ]
     }
