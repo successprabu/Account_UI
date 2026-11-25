@@ -5,6 +5,7 @@ import DashboardAdmin from './DashboardAdmin';
 import ProtectedRoute from '../common/ProtectedRoute';
 import DashboardMahal from './DashboardMahal';
 import PlanReminder from '../billing/PlanReminder';
+import { MoitechPlanBanner } from '../billing/PlanLimit';
 
 const RoleBasedDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -24,13 +25,14 @@ const RoleBasedDashboard = () => {
     case 'AU':
       return (
         <ProtectedRoute allowedRoles={['AU']}>
-          <PlanReminder userType="AU" />
+          <MoitechPlanBanner />
           <DashboardAdmin />
         </ProtectedRoute>
       );
     case 'NU':
       return (
         <ProtectedRoute allowedRoles={['NU']}>
+          <MoitechPlanBanner />
           <DashboardUser />
         </ProtectedRoute>
       );

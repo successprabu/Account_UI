@@ -1040,5 +1040,17 @@
   "Choose a plan": "திட்டத்தைத் தேர்வு செய்யவும்",
   "My plan and billing": "எனது திட்டம் மற்றும் கட்டணம்",
   "Use the mobile app": "மொபைல் செயலியைப் பயன்படுத்தவும்",
-  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "உங்கள் மண்டபத்தை ஆன்லைனில் கொண்டு வாருங்கள், முன்பதிவுகளையும் முன்பணத்தையும் பெறுங்கள், விலைப்பட்டியல்களையும் நினைவூட்டல்களையும் WhatsApp-இல் அனுப்புங்கள், உண்மையான லாபத்தைப் பாருங்கள். முதல் மாதம் இலவசம்."
+  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "உங்கள் மண்டபத்தை ஆன்லைனில் கொண்டு வாருங்கள், முன்பதிவுகளையும் முன்பணத்தையும் பெறுங்கள், விலைப்பட்டியல்களையும் நினைவூட்டல்களையும் WhatsApp-இல் அனுப்புங்கள், உண்மையான லாபத்தைப் பாருங்கள். முதல் மாதம் இலவசம்.",
+  "Free receipts used up": "இலவச ரசீதுகள் தீர்ந்துவிட்டன",
+  "Your plan has ended": "உங்கள் திட்டம் முடிந்துவிட்டது",
+  "Your free trial has ended": "உங்கள் இலவச சோதனைக் காலம் முடிந்துவிட்டது",
+  "{{n}} of {{limit}} free receipts used": "{{limit}} இலவச ரசீதுகளில் {{n}} பயன்படுத்தப்பட்டன",
+  "Standard ₹99/month or Premium ₹199/month: unlimited receipts for all your functions.": "ஸ்டாண்டர்ட் ₹99/மாதம் அல்லது பிரீமியம் ₹199/மாதம்: உங்கள் எல்லா விழாக்களுக்கும் வரம்பற்ற ரசீதுகள்.",
+  "Your plan ends in {{n}} days.": "உங்கள் திட்டம் {{n}} நாட்களில் முடிகிறது.",
+  "Free until {{date}}. Choose a plan to keep using Moitech after that.": "{{date}} வரை இலவசம். அதன் பிறகும் Moitech பயன்படுத்த ஒரு திட்டத்தைத் தேர்வு செய்யுங்கள்.",
+  "Free trial: {{n}} days left · {{used}} of {{limit}} receipts used": "இலவச சோதனை: {{n}} நாட்கள் மீதம் · {{limit}} ரசீதுகளில் {{used}} பயன்படுத்தப்பட்டன",
+  "New entries are paused. Your saved receipts and reports stay as they are.": "புதிய பதிவுகள் நிறுத்தப்பட்டுள்ளன. சேமித்த ரசீதுகளும் அறிக்கைகளும் அப்படியே இருக்கும்.",
+  "The free plan allows 100 receipts and you have used them all. Choose a plan to keep adding receipts. Your saved receipts and reports stay as they are.": "இலவசத் திட்டத்தில் 100 ரசீதுகள் மட்டுமே; அனைத்தையும் பயன்படுத்திவிட்டீர்கள். மேலும் ரசீதுகள் சேர்க்க ஒரு திட்டத்தைத் தேர்வு செய்யுங்கள். சேமித்த ரசீதுகளும் அறிக்கைகளும் அப்படியே இருக்கும்.",
+  "Your plan has ended. Renew it to keep adding entries. Your saved receipts and reports stay as they are.": "உங்கள் திட்டம் முடிந்துவிட்டது. பதிவுகளைத் தொடர புதுப்பிக்கவும். சேமித்த ரசீதுகளும் அறிக்கைகளும் அப்படியே இருக்கும்.",
+  "Your free trial has ended. Choose a plan to keep adding entries. Your saved receipts and reports stay as they are.": "உங்கள் இலவச சோதனைக் காலம் முடிந்துவிட்டது. பதிவுகளைத் தொடர ஒரு திட்டத்தைத் தேர்வு செய்யுங்கள். சேமித்த ரசீதுகளும் அறிக்கைகளும் அப்படியே இருக்கும்."
 }

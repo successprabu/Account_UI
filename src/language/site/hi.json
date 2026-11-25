@@ -1040,5 +1040,17 @@
   "Choose a plan": "प्लान चुनें",
   "My plan and billing": "मेरा प्लान और बिलिंग",
   "Use the mobile app": "मोबाइल ऐप इस्तेमाल करें",
-  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "अपना हॉल ऑनलाइन लाएँ, बुकिंग और एडवांस भुगतान लें, इनवॉइस और रिमाइंडर WhatsApp पर भेजें, और असली मुनाफ़ा देखें। पहला महीना मुफ़्त है।"
+  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "अपना हॉल ऑनलाइन लाएँ, बुकिंग और एडवांस भुगतान लें, इनवॉइस और रिमाइंडर WhatsApp पर भेजें, और असली मुनाफ़ा देखें। पहला महीना मुफ़्त है।",
+  "Free receipts used up": "मुफ़्त रसीदें खत्म",
+  "Your plan has ended": "आपका प्लान समाप्त हो गया",
+  "Your free trial has ended": "आपका मुफ़्त ट्रायल समाप्त हो गया",
+  "{{n}} of {{limit}} free receipts used": "{{limit}} मुफ़्त रसीदों में से {{n}} इस्तेमाल",
+  "Standard ₹99/month or Premium ₹199/month: unlimited receipts for all your functions.": "स्टैंडर्ड ₹99/माह या प्रीमियम ₹199/माह: आपके सभी समारोहों के लिए असीमित रसीदें।",
+  "Your plan ends in {{n}} days.": "आपका प्लान {{n}} दिनों में समाप्त होगा।",
+  "Free until {{date}}. Choose a plan to keep using Moitech after that.": "{{date}} तक मुफ़्त। उसके बाद Moitech इस्तेमाल करने के लिए प्लान चुनें।",
+  "Free trial: {{n}} days left · {{used}} of {{limit}} receipts used": "मुफ़्त ट्रायल: {{n}} दिन बाकी · {{limit}} में से {{used}} रसीदें इस्तेमाल",
+  "New entries are paused. Your saved receipts and reports stay as they are.": "नई एंट्री रुकी हैं। आपकी सेव रसीदें और रिपोर्ट्स वैसी ही रहेंगी।",
+  "The free plan allows 100 receipts and you have used them all. Choose a plan to keep adding receipts. Your saved receipts and reports stay as they are.": "मुफ़्त प्लान में 100 रसीदें हैं और आप सभी इस्तेमाल कर चुके हैं। और रसीदें जोड़ने के लिए प्लान चुनें। आपकी सेव रसीदें और रिपोर्ट्स वैसी ही रहेंगी।",
+  "Your plan has ended. Renew it to keep adding entries. Your saved receipts and reports stay as they are.": "आपका प्लान समाप्त हो गया है। एंट्री जोड़ते रहने के लिए रिन्यू करें। आपकी सेव रसीदें और रिपोर्ट्स वैसी ही रहेंगी।",
+  "Your free trial has ended. Choose a plan to keep adding entries. Your saved receipts and reports stay as they are.": "आपका मुफ़्त ट्रायल समाप्त हो गया है। एंट्री जोड़ते रहने के लिए प्लान चुनें। आपकी सेव रसीदें और रिपोर्ट्स वैसी ही रहेंगी।"
 }

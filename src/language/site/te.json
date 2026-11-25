@@ -1040,5 +1040,17 @@
   "Choose a plan": "ప్లాన్ ఎంచుకోండి",
   "My plan and billing": "నా ప్లాన్ మరియు బిల్లింగ్",
   "Use the mobile app": "మొబైల్ యాప్ వాడండి",
-  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "మీ హాల్‌ను ఆన్‌లైన్‌లో పెట్టండి, బుకింగ్‌లు మరియు అడ్వాన్స్ చెల్లింపులు తీసుకోండి, ఇన్‌వాయిస్‌లు మరియు రిమైండర్‌లు WhatsApp‌లో పంపండి, నిజమైన లాభం చూడండి. మొదటి నెల ఉచితం."
+  "Put your hall online, take bookings and advance payments, send invoices and reminders on WhatsApp, and see your real profit. The first month is free.": "మీ హాల్‌ను ఆన్‌లైన్‌లో పెట్టండి, బుకింగ్‌లు మరియు అడ్వాన్స్ చెల్లింపులు తీసుకోండి, ఇన్‌వాయిస్‌లు మరియు రిమైండర్‌లు WhatsApp‌లో పంపండి, నిజమైన లాభం చూడండి. మొదటి నెల ఉచితం.",
+  "Free receipts used up": "ఉచిత రసీదులు అయిపోయాయి",
+  "Your plan has ended": "మీ ప్లాన్ ముగిసింది",
+  "Your free trial has ended": "మీ ఉచిత ట్రయల్ ముగిసింది",
+  "{{n}} of {{limit}} free receipts used": "{{limit}} ఉచిత రసీదుల్లో {{n}} వాడారు",
+  "Standard ₹99/month or Premium ₹199/month: unlimited receipts for all your functions.": "స్టాండర్డ్ ₹99/నెల లేదా ప్రీమియం ₹199/నెల: మీ అన్ని వేడుకలకు అపరిమిత రసీదులు.",
+  "Your plan ends in {{n}} days.": "మీ ప్లాన్ {{n}} రోజుల్లో ముగుస్తుంది.",
+  "Free until {{date}}. Choose a plan to keep using Moitech after that.": "{{date}} వరకు ఉచితం. ఆ తర్వాత Moitech వాడటానికి ప్లాన్ ఎంచుకోండి.",
+  "Free trial: {{n}} days left · {{used}} of {{limit}} receipts used": "ఉచిత ట్రయల్: {{n}} రోజులు మిగిలాయి · {{limit}} రసీదుల్లో {{used}} వాడారు",
+  "New entries are paused. Your saved receipts and reports stay as they are.": "కొత్త నమోదులు ఆపబడ్డాయి. సేవ్ చేసిన రసీదులు, నివేదికలు అలాగే ఉంటాయి.",
+  "The free plan allows 100 receipts and you have used them all. Choose a plan to keep adding receipts. Your saved receipts and reports stay as they are.": "ఉచిత ప్లాన్‌లో 100 రసీదులు మాత్రమే, మీరు అన్నీ వాడేశారు. మరిన్ని రసీదులు జోడించడానికి ప్లాన్ ఎంచుకోండి. సేవ్ చేసిన రసీదులు, నివేదికలు అలాగే ఉంటాయి.",
+  "Your plan has ended. Renew it to keep adding entries. Your saved receipts and reports stay as they are.": "మీ ప్లాన్ ముగిసింది. నమోదులు కొనసాగించడానికి పునరుద్ధరించండి. సేవ్ చేసిన రసీదులు, నివేదికలు అలాగే ఉంటాయి.",
+  "Your free trial has ended. Choose a plan to keep adding entries. Your saved receipts and reports stay as they are.": "మీ ఉచిత ట్రయల్ ముగిసింది. నమోదులు కొనసాగించడానికి ప్లాన్ ఎంచుకోండి. సేవ్ చేసిన రసీదులు, నివేదికలు అలాగే ఉంటాయి."
 }

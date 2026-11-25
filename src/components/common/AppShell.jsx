@@ -50,6 +50,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
+import { PlanLimitDialog } from '../billing/PlanLimit';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
 import { useTheme as useAppTheme } from '../../ThemeProvider';
@@ -434,6 +435,7 @@ const AppShell = ({ children }) => {
 
         <Box component="main" sx={{ flex: 1, minWidth: 0, px: { xs: 2, md: 3 }, pb: 4 }}>
           {children}
+          <PlanLimitDialog />
         </Box>
       </Box>
 
