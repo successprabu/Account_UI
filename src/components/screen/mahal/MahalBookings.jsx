@@ -54,6 +54,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { EmptyState, PageHeader, StatusChip, notify } from '../../ui';
 import { getBooking, listBookings, listMyMahals, recordPayment, saveBooking, setBookingStatus, toDay, toLocalIso } from '../../../api/mahal';
 import { getInvoice, isStaffUser, markReminder } from '../../../api/mahalOps';
+import { getQuote, listPackages, DAY_KIND } from '../../../api/mahalPlus';
+
 import { hallMessage, printInvoice, waLink } from '../../mahal/hallMessages';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
@@ -90,7 +92,7 @@ const emptyBooking = (mahalId) => {
   from.setHours(6, 0, 0, 0);
   const to = new Date(from);
   to.setHours(22, 0, 0, 0);
-  return { id: 0, mahalId: mahalId || '', customerName: '', primary_phone: '', email: '', eventType: 'Marriage', guestCount: '', fromDate: inputValue(from), toDate: inputValue(to), totalAmount: '', discount: '', advance: '', payMethod: 'Cash', remarks: '' };
+  return { id: 0, mahalId: mahalId || '', customerName: '', primary_phone: '', email: '', eventType: 'Marriage', guestCount: '', fromDate: inputValue(from), toDate: inputValue(to), totalAmount: '', discount: '', advance: '', payMethod: 'Cash', remarks: '', packageId: null, addonIds: [] };
 };
 
 const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose, onSaved }) => {
@@ -118,6 +120,8 @@ const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose
         advance: booking.advance || '',
         payMethod: booking.payMethod || 'Cash',
         remarks: booking.remarks || '',
+        packageId: booking.packageId || null,
+        addonIds: booking.addonIds || [],
       });
     } else if (draft) {
       // Filled by AI from the owner's words: show what is still missing.
@@ -143,12 +147,51 @@ const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose
   };
   const money = (e) => e.target.value.replace(/[^\d.]/g, '').slice(0, 10);
 
-  // Suggest the rent from the hall's daily price when the owner has not typed one.
+  // Packages and add-ons of the chosen hall, and the price-list quote for the dates (weekend, muhurtham, extras).
+  const [extras, setExtras] = useState([]);
+  const [quote, setQuote] = useState(null);
+  const [rentTyped, setRentTyped] = useState(false);
   useEffect(() => {
-    if (!open || booking || !mahal?.pricePerDay || form.totalAmount) return;
-    const days = Math.max(1, Math.ceil((new Date(form.toDate) - new Date(form.fromDate)) / 86400000));
-    setForm((f) => ({ ...f, totalAmount: String(mahal.pricePerDay * days), advance: f.advance || (mahal.advanceAmount ? String(mahal.advanceAmount) : '') }));
-  }, [open, booking, mahal, form.fromDate, form.toDate, form.totalAmount]);
+    if (open) setRentTyped(!!booking);
+  }, [open, booking]);
+  useEffect(() => {
+    if (!open || !form.mahalId) {
+      setExtras([]);
+      return;
+    }
+    listPackages(Number(form.mahalId)).then((r) => setExtras(r.ok ? (r.data || []).filter((x) => x.isActive) : []));
+  }, [open, form.mahalId]);
+  const addonKey = (form.addonIds || []).join(',');
+  useEffect(() => {
+    if (!open || !form.mahalId || !form.fromDate || !form.toDate || new Date(form.toDate) <= new Date(form.fromDate)) {
+      setQuote(null);
+      return undefined;
+    }
+    let live = true;
+    const t = setTimeout(async () => {
+      const r = await getQuote({ mahalId: Number(form.mahalId), from: `${form.fromDate}:00`, to: `${form.toDate}:00`, packageId: form.packageId, addonIds: form.addonIds });
+      if (!live) return;
+      if (r.ok) {
+        setQuote(r.data);
+      } else if (mahal?.pricePerDay) {
+        // Older server without the price list: rent × days, as before.
+        const days = Math.max(1, Math.ceil((new Date(form.toDate) - new Date(form.fromDate)) / 86400000));
+        setQuote({ total: mahal.pricePerDay * days, rent: mahal.pricePerDay * days, days: [], addons: [] });
+      } else setQuote(null);
+    }, 300);
+    return () => {
+      live = false;
+      clearTimeout(t);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, form.mahalId, form.fromDate, form.toDate, form.packageId, addonKey]);
+  // A new booking takes the price-list total until the owner types their own rent.
+  useEffect(() => {
+    if (!open || booking || rentTyped || !quote?.total) return;
+    setForm((f) => ({ ...f, totalAmount: String(quote.total), advance: f.advance || (mahal?.advanceAmount ? String(mahal.advanceAmount) : '') }));
+  }, [open, booking, rentTyped, quote, mahal]);
+  const toggleAddon = (id) => setForm((f) => ({ ...f, addonIds: f.addonIds.includes(id) ? f.addonIds.filter((x) => x !== id) : [...f.addonIds, id] }));
+  const special = (quote?.days || []).filter((d) => d.kind === 'muhurtham').length;
 
   const balance = Math.max(0, (Number(form.totalAmount) || 0) - (Number(form.discount) || 0) - (Number(form.advance) || 0) - (Number(booking?.rcdAmount) || 0));
 
@@ -185,6 +228,8 @@ const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose
       advance: Number(form.advance) || 0,
       payMethod: form.payMethod,
       remarks: form.remarks,
+      packageId: form.packageId || null,
+      addonIds: form.addonIds || [],
     });
     setSaving(false);
     if (res.ok) {
@@ -232,9 +277,45 @@ const BookingFormDialog = ({ open, booking, draft, mahals, defaultMahal, onClose
             <Grid item xs={12} md={4}><TextField fullWidth label="Guests" value={form.guestCount} onChange={set('guestCount', (e) => e.target.value.replace(/\D/g, '').slice(0, 6))} inputProps={{ inputMode: 'numeric' }} /></Grid>
           </Grid>
 
+          {extras.length > 0 && (
+            <Box>
+              <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>Package and add-ons</Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {extras.filter((x) => x.kind === 'package').length > 0 && (
+                  <Chip label="Hall only" clickable color={!form.packageId ? 'primary' : 'default'} variant={!form.packageId ? 'filled' : 'outlined'} onClick={() => setForm((f) => ({ ...f, packageId: null }))} />
+                )}
+                {extras.filter((x) => x.kind === 'package').map((x) => (
+                  <Chip key={x.id} label={`${x.name} · +${rupees(x.price)}/day`} clickable color={form.packageId === x.id ? 'primary' : 'default'}
+                    variant={form.packageId === x.id ? 'filled' : 'outlined'} onClick={() => setForm((f) => ({ ...f, packageId: x.id }))} aria-pressed={form.packageId === x.id} />
+                ))}
+              </Stack>
+              {extras.some((x) => x.kind === 'addon') && (
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
+                  {extras.filter((x) => x.kind === 'addon').map((x) => {
+                    const on = form.addonIds.includes(x.id);
+                    return (
+                      <Chip key={x.id} icon={on ? <CheckIcon /> : undefined} label={`${x.name} · ${rupees(x.price)}${x.unit === 'event' ? '' : '/day'}`} clickable
+                        color={on ? 'secondary' : 'default'} variant={on ? 'filled' : 'outlined'} onClick={() => toggleAddon(x.id)} aria-pressed={on} />
+                    );
+                  })}
+                </Stack>
+              )}
+            </Box>
+          )}
+
           <Divider textAlign="left"><Typography variant="overline">Payment</Typography></Divider>
+          {quote?.total > 0 && (
+            <Alert severity={Number(form.totalAmount) === quote.total ? 'success' : 'info'} icon={false}
+              action={Number(form.totalAmount) !== quote.total ? <Button size="small" onClick={() => setForm((f) => ({ ...f, totalAmount: String(quote.total) }))}>Use it</Button> : null}>
+              Price list: <b>{rupees(quote.total)}</b>
+              {quote.days?.length > 0 && ` · rent ${rupees(quote.rent)} for ${quote.days.length} ${quote.days.length === 1 ? 'day' : 'days'}`}
+              {special > 0 && ` (${special} ${DAY_KIND.muhurtham.toLowerCase()}${special === 1 ? '' : 's'})`}
+              {quote.package && ` + ${quote.package.name} ${rupees(quote.package.amount)}`}
+              {quote.addons?.map((a) => ` + ${a.name} ${rupees(a.amount)}`).join('')}
+            </Alert>
+          )}
           <Grid container spacing={2}>
-            <Grid item xs={6} md={3}><TextField fullWidth label="Hall rent" value={form.totalAmount} onChange={set('totalAmount', money)} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} inputProps={{ inputMode: 'decimal' }} /></Grid>
+            <Grid item xs={6} md={3}><TextField fullWidth label="Total rent" value={form.totalAmount} onChange={(e) => { setRentTyped(true); set('totalAmount', money)(e); }} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} inputProps={{ inputMode: 'decimal' }} /></Grid>
             <Grid item xs={6} md={3}><TextField fullWidth label="Discount" value={form.discount} onChange={set('discount', money)} error={!!errors.discount} helperText={errors.discount} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} inputProps={{ inputMode: 'decimal' }} /></Grid>
             <Grid item xs={6} md={3}><TextField fullWidth label="Advance received" value={form.advance} onChange={set('advance', money)} InputProps={{ startAdornment: <InputAdornment position="start">₹</InputAdornment> }} inputProps={{ inputMode: 'decimal' }} /></Grid>
             <Grid item xs={6} md={3}>
@@ -453,6 +534,11 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
             <Box sx={{ mt: 2 }}>
               <Typography variant="overline" color="text.secondary">Payment</Typography>
               <Line label="Hall rent">{rupees(b.totalAmount)}</Line>
+              {(b.packageName || b.addons?.length > 0) && (
+                <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: -0.5, mb: 0.5 }}>
+                  {[b.packageName && `Package: ${b.packageName}`, ...(b.addons || []).map((a) => a.name)].filter(Boolean).join(' · ')}
+                </Typography>
+              )}
               {b.discount > 0 && <Line label="Discount">− {rupees(b.discount)}</Line>}
               <Line label="Received">{rupees(paid)}{b.payMethod ? ` · ${b.payMethod}` : ''}</Line>
               <Divider sx={{ my: 1 }} />

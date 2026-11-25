@@ -41,6 +41,8 @@ import { getDistricts, getStates, listMyMahals, saveMahal } from '../../../api/m
 import { AMENITIES, EVENT_TYPES, MahalImage, fadeUp, placeLine, rupees } from '../../mahal/shared';
 import PhotoManager, { uploadQueued } from '../../mahal/PhotoManager';
 import BillingDialog from '../../mahal/BillingDialog';
+import PricingDialog from '../../mahal/PricingDialog';
+import SellOutlinedIcon from '@mui/icons-material/SellOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import { useTx } from '../../../language/site';
 
@@ -263,6 +265,7 @@ export const MahalFormDialog = ({ open, mahal, onClose, onSaved }) => {
 const MyMahals = () => {
   const tx = useTx();
   const [billing, setBilling] = useState(null);
+  const [pricing, setPricing] = useState(null);
   const [params, setParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -355,11 +358,15 @@ const MyMahals = () => {
                     </Stack>
                   </Box>
                   <Divider />
-                  <Stack direction="row" spacing={1} sx={{ p: 1.25 }}>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ p: 1.25 }}>
                     <Button size="small" startIcon={<EditOutlinedIcon />} onClick={() => { setEditing(m); setOpen(true); }}>Edit</Button>
                     <Button size="small" component={RouterLink} to={`/mahal-bookings?mahal=${m.id}`} startIcon={<EventNoteOutlinedIcon />}>Bookings</Button>
                     <Tooltip title={tx('GST invoice and online payment')}>
                       <Button size="small" startIcon={<ReceiptOutlinedIcon />} onClick={() => setBilling(m)} color={m.payOnline || m.gstEnabled ? 'success' : 'primary'}>{tx('Billing')}</Button>
+                    </Tooltip>
+                    <Tooltip title={tx('Weekend and muhurtham prices, packages and add-ons')}>
+                      <Button size="small" startIcon={<SellOutlinedIcon />} onClick={() => setPricing(m)}
+                        color={m.weekendPrice || m.muhurthamPrice || m.weekdayDiscount ? 'success' : 'primary'}>{tx('Prices')}</Button>
                     </Tooltip>
                     {m.isOnlineBooking && m.isActive && (
                       <Tooltip title="Open public page">
@@ -375,6 +382,8 @@ const MyMahals = () => {
       )}
 
       <MahalFormDialog open={open} mahal={editing} onClose={close} onSaved={saved} />
+      <PricingDialog open={!!pricing} mahal={pricing} onClose={() => setPricing(null)}
+        onSaved={(nm) => { setPricing(nm); setMahals((list) => list.map((x) => (x.id === nm.id ? { ...x, ...nm } : x))); }} />
       <BillingDialog open={!!billing} mahal={billing} onClose={() => setBilling(null)}
         onSaved={(nm) => { setBilling(null); setMahals((list) => list.map((x) => (x.id === nm.id ? { ...x, ...nm } : x))); }} />
     </Box>

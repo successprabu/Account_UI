@@ -112,6 +112,8 @@ const MahalStaff = lazy(() => import("./components/screen/mahal/MahalStaff"));
 const FindMahal = lazy(() => import("./components/screen/mahal/FindMahal"));
 const MahalDetails = lazy(() => import("./components/screen/mahal/MahalDetails"));
 const MahalBookingStatus = lazy(() => import("./components/screen/mahal/BookingStatus"));
+const MahalReview = lazy(() => import("./components/screen/mahal/MahalReview"));
+const MahalReviews = lazy(() => import("./components/screen/mahal/MahalReviews"));
 const AddMoitechCustomer = lazy(() =>
   import("./components/screen/AddMoitechCustomer")
 );
@@ -145,6 +147,7 @@ const Router = () => {
         <Route path="user-guide/:id" element={<UserGuidePage />} />
         <Route path="mahals" element={<FindMahal />} />
         <Route path="mahals/status" element={<MahalBookingStatus />} />
+        <Route path="mahals/review" element={<MahalReview />} />
         <Route path="mahals/:id" element={<MahalDetails />} />
         <Route path="contactus" element={<ContactUs />} />
         <Route path="inprogress" element={<InProgress />} />
@@ -343,6 +346,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU","MU","MS"]}>
                 <MahalExpenses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="mahal-reviews"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "MU", "MS"]}>
+                <MahalReviews />
               </ProtectedRoute>
             }
           />

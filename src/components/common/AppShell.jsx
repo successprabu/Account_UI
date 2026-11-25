@@ -49,6 +49,7 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import { useTheme as useAppTheme } from '../../ThemeProvider';
 import { useLanguage } from '../../language/LanguageContext';
 import { LANGUAGES } from './AppHeader';
@@ -71,6 +72,7 @@ const NAV = [
   { key: 'myMahals', fallback: 'My mahals', to: '/my-mahals', icon: <ApartmentOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'mahalExpenses', fallback: 'Expenses and profit', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['SU', 'MU'] },
   { key: 'mahalExpensesStaff', fallback: 'Expenses', to: '/mahal-expenses', icon: <ReceiptLongOutlinedIcon />, roles: ['MS'] },
+  { key: 'mahalReviews', fallback: 'Reviews', to: '/mahal-reviews', icon: <RateReviewOutlinedIcon />, roles: ['SU', 'MU', 'MS'] },
   { key: 'mahalStaff', fallback: 'Staff logins', to: '/mahal-staff', icon: <BadgeOutlinedIcon />, roles: ['MU'] },
   // Mahal admins add Moitech users under their own account; super admins use Register client.
   { key: 'addMoiTechCustomer', to: '/add-moitech-customer', icon: <PersonAddAltOutlinedIcon />, roles: ['MU'] },

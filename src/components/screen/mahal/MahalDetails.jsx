@@ -44,6 +44,11 @@ import { getPublicMahal, requestBooking, toDay } from '../../../api/mahal';
 import { AvailabilityCalendar, EVENT_TYPES, MahalImage, daysBetween, fmtRange, placeLine, rupees } from '../../mahal/shared';
 import MahalGallery from '../../mahal/MahalGallery';
 import AiChat from '../../mahal/AiChat';
+import HallReviews from '../../mahal/HallReviews';
+import { RatingLine } from '../../mahal/Stars';
+import { getHallExtras, getPublicQuote } from '../../../api/mahalPlus';
+import CelebrationOutlinedIcon from '@mui/icons-material/CelebrationOutlined';
+import WeekendOutlinedIcon from '@mui/icons-material/WeekendOutlined';
 
 const MAX_DAYS = 7;
 const emptyForm = { name: '', phone: '', email: '', eventType: '', guestCount: '', message: '', website: '' };
@@ -153,6 +158,10 @@ const MahalDetails = () => {
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState('');
   const [result, setResult] = useState(null);
+  const [extras, setExtras] = useState(null);
+  const [packageId, setPackageId] = useState(null);
+  const [addonIds, setAddonIds] = useState([]);
+  const [quote, setQuote] = useState(null);
   const formRef = useRef(null);
   const narrow = useMediaQuery(theme.breakpoints.down('md'));
   const [formVisible, setFormVisible] = useState(false);
@@ -176,6 +185,8 @@ const MahalDetails = () => {
       if (res.ok) setInfo(res.data);
       else setError(res.message);
     })();
+    // Packages, add-ons and reviews (Phase 2). The page works without them.
+    getHallExtras(id).then((r) => live && setExtras(r.ok ? r.data : null));
     return () => {
       live = false;
     };
@@ -208,7 +219,28 @@ const MahalDetails = () => {
   };
 
   const days = range.from ? daysBetween(range.from, range.to || range.from) : 0;
-  const estimate = mahal?.pricePerDay > 0 && days ? mahal.pricePerDay * days : 0;
+  const fromKey = range.from ? toDay(range.from) : '';
+  const toKey = range.from ? toDay(range.to || range.from) : '';
+  const addonKey = addonIds.join(',');
+  // Price list for the chosen days (weekend, muhurtham, weekday) plus package and add-ons, from the server.
+  useEffect(() => {
+    if (!fromKey) {
+      setQuote(null);
+      return undefined;
+    }
+    let live = true;
+    getPublicQuote({ mahalId: Number(id), from: fromKey, lastDay: toKey, packageId, addonIds })
+      .then((r) => live && setQuote(r.ok ? r.data : null));
+    return () => {
+      live = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, fromKey, toKey, packageId, addonKey]);
+  const estimate = quote?.total > 0 ? quote.total : mahal?.pricePerDay > 0 && days ? mahal.pricePerDay * days : 0;
+  const muhurthamDays = (quote?.days || []).filter((d) => d.kind === 'muhurtham').length;
+  const packages = extras?.packages || [];
+  const addons = extras?.addons || [];
+  const upcomingSpecial = (mahal?.specialDates || []).slice(0, 12);
   const pendingOverlap = range.from && [...Array(days).keys()].some((i) => {
     const d = new Date(range.from);
     d.setDate(d.getDate() + i);
@@ -243,6 +275,8 @@ const MahalDetails = () => {
       guestCount: form.guestCount ? Number(form.guestCount) : null,
       fromDate: toDay(range.from),
       toDate: toDay(range.to || range.from),
+      packageId: packageId || null,
+      addonIds,
     });
     setSending(false);
     if (res.ok) {
@@ -297,6 +331,11 @@ const MahalDetails = () => {
                 <Typography variant="h3" component="h1" sx={{ mt: 3, fontWeight: 800, fontSize: { xs: 26, md: 34 } }}>
                   {mahal.mahalName}
                 </Typography>
+                {extras?.rating?.count > 0 && (
+                  <Box component="a" href="#reviews" sx={{ display: 'inline-block', mt: 1, color: 'inherit', textDecoration: 'none' }}>
+                    <RatingLine rating={extras.rating} />
+                  </Box>
+                )}
                 <Stack direction="row" spacing={0.75} alignItems="flex-start" color="text.secondary" sx={{ mt: 1 }}>
                   <PlaceOutlinedIcon fontSize="small" sx={{ mt: 0.25 }} />
                   <Typography>{[mahal.addressLine1, mahal.addressLine2, placeLine(mahal), mahal.pincode].filter(Boolean).join(', ')}</Typography>
@@ -306,8 +345,42 @@ const MahalDetails = () => {
                   {mahal.capacity > 0 && <Fact icon={<GroupsOutlinedIcon />} label={tx("Seating")} value={`${mahal.capacity.toLocaleString('en-IN')} guests`} />}
                   {mahal.diningCapacity > 0 && <Fact icon={<RestaurantOutlinedIcon />} label={tx("Dining")} value={`${mahal.diningCapacity.toLocaleString('en-IN')} at a time`} />}
                   {mahal.roomCount > 0 && <Fact icon={<BedOutlinedIcon />} label={tx("Rooms")} value={mahal.roomCount} />}
-                  {mahal.pricePerDay > 0 && <Fact icon={<Typography fontWeight={800}>₹</Typography>} label={tx("Hall rent")} value={`${rupees(mahal.pricePerDay)} / day`} />}
+                  {mahal.pricePerDay > 0 && <Fact icon={<Typography fontWeight={800}>₹</Typography>} label={tx(mahal.weekdayDiscount > 0 ? 'Weekday rent' : 'Hall rent')} value={`${rupees(mahal.pricePerDay * (1 - (mahal.weekdayDiscount || 0) / 100))} / day`} />}
+                  {mahal.weekendPrice > 0 && <Fact icon={<WeekendOutlinedIcon />} label={tx('Weekend rent')} value={`${rupees(mahal.weekendPrice)} / day`} />}
+                  {mahal.muhurthamPrice > 0 && upcomingSpecial.length > 0 && <Fact icon={<CelebrationOutlinedIcon />} label={tx('Muhurtham day rent')} value={`${rupees(mahal.muhurthamPrice)} / day`} />}
                 </Stack>
+
+                {mahal.muhurthamPrice > 0 && upcomingSpecial.length > 0 && (
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="subtitle2" fontWeight={700} gutterBottom>{tx('Muhurtham dates')}</Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                      {upcomingSpecial.map((d) => (
+                        <Chip key={d} size="small" color="secondary" variant="outlined" label={new Date(`${d}T00:00:00`).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })} />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                {(packages.length > 0 || addons.length > 0) && (
+                  <Box sx={{ mt: 4 }}>
+                    <Typography variant="h6" fontWeight={700} gutterBottom>{tx('Packages and add-ons')}</Typography>
+                    <Grid container spacing={1.5}>
+                      {[...packages, ...addons].map((x) => (
+                        <Grid item xs={12} sm={6} key={x.id}>
+                          <Card variant="outlined" sx={{ p: 1.5, height: '100%' }}>
+                            <Stack direction="row" justifyContent="space-between" spacing={1}>
+                              <Typography fontWeight={700}>{x.name}</Typography>
+                              <Typography fontWeight={800} sx={{ flexShrink: 0 }}>
+                                {x.kind === 'package' ? '+' : ''}{rupees(x.price)}<Typography component="span" variant="caption" color="text.secondary">{x.unit === 'event' ? ` ${tx('per event')}` : ` / ${tx('day')}`}</Typography>
+                              </Typography>
+                            </Stack>
+                            {x.description && <Typography variant="body2" color="text.secondary">{x.description}</Typography>}
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                )}
 
                 {mahal.description && (
                   <Box sx={{ mt: 4 }}>
@@ -340,6 +413,8 @@ const MahalDetails = () => {
                     </Stack>
                   </Box>
                 )}
+
+                <Box id="reviews"><HallReviews rating={extras?.rating} reviews={extras?.reviews || []} /></Box>
 
                 {info.contactNumber && (
                   <Card variant="outlined" sx={{ mt: 4, p: 2.5 }}>
@@ -384,6 +459,7 @@ const MahalDetails = () => {
                               {estimate > 0 && (
                                 <Typography variant="body2" sx={{ mt: 0.5 }}>
                                   {tx("Estimated rent ")}<b>{rupees(estimate)}</b>
+                                  {muhurthamDays > 0 && ` · ${tx('includes {{n}} muhurtham day(s)', { n: muhurthamDays })}`}
                                   {mahal.advanceAmount > 0 && tx(' · advance {{amount}} to confirm', { amount: rupees(mahal.advanceAmount) })}
                                   {mahal.payOnline && (
                                     <Box component="span" sx={{ display: 'block', mt: 0.5, color: 'success.main', fontWeight: 600 }}>
@@ -399,6 +475,38 @@ const MahalDetails = () => {
                           </Box>
                         )}
                       </AnimatePresence>
+
+                      {(packages.length > 0 || addons.length > 0) && (
+                        <Box sx={{ mt: 2 }}>
+                          {packages.length > 0 && (
+                            <>
+                              <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>{tx('Package')}</Typography>
+                              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 1.5 }}>
+                                <Chip label={tx('Hall only')} clickable color={!packageId ? 'primary' : 'default'} variant={!packageId ? 'filled' : 'outlined'} onClick={() => setPackageId(null)} aria-pressed={!packageId} />
+                                {packages.map((x) => (
+                                  <Chip key={x.id} label={`${x.name} +${rupees(x.price)}/${tx('day')}`} clickable color={packageId === x.id ? 'primary' : 'default'}
+                                    variant={packageId === x.id ? 'filled' : 'outlined'} onClick={() => setPackageId(x.id)} aria-pressed={packageId === x.id} />
+                                ))}
+                              </Stack>
+                            </>
+                          )}
+                          {addons.length > 0 && (
+                            <>
+                              <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>{tx('Add-ons')}</Typography>
+                              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                {addons.map((x) => {
+                                  const on = addonIds.includes(x.id);
+                                  return (
+                                    <Chip key={x.id} icon={on ? <CheckIcon /> : undefined} clickable color={on ? 'secondary' : 'default'} variant={on ? 'filled' : 'outlined'} aria-pressed={on}
+                                      label={`${x.name} ${rupees(x.price)}${x.unit === 'event' ? '' : `/${tx('day')}`}`}
+                                      onClick={() => setAddonIds((ids) => (ids.includes(x.id) ? ids.filter((i) => i !== x.id) : [...ids, x.id]))} />
+                                  );
+                                })}
+                              </Stack>
+                            </>
+                          )}
+                        </Box>
+                      )}
 
                       <Divider sx={{ my: 2.5 }} />
 
