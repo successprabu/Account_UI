@@ -4,6 +4,7 @@ import DashboardUser from './DashboardUser';
 import DashboardAdmin from './DashboardAdmin';
 import ProtectedRoute from '../common/ProtectedRoute';
 import DashboardMahal from './DashboardMahal';
+import PlanReminder from '../billing/PlanReminder';
 
 const RoleBasedDashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -23,6 +24,7 @@ const RoleBasedDashboard = () => {
     case 'AU':
       return (
         <ProtectedRoute allowedRoles={['AU']}>
+          <PlanReminder userType="AU" />
           <DashboardAdmin />
         </ProtectedRoute>
       );
@@ -36,6 +38,7 @@ const RoleBasedDashboard = () => {
       case 'MS':
         return (
           <ProtectedRoute allowedRoles={['MU', 'MS']}>
+            {user.userType === 'MU' && <PlanReminder userType="MU" />}
             <DashboardMahal />
           </ProtectedRoute>
           

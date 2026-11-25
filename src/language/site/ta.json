@@ -827,5 +827,21 @@
   "Scan with any UPI app to give moi": "மொய் செலுத்த ஏதேனும் UPI செயலியில் ஸ்கேன் செய்யுங்கள்",
   "Show UPI QR": "UPI QR காட்டு",
   "Stop AutoPay": "AutoPay நிறுத்து",
-  "Please sign in. We will bring you back to pay for this plan.": "உள்நுழையவும். இந்தத் திட்டத்திற்குச் செலுத்த உங்களை மீண்டும் இங்கே அழைத்து வருவோம்."
+  "Please sign in. We will bring you back to pay for this plan.": "உள்நுழையவும். இந்தத் திட்டத்திற்குச் செலுத்த உங்களை மீண்டும் இங்கே அழைத்து வருவோம்.",
+  "My plan & billing": "எனது திட்டம் & கட்டணம்",
+  "See your plan, renew it, or turn on AutoPay so it renews by itself.": "உங்கள் திட்டத்தைப் பார்க்கவும், புதுப்பிக்கவும், அல்லது தானாகப் புதுப்பிக்க AutoPay இயக்கவும்.",
+  "No plan yet": "இன்னும் திட்டம் இல்லை",
+  "Ended": "முடிந்தது",
+  "Ends soon": "விரைவில் முடிகிறது",
+  "Ended on": "முடிந்த தேதி",
+  "Valid till": "செல்லுபடி தேதி",
+  "Days left": "மீதமுள்ள நாட்கள்",
+  "On": "இயக்கத்தில்",
+  "Off": "நிறுத்தத்தில்",
+  "Your plan has ended. Renew now to keep using all features.": "உங்கள் திட்டம் முடிந்துவிட்டது. எல்லா வசதிகளையும் தொடர்ந்து பயன்படுத்த இப்போதே புதுப்பிக்கவும்.",
+  "Renew now": "இப்போது புதுப்பி",
+  "Turn on AutoPay": "AutoPay இயக்கு",
+  "See all plans": "எல்லா திட்டங்களும்",
+  "Your plan ended on {{date}}.": "உங்கள் திட்டம் {{date}} அன்று முடிந்தது.",
+  "Your plan ends on {{date}}.": "உங்கள் திட்டம் {{date}} அன்று முடிகிறது."
 }

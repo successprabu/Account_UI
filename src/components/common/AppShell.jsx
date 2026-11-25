@@ -48,6 +48,7 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import TranslateIcon from '@mui/icons-material/Translate';
 import CheckIcon from '@mui/icons-material/Check';
+import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import { useTheme as useAppTheme } from '../../ThemeProvider';
 import { useLanguage } from '../../language/LanguageContext';
 import { LANGUAGES } from './AppHeader';
@@ -110,6 +111,7 @@ const NAV = [
   },
   { key: 'moiGiven', fallback: 'Moi we gave', to: '/moi-given', icon: <RedeemOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'history', fallback: 'History', to: '/history', icon: <HistoryIcon />, roles: ['SU', 'AU'] },
+  { key: 'myPlan', fallback: 'My plan & billing', to: '/my-plan', icon: <WorkspacePremiumOutlinedIcon />, roles: ['AU', 'MU'] },
   { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU', 'MS'] },
   // One entry per role, each opening that role's guide (the super admin gets the list of all guides).
   { key: 'userGuide', fallback: 'User guide', to: '/user-guide/moitech', icon: <MenuBookOutlinedIcon />, roles: ['AU', 'NU'] },
@@ -387,6 +389,14 @@ const AppShell = ({ children }) => {
                 </ListItemIcon>
                 {t('changePassword', { defaultValue: 'Change password' })}
               </MenuItem>
+              {['AU', 'MU'].includes(user?.userType) && (
+                <MenuItem component={RouterLink} to="/my-plan" onClick={() => setUserMenu(null)}>
+                  <ListItemIcon>
+                    <WorkspacePremiumOutlinedIcon fontSize="small" />
+                  </ListItemIcon>
+                  {t('myPlan', { defaultValue: 'My plan & billing' })}
+                </MenuItem>
+              )}
               <MenuItem component={RouterLink} to={guideFor(user?.userType)} onClick={() => setUserMenu(null)}>
                 <ListItemIcon>
                   <MenuBookOutlinedIcon fontSize="small" />

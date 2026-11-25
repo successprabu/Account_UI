@@ -827,5 +827,21 @@
   "Scan with any UPI app to give moi": "मोई देने के लिए किसी भी UPI ऐप से स्कैन करें",
   "Show UPI QR": "UPI QR दिखाएँ",
   "Stop AutoPay": "AutoPay बंद करें",
-  "Please sign in. We will bring you back to pay for this plan.": "कृपया साइन इन करें। हम आपको इस प्लान का भुगतान करने के लिए वापस यहीं लाएँगे।"
+  "Please sign in. We will bring you back to pay for this plan.": "कृपया साइन इन करें। हम आपको इस प्लान का भुगतान करने के लिए वापस यहीं लाएँगे।",
+  "My plan & billing": "मेरा प्लान और बिलिंग",
+  "See your plan, renew it, or turn on AutoPay so it renews by itself.": "अपना प्लान देखें, रिन्यू करें, या AutoPay चालू करें ताकि यह अपने-आप रिन्यू हो।",
+  "No plan yet": "अभी कोई प्लान नहीं",
+  "Ended": "समाप्त",
+  "Ends soon": "जल्द समाप्त",
+  "Ended on": "समाप्ति तिथि",
+  "Valid till": "तक मान्य",
+  "Days left": "बचे दिन",
+  "On": "चालू",
+  "Off": "बंद",
+  "Your plan has ended. Renew now to keep using all features.": "आपका प्लान समाप्त हो गया है। सभी सुविधाएँ इस्तेमाल करते रहने के लिए अभी रिन्यू करें।",
+  "Renew now": "अभी रिन्यू करें",
+  "Turn on AutoPay": "AutoPay चालू करें",
+  "See all plans": "सभी प्लान देखें",
+  "Your plan ended on {{date}}.": "आपका प्लान {{date}} को समाप्त हुआ।",
+  "Your plan ends on {{date}}.": "आपका प्लान {{date}} को समाप्त होगा।"
 }
