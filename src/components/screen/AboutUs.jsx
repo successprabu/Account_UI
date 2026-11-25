@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Card, Chip, Container, Grid, Stack, Typography } from '@mui/material';
@@ -21,6 +22,7 @@ const VALUES = [
 ];
 
 const AboutUs = () => {
+  const tx = useTx();
   const { t } = useTranslation();
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', bgcolor: 'background.default' }}>
@@ -32,29 +34,28 @@ const AboutUs = () => {
             {t('about_us', { defaultValue: 'About us' })}
           </Typography>
           <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1 }}>
-            We build simple software for real community work
+            {tx("We build simple software for real community work")}
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 2.5, fontSize: 18 }}>
-            MySuccess Technologies is a software team based in {CONTACT.city.split(',')[0]}. We make tools that replace the notebook and calculator: moi
-            collection at family functions, bookings at marriage halls and office work at schools.
+            {tx('MySuccess Technologies is a software team based in {{city}}. We make tools that replace the notebook and calculator: moi collection at family functions, bookings at marriage halls and office work at schools.', { city: tx(CONTACT.city.split(',')[0]) })}
           </Typography>
         </Container>
       </Box>
 
-      <Section tinted eyebrow="What we build" title="Our products">
+      <Section tinted eyebrow={tx("What we build")} title={tx("Our products")}>
         <Grid container spacing={3} columns={{ xs: 12, lg: 15 }}>
           {PRODUCTS.map((p) => (
             <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
                   <IconTile color={p.color}>{p.icon}</IconTile>
-                  {p.comingSoon && <Chip label="Coming soon" size="small" color="error" variant="outlined" />}
+                  {p.comingSoon && <Chip label={tx("Coming soon")} size="small" color="error" variant="outlined" />}
                 </Stack>
                 <Typography variant="h5" component="h3" sx={{ mt: 2 }}>
                   {t(p.titleKey, { defaultValue: p.title })}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {p.tagline}.
+                  {tx(p.tagline)}.
                 </Typography>
               </Card>
             </Grid>
@@ -62,25 +63,25 @@ const AboutUs = () => {
         </Grid>
         <Box sx={{ textAlign: 'center', mt: 4 }}>
           <Button component={RouterLink} to="/services" variant="outlined" color="inherit">
-            Explore the products
+            {tx("Explore the products")}
           </Button>
         </Box>
       </Section>
 
-      <Section eyebrow="How we work" title="What we care about">
+      <Section eyebrow={tx("How we work")} title={tx("What we care about")}>
         <Grid container spacing={3}>
           {VALUES.map((v) => (
-            <Grid item xs={12} sm={6} key={v.title}>
+            <Grid item xs={12} sm={6} key={tx(v.title)}>
               <Stack direction="row" spacing={2}>
                 <IconTile color={v.color} size={44}>
                   {v.icon}
                 </IconTile>
                 <Box>
                   <Typography variant="h6" component="h3">
-                    {v.title}
+                    {tx(v.title)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                    {v.text}
+                    {tx(v.text)}
                   </Typography>
                 </Box>
               </Stack>
@@ -89,14 +90,14 @@ const AboutUs = () => {
         </Grid>
       </Section>
 
-      <Section tinted eyebrow="Get in touch" title="Talk to us">
+      <Section tinted eyebrow={tx("Get in touch")} title={tx("Talk to us")}>
         <Grid container spacing={3}>
           {[
             { icon: <MailOutlineIcon />, color: '#6366f1', label: 'Email', value: CONTACT.email, href: `mailto:${CONTACT.email}` },
             { icon: <PhoneOutlinedIcon />, color: '#10b981', label: 'Phone', value: CONTACT.phoneDisplay, href: `tel:${CONTACT.phoneTel}` },
             { icon: <PlaceOutlinedIcon />, color: '#f59e0b', label: 'Office', value: CONTACT.city },
           ].map((c) => (
-            <Grid item xs={12} md={4} key={c.label}>
+            <Grid item xs={12} md={4} key={tx(c.label)}>
               <Card sx={{ p: 3, height: '100%' }}>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <IconTile color={c.color} size={44}>
@@ -104,14 +105,14 @@ const AboutUs = () => {
                   </IconTile>
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="body2" color="text.secondary">
-                      {c.label}
+                      {tx(c.label)}
                     </Typography>
                     {c.href ? (
                       <Typography component="a" href={c.href} sx={{ fontWeight: 600, color: 'text.primary', textDecoration: 'none', wordBreak: 'break-word', '&:hover': { color: 'primary.main' } }}>
                         {c.value}
                       </Typography>
                     ) : (
-                      <Typography fontWeight={600}>{c.value}</Typography>
+                      <Typography fontWeight={600}>{tx(c.value)}</Typography>
                     )}
                   </Box>
                 </Stack>

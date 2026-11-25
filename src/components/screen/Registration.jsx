@@ -224,10 +224,6 @@ const Registration = () => {
     <Card className="mt-1">
       <Header
         titles={[t("registration")]}
-        links={[
-          { to: "/", label: t("home") },
-          { to: "/services", label: t("ourServices") },
-        ]}
         showLanguageSelector={true}
       />
       <CardBody>

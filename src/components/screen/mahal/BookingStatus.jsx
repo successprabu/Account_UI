@@ -1,3 +1,4 @@
+import { useTx } from '../../../language/site';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -31,6 +32,7 @@ const Row = ({ label, value, strong }) => (
 
 /** Public: a customer checks their booking with the reference and phone number. */
 const BookingStatus = () => {
+  const tx = useTx();
   const [params] = useSearchParams();
   const [ref, setRef] = useState(params.get('ref') || '');
   const [phone, setPhone] = useState('');
@@ -45,7 +47,7 @@ const BookingStatus = () => {
   const submit = async (e) => {
     e.preventDefault();
     if (!ref.trim() || !phone.trim()) {
-      setError('Enter your booking reference and phone number.');
+      setError(tx('Enter your booking reference and phone number.'));
       return;
     }
     setLoading(true);
@@ -66,16 +68,16 @@ const BookingStatus = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
       <AppHeader />
       <Container maxWidth="sm" sx={{ py: { xs: 4, md: 6 }, flex: 1 }}>
-        <Button component={RouterLink} to="/mahals" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }}>Find a hall</Button>
+        <Button component={RouterLink} to="/mahals" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }}>{tx("Find a hall")}</Button>
         <Card component={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} sx={{ p: { xs: 2.5, md: 4 } }}>
-          <Typography variant="h4" component="h1" fontWeight={800}>Check my booking</Typography>
-          <Typography color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>Use the reference you got when you sent the request.</Typography>
+          <Typography variant="h4" component="h1" fontWeight={800}>{tx("Check my booking")}</Typography>
+          <Typography color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>{tx("Use the reference you got when you sent the request.")}</Typography>
           <Stack component="form" onSubmit={submit} spacing={2} noValidate>
-            <TextField label="Booking reference" placeholder="MB7K3Q9P" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} inputProps={{ maxLength: 20, style: { letterSpacing: 2, fontWeight: 700 } }} />
-            <TextField label="Phone number" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
-            {error && <Alert severity="error">{error}</Alert>}
+            <TextField label={tx("Booking reference")} placeholder="MB7K3Q9P" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} inputProps={{ maxLength: 20, style: { letterSpacing: 2, fontWeight: 700 } }} />
+            <TextField label={tx("Phone number")} type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+            {error && <Alert severity="error">{tx(error)}</Alert>}
             <Button type="submit" variant="contained" size="large" disabled={loading} startIcon={loading ? <CircularProgress size={18} color="inherit" /> : <SearchIcon />}>
-              {loading ? 'Checking…' : 'Check status'}
+              {tx(loading ? 'Checking…' : 'Check status')}
             </Button>
           </Stack>
 
@@ -88,29 +90,29 @@ const BookingStatus = () => {
                     {look.icon}
                   </Box>
                   <Box>
-                    <Typography variant="h6" fontWeight={700}>{look.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{look.text}</Typography>
+                    <Typography variant="h6" fontWeight={700}>{tx(look.title)}</Typography>
+                    <Typography variant="body2" color="text.secondary">{tx(look.text)}</Typography>
                   </Box>
                 </Stack>
-                {booking.reason && <Alert severity="info" sx={{ mt: 2 }}>Reason: {booking.reason}</Alert>}
+                {booking.reason && <Alert severity="info" sx={{ mt: 2 }}>{tx("Reason: ")}{booking.reason}</Alert>}
                 <Stack spacing={1.25} sx={{ mt: 3 }}>
-                  <Row label="Hall" value={booking.mahalName} strong />
-                  <Row label="Dates" value={fmtRange(booking.fromDate, booking.toDate)} />
-                  {booking.eventType && <Row label="Event" value={booking.eventType} />}
-                  {booking.guestCount > 0 && <Row label="Guests" value={booking.guestCount} />}
+                  <Row label={tx("Hall")} value={booking.mahalName} strong />
+                  <Row label={tx("Dates")} value={fmtRange(booking.fromDate, booking.toDate)} />
+                  {booking.eventType && <Row label={tx("Event")} value={booking.eventType} />}
+                  {booking.guestCount > 0 && <Row label={tx("Guests")} value={booking.guestCount} />}
                   {booking.totalAmount > 0 && (
                     <>
                       <Divider />
-                      <Row label="Hall rent" value={rupees(booking.totalAmount)} />
-                      {booking.discount > 0 && <Row label="Discount" value={`− ${rupees(booking.discount)}`} />}
-                      {booking.paid > 0 && <Row label="Paid" value={rupees(booking.paid)} />}
-                      <Row label="Balance" value={rupees(booking.balance)} strong />
+                      <Row label={tx("Hall rent")} value={rupees(booking.totalAmount)} />
+                      {booking.discount > 0 && <Row label={tx("Discount")} value={`− ${rupees(booking.discount)}`} />}
+                      {booking.paid > 0 && <Row label={tx("Paid")} value={rupees(booking.paid)} />}
+                      <Row label={tx("Balance")} value={rupees(booking.balance)} strong />
                     </>
                   )}
                 </Stack>
                 {booking.hallPhone && (
                   <Button sx={{ mt: 3 }} fullWidth variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${booking.hallPhone}`}>
-                    Call the hall
+                    {tx("Call the hall")}
                   </Button>
                 )}
               </Box>

@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -60,6 +61,7 @@ const readUser = () => {
 const inr = (v) => Number(v).toLocaleString('en-IN');
 
 const PricingPage = () => {
+  const tx = useTx();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [params, setParams] = useSearchParams();
@@ -174,7 +176,7 @@ const PricingPage = () => {
       color: '#F59E0B',
       icon: <EmojiEventsIcon />,
       popular: true,
-      saving: `Save ₹${inr(4999 * 12 - 49999)} a year`,
+      saving: tx('Save ₹{{amount}} a year', { amount: inr(4999 * 12 - 49999) }),
       features: [...mahalFeatures.map((text) => ({ included: true, text })), { included: true, text: 'Priority support and free setup' }],
       buttonText: 'Choose Yearly',
       description: 'Best value: about 2 months free',
@@ -237,7 +239,7 @@ const PricingPage = () => {
     // The subscription is activated for the signed-in account, so payment needs a login.
     const user = readUser();
     if (!user?.primary_phone) {
-      notify.info('Please sign in to your account first, then choose your plan.');
+      notify.info(tx('Please sign in to your account first, then choose your plan.'));
       navigate('/login');
       return;
     }
@@ -360,10 +362,10 @@ const PricingPage = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
             <AutoAwesomeIcon color="primary" />
-            <Typography variant="overline">Simple Pricing</Typography>
+            <Typography variant="overline">{tx("Simple Pricing")}</Typography>
           </Stack>
           <Typography variant="h1" component="h1" gutterBottom sx={{ fontSize: { xs: 32, md: 44 } }}>
-            Choose the Perfect Plan for Your <Box component="span" sx={{ color: 'primary.main' }}>{product === 'mahal' ? 'Mahal' : 'Business'}</Box>
+            {tx("Choose the Perfect Plan for Your ")}<Box component="span" sx={{ color: 'primary.main' }}>{tx(product === 'mahal' ? 'Mahal' : 'Business')}</Box>
           </Typography>
 
           <Tabs
@@ -376,17 +378,17 @@ const PricingPage = () => {
           >
             {PRODUCT_TABS.map((p) =>
               p.href ? (
-                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={<Stack direction="row" spacing={0.5} alignItems="center"><span>{p.label}</span><OpenInNewIcon sx={{ fontSize: 14 }} /></Stack>} component="a" href={p.href} target="_blank" rel="noopener noreferrer" />
+                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={<Stack direction="row" spacing={0.5} alignItems="center"><span>{tx(p.label)}</span><OpenInNewIcon sx={{ fontSize: 14 }} /></Stack>} component="a" href={p.href} target="_blank" rel="noopener noreferrer" />
               ) : (
-                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={p.label} />
+                <Tab key={p.id} value={p.id} icon={p.icon} iconPosition="start" label={tx(p.label)} />
               )
             )}
           </Tabs>
 
           <Typography variant="subtitle1" color="text.secondary">
-            {product === 'mahal'
+            {tx(product === 'mahal'
               ? 'Take marriage, birthday and event bookings online. First month free, no card needed.'
-              : 'Start with a 7-day free trial. No credit card required. Cancel or upgrade anytime.'}
+              : 'Start with a 7-day free trial. No credit card required. Cancel or upgrade anytime.')}
           </Typography>
 
           <Box sx={{ mt: 3, display: product === 'mahal' ? 'none' : 'flex', justifyContent: 'center' }}>
@@ -396,10 +398,10 @@ const PricingPage = () => {
               onChange={(e, val) => { if (val) setBillingCycle(val); }}
               size="small"
             >
-              <ToggleButton value="monthly">Monthly</ToggleButton>
-              <ToggleButton value="yearly">Yearly</ToggleButton>
+              <ToggleButton value="monthly">{tx("Monthly")}</ToggleButton>
+              <ToggleButton value="yearly">{tx("Yearly")}</ToggleButton>
             </ToggleButtonGroup>
-            <Chip label="Save 16%" color="secondary" sx={{ ml: 2 }} />
+            <Chip label={tx("Save 16%")} color="secondary" sx={{ ml: 2 }} />
           </Box>
         </motion.div>
       </Box>
@@ -421,18 +423,18 @@ const PricingPage = () => {
                 }}
               >
                 <CardContent sx={{ flex: 1 }}>
-                  {plan.popular && <Chip label={product === 'mahal' ? 'Best value' : 'Most popular'} color="primary" size="small" sx={{ mb: 2 }} />}
+                  {plan.popular && <Chip label={tx(product === 'mahal' ? 'Best value' : 'Most popular')} color="primary" size="small" sx={{ mb: 2 }} />}
                   <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
                     <Box sx={{ color: plan.color }}>{plan.icon}</Box>
                     <Box>
-                      <Typography variant="h6">{plan.name}</Typography>
-                      <Typography variant="body2" color="text.secondary">{plan.description}</Typography>
+                      <Typography variant="h6">{tx(plan.name)}</Typography>
+                      <Typography variant="body2" color="text.secondary">{tx(plan.description)}</Typography>
                     </Box>
                   </Stack>
 
                   <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
                     <Typography variant="h2" component="p" sx={{ fontVariantNumeric: 'tabular-nums' }}>₹{inr(plan.price)}</Typography>
-                    <Typography variant="body2" color="text.secondary">{plan.period}</Typography>
+                    <Typography variant="body2" color="text.secondary">{tx(plan.period)}</Typography>
                   </Box>
                   {plan.saving && <Chip label={plan.saving} color="success" variant="outlined" size="small" sx={{ mb: 2, mt: -1 }} />}
 
@@ -440,7 +442,7 @@ const PricingPage = () => {
                     {plan.features.map((f, i) => (
                       <Box component="li" key={i} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                         {f.included ? <CheckIcon color="primary" sx={{ mr: 1 }} /> : <CloseIcon color="disabled" sx={{ mr: 1 }} />}
-                        <Typography variant="body2">{f.text}</Typography>
+                        <Typography variant="body2">{tx(f.text)}</Typography>
                       </Box>
                     ))}
                   </Box>
@@ -448,7 +450,7 @@ const PricingPage = () => {
                 <CardActions sx={{ flexDirection: 'column', alignItems: 'stretch', gap: 1.5, px: 2.5, pb: 2.5, '& > :not(style) ~ :not(style)': { ml: 0 } }}>
                   {plan.cycle === 'trial' ? (
                     <Button fullWidth size="large" variant="outlined" startIcon={<RocketLaunchIcon />} onClick={() => { setSelectedPlan(plan.id); handleFreeTrial(); }}>
-                      {plan.buttonText}
+                      {tx(plan.buttonText)}
                     </Button>
                   ) : (
                     <Button
@@ -460,13 +462,13 @@ const PricingPage = () => {
                       disabled={loading}
                     >
                       {loading && selectedPlan === plan.id ? <CircularProgress size={18} sx={{ mr: 1 }} /> : null}
-                      {plan.buttonText}
+                      {tx(plan.buttonText)}
                     </Button>
                   )}
 
                   {plan.cycle !== 'trial' && (
                     <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-                      <LockIcon fontSize="small" /> Secure payment powered by Razorpay
+                      <LockIcon fontSize="small" />{tx(" Secure payment powered by Razorpay")}
                     </Typography>
                   )}
                 </CardActions>
@@ -485,8 +487,8 @@ const PricingPage = () => {
                 <Stack direction="row" spacing={2} alignItems="center">
                   <Box sx={{ color: 'primary.main' }}>{b.icon}</Box>
                   <Box>
-                    <Typography variant="subtitle1">{b.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">{b.description}</Typography>
+                    <Typography variant="subtitle1">{tx(b.title)}</Typography>
+                    <Typography variant="body2" color="text.secondary">{tx(b.description)}</Typography>
                   </Box>
                 </Stack>
               </Card>
@@ -497,7 +499,7 @@ const PricingPage = () => {
 
       {/* FAQ */}
       <Box sx={{ mt: 6 }}>
-        <Typography variant="h5" gutterBottom>Frequently Asked Questions</Typography>
+        <Typography variant="h5" gutterBottom>{tx("Frequently Asked Questions")}</Typography>
         <Grid container spacing={2}>
           {faqs.map((faq, i) => (
             <Grid item xs={12} md={6} key={i}>
@@ -506,8 +508,8 @@ const PricingPage = () => {
                   <Stack direction="row" spacing={2} alignItems="flex-start">
                     <HelpOutlineIcon color="action" />
                     <Box>
-                      <Typography variant="subtitle1">{faq.question}</Typography>
-                      <Typography variant="body2" color="text.secondary">{faq.answer}</Typography>
+                      <Typography variant="subtitle1">{tx(faq.question)}</Typography>
+                      <Typography variant="body2" color="text.secondary">{tx(faq.answer)}</Typography>
                     </Box>
                   </Stack>
                 </CardContent>

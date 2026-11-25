@@ -10,6 +10,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { supportChat, supportStatus } from '../../api/supportAi';
 import { SITE, WHATSAPP_URL, faqAnswer } from './supportFaq';
+import { useTx } from '../../language/site';
 
 const STORE = 'supportChat';
 /** Messages sent back to the server as history with each question. */
@@ -17,6 +18,7 @@ const HISTORY = 12;
 
 const GREETING = {
   from: 'ai',
+  greet: true,
   text: 'Vanakkam! 👋 I am the MySuccess assistant. Ask me about Moitech, Mahal Management, School Website & ERP, custom software, prices or demos. You can write in English or தமிழ்.',
 };
 
@@ -86,6 +88,7 @@ const Dots = () => (
  * FAQ. Hidden for signed-in users and on pages that have their own chat.
  */
 const SupportChat = () => {
+  const tx = useTx();
   const theme = useTheme();
   const { pathname } = useLocation();
   const [ai, setAi] = useState(false);
@@ -119,7 +122,7 @@ const SupportChat = () => {
     let reply;
     if (ai) {
       const history = before
-        .filter((m) => m !== GREETING && !m.error)
+        .filter((m) => !m.greet && !m.error)
         .slice(-HISTORY)
         .map((m) => ({ role: m.from === 'me' ? 'user' : 'assistant', text: m.text }));
       const res = await supportChat(message, history, pathname);
@@ -149,7 +152,7 @@ const SupportChat = () => {
               <Box component={motion.span} animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 1.6, repeat: Infinity, repeatDelay: 2.5 }} sx={{ display: 'flex', mr: 1 }}>
                 <ChatRoundedIcon />
               </Box>
-              Ask us
+              {tx('Ask us')}
             </Fab>
           </Box>
         )}
@@ -182,12 +185,12 @@ const SupportChat = () => {
             <Stack direction="row" alignItems="center" spacing={1.25} sx={{ px: 2, py: 1.5, color: '#fff', background: 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}>
               <Avatar src="/logo.png" alt="MySuccess" sx={{ bgcolor: '#fff', width: 38, height: 38, p: 0.4 }} />
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography fontWeight={800} lineHeight={1.2}>MySuccess assistant</Typography>
+                <Typography fontWeight={800} lineHeight={1.2}>{tx('MySuccess assistant')}</Typography>
                 <Typography variant="caption" sx={{ opacity: 0.9 }} noWrap>
-                  {ai ? 'AI · replies in seconds' : 'Quick answers · we reply on WhatsApp'}
+                  {tx(ai ? 'AI · replies in seconds' : 'Quick answers · we reply on WhatsApp')}
                 </Typography>
               </Box>
-              <Tooltip title="New chat"><IconButton onClick={restart} sx={{ color: '#fff' }} aria-label="New chat"><RestartAltIcon /></IconButton></Tooltip>
+              <Tooltip title={tx("New chat")}><IconButton onClick={restart} sx={{ color: '#fff' }} aria-label="New chat"><RestartAltIcon /></IconButton></Tooltip>
               <IconButton onClick={() => setOpen(false)} sx={{ color: '#fff' }} aria-label="Close chat"><CloseIcon /></IconButton>
             </Stack>
 
@@ -215,7 +218,7 @@ const SupportChat = () => {
                           : { bgcolor: 'background.paper', color: 'text.primary', borderBottomLeftRadius: 6, boxShadow: 1 }),
                       }}
                     >
-                      {m.from === 'me' ? m.text : <Linkified text={m.text} />}
+                      {m.from === 'me' ? m.text : <Linkified text={m.greet ? tx(m.text) : m.text} />}
                     </Box>
                   </Box>
                 ))}
@@ -229,7 +232,7 @@ const SupportChat = () => {
 
             {messages.length <= 2 && (
               <Stack direction="row" spacing={0.75} sx={{ px: 1.5, pt: 1, overflowX: 'auto', flexShrink: 0 }}>
-                {CHIPS.map((c) => <Chip key={c} label={c} size="small" variant="outlined" color="primary" onClick={() => send(c)} disabled={busy} />)}
+                {CHIPS.map((c) => <Chip key={c} label={tx(c)} size="small" variant="outlined" color="primary" onClick={() => send(tx(c))} disabled={busy} />)}
               </Stack>
             )}
 
@@ -253,7 +256,7 @@ const SupportChat = () => {
                     send();
                   }
                 }}
-                placeholder="Type your question…"
+                placeholder={tx("Type your question…")}
                 multiline
                 maxRows={4}
                 inputProps={{ 'aria-label': 'Message' }}
@@ -265,10 +268,10 @@ const SupportChat = () => {
             </Stack>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 1.5, pb: 1, bgcolor: 'background.paper' }}>
               <Typography variant="caption" color="text.secondary">
-                {ai ? 'AI can make mistakes. ' : ''}Never share passwords or OTPs.
+                {ai ? `${tx('AI can make mistakes.')} ` : ''}{tx('Never share passwords or OTPs.')}
               </Typography>
               <Button size="small" startIcon={<WhatsAppIcon />} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" sx={{ color: '#10B981', fontWeight: 700, textTransform: 'none' }}>
-                WhatsApp us
+                {tx('WhatsApp us')}
               </Button>
             </Stack>
           </Paper>

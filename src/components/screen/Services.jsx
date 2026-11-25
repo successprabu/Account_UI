@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,7 @@ import { PRODUCTS, linkProps } from '../public/products';
 import DemoMenu from '../public/DemoMenu';
 
 const ProductBlock = ({ product, reverse }) => {
+  const tx = useTx();
   const { t } = useTranslation();
   const p = product;
   const ctaProps = p.cta.href ? { href: p.cta.href, target: '_blank', rel: 'noopener noreferrer', endIcon: <OpenInNewIcon /> } : { component: RouterLink, to: p.cta.to, endIcon: <ArrowForwardIcon /> };
@@ -22,13 +24,13 @@ const ProductBlock = ({ product, reverse }) => {
               {p.icon}
             </IconTile>
             <Typography variant="overline" sx={{ display: 'block', mt: 2.5, color: p.color }}>
-              {p.tagline}
+              {tx(p.tagline)}
             </Typography>
             <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
               <Typography variant="h2" component="h2">
                 {t(p.titleKey, { defaultValue: p.title })}
               </Typography>
-              {p.comingSoon && <Chip label="Coming soon" color="error" variant="outlined" />}
+              {p.comingSoon && <Chip label={tx("Coming soon")} color="error" variant="outlined" />}
             </Stack>
             <Typography color="text.secondary" sx={{ mt: 2, fontSize: 17 }}>
               {t(p.descriptionKey, { defaultValue: p.summary })}
@@ -36,11 +38,11 @@ const ProductBlock = ({ product, reverse }) => {
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 3.5 }} flexWrap="wrap" useFlexGap>
               {p.demo ? (
                 <Button variant="contained" size="large" {...linkProps(p.demo)} endIcon={p.demo.href ? <OpenInNewIcon /> : <ArrowForwardIcon />}>
-                  Try demo
+                  {tx("Try demo")}
                 </Button>
               ) : (
                 <Button variant="contained" size="large" {...ctaProps}>
-                  {p.cta.label}
+                  {tx(p.cta.label)}
                 </Button>
               )}
               {p.pricing && (
@@ -50,7 +52,7 @@ const ProductBlock = ({ product, reverse }) => {
               )}
               {p.demo && p.cta.to !== p.demo.to && p.cta.href !== p.demo.href && (
                 <Button {...ctaProps} size="large">
-                  {p.cta.label}
+                  {tx(p.cta.label)}
                 </Button>
               )}
             </Stack>
@@ -58,7 +60,7 @@ const ProductBlock = ({ product, reverse }) => {
           <Grid item xs={12} md={6}>
             <Card sx={{ p: { xs: 2.5, md: 3.5 }, borderRadius: 4 }}>
               <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
-                {p.comingSoon ? 'What it will do' : 'What it does'}
+                {tx(p.comingSoon ? 'What it will do' : 'What it does')}
               </Typography>
               <Stack spacing={1.75}>
                 {p.features.map((f) => (
@@ -66,7 +68,7 @@ const ProductBlock = ({ product, reverse }) => {
                     <Box sx={{ width: 24, height: 24, borderRadius: '50%', display: 'grid', placeItems: 'center', bgcolor: `${p.color}1a`, color: p.color, flexShrink: 0, mt: '1px' }}>
                       <CheckIcon sx={{ fontSize: 16 }} />
                     </Box>
-                    <Typography>{f}</Typography>
+                    <Typography>{tx(f)}</Typography>
                   </Stack>
                 ))}
               </Stack>
@@ -79,6 +81,7 @@ const ProductBlock = ({ product, reverse }) => {
 };
 
 const ServicePage = () => {
+  const tx = useTx();
   const { t } = useTranslation();
   const { hash } = useLocation();
 
@@ -96,10 +99,10 @@ const ServicePage = () => {
             {t('ourServices', { defaultValue: 'Our products' })}
           </Typography>
           <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1 }}>
-            Software for the work you already do
+            {tx("Software for the work you already do")}
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
-            Moi accounting for functions, bookings for marriage halls, office tools for schools, custom software for any business, and healthcare software on the way. Each one works in six languages and on any device.
+            {tx("Moi accounting for functions, bookings for marriage halls, office tools for schools, custom software for any business, and healthcare software on the way. Each one works in six languages and on any device.")}
           </Typography>
           <Stack direction="row" spacing={1} justifyContent="center" flexWrap="wrap" useFlexGap sx={{ mt: 3.5 }}>
             {PRODUCTS.map((p) => (
@@ -116,8 +119,8 @@ const ServicePage = () => {
       ))}
 
       <CtaBand
-        title="Not sure which one fits?"
-        text="Call or message us and we will set it up with you, in Tamil or English."
+        title={tx("Not sure which one fits?")}
+        text={tx("Call or message us and we will set it up with you, in Tamil or English.")}
         actions={
           <>
             <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>

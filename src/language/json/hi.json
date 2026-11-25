@@ -181,5 +181,12 @@
   "moiGiven": "हमने दिया मोई",
   "changePassword": "पासवर्ड बदलें",
   "wrong_mobile_or_password": "मोबाइल नंबर या पासवर्ड गलत है। कृपया जाँचकर फिर से कोशिश करें।",
-  "session_ended_sign_in": "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।"
+  "session_ended_sign_in": "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।",
+  "handoverFullAmount": "पूरी राशि {{amount}} सौंपें",
+  "showingRows": "{{total}} में से {{from}}–{{to}}",
+  "editingUser": "{{name}} संपादित हो रहा है",
+  "welcomeBackName": "फिर से स्वागत है, {{name}}",
+  "savedThisSession": "इस स्क्रीन पर {{count}} सहेजे गए",
+  "functionSelected": "नई एंट्री {{name}} के अंतर्गत सहेजी जाएँगी",
+  "editingFunction": "{{name}} संपादित हो रहा है"
 }

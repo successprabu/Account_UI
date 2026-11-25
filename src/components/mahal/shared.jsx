@@ -1,3 +1,5 @@
+import { useTx } from '../../language/site';
+import { useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
@@ -153,6 +155,10 @@ const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
  * renderDay(dateKey) can add content (e.g. owner calendar shows booking names).
  */
 export const AvailabilityCalendar = ({ booked = new Set(), requested = new Set(), value, onSelect, minDate, renderDay, initialMonth, compact = false }) => {
+  const tx = useTx();
+  const { i18n } = useTranslation();
+  // Month names in the visitor's language (ta-IN, hi-IN …); English stays en-IN.
+  const locale = `${(i18n.resolvedLanguage || i18n.language || 'en').slice(0, 2)}-IN`;
   const theme = useTheme();
   const start = initialMonth || value?.from || new Date();
   const [month, setMonth] = useState(new Date(start.getFullYear(), start.getMonth(), 1));
@@ -178,7 +184,7 @@ export const AvailabilityCalendar = ({ booked = new Set(), requested = new Set()
   };
 
   const primary = theme.palette.primary.main;
-  const label = month.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
+  const label = month.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
 
   return (
     <Box>
@@ -198,7 +204,7 @@ export const AvailabilityCalendar = ({ booked = new Set(), requested = new Set()
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 0.5, mb: 0.5 }}>
         {WEEKDAYS.map((w) => (
           <Typography key={w} variant="caption" color="text.secondary" textAlign="center" fontWeight={600}>
-            {compact ? w[0] : w}
+            {compact ? tx(w)[0] : tx(w)}
           </Typography>
         ))}
       </Box>
@@ -222,7 +228,7 @@ export const AvailabilityCalendar = ({ booked = new Set(), requested = new Set()
                 const inRange = fromKey && key >= fromKey && key <= toKey;
                 const isEdge = key === fromKey || key === toKey;
                 const disabled = !onSelect || past || isBooked;
-                const status = isBooked ? 'Booked' : isReq ? 'Requested by someone, may still be free' : past ? 'Not available' : 'Available';
+                const status = tx(isBooked ? 'Booked' : isReq ? 'Requested by someone, may still be free' : past ? 'Not available' : 'Available');
                 const bg = inRange
                   ? isEdge ? primary : alpha(primary, 0.16)
                   : isBooked
@@ -285,7 +291,7 @@ export const AvailabilityCalendar = ({ booked = new Set(), requested = new Set()
           ].map(([t, bg, bc]) => (
             <Stack key={t} direction="row" spacing={0.75} alignItems="center">
               <Box sx={{ width: 14, height: 14, borderRadius: 0.75, bgcolor: bg, border: `1px solid ${bc}` }} />
-              <Typography variant="caption" color="text.secondary">{t}</Typography>
+              <Typography variant="caption" color="text.secondary">{tx(t)}</Typography>
             </Stack>
           ))}
         </Stack>

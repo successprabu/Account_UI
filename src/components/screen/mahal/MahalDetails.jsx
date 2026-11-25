@@ -1,3 +1,4 @@
+import { useTx } from '../../../language/site';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -60,10 +61,11 @@ const Fact = ({ icon, label, value }) => (
 
 /** Success panel shown after the request is saved. */
 const RequestSent = ({ result, mahal, range, onAnother }) => {
+  const tx = useTx();
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(result.bookingRef);
-      notify.success('Reference copied');
+      notify.success(tx('Reference copied'));
     } catch (e) {
       /* clipboard blocked: the reference is on screen */
     }
@@ -73,23 +75,23 @@ const RequestSent = ({ result, mahal, range, onAnother }) => {
       <motion.div initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 15, delay: 0.1 }}>
         <CheckCircleIcon sx={{ fontSize: 72, color: 'success.main' }} />
       </motion.div>
-      <Typography variant="h5" fontWeight={700}>Request sent</Typography>
+      <Typography variant="h5" fontWeight={700}>{tx("Request sent")}</Typography>
       <Typography color="text.secondary" sx={{ maxWidth: 360 }}>
         {mahal.mahalName} will call you to confirm {fmtRange(range.from, range.to)}. Your booking is confirmed only after the hall accepts it.
       </Typography>
       <Box sx={{ px: 3, py: 1.5, borderRadius: 2, border: '2px dashed', borderColor: 'primary.main' }}>
-        <Typography variant="caption" color="text.secondary">Your reference</Typography>
+        <Typography variant="caption" color="text.secondary">{tx("Your reference")}</Typography>
         <Stack direction="row" alignItems="center" spacing={1}>
           <Typography variant="h5" fontWeight={800} letterSpacing={2}>{result.bookingRef}</Typography>
-          <Tooltip title="Copy">
+          <Tooltip title={tx("Copy")}>
             <IconButton size="small" onClick={copy} aria-label="Copy reference"><ContentCopyIcon fontSize="small" /></IconButton>
           </Tooltip>
         </Stack>
       </Box>
-      {result.totalAmount > 0 && <Typography variant="body2">Estimated hall rent: <b>{rupees(result.totalAmount)}</b></Typography>}
+      {result.totalAmount > 0 && <Typography variant="body2">{tx("Estimated hall rent: ")}<b>{rupees(result.totalAmount)}</b></Typography>}
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-        <Button component={RouterLink} to={`/mahals/status?ref=${result.bookingRef}`} variant="contained">Track my request</Button>
-        <Button onClick={onAnother}>Request other dates</Button>
+        <Button component={RouterLink} to={`/mahals/status?ref=${result.bookingRef}`} variant="contained">{tx("Track my request")}</Button>
+        <Button onClick={onAnother}>{tx("Request other dates")}</Button>
       </Stack>
     </Stack>
   );
@@ -97,6 +99,7 @@ const RequestSent = ({ result, mahal, range, onAnother }) => {
 
 /** Public: one hall with its free dates and the booking request form. */
 const MahalDetails = () => {
+  const tx = useTx();
   const theme = useTheme();
   const { id } = useParams();
   const [params] = useSearchParams();
@@ -157,12 +160,12 @@ const MahalDetails = () => {
       if (!r.from || (r.to && toDay(r.to) !== toDay(r.from)) || day < r.from) return { from: day, to: day };
       const days = daysBetween(r.from, day);
       if (days > MAX_DAYS) {
-        notify.info(`Online requests can cover up to ${MAX_DAYS} days.`);
+        notify.info(tx('Online requests can cover up to {{n}} days.', { n: MAX_DAYS }));
         return { from: day, to: day };
       }
       for (let d = new Date(r.from); d <= day; d.setDate(d.getDate() + 1)) {
         if (booked.has(toDay(d))) {
-          notify.info('A day in between is already booked.');
+          notify.info(tx('A day in between is already booked.'));
           return { from: day, to: day };
         }
       }
@@ -190,7 +193,7 @@ const MahalDetails = () => {
     if (!/^[+\d][\d\s-]{8,}$/.test(form.phone.trim()) || form.phone.replace(/\D/g, '').length < 10) er.phone = 'Enter a valid phone number';
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email.trim())) er.email = 'Enter a valid email address';
     if (!form.eventType) er.eventType = 'Choose the event';
-    if (form.guestCount && mahal?.capacity && Number(form.guestCount) > mahal.capacity) er.guestCount = `This hall seats up to ${mahal.capacity}`;
+    if (form.guestCount && mahal?.capacity && Number(form.guestCount) > mahal.capacity) er.guestCount = tx('This hall seats up to {{n}}', { n: mahal.capacity });
     setErrors(er);
     return Object.keys(er).length === 0;
   };
@@ -234,7 +237,7 @@ const MahalDetails = () => {
       <AppHeader />
       <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 }, flex: 1 }}>
         <Button component={RouterLink} to="/mahals" startIcon={<ArrowBackIcon />} sx={{ mb: 2 }}>
-          All halls
+          {tx("All halls")}
         </Button>
 
         {loading ? (
@@ -250,7 +253,7 @@ const MahalDetails = () => {
           </Grid>
         ) : error || !mahal ? (
           <Card>
-            <EmptyState title="Hall not available" description={error || 'This hall is not taking online bookings.'} action={<Button variant="contained" component={RouterLink} to="/mahals">Browse other halls</Button>} />
+            <EmptyState title={tx("Hall not available")} description={error || 'This hall is not taking online bookings.'} action={<Button variant="contained" component={RouterLink} to="/mahals">{tx("Browse other halls")}</Button>} />
           </Card>
         ) : (
           <Grid container spacing={3} alignItems="flex-start">
@@ -266,28 +269,28 @@ const MahalDetails = () => {
                 </Stack>
 
                 <Stack direction="row" spacing={1.5} sx={{ mt: 3 }} flexWrap="wrap" useFlexGap>
-                  {mahal.capacity > 0 && <Fact icon={<GroupsOutlinedIcon />} label="Seating" value={`${mahal.capacity.toLocaleString('en-IN')} guests`} />}
-                  {mahal.diningCapacity > 0 && <Fact icon={<RestaurantOutlinedIcon />} label="Dining" value={`${mahal.diningCapacity.toLocaleString('en-IN')} at a time`} />}
-                  {mahal.roomCount > 0 && <Fact icon={<BedOutlinedIcon />} label="Rooms" value={mahal.roomCount} />}
-                  {mahal.pricePerDay > 0 && <Fact icon={<Typography fontWeight={800}>₹</Typography>} label="Hall rent" value={`${rupees(mahal.pricePerDay)} / day`} />}
+                  {mahal.capacity > 0 && <Fact icon={<GroupsOutlinedIcon />} label={tx("Seating")} value={`${mahal.capacity.toLocaleString('en-IN')} guests`} />}
+                  {mahal.diningCapacity > 0 && <Fact icon={<RestaurantOutlinedIcon />} label={tx("Dining")} value={`${mahal.diningCapacity.toLocaleString('en-IN')} at a time`} />}
+                  {mahal.roomCount > 0 && <Fact icon={<BedOutlinedIcon />} label={tx("Rooms")} value={mahal.roomCount} />}
+                  {mahal.pricePerDay > 0 && <Fact icon={<Typography fontWeight={800}>₹</Typography>} label={tx("Hall rent")} value={`${rupees(mahal.pricePerDay)} / day`} />}
                 </Stack>
 
                 {mahal.description && (
                   <Box sx={{ mt: 4 }}>
-                    <Typography variant="h6" fontWeight={700} gutterBottom>About the hall</Typography>
-                    <Typography color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>{mahal.description}</Typography>
+                    <Typography variant="h6" fontWeight={700} gutterBottom>{tx("About the hall")}</Typography>
+                    <Typography color="text.secondary" sx={{ whiteSpace: 'pre-line' }}>{tx(mahal.description)}</Typography>
                   </Box>
                 )}
 
                 {mahal.amenities?.length > 0 && (
                   <Box sx={{ mt: 4 }}>
-                    <Typography variant="h6" fontWeight={700} gutterBottom>Facilities</Typography>
+                    <Typography variant="h6" fontWeight={700} gutterBottom>{tx("Facilities")}</Typography>
                     <Grid container spacing={1}>
                       {mahal.amenities.map((a, i) => (
                         <Grid item xs={12} sm={6} key={a}>
                           <Stack component={motion.div} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.04 }} direction="row" spacing={1} alignItems="center">
                             <CheckIcon sx={{ color: 'success.main', fontSize: 20 }} />
-                            <Typography>{a}</Typography>
+                            <Typography>{tx(a)}</Typography>
                           </Stack>
                         </Grid>
                       ))}
@@ -297,23 +300,23 @@ const MahalDetails = () => {
 
                 {mahal.eventTypes?.length > 0 && (
                   <Box sx={{ mt: 4 }}>
-                    <Typography variant="h6" fontWeight={700} gutterBottom>Events hosted</Typography>
+                    <Typography variant="h6" fontWeight={700} gutterBottom>{tx("Events hosted")}</Typography>
                     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                      {mahal.eventTypes.map((e) => <Chip key={e} label={e} />)}
+                      {mahal.eventTypes.map((e) => <Chip key={e} label={tx(e)} />)}
                     </Stack>
                   </Box>
                 )}
 
                 {info.contactNumber && (
                   <Card variant="outlined" sx={{ mt: 4, p: 2.5 }}>
-                    <Typography fontWeight={700}>Prefer to talk?</Typography>
+                    <Typography fontWeight={700}>{tx("Prefer to talk?")}</Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
                       {info.contactPerson ? `${info.contactPerson} · ` : ''}{info.contactNumber}
                     </Typography>
                     <Stack direction="row" spacing={1}>
-                      <Button variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${info.contactNumber}`}>Call</Button>
+                      <Button variant="outlined" startIcon={<PhoneOutlinedIcon />} href={`tel:${info.contactNumber}`}>{tx("Call")}</Button>
                       <Button variant="outlined" color="success" startIcon={<WhatsAppIcon />} href={`https://wa.me/${waDigits(info.contactNumber)}?text=${encodeURIComponent(`Hello, I would like to book ${mahal.mahalName}.`)}`} target="_blank" rel="noopener noreferrer">
-                        WhatsApp
+                        {tx("WhatsApp")}
                       </Button>
                     </Stack>
                   </Card>
@@ -328,13 +331,13 @@ const MahalDetails = () => {
                     <RequestSent key="done" result={result} mahal={mahal} range={range} onAnother={another} />
                   ) : (
                     <Box key="form" component="form" noValidate onSubmit={submit}>
-                      <Typography variant="h6" fontWeight={700}>Request a booking</Typography>
+                      <Typography variant="h6" fontWeight={700}>{tx("Request a booking")}</Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        Pick a date, or click a second date for a multi-day event.
+                        {tx("Pick a date, or click a second date for a multi-day event.")}
                       </Typography>
 
                       <AvailabilityCalendar booked={booked} requested={requested} value={range} onSelect={pick} minDate={new Date()} compact />
-                      {errors.dates && <Typography color="error" variant="body2" sx={{ mt: 1 }}>{errors.dates}</Typography>}
+                      {errors.dates && <Typography color="error" variant="body2" sx={{ mt: 1 }}>{tx(errors.dates)}</Typography>}
 
                       <AnimatePresence>
                         {range.from && (
@@ -346,13 +349,13 @@ const MahalDetails = () => {
                               </Stack>
                               {estimate > 0 && (
                                 <Typography variant="body2" sx={{ mt: 0.5 }}>
-                                  Estimated rent <b>{rupees(estimate)}</b>
-                                  {mahal.advanceAmount > 0 && <> · advance {rupees(mahal.advanceAmount)} to confirm</>}
+                                  {tx("Estimated rent ")}<b>{rupees(estimate)}</b>
+                                  {mahal.advanceAmount > 0 && tx(' · advance {{amount}} to confirm', { amount: rupees(mahal.advanceAmount) })}
                                 </Typography>
                               )}
                             </Box>
                             {pendingOverlap && (
-                              <Alert severity="warning" sx={{ mt: 1.5 }}>Someone has already asked for one of these days. You can still send a request; the hall decides.</Alert>
+                              <Alert severity="warning" sx={{ mt: 1.5 }}>{tx('Someone has already asked for one of these days. You can still send a request; the hall decides.')}</Alert>
                             )}
                           </Box>
                         )}
@@ -360,12 +363,12 @@ const MahalDetails = () => {
 
                       <Divider sx={{ my: 2.5 }} />
 
-                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>Event</Typography>
+                      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>{tx("Event")}</Typography>
                       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: errors.eventType ? 0.5 : 2 }}>
                         {eventChoices.map((e) => (
                           <Chip
                             key={e}
-                            label={e}
+                            label={tx(e)}
                             clickable
                             onClick={() => {
                               setForm((f) => ({ ...f, eventType: e }));
@@ -377,19 +380,19 @@ const MahalDetails = () => {
                           />
                         ))}
                       </Stack>
-                      {errors.eventType && <Typography color="error" variant="caption" display="block" sx={{ mb: 2 }}>{errors.eventType}</Typography>}
+                      {errors.eventType && <Typography color="error" variant="caption" display="block" sx={{ mb: 2 }}>{tx(errors.eventType)}</Typography>}
 
                       <Stack spacing={2}>
-                        <TextField label="Your name" required value={form.name} onChange={set('name')} error={!!errors.name} helperText={errors.name} autoComplete="name" />
+                        <TextField label={tx("Your name")} required value={form.name} onChange={set('name')} error={!!errors.name} helperText={tx(errors.name)} autoComplete="name" />
                         <Stack direction="row" spacing={2}>
-                          <TextField label="Phone" required fullWidth value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={errors.phone} type="tel" autoComplete="tel" />
-                          <TextField label="Guests" sx={{ width: 140 }} value={form.guestCount} onChange={(e) => set('guestCount')({ target: { value: e.target.value.replace(/\D/g, '').slice(0, 6) } })} error={!!errors.guestCount} helperText={errors.guestCount} inputProps={{ inputMode: 'numeric' }} />
+                          <TextField label={tx("Phone")} required fullWidth value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={tx(errors.phone)} type="tel" autoComplete="tel" />
+                          <TextField label={tx("Guests")} sx={{ width: 140 }} value={form.guestCount} onChange={(e) => set('guestCount')({ target: { value: e.target.value.replace(/\D/g, '').slice(0, 6) } })} error={!!errors.guestCount} helperText={errors.guestCount} inputProps={{ inputMode: 'numeric' }} />
                         </Stack>
-                        <TextField label="Email (optional)" value={form.email} onChange={set('email')} error={!!errors.email} helperText={errors.email} type="email" autoComplete="email" />
-                        <TextField label="Anything the hall should know? (optional)" value={form.message} onChange={set('message')} multiline minRows={2} inputProps={{ maxLength: 1000 }} />
+                        <TextField label={tx("Email (optional)")} value={form.email} onChange={set('email')} error={!!errors.email} helperText={tx(errors.email)} type="email" autoComplete="email" />
+                        <TextField label={tx("Anything the hall should know? (optional)")} value={form.message} onChange={set('message')} multiline minRows={2} inputProps={{ maxLength: 1000 }} />
                         {/* Honeypot: hidden from people, filled by bots. */}
                         <Box sx={{ position: 'absolute', left: -9999, width: 1, height: 1, overflow: 'hidden' }} aria-hidden>
-                          <label htmlFor="mahal-website">Website</label>
+                          <label htmlFor="mahal-website">{tx("Website")}</label>
                           <input id="mahal-website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
                         </Box>
                         {sendError && <Alert severity="error">{sendError}</Alert>}
@@ -402,10 +405,10 @@ const MahalDetails = () => {
                           whileTap={{ scale: 0.97 }}
                           startIcon={sending ? <CircularProgress size={18} color="inherit" /> : <SendOutlinedIcon />}
                         >
-                          {sending ? 'Sending…' : 'Send booking request'}
+                          {tx(sending ? 'Sending…' : 'Send booking request')}
                         </Button>
                         <Typography variant="caption" color="text.secondary" textAlign="center">
-                          No payment now. The hall calls you to confirm and collect the advance.
+                          {tx("No payment now. The hall calls you to confirm and collect the advance.")}
                         </Typography>
                       </Stack>
                     </Box>
@@ -423,7 +426,7 @@ const MahalDetails = () => {
           <Box component={motion.div} initial={{ y: 80 }} animate={{ y: 0 }} exit={{ y: 80 }} sx={{ position: 'fixed', left: 16, right: 16, bottom: 16, zIndex: 10 }}>
             <Fab variant="extended" color="primary" sx={{ width: '100%' }} onClick={() => formRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })}>
               <EventAvailableOutlinedIcon sx={{ mr: 1 }} />
-              Check dates &amp; book
+              {tx('Check dates & book')}
             </Fab>
           </Box>
         )}

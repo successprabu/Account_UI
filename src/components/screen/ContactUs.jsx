@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useState } from 'react';
 import { submitEnquiry } from '../../api/enquiries';
 import { useSearchParams } from 'react-router-dom';
@@ -20,6 +21,7 @@ const TOPICS = ['Website or custom software', 'Digitizing my business', 'AI and 
 const emptyForm = { name: '', phone: '', email: '', topic: TOPICS[0], message: '', website: '' };
 
 const ContactUs = () => {
+  const tx = useTx();
   const { t } = useTranslation();
   const [params] = useSearchParams();
   const requested = params.get('topic');
@@ -65,7 +67,7 @@ const ContactUs = () => {
     const res = await submitEnquiry(form);
     setSending(false);
     if (res.ok) {
-      setSaved(res.message || 'Thank you. We will reply within one working day.');
+      setSaved(tx(res.message || 'Thank you. We will reply within one working day.'));
       setForm({ ...emptyForm, topic: form.topic });
     } else {
       setSaveError(res.message);
@@ -103,10 +105,10 @@ const ContactUs = () => {
             {t('contact_us', { defaultValue: 'Contact us' })}
           </Typography>
           <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, mt: 1 }}>
-            How can we help?
+            {tx("How can we help?")}
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 2, fontSize: 18 }}>
-            Questions about a product, pricing or your account. Call, WhatsApp or send us a message below.
+            {tx("Questions about a product, pricing or your account. Call, WhatsApp or send us a message below.")}
           </Typography>
         </Container>
       </Box>
@@ -123,7 +125,7 @@ const ContactUs = () => {
                     </IconTile>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography variant="body2" color="text.secondary">
-                        {c.label}
+                        {tx(c.label)}
                       </Typography>
                       {c.href ? (
                         <Typography
@@ -136,7 +138,7 @@ const ContactUs = () => {
                           {c.value}
                         </Typography>
                       ) : (
-                        <Typography fontWeight={600}>{c.value}</Typography>
+                        <Typography fontWeight={600}>{tx(c.value)}</Typography>
                       )}
                     </Box>
                   </Stack>
@@ -148,10 +150,10 @@ const ContactUs = () => {
           <Grid item xs={12} md={7}>
             <Card sx={{ p: { xs: 2.5, md: 4 } }}>
               <Typography variant="h4" component="h2">
-                Send a message
+                {tx("Send a message")}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 3 }}>
-                We reply within one working day by phone, email or WhatsApp.
+                {tx("We reply within one working day by phone, email or WhatsApp.")}
               </Typography>
               {saved ? (
                 <Stack spacing={2} alignItems="flex-start">
@@ -159,7 +161,7 @@ const ContactUs = () => {
                     {saved}
                   </Alert>
                   <Button variant="outlined" color="inherit" onClick={() => setSaved('')}>
-                    Send another message
+                    {tx("Send another message")}
                   </Button>
                 </Stack>
               ) : (
@@ -171,61 +173,61 @@ const ContactUs = () => {
                   )}
                   {sentVia && (
                     <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSentVia('')}>
-                      Your message is ready in {sentVia}. Press send there and we will reply within one working day.
+                      {tx("Your message is ready in ")}{sentVia}. Press send there and we will reply within one working day.
                     </Alert>
                   )}
                   <Box component="form" noValidate onSubmit={submit}>
                     {/* Hidden from people; bots that fill every field are ignored by the server */}
                     <Box aria-hidden="true" sx={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
-                      <label htmlFor="contact-website">Website</label>
+                      <label htmlFor="contact-website">{tx("Website")}</label>
                       <input id="contact-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
                     </Box>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <TextField label="Your name" required value={form.name} onChange={set('name')} error={!!errors.name} helperText={errors.name} autoComplete="name" />
+                        <TextField label={tx("Your name")} required value={form.name} onChange={set('name')} error={!!errors.name} helperText={tx(errors.name)} autoComplete="name" />
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <TextField label="Phone number" value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={errors.phone} autoComplete="tel" inputProps={{ inputMode: 'tel' }} />
+                        <TextField label={tx("Phone number")} value={form.phone} onChange={set('phone')} error={!!errors.phone} helperText={tx(errors.phone)} autoComplete="tel" inputProps={{ inputMode: 'tel' }} />
                       </Grid>
                       <Grid item xs={12} sm={6}>
-                        <TextField label="Email" value={form.email} onChange={set('email')} error={!!errors.email} helperText={errors.email} autoComplete="email" inputProps={{ inputMode: 'email' }} />
+                        <TextField label={tx("Email")} value={form.email} onChange={set('email')} error={!!errors.email} helperText={tx(errors.email)} autoComplete="email" inputProps={{ inputMode: 'email' }} />
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField select label="Topic" value={form.topic} onChange={set('topic')}>
+                        <TextField select label={tx("Topic")} value={form.topic} onChange={set('topic')}>
                           {TOPICS.map((tp) => (
                             <MenuItem key={tp} value={tp}>
-                              {tp}
+                              {tx(tp)}
                             </MenuItem>
                           ))}
                         </TextField>
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
-                          label="Message"
+                          label={tx("Message")}
                           required
                           multiline
                           minRows={4}
                           value={form.message}
                           onChange={set('message')}
                           error={!!errors.message}
-                          placeholder={form.topic === 'Custom Software' ? 'What does your business do, how do you work today, and what should the software do for you?' : undefined}
-                          helperText={errors.message || (form.topic === 'Custom Software' ? 'A few lines is enough. We will call you to understand the details.' : undefined)}
+                          placeholder={form.topic === 'Custom Software' ? tx('What does your business do, how do you work today, and what should the software do for you?') : undefined}
+                          helperText={tx(errors.message) || (form.topic === 'Custom Software' ? tx('A few lines is enough. We will call you to understand the details.') : undefined)}
                           inputProps={{ maxLength: 2000 }}
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'center' }}>
                           <Button type="submit" variant="contained" size="large" disabled={sending} startIcon={sending ? <CircularProgress size={18} color="inherit" /> : <SendOutlinedIcon />}>
-                            {sending ? 'Sending…' : 'Send message'}
+                            {tx(sending ? 'Sending…' : 'Send message')}
                           </Button>
                           <Typography variant="body2" color="text.secondary" sx={{ px: { sm: 1 } }}>
-                            or
+                            {tx("or")}
                           </Typography>
                           <Button variant="text" size="large" color="inherit" onClick={sendEmail} disabled={sending}>
-                            Use my email app
+                            {tx("Use my email app")}
                           </Button>
                           <Button variant="text" size="large" color="success" startIcon={<WhatsAppIcon />} onClick={sendWhatsApp} disabled={sending}>
-                            WhatsApp
+                            {tx("WhatsApp")}
                           </Button>
                         </Stack>
                       </Grid>

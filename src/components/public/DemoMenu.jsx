@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
@@ -11,6 +12,7 @@ import { DEMO_PRODUCTS, linkProps } from './products';
  * Any extra props go to the button, e.g. variant, size, sx, fullWidth.
  */
 const DemoMenu = ({ label, onPick, ...buttonProps }) => {
+  const tx = useTx();
   const { t } = useTranslation();
   const [anchor, setAnchor] = useState(null);
   const close = () => setAnchor(null);
@@ -50,7 +52,7 @@ const DemoMenu = ({ label, onPick, ...buttonProps }) => {
             </ListItemIcon>
             <ListItemText
               primary={t(p.titleKey, { defaultValue: p.title })}
-              secondary={p.demo.label}
+              secondary={tx(p.demo.label)}
               primaryTypographyProps={{ fontWeight: 600 }}
             />
             {p.demo.href && <OpenInNewIcon fontSize="small" sx={{ ml: 2, color: 'text.secondary' }} />}

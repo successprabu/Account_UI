@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Link, Stack, Typography } from '@mui/material';
@@ -11,6 +12,7 @@ import { linkProps } from './products';
  * then sign in) with the right link, plus links to details and pricing.
  */
 const ProductStartDialog = ({ product, onClose }) => {
+  const tx = useTx();
   const { t } = useTranslation();
   const p = product;
   const start = p?.start;
@@ -28,7 +30,7 @@ const ProductStartDialog = ({ product, onClose }) => {
               {t(p.titleKey, { defaultValue: p.title })}
             </Typography>
             <Typography id="product-start-title" variant="h5" component="h2" fontWeight={700}>
-              {start.title}
+              {tx(start.title)}
             </Typography>
             <Box component="ol" sx={{ listStyle: 'none', p: 0, m: 0, mt: 2.5 }}>
               {start.steps.map((step, i) => (
@@ -36,16 +38,16 @@ const ProductStartDialog = ({ product, onClose }) => {
                   <Box sx={{ width: 26, height: 26, borderRadius: '50%', bgcolor: p.color, color: '#fff', display: 'grid', placeItems: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>
                     {i + 1}
                   </Box>
-                  <Typography sx={{ pt: 0.25 }}>{step}</Typography>
+                  <Typography sx={{ pt: 0.25 }}>{tx(step)}</Typography>
                 </Stack>
               ))}
             </Box>
             {start.note && (
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                {start.note}{' '}
+                {tx(start.note)}{' '}
                 {start.noteLink && (
                   <Link component={RouterLink} to={start.noteLink.to} onClick={onClose}>
-                    {start.noteLink.label}
+                    {tx(start.noteLink.label)}
                   </Link>
                 )}
               </Typography>
@@ -53,20 +55,20 @@ const ProductStartDialog = ({ product, onClose }) => {
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 3, pt: 0, flexDirection: 'column', alignItems: 'stretch', gap: 1, '& > :not(style) ~ :not(style)': { ml: 0 } }}>
             <Button variant="contained" size="large" endIcon={<ArrowForwardIcon />} {...linkProps(start.action)} onClick={onClose}>
-              {start.action.label}
+              {tx(start.action.label)}
             </Button>
             <Stack direction="row" justifyContent="center" flexWrap="wrap" useFlexGap columnGap={1}>
               <Button component={RouterLink} to={`/services#${p.id}`} onClick={onClose}>
-                See details
+                {tx("See details")}
               </Button>
               {p.pricing && (
                 <Button {...linkProps(p.pricing)} onClick={onClose}>
-                  Pricing
+                  {tx("Pricing")}
                 </Button>
               )}
               {start.signIn && (
                 <Button component={RouterLink} to="/login" onClick={onClose}>
-                  Already registered? Sign in
+                  {tx("Already registered? Sign in")}
                 </Button>
               )}
             </Stack>

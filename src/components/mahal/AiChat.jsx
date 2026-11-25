@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useEffect, useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -29,8 +30,9 @@ const save = (state) => {
 
 const greeting = (hallName) => ({
   from: 'ai',
+  greet: true,
   text: hallName
-    ? `Vanakkam! I can tell you about ${hallName}: price, free dates, capacity, and send a booking request for you. You can write in English or தமிழ்.`
+    ? 'Vanakkam! I can tell you about {{hall}}: price, free dates, capacity, and send a booking request for you. You can write in English or தமிழ்.'
     : 'Vanakkam! Tell me the date, area and number of guests, and I will find halls for you. You can write in English or தமிழ்.',
 });
 
@@ -53,6 +55,7 @@ const Dots = () => (
  * the hall's real details and can send a booking request once the customer confirms. Hidden when AI is off.
  */
 const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
+  const tx = useTx();
   const theme = useTheme();
   const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -111,7 +114,7 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
               <Box component={motion.span} animate={{ rotate: [0, 18, -12, 0] }} transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 2 }} sx={{ display: 'flex', mr: 1 }}>
                 <AutoAwesomeIcon />
               </Box>
-              Ask AI
+              {tx("Ask AI")}
             </Fab>
           </Box>
         )}
@@ -144,10 +147,10 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
             <Stack direction="row" alignItems="center" spacing={1.25} sx={{ px: 2, py: 1.5, color: '#fff', background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})` }}>
               <Avatar sx={{ bgcolor: alpha('#fff', 0.2), width: 36, height: 36 }}><AutoAwesomeIcon fontSize="small" /></Avatar>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography fontWeight={800} lineHeight={1.2}>Booking assistant</Typography>
-                <Typography variant="caption" sx={{ opacity: 0.85 }} noWrap>{hallName || 'Find and book a hall'} · AI</Typography>
+                <Typography fontWeight={800} lineHeight={1.2}>{tx("Booking assistant")}</Typography>
+                <Typography variant="caption" sx={{ opacity: 0.85 }} noWrap>{hallName || tx('Find and book a hall')} · AI</Typography>
               </Box>
-              <Tooltip title="New chat"><IconButton onClick={restart} sx={{ color: '#fff' }} aria-label="New chat"><RestartAltIcon /></IconButton></Tooltip>
+              <Tooltip title={tx("New chat")}><IconButton onClick={restart} sx={{ color: '#fff' }} aria-label="New chat"><RestartAltIcon /></IconButton></Tooltip>
               <IconButton onClick={() => setOpen(false)} sx={{ color: '#fff' }} aria-label="Close chat"><CloseIcon /></IconButton>
             </Stack>
 
@@ -174,11 +177,11 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
                           : { bgcolor: m.error ? alpha(theme.palette.error.main, 0.1) : 'background.paper', color: m.error ? 'error.main' : 'text.primary', borderBottomLeftRadius: 6, boxShadow: 1 }),
                       }}
                     >
-                      {m.text}
+                      {m.greet ? tx(m.text, { hall: hallName }) : m.text}
                     </Box>
                     {m.bookingRef && (
                       <Button component={RouterLink} to={`/mahals/status?ref=${m.bookingRef}`} size="small" variant="outlined" sx={{ mt: 0.75 }}>
-                        Check booking {m.bookingRef}
+                        {tx("Check booking ")}{m.bookingRef}
                       </Button>
                     )}
                   </Box>
@@ -193,7 +196,7 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
 
             {state.messages.length <= 2 && (
               <Stack direction="row" spacing={0.75} sx={{ px: 1.5, pt: 1, overflowX: 'auto', flexShrink: 0 }}>
-                {chips.map((c) => <Chip key={c} label={c} size="small" variant="outlined" color="primary" onClick={() => send(c)} disabled={busy} />)}
+                {chips.map((c) => <Chip key={c} label={tx(c)} size="small" variant="outlined" color="primary" onClick={() => send(tx(c))} disabled={busy} />)}
               </Stack>
             )}
 
@@ -217,7 +220,7 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
                     send();
                   }
                 }}
-                placeholder="Type your question…"
+                placeholder={tx("Type your question…")}
                 multiline
                 maxRows={4}
                 inputProps={{ 'aria-label': 'Message' }}
@@ -228,7 +231,7 @@ const AiChat = ({ mahalId, hallName, bottomOffset = 0 }) => {
               </IconButton>
             </Stack>
             <Typography variant="caption" color="text.secondary" textAlign="center" sx={{ pb: 0.75, bgcolor: 'background.paper' }}>
-              AI can make mistakes. The hall confirms every booking. <Link component={RouterLink} to="/mahals/status">Check a booking</Link>
+              {tx("AI can make mistakes. The hall confirms every booking. ")}<Link component={RouterLink} to="/mahals/status">{tx("Check a booking")}</Link>
             </Typography>
           </Paper>
         )}

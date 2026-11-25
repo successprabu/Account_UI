@@ -1,3 +1,4 @@
+import { useTx } from '../../../language/site';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -34,6 +35,7 @@ import AiChat from '../../mahal/AiChat';
 const MotionCard = motion(Card);
 
 const MahalCard = ({ mahal, index, date }) => {
+  const tx = useTx();
   const theme = useTheme();
   const to = `/mahals/${mahal.id}${date ? `?date=${date}` : ''}`;
   return (
@@ -55,7 +57,7 @@ const MahalCard = ({ mahal, index, date }) => {
             <Chip
               size="small"
               icon={mahal.availableOnDate ? <EventAvailableOutlinedIcon /> : <EventBusyOutlinedIcon />}
-              label={mahal.availableOnDate ? 'Available' : 'Booked'}
+              label={tx(mahal.availableOnDate ? 'Available' : 'Booked')}
               color={mahal.availableOnDate ? 'success' : 'default'}
               sx={{ position: 'absolute', top: 12, left: 12, fontWeight: 600, bgcolor: mahal.availableOnDate ? undefined : 'rgba(15,23,42,.75)', color: mahal.availableOnDate ? undefined : '#fff', '& .MuiChip-icon': { color: 'inherit' } }}
             />
@@ -80,7 +82,7 @@ const MahalCard = ({ mahal, index, date }) => {
           {mahal.capacity > 0 && (
             <Stack direction="row" spacing={0.5} alignItems="center" color="text.secondary">
               <GroupsOutlinedIcon sx={{ fontSize: 18 }} />
-              <Typography variant="body2">Up to {mahal.capacity.toLocaleString('en-IN')} guests</Typography>
+              <Typography variant="body2">{tx("Up to ")}{mahal.capacity.toLocaleString('en-IN')} guests</Typography>
             </Stack>
           )}
           <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ mt: 'auto', pt: 1 }}>
@@ -97,6 +99,7 @@ const MahalCard = ({ mahal, index, date }) => {
 
 /** Public: search halls that take online bookings, filter by event, date, guests and place. */
 const FindMahal = () => {
+  const tx = useTx();
   const theme = useTheme();
   const [params, setParams] = useSearchParams();
   const [q, setQ] = useState(params.get('q') || '');
@@ -181,12 +184,12 @@ const FindMahal = () => {
         ))}
         <Container maxWidth="lg" sx={{ position: 'relative' }}>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 2 }}>Online mahal booking</Typography>
+            <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 2 }}>{tx("Online mahal booking")}</Typography>
             <Typography variant="h2" component="h1" sx={{ color: '#fff', fontWeight: 800, fontSize: { xs: 32, md: 48 }, maxWidth: 720, lineHeight: 1.1 }}>
-              Find the perfect hall for your celebration
+              {tx("Find the perfect hall for your celebration")}
             </Typography>
             <Typography sx={{ mt: 1.5, opacity: 0.9, fontSize: { xs: 16, md: 18 }, maxWidth: 620 }}>
-              Marriages, receptions, birthdays and more. Check free dates, compare halls and send a booking request in minutes.
+              {tx("Marriages, receptions, birthdays and more. Check free dates, compare halls and send a booking request in minutes.")}
             </Typography>
           </motion.div>
         </Container>
@@ -199,21 +202,21 @@ const FindMahal = () => {
             <Grid item xs={12} md={5}>
               <TextField
                 fullWidth
-                label="Hall, area or pincode"
+                label={tx("Hall, area or pincode")}
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment> }}
               />
             </Grid>
             <Grid item xs={6} md={3}>
-              <TextField fullWidth type="date" label="Event date" value={date} onChange={(e) => setDate(e.target.value)} InputLabelProps={{ shrink: true }} inputProps={{ min: toDay(new Date()) }} />
+              <TextField fullWidth type="date" label={tx("Event date")} value={date} onChange={(e) => setDate(e.target.value)} InputLabelProps={{ shrink: true }} inputProps={{ min: toDay(new Date()) }} />
             </Grid>
             <Grid item xs={6} md={2}>
-              <TextField fullWidth type="number" label="Guests" value={guests} onChange={(e) => setGuests(e.target.value.replace(/\D/g, '').slice(0, 6))} inputProps={{ min: 1, inputMode: 'numeric' }} />
+              <TextField fullWidth type="number" label={tx("Guests")} value={guests} onChange={(e) => setGuests(e.target.value.replace(/\D/g, '').slice(0, 6))} inputProps={{ min: 1, inputMode: 'numeric' }} />
             </Grid>
             <Grid item xs={12} md={2}>
               <Button fullWidth variant="contained" size="large" sx={{ height: '100%', minHeight: 56 }} onClick={() => run(filters)} startIcon={<SearchIcon />}>
-                Search
+                {tx("Search")}
               </Button>
             </Grid>
           </Grid>
@@ -226,7 +229,7 @@ const FindMahal = () => {
                   component={motion.div}
                   whileTap={{ scale: 0.94 }}
                   icon={e.icon}
-                  label={e.key}
+                  label={tx(e.key)}
                   clickable
                   onClick={() => setEventType(on ? '' : e.key)}
                   aria-pressed={on}
@@ -247,23 +250,23 @@ const FindMahal = () => {
         <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ sm: 'center' }} spacing={1.5} sx={{ mb: 2.5 }}>
           <Box>
             <Typography variant="h5" component="h2" fontWeight={700}>
-              {loading ? 'Searching…' : `${mahals.length} ${mahals.length === 1 ? 'hall' : 'halls'}`}
+              {loading ? tx('Searching…') : tx(mahals.length === 1 ? '{{n}} hall' : '{{n}} halls', { n: mahals.length })}
               {!loading && available !== null && (
-                <Typography component="span" color="success.main" fontWeight={600}> · {available} free on {new Date(`${date}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</Typography>
+                <Typography component="span" color="success.main" fontWeight={600}> · {tx('{{n}} free on {{date}}', { n: available, date: new Date(`${date}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) })}</Typography>
               )}
             </Typography>
           </Box>
           <Stack direction="row" spacing={1}>
-            {hasFilters && <Button onClick={clear}>Clear filters</Button>}
+            {hasFilters && <Button onClick={clear}>{tx("Clear filters")}</Button>}
             <Button component={RouterLink} to="/mahals/status" variant="outlined" startIcon={<ReceiptLongOutlinedIcon />}>
-              Check my booking
+              {tx("Check my booking")}
             </Button>
           </Stack>
         </Stack>
 
         {places.length > 1 && (
           <Stack direction="row" spacing={1} sx={{ mb: 3, overflowX: 'auto', pb: 0.5 }} role="group" aria-label="District">
-            <Chip label="All places" onClick={() => setDistrict('')} color={!district ? 'primary' : 'default'} variant={!district ? 'filled' : 'outlined'} />
+            <Chip label={tx("All places")} onClick={() => setDistrict('')} color={!district ? 'primary' : 'default'} variant={!district ? 'filled' : 'outlined'} />
             {places.map(([id, name]) => (
               <Chip key={id} icon={<PlaceOutlinedIcon />} label={name} onClick={() => setDistrict(district === id ? '' : id)} color={district === id ? 'primary' : 'default'} variant={district === id ? 'filled' : 'outlined'} sx={{ flexShrink: 0 }} />
             ))}
@@ -271,8 +274,8 @@ const FindMahal = () => {
         )}
 
         {error && (
-          <Alert severity="error" sx={{ mb: 3 }} action={<Button color="inherit" onClick={() => run(filters)}>Retry</Button>}>
-            {error}
+          <Alert severity="error" sx={{ mb: 3 }} action={<Button color="inherit" onClick={() => run(filters)}>{tx("Retry")}</Button>}>
+            {tx(error)}
           </Alert>
         )}
 
@@ -295,9 +298,9 @@ const FindMahal = () => {
           <Card>
             <EmptyState
               icon={<ManageSearchIcon />}
-              title="No halls match your search"
-              description={hasFilters ? 'Try another date, fewer guests or a different area.' : 'No halls are taking online bookings yet. Please check back soon.'}
-              action={hasFilters ? <Button variant="contained" onClick={clear}>Clear filters</Button> : undefined}
+              title={tx("No halls match your search")}
+              description={tx(hasFilters ? 'Try another date, fewer guests or a different area.' : 'No halls are taking online bookings yet. Please check back soon.')}
+              action={hasFilters ? <Button variant="contained" onClick={clear}>{tx("Clear filters")}</Button> : undefined}
             />
           </Card>
         ) : (

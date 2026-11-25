@@ -233,10 +233,6 @@ const MahalRegistration = () => {
     <Card className="mt-1">
       <Header
         titles={[t("mahalRegistration")]}
-        links={[
-          { to: "/", label: t("home") },
-          { to: "/services", label: t("ourServices") },
-        ]}
         bgColor="#7F1D1D"
         showLanguageSelector={true}
       />

@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
@@ -20,6 +21,7 @@ import AppHeader from '../common/AppHeader';
 
 
 const PageNotFound = () => {
+  const tx = useTx();
   const floatingElements = [
     { icon: <FaGhost />, top: '20%', left: '10%', delay: 0, size: 'small' },
     { icon: <FiCompass />, top: '30%', right: '15%', delay: 0.5, size: 'medium' },
@@ -116,10 +118,9 @@ const PageNotFound = () => {
                 <div className="error-icon">
                   <FaRegSadTear />
                 </div>
-                <h1 className="error-title">Oops! Page Not Found</h1>
+                <h1 className="error-title">{tx("Oops! Page Not Found")}</h1>
                 <p className="error-subtitle">
-                  The page you're looking for seems to have vanished into the digital ether.
-                  Don't worry, even the best explorers sometimes take wrong turns.
+                  {tx("The page you're looking for seems to have vanished into the digital ether. Don't worry, even the best explorers sometimes take wrong turns.")}
                 </p>
               </motion.div>
 
@@ -132,15 +133,15 @@ const PageNotFound = () => {
               >
                 <div className="stat-item">
                   <div className="stat-number">404</div>
-                  <div className="stat-label">Error Code</div>
+                  <div className="stat-label">{tx("Error Code")}</div>
                 </div>
                 <div className="stat-item">
                   <div className="stat-number">0.0001%</div>
-                  <div className="stat-label">Chance of Happening</div>
+                  <div className="stat-label">{tx("Chance of Happening")}</div>
                 </div>
                 <div className="stat-item">
                   <div className="stat-number">∞</div>
-                  <div className="stat-label">Other Pages to Explore</div>
+                  <div className="stat-label">{tx("Other Pages to Explore")}</div>
                 </div>
               </motion.div>
 
@@ -154,7 +155,7 @@ const PageNotFound = () => {
                 <Link to="/">
                   <Button variant="primary" className="action-btn primary-btn">
                     <FiHome />
-                    <span>Return to Home</span>
+                    <span>{tx("Return to Home")}</span>
                     <HiArrowRight />
                   </Button>
                 </Link>
@@ -164,7 +165,7 @@ const PageNotFound = () => {
                   onClick={() => window.history.back()}
                 >
                   <FiArrowLeft />
-                  <span>Go Back</span>
+                  <span>{tx("Go Back")}</span>
                 </Button>
               </motion.div>
 
@@ -175,7 +176,7 @@ const PageNotFound = () => {
                 transition={{ delay: 0.8, duration: 0.5 }}
                 className="quick-links-section"
               >
-                <h3 className="quick-links-title">Quick Navigation</h3>
+                <h3 className="quick-links-title">{tx("Quick Navigation")}</h3>
                 <div className="quick-links-grid">
                   {quickLinks.map((link, index) => (
                     <motion.div
@@ -187,7 +188,7 @@ const PageNotFound = () => {
                         <div className="quick-link-icon">
                           {link.icon}
                         </div>
-                        <span className="quick-link-label">{link.label}</span>
+                        <span className="quick-link-label">{tx(link.label)}</span>
                       </Link>
                     </motion.div>
                   ))}
@@ -202,8 +203,7 @@ const PageNotFound = () => {
                 className="fun-message"
               >
                 <p className="fun-text">
-                  <span className="highlight">Pro tip:</span> While you're here, enjoy this rare 404 page. 
-                  Our designers worked hard to make getting lost look good!
+                  <span className="highlight">{tx("Pro tip:")}</span>{tx(" While you're here, enjoy this rare 404 page. Our designers worked hard to make getting lost look good!")}
                 </p>
               </motion.div>
             </motion.div>

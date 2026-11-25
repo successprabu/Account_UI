@@ -175,5 +175,12 @@
   "moiGiven": "ನಾವು ಕೊಟ್ಟ ಮೊಯ್",
   "changePassword": "ಪಾಸ್‌ವರ್ಡ್ ಬದಲಿಸಿ",
   "wrong_mobile_or_password": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ತಪ್ಪಾಗಿದೆ. ಪರಿಶೀಲಿಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
-  "session_ended_sign_in": "ನಿಮ್ಮ ಸೆಷನ್ ಮುಗಿದಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ."
+  "session_ended_sign_in": "ನಿಮ್ಮ ಸೆಷನ್ ಮುಗಿದಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "handoverFullAmount": "ಪೂರ್ಣ ಮೊತ್ತ {{amount}} ಹಸ್ತಾಂತರಿಸಿ",
+  "showingRows": "{{total}} ರಲ್ಲಿ {{from}}–{{to}}",
+  "editingUser": "{{name}} ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ",
+  "welcomeBackName": "ಮತ್ತೆ ಸ್ವಾಗತ, {{name}}",
+  "savedThisSession": "ಈ ಪರದೆಯಲ್ಲಿ {{count}} ಉಳಿಸಲಾಗಿದೆ",
+  "functionSelected": "ಹೊಸ ನಮೂದುಗಳು {{name}} ಅಡಿಯಲ್ಲಿ ಉಳಿಸಲ್ಪಡುತ್ತವೆ",
+  "editingFunction": "{{name}} ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
 }

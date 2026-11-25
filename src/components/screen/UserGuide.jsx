@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -52,7 +53,9 @@ const Marker = ({ n, size = 24 }) => (
 );
 
 /** One numbered step: title, text, numbered points (they match the red numbers on the picture) and the screenshot. */
-const Step = ({ guide, step, number, print, onZoom }) => (
+const Step = ({ guide, step, number, print, onZoom }) => {
+  const tx = useTx();
+  return (
   <Box
     component={print ? 'div' : motion.div}
     {...(print ? {} : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-60px' }, transition: { duration: 0.45 } })}
@@ -61,8 +64,8 @@ const Step = ({ guide, step, number, print, onZoom }) => (
     <Stack direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 1.5 }}>
       <Box sx={{ minWidth: 40, height: 40, borderRadius: 2.5, bgcolor: guide.color, color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: 17 }}>{number}</Box>
       <Box sx={{ minWidth: 0 }}>
-        <Typography variant="h6" component="h3" sx={{ fontWeight: 700, lineHeight: 1.3, fontSize: print ? 17 : undefined }}>{step.title}</Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5, fontSize: print ? 13.5 : 16, lineHeight: 1.6 }}>{step.text}</Typography>
+        <Typography variant="h6" component="h3" sx={{ fontWeight: 700, lineHeight: 1.3, fontSize: print ? 17 : undefined }}>{tx(step.title)}</Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5, fontSize: print ? 13.5 : 16, lineHeight: 1.6 }}>{tx(step.text)}</Typography>
         {step.points?.length > 0 && (
           <Stack spacing={0.75} sx={{ mt: 1.25 }}>
             {step.points.map((p, i) => (
@@ -80,22 +83,24 @@ const Step = ({ guide, step, number, print, onZoom }) => (
         component={print ? 'div' : 'button'}
         type={print ? undefined : 'button'}
         onClick={print ? undefined : () => onZoom(step)}
-        aria-label={print ? undefined : `Enlarge screenshot: ${step.title}`}
+        aria-label={print ? undefined : `Enlarge screenshot: ${tx(step.title)}`}
         sx={{ display: 'block', width: '100%', p: 0, border: 1, borderColor: 'divider', borderRadius: 3, overflow: 'hidden', bgcolor: 'background.paper', cursor: print ? 'default' : 'zoom-in', position: 'relative', boxShadow: print ? 'none' : '0 10px 30px rgba(15,23,42,.08)', transition: 'transform .2s, box-shadow .2s', '&:hover': print ? {} : { transform: 'translateY(-2px)', boxShadow: '0 16px 40px rgba(15,23,42,.14)' }, '&:hover .zoom': { opacity: 1 } }}
       >
-        <Box component="img" src={`/guide/${guide.id}/${step.img}`} alt={step.title} loading={print ? 'eager' : 'lazy'} sx={{ display: 'block', width: '100%', height: 'auto' }} />
+        <Box component="img" src={`/guide/${guide.id}/${step.img}`} alt={tx(step.title)} loading={print ? 'eager' : 'lazy'} sx={{ display: 'block', width: '100%', height: 'auto' }} />
         {!print && (
           <Box className="zoom" sx={{ position: 'absolute', right: 12, bottom: 12, bgcolor: 'rgba(15,23,42,.75)', color: '#fff', borderRadius: 99, px: 1.5, py: 0.5, display: 'flex', alignItems: 'center', gap: 0.5, fontSize: 13, opacity: 0, transition: 'opacity .2s' }}>
-            <ZoomInIcon fontSize="small" /> Enlarge
+            <ZoomInIcon fontSize="small" />{tx(" Enlarge")}
           </Box>
         )}
       </Box>
     )}
   </Box>
-);
+  );
+};
 
 /** The print layout the PDFs are made from: a cover, then every step. */
 const PrintGuide = ({ guide }) => {
+  const tx = useTx();
   let n = 0;
   return (
     <Box sx={{ bgcolor: '#fff', color: '#0f172a', '@page': { size: 'A4', margin: '14mm' } }}>
@@ -109,20 +114,20 @@ const PrintGuide = ({ guide }) => {
         </Stack>
         <Box sx={{ width: 80, height: 8, borderRadius: 4, bgcolor: guide.color, mb: 3 }} />
         <Typography sx={{ fontWeight: 900, fontSize: 44, lineHeight: 1.1 }}>{guide.heading}</Typography>
-        <Typography sx={{ fontSize: 18, color: '#475569', mt: 2, maxWidth: 560, lineHeight: 1.5 }}>{guide.summary}</Typography>
+        <Typography sx={{ fontSize: 18, color: '#475569', mt: 2, maxWidth: 560, lineHeight: 1.5 }}>{tx(guide.summary)}</Typography>
         <Box sx={{ mt: 6 }}>
-          <Typography sx={{ fontWeight: 700, mb: 1 }}>Contents</Typography>
+          <Typography sx={{ fontWeight: 700, mb: 1 }}>{tx("Contents")}</Typography>
           {guide.sections.map((s, i) => (
-            <Typography key={s.title} sx={{ color: '#334155', fontSize: 15, py: 0.25 }}>{i + 1}. {s.title}</Typography>
+            <Typography key={tx(s.title)} sx={{ color: '#334155', fontSize: 15, py: 0.25 }}>{i + 1}. {tx(s.title)}</Typography>
           ))}
         </Box>
         <Typography sx={{ mt: 'auto', pt: 6, color: '#64748b', fontSize: 13 }}>
-          Need help? Call or WhatsApp {CONTACT.phoneDisplay} · {CONTACT.email}
+          {tx("Need help? Call or WhatsApp ")}{CONTACT.phoneDisplay} · {CONTACT.email}
         </Typography>
       </Box>
       {guide.sections.map((s, si) => (
-        <Box key={s.title} sx={{ pageBreakBefore: si === 0 ? 'auto' : 'always', breakBefore: si === 0 ? 'auto' : 'page' }}>
-          <Typography sx={{ fontWeight: 800, fontSize: 24, color: guide.color, mb: 2, borderBottom: `3px solid ${guide.color}`, pb: 0.5 }}>{si + 1}. {s.title}</Typography>
+        <Box key={tx(s.title)} sx={{ pageBreakBefore: si === 0 ? 'auto' : 'always', breakBefore: si === 0 ? 'auto' : 'page' }}>
+          <Typography sx={{ fontWeight: 800, fontSize: 24, color: guide.color, mb: 2, borderBottom: `3px solid ${guide.color}`, pb: 0.5 }}>{si + 1}. {tx(s.title)}</Typography>
           {s.steps.map((st) => {
             n += 1;
             return <Step key={st.img || st.title} guide={guide} step={st} number={n} print />;
@@ -135,6 +140,7 @@ const PrintGuide = ({ guide }) => {
 
 /** /guide/:id: one product's guide. */
 export const UserGuidePage = () => {
+  const tx = useTx();
   const { id } = useParams();
   const [params] = useSearchParams();
   const print = params.get('print') === '1';
@@ -174,7 +180,7 @@ export const UserGuidePage = () => {
       <AppHeader />
       {!meta || error ? (
         <Container maxWidth="sm" sx={{ py: 10 }}>
-          <Alert severity="warning" action={<Button component={RouterLink} to="/user-guide">All guides</Button>}>{error || 'There is no guide at this address.'}</Alert>
+          <Alert severity="warning" action={<Button component={RouterLink} to="/user-guide">{tx("All guides")}</Button>}>{tx(error || 'There is no guide at this address.')}</Alert>
         </Container>
       ) : loading || !guide ? (
         <Box sx={{ display: 'grid', placeItems: 'center', py: 14 }}><CircularProgress /></Box>
@@ -182,15 +188,15 @@ export const UserGuidePage = () => {
         <>
           <Box sx={{ background: `linear-gradient(135deg, ${guide.color}22, transparent 60%)`, borderBottom: 1, borderColor: 'divider' }}>
             <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-              <Button component={RouterLink} to="/user-guide" startIcon={<ArrowBackIcon />} size="small" sx={{ mb: 2 }}>All guides</Button>
+              <Button component={RouterLink} to="/user-guide" startIcon={<ArrowBackIcon />} size="small" sx={{ mb: 2 }}>{tx("All guides")}</Button>
               <Stack component={motion.div} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems={{ md: 'flex-end' }} justifyContent="space-between">
                 <Box sx={{ maxWidth: 720 }}>
                   <Chip icon={<MenuBookOutlinedIcon />} label={`${stepCount(guide)} steps with pictures`} size="small" sx={{ mb: 1.5, bgcolor: `${guide.color}1f`, color: guide.color, fontWeight: 700, '& .MuiChip-icon': { color: guide.color } }} />
                   <Typography variant="h2" component="h1" sx={{ fontSize: { xs: 32, md: 44 } }}>{guide.heading}</Typography>
-                  <Typography color="text.secondary" sx={{ mt: 1.5, fontSize: 17 }}>{guide.summary}</Typography>
+                  <Typography color="text.secondary" sx={{ mt: 1.5, fontSize: 17 }}>{tx(guide.summary)}</Typography>
                 </Box>
                 <Button variant="contained" size="large" startIcon={<PictureAsPdfOutlinedIcon />} href={pdf} download={`MySuccess-${guide.id}-guide.pdf`} sx={{ flexShrink: 0, bgcolor: guide.color, '&:hover': { bgcolor: guide.color, filter: 'brightness(.92)' } }}>
-                  Download PDF
+                  {tx("Download PDF")}
                 </Button>
               </Stack>
             </Container>
@@ -200,17 +206,17 @@ export const UserGuidePage = () => {
             <Grid container spacing={{ xs: 2, md: 5 }}>
               <Grid item xs={12} md={3}>
                 <Box component="nav" aria-label="Contents" sx={{ position: { md: 'sticky' }, top: { md: 88 }, display: { xs: 'flex', md: 'block' }, gap: 1, overflowX: { xs: 'auto', md: 'visible' }, pb: { xs: 1, md: 0 }, mx: { xs: -2, md: 0 }, px: { xs: 2, md: 0 } }}>
-                  <Typography variant="overline" color="text.secondary" sx={{ display: { xs: 'none', md: 'block' } }}>Contents</Typography>
+                  <Typography variant="overline" color="text.secondary" sx={{ display: { xs: 'none', md: 'block' } }}>{tx("Contents")}</Typography>
                   {numbered.map((s, i) => {
                     const on = active === slug(s.title);
                     return (
                       <Box
-                        key={s.title}
+                        key={tx(s.title)}
                         component="a"
                         href={`#${slug(s.title)}`}
                         sx={{ display: 'block', flexShrink: 0, textDecoration: 'none', whiteSpace: { xs: 'nowrap', md: 'normal' }, px: 1.5, py: 1, my: { md: 0.25 }, borderRadius: 2, fontSize: 14.5, fontWeight: on ? 700 : 500, color: on ? guide.color : 'text.primary', bgcolor: on ? `${guide.color}14` : { xs: 'background.paper', md: 'transparent' }, border: { xs: 1, md: 0 }, borderColor: 'divider', borderLeft: { md: `3px solid ${on ? guide.color : 'transparent'}` }, transition: 'all .2s', '&:hover': { bgcolor: `${guide.color}14` } }}
                       >
-                        {i + 1}. {s.title}
+                        {i + 1}. {tx(s.title)}
                       </Box>
                     );
                   })}
@@ -218,20 +224,20 @@ export const UserGuidePage = () => {
               </Grid>
               <Grid item xs={12} md={9}>
                 {numbered.map((s, i) => (
-                  <Box key={s.title} id={slug(s.title)} component="section" sx={{ scrollMarginTop: 90, mb: 3 }}>
+                  <Box key={tx(s.title)} id={slug(s.title)} component="section" sx={{ scrollMarginTop: 90, mb: 3 }}>
                     <Typography variant="h4" component="h2" sx={{ fontWeight: 800, mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <Box component="span" sx={{ width: 8, height: 28, borderRadius: 4, bgcolor: guide.color }} />
-                      {i + 1}. {s.title}
+                      {i + 1}. {tx(s.title)}
                     </Typography>
                     {s.steps.map((st) => <Step key={st.n} guide={guide} step={st} number={st.n} onZoom={setZoom} />)}
                   </Box>
                 ))}
                 <Card variant="outlined" sx={{ p: 3, borderRadius: 3, textAlign: 'center' }}>
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>Still need help?</Typography>
-                  <Typography color="text.secondary" sx={{ mt: 0.5 }}>Call or WhatsApp {CONTACT.phoneDisplay} ({CONTACT.hours}), or send us a message.</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 700 }}>{tx("Still need help?")}</Typography>
+                  <Typography color="text.secondary" sx={{ mt: 0.5 }}>{tx("Call or WhatsApp ")}{CONTACT.phoneDisplay} ({CONTACT.hours}), or send us a message.</Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="center" sx={{ mt: 2 }}>
-                    <Button variant="contained" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener noreferrer">WhatsApp us</Button>
-                    <Button variant="outlined" component={RouterLink} to="/contactus">Send a message</Button>
+                    <Button variant="contained" href={`https://wa.me/${CONTACT.whatsapp}`} target="_blank" rel="noopener noreferrer">{tx("WhatsApp us")}</Button>
+                    <Button variant="outlined" component={RouterLink} to="/contactus">{tx("Send a message")}</Button>
                   </Stack>
                 </Card>
               </Grid>
@@ -245,8 +251,8 @@ export const UserGuidePage = () => {
         {zoom && (
           <Box sx={{ position: 'relative' }}>
             <IconButton onClick={() => setZoom(null)} aria-label="Close" sx={{ position: 'absolute', right: 8, top: 8, bgcolor: 'rgba(15,23,42,.7)', color: '#fff', '&:hover': { bgcolor: 'rgba(15,23,42,.85)' } }}><CloseIcon /></IconButton>
-            <Box component="img" src={`/guide/${guide.id}/${zoom.img}`} alt={zoom.title} sx={{ display: 'block', width: '100%' }} />
-            <Typography sx={{ p: 2, fontWeight: 700 }}>{zoom.title}</Typography>
+            <Box component="img" src={`/guide/${guide.id}/${zoom.img}`} alt={tx(zoom.title)} sx={{ display: 'block', width: '100%' }} />
+            <Typography sx={{ p: 2, fontWeight: 700 }}>{tx(zoom.title)}</Typography>
           </Box>
         )}
       </Dialog>
@@ -256,6 +262,7 @@ export const UserGuidePage = () => {
 
 /** /guide: pick a product's guide. */
 const UserGuides = () => {
+  const tx = useTx();
   useEffect(() => {
     document.title = 'User guides · My Success';
   }, []);
@@ -264,9 +271,9 @@ const UserGuides = () => {
       <AppHeader />
       <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
         <Stack spacing={1.5} alignItems="center" textAlign="center" sx={{ mb: { xs: 4, md: 6 } }}>
-          <Typography variant="overline" color="primary.main">Help centre</Typography>
-          <Typography variant="h2" component="h1">User guides</Typography>
-          <Typography color="text.secondary" sx={{ maxWidth: 600, fontSize: 17 }}>Step-by-step guides with pictures for each product. Read them here or download the PDF to print or share.</Typography>
+          <Typography variant="overline" color="primary.main">{tx("Help centre")}</Typography>
+          <Typography variant="h2" component="h1">{tx("User guides")}</Typography>
+          <Typography color="text.secondary" sx={{ maxWidth: 600, fontSize: 17 }}>{tx("Step-by-step guides with pictures for each product. Read them here or download the PDF to print or share.")}</Typography>
         </Stack>
         <Grid container spacing={3}>
           {GUIDES.map((g, i) => (
@@ -274,12 +281,12 @@ const UserGuides = () => {
               <Card component={motion.div} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }} whileHover={{ y: -6 }} variant="outlined" sx={{ height: '100%', borderRadius: 4, display: 'flex', flexDirection: 'column', borderTop: `4px solid ${g.color}` }}>
                 <CardActionArea component={RouterLink} to={`/user-guide/${g.id}`} sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
                   <Box sx={{ width: 56, height: 56, borderRadius: 3, bgcolor: `${g.color}1f`, color: g.color, display: 'grid', placeItems: 'center', mb: 2, '& svg': { fontSize: 30 } }}>{g.icon}</Box>
-                  <Typography variant="h5" sx={{ fontWeight: 800 }}>{g.title}</Typography>
-                  <Typography color="text.secondary" sx={{ mt: 0.5 }}>{g.who}</Typography>
-                  <Typography sx={{ mt: 2, color: g.color, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>Read the guide <ArrowForwardIcon fontSize="small" /></Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800 }}>{tx(g.title)}</Typography>
+                  <Typography color="text.secondary" sx={{ mt: 0.5 }}>{tx(g.who)}</Typography>
+                  <Typography sx={{ mt: 2, color: g.color, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 0.5 }}>{tx("Read the guide ")}<ArrowForwardIcon fontSize="small" /></Typography>
                 </CardActionArea>
                 <Box sx={{ px: 3, pb: 3 }}>
-                  <Button fullWidth variant="outlined" startIcon={<PictureAsPdfOutlinedIcon />} href={`/guide/${g.id}.pdf`} download={`MySuccess-${g.id}-guide.pdf`}>Download PDF</Button>
+                  <Button fullWidth variant="outlined" startIcon={<PictureAsPdfOutlinedIcon />} href={`/guide/${g.id}.pdf`} download={`MySuccess-${g.id}-guide.pdf`}>{tx("Download PDF")}</Button>
                 </Box>
               </Card>
             </Grid>

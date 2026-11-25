@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Alert, Box, Button, Card, Container, Grid, Link, Stack, Typography } from '@mui/material';
@@ -31,6 +32,7 @@ const isAndroid = () => typeof navigator !== 'undefined' && /android/i.test(navi
 const LATEST_RELEASE_API = 'https://api.github.com/repos/successprabu/AIMobileApp/releases/latest';
 
 const DownloadApp = () => {
+  const tx = useTx();
   // GitHub serves the APK labelled as an Android app, so phones save one MySuccess.apk and offer to
   // install it. (The copy the deploy puts on this site stays as a backup at /downloads/MySuccess.apk.)
   const apkUrl = APK_ON_GITHUB;
@@ -56,7 +58,7 @@ const DownloadApp = () => {
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(pageUrl);
-      notify.success('Link copied. Open it on your Android phone.');
+      notify.success(tx('Link copied. Open it on your Android phone.'));
     } catch (e) {
       notify.info(pageUrl);
     }
@@ -73,13 +75,13 @@ const DownloadApp = () => {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <Stack direction="row" spacing={1} alignItems="center" sx={{ color: '#10b981', mb: 1.5 }}>
                   <AndroidIcon />
-                  <Typography variant="overline" sx={{ color: 'inherit' }}>Android app</Typography>
+                  <Typography variant="overline" sx={{ color: 'inherit' }}>{tx("Android app")}</Typography>
                 </Stack>
                 <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 32, md: 46 }, letterSpacing: '-0.02em' }}>
-                  My Success on your phone
+                  {tx("My Success on your phone")}
                 </Typography>
                 <Typography color="text.secondary" sx={{ mt: 2, fontSize: { xs: 17, md: 19 }, maxWidth: 560 }}>
-                  The same account as the website. Record moi at the function, check totals and share reports, right from your phone.
+                  {tx("The same account as the website. Record moi at the function, check totals and share reports, right from your phone.")}
                 </Typography>
 
                 {android ? (
@@ -95,16 +97,16 @@ const DownloadApp = () => {
                       startIcon={<DownloadIcon />}
                       sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, px: 4, py: 1.5, fontSize: 17 }}
                     >
-                      Download for Android{sizeMb ? ` (${sizeMb} MB)` : ''}
+                      {tx("Download for Android")}{sizeMb ? ` (${sizeMb} MB)` : ''}
                     </Button>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
-                      One file, MySuccess.apk. Open it after it downloads to install.
+                      {tx("One file, MySuccess.apk. Open it after it downloads to install.")}
                     </Typography>
                   </Box>
                 ) : (
                   <Box sx={{ mt: 4 }}>
                     <Alert severity="info" icon={<PhoneAndroidIcon />} sx={{ mb: 2, maxWidth: 560 }}>
-                      The app installs on <b>Android phones</b>. Open this page on your phone, or send the link to it.
+                      {tx('The app installs on Android phones. Open this page on your phone, or send the link to it.')}
                     </Alert>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
                       <Button
@@ -119,16 +121,16 @@ const DownloadApp = () => {
                         rel="noopener noreferrer"
                         sx={{ bgcolor: '#10b981', '&:hover': { bgcolor: '#059669' }, px: 3, py: 1.5, fontSize: 16 }}
                       >
-                        Send the link to my phone
+                        {tx("Send the link to my phone")}
                       </Button>
                       <Button variant="outlined" size="large" startIcon={<ContentCopyIcon />} onClick={copyLink}>
-                        Copy link
+                        {tx("Copy link")}
                       </Button>
                     </Stack>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 2, maxWidth: 560 }}>
-                      Need the file on this computer?{' '}
-                      <Link href={apkUrl} download="MySuccess.apk">Download MySuccess.apk{sizeMb ? ` (${sizeMb} MB)` : ''}</Link>
-                      {' '}and copy it to your phone. Do not open it on the computer: an APK only installs on Android, and a computer shows it as a folder of files.
+                      {tx("Need the file on this computer?")}{' '}
+                      <Link href={apkUrl} download="MySuccess.apk">{tx("Download MySuccess.apk")}{sizeMb ? ` (${sizeMb} MB)` : ''}</Link>
+                      {' '}{tx('and copy it to your phone. Do not open it on the computer: an APK only installs on Android, and a computer shows it as a folder of files.')}
                     </Typography>
                   </Box>
                 )}
@@ -137,7 +139,7 @@ const DownloadApp = () => {
                   {FEATURES.map((f) => (
                     <Stack key={f} direction="row" spacing={0.75} alignItems="center">
                       <CheckIcon sx={{ fontSize: 18, color: 'success.main' }} />
-                      <Typography variant="body2" color="text.secondary">{f}</Typography>
+                      <Typography variant="body2" color="text.secondary">{tx(f)}</Typography>
                     </Stack>
                   ))}
                 </Stack>
@@ -148,18 +150,18 @@ const DownloadApp = () => {
               <Card component={motion.div} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }} sx={{ p: { xs: 2.5, md: 3.5 }, borderRadius: 4 }}>
                 <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
                   <PhoneAndroidIcon color="primary" />
-                  <Typography variant="h6" fontWeight={700}>How to install</Typography>
+                  <Typography variant="h6" fontWeight={700}>{tx("How to install")}</Typography>
                 </Stack>
                 <Box component="ol" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                   {STEPS.map((s, i) => (
                     <Stack component={motion.li} key={s} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.08 }} direction="row" spacing={1.5} alignItems="flex-start" sx={{ mb: 2 }}>
                       <Box sx={{ width: 28, height: 28, borderRadius: '50%', bgcolor: 'primary.main', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 14, flexShrink: 0 }}>{i + 1}</Box>
-                      <Typography sx={{ pt: 0.25 }}>{s}</Typography>
+                      <Typography sx={{ pt: 0.25 }}>{tx(s)}</Typography>
                     </Stack>
                   ))}
                 </Box>
                 <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
-                  Installing a new version keeps your data: everything is saved in your account online.
+                  {tx('Installing a new version keeps your data: everything is saved in your account online.')}
                 </Alert>
               </Card>
             </Grid>

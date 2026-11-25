@@ -293,5 +293,12 @@
   "moiGiven": "நாம் செய்த மொய்",
   "changePassword": "கடவுச்சொல்லை மாற்று",
   "wrong_mobile_or_password": "மொபைல் எண் அல்லது கடவுச்சொல் தவறு. சரிபார்த்து மீண்டும் முயலவும்.",
-  "session_ended_sign_in": "உங்கள் அமர்வு முடிந்தது. மீண்டும் உள்நுழையவும்."
+  "session_ended_sign_in": "உங்கள் அமர்வு முடிந்தது. மீண்டும் உள்நுழையவும்.",
+  "handoverFullAmount": "முழுத் தொகை {{amount}} ஒப்படைக்கவும்",
+  "showingRows": "{{total}}-இல் {{from}}–{{to}}",
+  "editingUser": "{{name}} திருத்தப்படுகிறது",
+  "welcomeBackName": "மீண்டும் வருக, {{name}}",
+  "savedThisSession": "இந்தத் திரையில் {{count}} சேமிக்கப்பட்டன",
+  "functionSelected": "புதிய பதிவுகள் {{name}} கீழ் சேமிக்கப்படும்",
+  "editingFunction": "{{name}} திருத்தப்படுகிறது"
 }

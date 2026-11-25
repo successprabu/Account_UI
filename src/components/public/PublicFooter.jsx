@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +30,7 @@ const Column = ({ title, children }) => (
 
 /** Footer for all public pages. */
 const PublicFooter = () => {
+  const tx = useTx();
   const { t } = useTranslation();
   const [starting, setStarting] = useState(null);
   return (
@@ -38,11 +40,11 @@ const PublicFooter = () => {
           <Grid item xs={12} md={4}>
             <BrandLink />
             <Typography variant="body2" color="text.secondary" sx={{ mt: 2, maxWidth: 320 }}>
-              We help businesses modernize, go digital and grow with AI, in English and five Indian languages.
+              {tx("We help businesses modernize, go digital and grow with AI, in English and five Indian languages.")}
             </Typography>
           </Grid>
           <Grid item xs={6} md={3}>
-            <Column title="Products">
+            <Column title={tx("Products")}>
               {PRODUCTS.map((p) =>
                 p.start ? (
                   // Opens "how to get started" with the right register link
@@ -57,7 +59,7 @@ const PublicFooter = () => {
                     sx={{ textAlign: 'left', alignSelf: 'flex-start' }}
                   >
                     {t(p.titleKey, { defaultValue: p.title })}
-                    {p.comingSoon ? ' (coming soon)' : ''}
+                    {p.comingSoon ? ` (${tx('coming soon')})` : ''}
                   </Link>
                 ) : (
                   <FooterLink key={p.id} to={p.cta.to} href={p.cta.href}>
@@ -68,9 +70,9 @@ const PublicFooter = () => {
             </Column>
           </Grid>
           <Grid item xs={6} md={2}>
-            <Column title="Company">
+            <Column title={tx("Company")}>
               <FooterLink to="/about">{t('about_us', { defaultValue: 'About' })}</FooterLink>
-              <FooterLink to="/pricing">Pricing</FooterLink>
+              <FooterLink to="/pricing">{tx("Pricing")}</FooterLink>
               <FooterLink to="/contactus">{t('contact_us', { defaultValue: 'Contact' })}</FooterLink>
               <FooterLink to="/user-guide">{t('userGuides', { defaultValue: 'User guides' })}</FooterLink>
               <FooterLink to="/download-app">{t('getAndroidApp', { defaultValue: 'Get the Android app' })}</FooterLink>
@@ -82,18 +84,18 @@ const PublicFooter = () => {
             </Column>
           </Grid>
           <Grid item xs={12} md={3}>
-            <Column title="Contact">
+            <Column title={tx("Contact")}>
               <FooterLink href={`mailto:${CONTACT.email}`}>{CONTACT.email}</FooterLink>
               <FooterLink href={`tel:${CONTACT.phoneTel}`}>{CONTACT.phoneDisplay}</FooterLink>
               <Typography variant="body2" color="text.secondary">
-                {CONTACT.city}
+                {tx(CONTACT.city)}
               </Typography>
             </Column>
           </Grid>
         </Grid>
         <Divider sx={{ my: 4 }} />
         <Typography variant="caption" color="text.secondary">
-          © {new Date().getFullYear()} MySuccess Technologies. All rights reserved.
+          © {new Date().getFullYear()} MySuccess Technologies. {tx('All rights reserved.')}
         </Typography>
       </Container>
       <ProductStartDialog product={starting} onClose={() => setStarting(null)} />

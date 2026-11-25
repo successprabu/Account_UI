@@ -179,5 +179,12 @@
   "moiGiven": "ഞങ്ങൾ നൽകിയ മൊയ്",
   "changePassword": "പാസ്‌വേഡ് മാറ്റുക",
   "wrong_mobile_or_password": "മൊബൈൽ നമ്പറോ പാസ്‌വേഡോ തെറ്റാണ്. പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.",
-  "session_ended_sign_in": "നിങ്ങളുടെ സെഷൻ അവസാനിച്ചു. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യുക."
+  "session_ended_sign_in": "നിങ്ങളുടെ സെഷൻ അവസാനിച്ചു. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യുക.",
+  "handoverFullAmount": "മുഴുവൻ തുക {{amount}} കൈമാറുക",
+  "showingRows": "{{total}}-ൽ {{from}}–{{to}}",
+  "editingUser": "{{name}} എഡിറ്റ് ചെയ്യുന്നു",
+  "welcomeBackName": "വീണ്ടും സ്വാഗതം, {{name}}",
+  "savedThisSession": "ഈ സ്ക്രീനിൽ {{count}} സേവ് ചെയ്തു",
+  "functionSelected": "പുതിയ എൻട്രികൾ {{name}} എന്നതിന് കീഴിൽ സേവ് ചെയ്യും",
+  "editingFunction": "{{name}} എഡിറ്റ് ചെയ്യുന്നു"
 }

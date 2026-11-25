@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import { useTranslation } from 'react-i18next';
+import { useTx } from '../../language/site';
 import './regShowcase.css';
 
 /**
@@ -39,6 +41,7 @@ const THEMES = {
 
 /** Cycles through words (occasions) with a soft slide. */
 const WordTicker = ({ words, color }) => {
+  const tx = useTx();
   const [i, setI] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setI((n) => (n + 1) % words.length), 2200);
@@ -56,7 +59,7 @@ const WordTicker = ({ words, color }) => {
           transition={{ duration: 0.35 }}
           sx={{ color, fontWeight: 800, gridArea: '1 / 1' }}
         >
-          {words[i]}
+          {tx(words[i])}
         </Box>
       </AnimatePresence>
     </Box>
@@ -82,6 +85,7 @@ const Marigold = ({ x, y, r = 7, c = '#F59E0B' }) => (
 );
 
 const MoitechScene = () => {
+  const tx = useTx();
   const [shown, setShown] = useState(1);
   useEffect(() => {
     const id = setInterval(() => setShown((n) => (n >= ENTRIES.length ? 1 : n + 1)), 1300);
@@ -145,7 +149,7 @@ const MoitechScene = () => {
           </motion.g>
         ))}
         <rect x="130" y="222" width="108" height="22" rx="7" fill="#10B981" />
-        <text x="136" y="236" fontSize="8.5" fill="#fff" fontWeight="700">Total</text>
+        <text x="136" y="236" fontSize="8.5" fill="#fff" fontWeight="700">{tx('Total')}</text>
         <text x="232" y="237" fontSize="11" fill="#fff" fontWeight="900" textAnchor="end">₹{total.toLocaleString('en-IN')}</text>
       </motion.g>
 
@@ -167,6 +171,7 @@ const MoitechScene = () => {
 const BOOKED_ORDER = [3, 9, 14, 6, 17, 1, 12, 19];
 
 const MahalScene = () => {
+  const tx = useTx();
   const [booked, setBooked] = useState(2);
   useEffect(() => {
     const id = setInterval(() => setBooked((n) => (n >= BOOKED_ORDER.length ? 2 : n + 1)), 1200);
@@ -220,7 +225,7 @@ const MahalScene = () => {
         <rect x="222" y="70" width="128" height="150" rx="14" fill="#fff" />
         <rect x="222" y="70" width="128" height="28" rx="14" fill="#6366F1" />
         <rect x="222" y="86" width="128" height="12" fill="#6366F1" />
-        <text x="234" y="89" fontSize="10" fontWeight="800" fill="#fff">Muhurtham dates</text>
+        <text x="234" y="89" fontSize="10" fontWeight="800" fill="#fff">{tx('Muhurtham dates')}</text>
         {Array.from({ length: 20 }, (_, k) => {
           const x = 230 + (k % 5) * 23.5;
           const y = 106 + Math.floor(k / 5) * 24;
@@ -240,7 +245,7 @@ const MahalScene = () => {
           <rect x="214" y="228" width="140" height="30" rx="15" fill="#10B981" />
           <circle cx="231" cy="243" r="8" fill="#fff" />
           <path d="M227 243 l3 3 l6 -6" stroke="#10B981" strokeWidth="2" fill="none" />
-          <text x="244" y="247" fontSize="9.5" fill="#fff" fontWeight="800">Date {latest + 1} booked · advance paid</text>
+          <text x="244" y="247" fontSize="9.5" fill="#fff" fontWeight="800">{tx('Date {{n}} booked · advance paid', { n: latest + 1 })}</text>
         </motion.g>
       </AnimatePresence>
     </svg>
@@ -250,6 +255,10 @@ const MahalScene = () => {
 /* ------------------------------------------------------------------ layout */
 
 const RegShowcase = ({ variant = 'moitech', children }) => {
+  const tx = useTx();
+  const { i18n } = useTranslation();
+  // The Tamil tagline is a bilingual touch for English visitors; other languages already see their own.
+  const showTamil = (i18n.resolvedLanguage || i18n.language || 'en').startsWith('en');
   const th = THEMES[variant];
   const dark = variant === 'mahal';
   return (
@@ -262,21 +271,21 @@ const RegShowcase = ({ variant = 'moitech', children }) => {
           transition={{ duration: 0.5 }}
           sx={{ position: { lg: 'sticky' }, top: { lg: 16 }, borderRadius: 5, p: { xs: 2.5, md: 3.5 }, background: th.bg, color: th.ink, overflow: 'hidden', boxShadow: '0 20px 50px rgba(15,23,42,.18)' }}
         >
-          <Chip label={th.badge} size="small" sx={{ bgcolor: th.chip, color: dark ? '#3B0A0A' : '#fff', fontWeight: 800, mb: 1.5 }} />
-          <Typography sx={{ fontFamily: '"Noto Sans Tamil", Inter, sans-serif', fontWeight: 700, fontSize: { xs: 14, md: 15 }, opacity: 0.9 }}>{th.tamil}</Typography>
-          <Typography component="h1" sx={{ fontWeight: 900, fontSize: { xs: 26, md: 34 }, lineHeight: 1.12, mt: 0.5 }}>{th.title}</Typography>
+          <Chip label={tx(th.badge)} size="small" sx={{ bgcolor: th.chip, color: dark ? '#3B0A0A' : '#fff', fontWeight: 800, mb: 1.5 }} />
+          {showTamil && <Typography sx={{ fontFamily: '"Noto Sans Tamil", Inter, sans-serif', fontWeight: 700, fontSize: { xs: 14, md: 15 }, opacity: 0.9 }}>{th.tamil}</Typography>}
+          <Typography component="h1" sx={{ fontWeight: 900, fontSize: { xs: 26, md: 34 }, lineHeight: 1.12, mt: 0.5 }}>{tx(th.title)}</Typography>
           <Typography sx={{ mt: 1, fontSize: { xs: 15, md: 16 }, opacity: 0.85 }}>
-            Made for <WordTicker words={th.words} color={th.accent} />
+            {tx('Made for')} <WordTicker words={th.words} color={th.accent} />
           </Typography>
 
           <Box sx={{ my: { xs: 1, md: 2 }, mx: { xs: -1, md: 0 } }}>{variant === 'mahal' ? <MahalScene /> : <MoitechScene />}</Box>
 
-          <Typography sx={{ fontSize: 15, opacity: 0.9, mb: 1.5, display: { xs: 'none', sm: 'block' } }}>{th.sub}</Typography>
+          <Typography sx={{ fontSize: 15, opacity: 0.9, mb: 1.5, display: { xs: 'none', sm: 'block' } }}>{tx(th.sub)}</Typography>
           <Stack spacing={0.9}>
             {th.ticks.map((tk, i) => (
               <Stack key={tk} direction="row" spacing={1} alignItems="center" component={motion.div} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 + i * 0.12 }}>
                 <CheckCircleRoundedIcon sx={{ color: dark ? '#FACC15' : '#10B981', fontSize: 20 }} />
-                <Typography sx={{ fontSize: 14.5, fontWeight: 600 }}>{tk}</Typography>
+                <Typography sx={{ fontSize: 14.5, fontWeight: 600 }}>{tx(tk)}</Typography>
               </Stack>
             ))}
           </Stack>

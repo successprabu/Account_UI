@@ -1,3 +1,4 @@
+import { useTx } from '../../language/site';
 import { Link as RouterLink } from 'react-router-dom';
 import AndroidIcon from '@mui/icons-material/Android';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +63,7 @@ const FEATURES = [
 ];
 
 const Home = () => {
+  const tx = useTx();
   const { t } = useTranslation();
 
   return (
@@ -83,15 +85,15 @@ const Home = () => {
           <Box sx={{ maxWidth: 820, mx: 'auto', textAlign: 'center' }}>
               <Chip
                 icon={<AutoAwesomeIcon sx={{ fontSize: 16 }} />}
-                label="Modernize · Digitize · AI"
+                label={tx("Modernize · Digitize · AI")}
                 variant="outlined"
                 color="primary"
                 sx={{ mb: 2.5, bgcolor: 'background.paper' }}
               />
               <Typography variant="h1" component="h1" sx={{ fontSize: { xs: 34, sm: 44, md: 52 }, letterSpacing: '-0.02em' }}>
-                Take your business digital and{' '}
+                {tx("Take your business digital and")}{' '}
                 <Box component="span" sx={{ background: 'var(--ms-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  grow it with AI
+                  {tx("grow it with AI")}
                 </Box>
               </Typography>
               <Typography color="text.secondary" sx={{ mt: 2.5, fontSize: { xs: 17, md: 19 }, maxWidth: 640, mx: 'auto' }}>
@@ -100,10 +102,10 @@ const Home = () => {
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="center" sx={{ mt: 4 }}>
                 <DemoMenu size="large" />
                 <Button component={RouterLink} to="/contactus" variant="outlined" color="inherit" size="large">
-                  Talk to us
+                  {tx("Talk to us")}
                 </Button>
                 <Button component={RouterLink} to="/download-app" size="large" startIcon={<AndroidIcon />} sx={{ color: '#10b981' }}>
-                  Get the app
+                  {tx("Get the app")}
                 </Button>
               </Stack>
               <Stack direction="row" spacing={2.5} flexWrap="wrap" useFlexGap justifyContent="center" sx={{ mt: 3 }}>
@@ -111,7 +113,7 @@ const Home = () => {
                   <Stack key={x} direction="row" spacing={0.75} alignItems="center">
                     <CheckCircleIcon sx={{ fontSize: 18, color: 'success.main' }} />
                     <Typography variant="body2" color="text.secondary">
-                      {x}
+                      {tx(x)}
                     </Typography>
                   </Stack>
                 ))}
@@ -121,23 +123,23 @@ const Home = () => {
       </Box>
 
       {/* Services */}
-      <Section tinted eyebrow="What we do" title="Modernize, digitize and improve with AI" intro="Whatever your size or industry, we help you move from manual work to smart, connected software.">
+      <Section tinted eyebrow={tx("What we do")} title={tx("Modernize, digitize and improve with AI")} intro={tx("Whatever your size or industry, we help you move from manual work to smart, connected software.")}>
         <Grid container spacing={3}>
           {SERVICES.map((s) => (
-            <Grid item xs={12} md={4} key={s.title}>
+            <Grid item xs={12} md={4} key={tx(s.title)}>
               <Card sx={{ p: 3, height: '100%' }}>
                 <IconTile color={s.color}>{s.icon}</IconTile>
                 <Typography variant="h4" component="h3" sx={{ mt: 2.5 }}>
-                  {s.title}
+                  {tx(s.title)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {s.text}
+                  {tx(s.text)}
                 </Typography>
                 <Stack spacing={1} sx={{ mt: 2.5 }}>
                   {s.points.map((p) => (
                     <Stack key={p} direction="row" spacing={1} alignItems="center">
                       <CheckCircleIcon sx={{ fontSize: 18, color: s.color }} />
-                      <Typography variant="body2">{p}</Typography>
+                      <Typography variant="body2">{tx(p)}</Typography>
                     </Stack>
                   ))}
                 </Stack>
@@ -148,7 +150,7 @@ const Home = () => {
       </Section>
 
       {/* How it works */}
-      <Section eyebrow="How it works" title="From paperwork to smart software in three steps">
+      <Section eyebrow={tx("How it works")} title={tx("From paperwork to smart software in three steps")}>
         <Grid container spacing={3}>
           {STEPS.map((s) => (
             <Grid item xs={12} md={4} key={s.n}>
@@ -157,10 +159,10 @@ const Home = () => {
                   {s.n}
                 </Box>
                 <Typography variant="h5" component="h3">
-                  {s.title}
+                  {tx(s.title)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {s.text}
+                  {tx(s.text)}
                 </Typography>
               </Stack>
             </Grid>
@@ -169,20 +171,20 @@ const Home = () => {
       </Section>
 
       {/* Ready-made products */}
-      <Section tinted eyebrow="Ready-made products" title="Start today with our apps" intro="Use one of our ready-to-run products, or tell us how your business works and we will build software made for it. Healthcare software is next on our roadmap.">
+      <Section tinted eyebrow={tx("Ready-made products")} title={tx("Start today with our apps")} intro={tx("Use one of our ready-to-run products, or tell us how your business works and we will build software made for it. Healthcare software is next on our roadmap.")}>
         <Grid container spacing={3} columns={{ xs: 12, lg: 15 }}>
           {PRODUCTS.map((p) => (
             <Grid item xs={12} sm={6} lg={3} key={p.id}>
               <Card sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', transition: 'box-shadow .2s, transform .2s', '&:hover': { boxShadow: 'var(--ms-shadow-md)', transform: 'translateY(-2px)' } }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
                   <IconTile color={p.color}>{p.icon}</IconTile>
-                  {p.comingSoon && <Chip label="Coming soon" size="small" color="error" variant="outlined" />}
+                  {p.comingSoon && <Chip label={tx("Coming soon")} size="small" color="error" variant="outlined" />}
                 </Stack>
                 <Typography variant="h5" component="h3" sx={{ mt: 2.5 }}>
                   {t(p.titleKey, { defaultValue: p.title })}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1, flex: 1 }}>
-                  {p.summary}
+                  {tx(p.summary)}
                 </Typography>
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2.5 }}>
                   <Button
@@ -190,11 +192,11 @@ const Home = () => {
                     endIcon={<ArrowForwardIcon />}
                     sx={{ px: 0, '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}
                   >
-                    {p.demo ? 'Try demo' : p.cta.label}
+                    {tx(p.demo ? 'Try demo' : p.cta.label)}
                   </Button>
                   {p.pricing && (
                     <Button {...linkProps(p.pricing)} color="inherit" sx={{ px: 0, color: 'text.secondary', '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' } }}>
-                      Pricing
+                      {tx("Pricing")}
                     </Button>
                   )}
                 </Stack>
@@ -205,20 +207,20 @@ const Home = () => {
       </Section>
 
       {/* What's included */}
-      <Section eyebrow="Included with every product" title="Built for the way you work">
+      <Section eyebrow={tx("Included with every product")} title={tx("Built for the way you work")}>
         <Grid container spacing={3}>
           {FEATURES.map((f) => (
-            <Grid item xs={12} sm={6} md={4} key={f.title}>
+            <Grid item xs={12} sm={6} md={4} key={tx(f.title)}>
               <Stack direction="row" spacing={2}>
                 <IconTile color={f.color} size={44}>
                   {f.icon}
                 </IconTile>
                 <Box>
                   <Typography variant="h6" component="h3">
-                    {f.title}
+                    {tx(f.title)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                    {f.text}
+                    {tx(f.text)}
                   </Typography>
                 </Box>
               </Stack>
@@ -228,12 +230,12 @@ const Home = () => {
       </Section>
 
       <CtaBand
-        title="Ready to modernize your business?"
-        text="Tell us how you work today. We will show you what to digitize first and where AI can save you time."
+        title={tx("Ready to modernize your business?")}
+        text={tx("Tell us how you work today. We will show you what to digitize first and where AI can save you time.")}
         actions={
           <>
             <Button component={RouterLink} to="/contactus" size="large" variant="contained" sx={{ bgcolor: '#fff', color: 'primary.main', '&:hover': { bgcolor: '#f1f5f9' } }}>
-              Book a free consultation
+              {tx("Book a free consultation")}
             </Button>
             <DemoMenu size="large" variant="outlined" sx={{ color: '#fff', borderColor: 'rgba(255,255,255,0.6)', '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.08)' } }} />
           </>
