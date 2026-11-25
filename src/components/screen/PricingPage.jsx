@@ -72,7 +72,7 @@ const PricingPage = () => {
   const [selectedPlan, setSelectedPlan] = useState('premium');
   const [billingCycle, setBillingCycle] = useState('monthly');
   // 'once' = pay for one period (old flow); 'auto' = Razorpay subscription that renews by itself.
-  const [payWay, setPayWay] = useState('auto');
+  const [payWay, setPayWay] = useState('once');
   const [autoPay, setAutoPay] = useState(null);
   const [stopping, setStopping] = useState(false);
 
@@ -475,8 +475,8 @@ const PricingPage = () => {
       {/* Pay once or AutoPay */}
       <Box sx={{ textAlign: 'center', mb: 3 }}>
         <ToggleButtonGroup exclusive size="small" color="primary" value={payWay} onChange={(e, v) => v && setPayWay(v)}>
-          <ToggleButton value="auto"><AutorenewIcon fontSize="small" sx={{ mr: 0.75 }} />{tx('AutoPay (renews by itself)')}</ToggleButton>
           <ToggleButton value="once"><CreditCardIcon fontSize="small" sx={{ mr: 0.75 }} />{tx('Pay once')}</ToggleButton>
+          <ToggleButton value="auto"><AutorenewIcon fontSize="small" sx={{ mr: 0.75 }} />{tx('AutoPay (renews by itself)')}</ToggleButton>
         </ToggleButtonGroup>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {tx(payWay === 'auto'
