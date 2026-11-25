@@ -1,0 +1,42 @@
+/* Registration pages (Moitech / Mahal): modern form card next to the animated showcase. */
+.reg-modern .reg-scene { width: 100%; height: auto; display: block; max-height: 300px; }
+
+.reg-modern .card {
+  border: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+  margin-top: 0 !important;
+}
+.reg-modern .card-body { padding: 1.75rem; }
+@media (max-width: 576px) { .reg-modern .card-body { padding: 1.1rem; } }
+
+.reg-modern .form-label { color: #0F172A; font-weight: 600; font-size: 0.95rem; }
+.reg-modern .form-control,
+.reg-modern .form-select {
+  border-radius: 12px;
+  border: 1.5px solid #E2E8F0;
+  min-height: 48px;
+  font-size: 16px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.reg-modern .form-check-label { color: #475569; }
+
+.reg-moitech .form-control:focus { border-color: #F59E0B; box-shadow: 0 0 0 4px rgba(245, 158, 11, .2); }
+.reg-mahal .form-control:focus { border-color: #B45309; box-shadow: 0 0 0 4px rgba(212, 160, 23, .22); }
+.reg-moitech .form-check-input:checked { background-color: #6366F1; border-color: #6366F1; }
+.reg-mahal .form-check-input:checked { background-color: #7F1D1D; border-color: #7F1D1D; }
+
+.reg-modern .btn { border-radius: 12px; min-height: 44px; font-weight: 700; }
+.reg-modern .btn-success[type="submit"] {
+  border: 0;
+  min-width: 220px;
+  min-height: 52px;
+  font-size: 1.05rem;
+  box-shadow: 0 12px 26px rgba(99, 102, 241, .35);
+  transition: transform .15s, box-shadow .15s;
+}
+.reg-moitech .btn-success[type="submit"] { background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+.reg-mahal .btn-success[type="submit"] { background: linear-gradient(135deg, #7F1D1D, #B45309); box-shadow: 0 12px 26px rgba(127, 29, 29, .35); }
+.reg-modern .btn-success[type="submit"]:not(:disabled):hover { transform: translateY(-2px); }
+.reg-modern .btn-success[type="submit"]:disabled { opacity: .55; box-shadow: none; }

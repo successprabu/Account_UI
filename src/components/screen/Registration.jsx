@@ -24,6 +24,7 @@ import { sendOtp as requestOtp, verifyOtp } from "../../api/otp";
 import { Oval } from "react-loader-spinner";
 import Header from "../common/Header";
 import InputWithMicrophone from "../common/InputWithMicrophone";
+import RegShowcase from "../public/RegShowcase";
 import "./css/Registration.css"; // Ensure you import the CSS file
 
 const Registration = () => {
@@ -219,6 +220,7 @@ const Registration = () => {
   };
 
   return (
+    <RegShowcase variant="moitech">
     <Card className="mt-1">
       <Header
         titles={[t("registration")]}
@@ -497,6 +499,7 @@ const Registration = () => {
         )}
       </CardBody>
     </Card>
+    </RegShowcase>
   );
 };
 

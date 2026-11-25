@@ -24,6 +24,7 @@ import { sendOtp as requestOtp, verifyOtp } from "../../api/otp";
 import { Oval } from "react-loader-spinner";
 import Header from "../common/Header";
 import InputWithMicrophone from "../common/InputWithMicrophone";
+import RegShowcase from "../public/RegShowcase";
 import "./css/Registration.css"; // Ensure you import the CSS file
 
 const MahalRegistration = () => {
@@ -228,6 +229,7 @@ const MahalRegistration = () => {
   };
 
   return (
+    <RegShowcase variant="mahal">
     <Card className="mt-1">
       <Header
         titles={[t("mahalRegistration")]}
@@ -235,7 +237,7 @@ const MahalRegistration = () => {
           { to: "/", label: t("home") },
           { to: "/services", label: t("ourServices") },
         ]}
-        bgColor="#3d7d3b"
+        bgColor="#7F1D1D"
         showLanguageSelector={true}
       />
       <CardBody>
@@ -507,6 +509,7 @@ const MahalRegistration = () => {
         )}
       </CardBody>
     </Card>
+    </RegShowcase>
   );
 };
 
