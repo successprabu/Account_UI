@@ -55,6 +55,8 @@ const PageNotFound = lazy(() =>
 const ClientList = lazy(() =>
   import("./components/screen/list/ClientList")
 );
+const GuestEntries = lazy(() => import("./components/screen/GuestEntries"));
+const GuestMoi = lazy(() => import("./components/screen/GuestMoi"));
 const Transaction = lazy(() =>
   import("./components/screen/Transaction")
 );
@@ -148,6 +150,7 @@ const Router = () => {
         <Route path="user-guide" element={<UserGuides />} />
         <Route path="user-guide/:id" element={<UserGuidePage />} />
         <Route path="mahals" element={<FindMahal />} />
+        <Route path="moi/:token" element={<GuestMoi />} />
         <Route path="mahals/status" element={<MahalBookingStatus />} />
         <Route path="mahals/review" element={<MahalReview />} />
         <Route path="mahals/:id" element={<MahalDetails />} />
@@ -195,6 +198,14 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
                 <Transaction />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="guest-entries"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <GuestEntries />
               </ProtectedRoute>
             }
           />

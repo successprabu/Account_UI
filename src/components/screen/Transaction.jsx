@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useTx } from "../../language/site";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
@@ -24,6 +25,8 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import ClearIcon from "@mui/icons-material/Clear";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
+import GuestQrDialog from "../moitech/GuestQrDialog";
 import TranslateIcon from "@mui/icons-material/Translate";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -75,6 +78,7 @@ const emptyReceipt = (user) => ({
 /** Moi entry: one receipt at a time, with voice input, Tamil suggestions and bulk import. */
 const Transaction = () => {
   const { t, i18n } = useTranslation();
+  const tx = useTx();
   const theme = useTheme();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(() => emptyReceipt(readUser()));
@@ -91,6 +95,7 @@ const Transaction = () => {
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [showDetails, setShowDetails] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [showGuestQr, setShowGuestQr] = useState(false);
   const [fieldBeingTranslated, setFieldBeingTranslated] = useState(null);
   const currentFunction = useCurrentFunction();
 
@@ -318,6 +323,9 @@ const Transaction = () => {
         breadcrumbs={[{ label: t("dashboard"), to: "/dashboard" }, { label: t("addTransaction") }]}
         actions={
           <>
+            <Button startIcon={<QrCode2Icon />} onClick={() => setShowGuestQr(true)}>
+              {tx("Guest QR")}
+            </Button>
             <Button startIcon={<UploadFileOutlinedIcon />} onClick={() => setShowImport(true)}>
               {t("import", { defaultValue: "Import" })}
             </Button>
@@ -485,6 +493,7 @@ const Transaction = () => {
         </Grid>
       </Grid>
 
+      <GuestQrDialog open={showGuestQr} onClose={() => setShowGuestQr(false)} />
       <ReceiptImportDialog open={showImport} onClose={() => setShowImport(false)} schema={schema} />
     </Box>
   );

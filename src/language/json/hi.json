@@ -188,5 +188,6 @@
   "welcomeBackName": "फिर से स्वागत है, {{name}}",
   "savedThisSession": "इस स्क्रीन पर {{count}} सहेजे गए",
   "functionSelected": "नई एंट्री {{name}} के अंतर्गत सहेजी जाएँगी",
-  "editingFunction": "{{name}} संपादित हो रहा है"
+  "editingFunction": "{{name}} संपादित हो रहा है",
+  "guestEntries": "अतिथि प्रविष्टियाँ"
 }

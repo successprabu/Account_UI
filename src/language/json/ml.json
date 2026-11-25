@@ -186,5 +186,6 @@
   "welcomeBackName": "വീണ്ടും സ്വാഗതം, {{name}}",
   "savedThisSession": "ഈ സ്ക്രീനിൽ {{count}} സേവ് ചെയ്തു",
   "functionSelected": "പുതിയ എൻട്രികൾ {{name}} എന്നതിന് കീഴിൽ സേവ് ചെയ്യും",
-  "editingFunction": "{{name}} എഡിറ്റ് ചെയ്യുന്നു"
+  "editingFunction": "{{name}} എഡിറ്റ് ചെയ്യുന്നു",
+  "guestEntries": "അതിഥി എൻട്രികൾ"
 }

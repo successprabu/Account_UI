@@ -182,5 +182,6 @@
   "welcomeBackName": "ಮತ್ತೆ ಸ್ವಾಗತ, {{name}}",
   "savedThisSession": "ಈ ಪರದೆಯಲ್ಲಿ {{count}} ಉಳಿಸಲಾಗಿದೆ",
   "functionSelected": "ಹೊಸ ನಮೂದುಗಳು {{name}} ಅಡಿಯಲ್ಲಿ ಉಳಿಸಲ್ಪಡುತ್ತವೆ",
-  "editingFunction": "{{name}} ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
+  "editingFunction": "{{name}} ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ",
+  "guestEntries": "ಅತಿಥಿ ನಮೂದುಗಳು"
 }

@@ -300,5 +300,6 @@
   "welcomeBackName": "மீண்டும் வருக, {{name}}",
   "savedThisSession": "இந்தத் திரையில் {{count}} சேமிக்கப்பட்டன",
   "functionSelected": "புதிய பதிவுகள் {{name}} கீழ் சேமிக்கப்படும்",
-  "editingFunction": "{{name}} திருத்தப்படுகிறது"
+  "editingFunction": "{{name}} திருத்தப்படுகிறது",
+  "guestEntries": "விருந்தினர் பதிவுகள்"
 }

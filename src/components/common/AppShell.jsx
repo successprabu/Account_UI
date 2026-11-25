@@ -97,6 +97,7 @@ const NAV = [
     children: [
       { key: 'addTransaction', to: '/transaction' },
       { key: 'transactionList', to: '/transaction-list' },
+      { key: 'guestEntries', to: '/guest-entries' },
       { key: 'addExpenses', to: '/addExpenses' },
       { key: 'expensesList', to: '/expenses-list' },
       { key: 'addOthers', to: '/others' },
