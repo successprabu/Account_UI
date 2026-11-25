@@ -60,6 +60,10 @@ const GuestMoi = lazy(() => import("./components/screen/GuestMoi"));
 const LiveTotals = lazy(() => import("./components/screen/LiveTotals"));
 const ThankGivers = lazy(() => import("./components/screen/ThankGivers"));
 const MoiReturn = lazy(() => import("./components/screen/MoiReturn"));
+const MoiBook = lazy(() => import("./components/screen/MoiBook"));
+const Invitations = lazy(() => import("./components/screen/Invitations"));
+const InviteCard = lazy(() => import("./components/screen/InviteCard"));
+const OldNotebooks = lazy(() => import("./components/screen/OldNotebooks"));
 const Transaction = lazy(() =>
   import("./components/screen/Transaction")
 );
@@ -155,6 +159,7 @@ const Router = () => {
         <Route path="mahals" element={<FindMahal />} />
         <Route path="moi/:token" element={<GuestMoi />} />
         <Route path="live/:token" element={<LiveTotals />} />
+        <Route path="invite/:token" element={<InviteCard />} />
         <Route path="mahals/status" element={<MahalBookingStatus />} />
         <Route path="mahals/review" element={<MahalReview />} />
         <Route path="mahals/:id" element={<MahalDetails />} />
@@ -322,6 +327,30 @@ const Router = () => {
             element={
               <ProtectedRoute allowedRoles={["AU", "MU"]}>
                 <MyPlan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="moi-book"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <MoiBook />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="invitations"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU", "NU"]}>
+                <Invitations />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="old-notebooks"
+            element={
+              <ProtectedRoute allowedRoles={["SU", "AU"]}>
+                <OldNotebooks />
               </ProtectedRoute>
             }
           />

@@ -185,5 +185,8 @@
   "editingFunction": "{{name}} ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ",
   "guestEntries": "ಅತಿಥಿ ನಮೂದುಗಳು",
   "thankGivers": "ಧನ್ಯವಾದ ಕಳುಹಿಸಿ",
-  "moiReturn": "ಹಿಂದಿರುಗಿಸಬೇಕಾದ ಮೊಯ್"
+  "moiReturn": "ಹಿಂದಿರುಗಿಸಬೇಕಾದ ಮೊಯ್",
+  "invitations": "ಆಹ್ವಾನಗಳು",
+  "moiBook": "ಮೊಯ್ ಪುಸ್ತಕ",
+  "oldNotebooks": "ಹಳೆಯ ಮೊಯ್ ನೋಟ್‌ಬುಕ್‌ಗಳು"
 }

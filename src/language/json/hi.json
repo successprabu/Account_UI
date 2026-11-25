@@ -191,5 +191,8 @@
   "editingFunction": "{{name}} संपादित हो रहा है",
   "guestEntries": "अतिथि प्रविष्टियाँ",
   "thankGivers": "धन्यवाद भेजें",
-  "moiReturn": "लौटाने वाला मोई"
+  "moiReturn": "लौटाने वाला मोई",
+  "invitations": "निमंत्रण",
+  "moiBook": "मोई पुस्तिका",
+  "oldNotebooks": "पुरानी मोई कॉपियाँ"
 }

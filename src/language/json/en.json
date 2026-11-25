@@ -301,5 +301,8 @@
   "session_ended_sign_in": "Your session has ended. Please sign in again.",
   "guestEntries": "Guest entries",
   "thankGivers": "Thank givers",
-  "moiReturn": "Moi to return"
+  "moiReturn": "Moi to return",
+  "invitations": "Invitations",
+  "moiBook": "Moi book",
+  "oldNotebooks": "Old moi notebooks"
 }

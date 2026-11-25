@@ -25,6 +25,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -100,6 +101,8 @@ const NAV = [
       { key: 'transactionList', to: '/transaction-list' },
       { key: 'guestEntries', to: '/guest-entries' },
       { key: 'thankGivers', to: '/thank-givers' },
+      { key: 'invitations', to: '/invitations' },
+      { key: 'moiBook', to: '/moi-book' },
       { key: 'addExpenses', to: '/addExpenses' },
       { key: 'expensesList', to: '/expenses-list' },
       { key: 'addOthers', to: '/others' },
@@ -121,6 +124,7 @@ const NAV = [
   },
   { key: 'moiGiven', fallback: 'Moi we gave', to: '/moi-given', icon: <RedeemOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'moiReturn', fallback: 'Moi to return', to: '/moi-return', icon: <EventOutlinedIcon />, roles: ['SU', 'AU'] },
+  { key: 'oldNotebooks', fallback: 'Old moi notebooks', to: '/old-notebooks', icon: <AutoStoriesOutlinedIcon />, roles: ['SU', 'AU'] },
   { key: 'history', fallback: 'History', to: '/history', icon: <HistoryIcon />, roles: ['SU', 'AU'] },
   { key: 'myPlan', fallback: 'My plan & billing', to: '/my-plan', icon: <WorkspacePremiumOutlinedIcon />, roles: ['AU', 'MU'] },
   { key: 'Theme Settings', fallback: 'Theme settings', to: '/settings', icon: <PaletteOutlinedIcon />, roles: ['SU', 'AU', 'NU', 'MU', 'MS'] },

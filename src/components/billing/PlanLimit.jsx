@@ -5,6 +5,8 @@ import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, 
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 import { auth, call } from '../../api/mahal';
 import { useTx } from '../../language/site';
+import { buyFunctionPass } from '../../api/moiPlus';
+import { notify } from '../ui';
 
 const EVENT = 'mysuccess:plan-limit';
 
@@ -34,6 +36,17 @@ export const PlanLimitDialog = () => {
     return () => window.removeEventListener(EVENT, on);
   }, []);
   const d = info?.data || {};
+  const [buying, setBuying] = useState(false);
+  const canPass = d.functionId > 0 && d.passPrice > 0 && d.reason !== 'paid_feature';
+  const buyPass = async () => {
+    setBuying(true);
+    const r = await buyFunctionPass(d.functionId);
+    setBuying(false);
+    if (r.ok) {
+      notify.success(tx(r.message));
+      setInfo(null);
+    } else if (!r.cancelled) notify.error(tx(r.message));
+  };
   return (
     <Dialog open={!!info} onClose={() => setInfo(null)} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -46,6 +59,13 @@ export const PlanLimitDialog = () => {
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>{tx('{{n}} of {{limit}} free receipts used', { n: d.receipts, limit: d.receiptLimit })}</Typography>
         )}
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>{tx('Standard ₹99/month or Premium ₹199/month: unlimited receipts for all your functions.')}</Typography>
+        {canPass && (
+          <Alert severity="info" icon={false} sx={{ mt: 2 }}
+            action={<Button color="inherit" size="small" variant="outlined" disabled={buying} onClick={buyPass}>{tx('Pay ₹{{n}}', { n: d.passPrice })}</Button>}>
+            <Typography variant="body2" fontWeight={700}>{tx('Only one function this year?')}</Typography>
+            <Typography variant="body2">{tx('Pay once for this function: unlimited entries until 60 days after the function.')}</Typography>
+          </Alert>
+        )}
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2.5 }}>
         <Button onClick={() => setInfo(null)}>{tx('Close')}</Button>

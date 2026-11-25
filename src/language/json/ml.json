@@ -189,5 +189,8 @@
   "editingFunction": "{{name}} എഡിറ്റ് ചെയ്യുന്നു",
   "guestEntries": "അതിഥി എൻട്രികൾ",
   "thankGivers": "നന്ദി അയയ്ക്കുക",
-  "moiReturn": "തിരികെ നൽകേണ്ട മൊയ്"
+  "moiReturn": "തിരികെ നൽകേണ്ട മൊയ്",
+  "invitations": "ക്ഷണങ്ങൾ",
+  "moiBook": "മൊയ് പുസ്തകം",
+  "oldNotebooks": "പഴയ മൊയ് നോട്ടുബുക്കുകൾ"
 }

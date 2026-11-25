@@ -303,5 +303,8 @@
   "editingFunction": "{{name}} திருத்தப்படுகிறது",
   "guestEntries": "விருந்தினர் பதிவுகள்",
   "thankGivers": "நன்றி அனுப்பு",
-  "moiReturn": "திருப்ப வேண்டிய மொய்"
+  "moiReturn": "திருப்ப வேண்டிய மொய்",
+  "invitations": "அழைப்பிதழ்கள்",
+  "moiBook": "மொய் புத்தகம்",
+  "oldNotebooks": "பழைய மொய் நோட்டுகள்"
 }
