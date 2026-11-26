@@ -1345,5 +1345,8 @@
   "Become a partner": "கூட்டாளர் ஆகுங்கள்",
   "Apply": "விண்ணப்பி",
   "Share": "பகிர்",
-  "1 function to attend in the next 7 days.": "அடுத்த 7 நாட்களில் 1 விழாவுக்குச் செல்ல வேண்டும்."
+  "1 function to attend in the next 7 days.": "அடுத்த 7 நாட்களில் 1 விழாவுக்குச் செல்ல வேண்டும்.",
+  "The password needs at least 8 characters.": "கடவுச்சொல்லில் குறைந்தது 8 எழுத்துகள் வேண்டும்.",
+  "This password is too easy to guess. Choose a different one.": "இந்தக் கடவுச்சொல் எளிதில் ஊகிக்கக்கூடியது. வேறொன்றைத் தேர்ந்தெடுக்கவும்.",
+  "Do not use your mobile number as the password.": "உங்கள் மொபைல் எண்ணைக் கடவுச்சொல்லாகப் பயன்படுத்த வேண்டாம்."
 }

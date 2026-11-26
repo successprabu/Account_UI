@@ -308,5 +308,6 @@
   "moiBook": "மொய் புத்தகம்",
   "oldNotebooks": "பழைய மொய் நோட்டுகள்",
   "partners": "கூட்டாளர்கள்",
-  "partnerDashboard": "கூட்டாளர் பக்கம்"
+  "partnerDashboard": "கூட்டாளர் பக்கம்",
+  "passwordMin8": "குறைந்தது 8 எழுத்துகள்"
 }

@@ -184,8 +184,8 @@ const Registration = () => {
 
     if (!formData.password.trim()) {
       validationErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      validationErrors.password = "Password should be at least 6 characters";
+    } else if (formData.password.length < 8) {
+      validationErrors.password = "Password should be at least 8 characters";
     }
 
     if (formData.conpassword !== formData.password) {

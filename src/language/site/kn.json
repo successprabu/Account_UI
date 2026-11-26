@@ -1345,5 +1345,8 @@
   "Become a partner": "ಪಾಲುದಾರರಾಗಿ",
   "Apply": "ಅರ್ಜಿ ಹಾಕಿ",
   "Share": "ಹಂಚಿ",
-  "1 function to attend in the next 7 days.": "ಮುಂದಿನ 7 ದಿನಗಳಲ್ಲಿ 1 ಸಮಾರಂಭಕ್ಕೆ ಹೋಗಬೇಕು."
+  "1 function to attend in the next 7 days.": "ಮುಂದಿನ 7 ದಿನಗಳಲ್ಲಿ 1 ಸಮಾರಂಭಕ್ಕೆ ಹೋಗಬೇಕು.",
+  "The password needs at least 8 characters.": "ಪಾಸ್‌ವರ್ಡ್‌ನಲ್ಲಿ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಿರಬೇಕು.",
+  "This password is too easy to guess. Choose a different one.": "ಈ ಪಾಸ್‌ವರ್ಡ್ ಸುಲಭವಾಗಿ ಊಹಿಸಬಹುದು. ಬೇರೆಯದನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+  "Do not use your mobile number as the password.": "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ಪಾಸ್‌ವರ್ಡ್ ಆಗಿ ಬಳಸಬೇಡಿ."
 }

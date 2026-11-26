@@ -29,7 +29,7 @@ const ChangePasswordDialog = ({ open, onClose }) => {
   const save = async () => {
     const er = {};
     if (!form.current) er.current = 'Enter your current password';
-    if (form.next.length < 6) er.next = 'At least 6 characters';
+    if (form.next.length < 8) er.next = 'At least 8 characters';
     if (form.next !== form.confirm) er.confirm = 'The passwords do not match';
     setErrors(er);
     if (Object.keys(er).length) return;
@@ -62,7 +62,7 @@ const ChangePasswordDialog = ({ open, onClose }) => {
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <Stack spacing={2} component="form" noValidate onSubmit={(e) => { e.preventDefault(); save(); }}>
           <TextField label="Current password" type={show ? 'text' : 'password'} value={form.current} onChange={set('current')} error={!!errors.current} helperText={errors.current} autoComplete="current-password" autoFocus InputProps={{ endAdornment: eye }} />
-          <TextField label="New password" type={show ? 'text' : 'password'} value={form.next} onChange={set('next')} error={!!errors.next} helperText={errors.next || 'At least 6 characters'} autoComplete="new-password" />
+          <TextField label="New password" type={show ? 'text' : 'password'} value={form.next} onChange={set('next')} error={!!errors.next} helperText={errors.next || 'At least 8 characters'} autoComplete="new-password" />
           <TextField label="Confirm new password" type={show ? 'text' : 'password'} value={form.confirm} onChange={set('confirm')} error={!!errors.confirm} helperText={errors.confirm} autoComplete="new-password" />
           <button type="submit" hidden aria-hidden="true" />
         </Stack>

@@ -84,8 +84,8 @@ describe('User', () => {
     const add = async (name, phone) => {
       fireEvent.change(screen.getByRole('textbox', { name: /^name/i }), { target: { value: name } });
       fireEvent.change(screen.getByRole('textbox', { name: /mobile number/i }), { target: { value: phone } });
-      fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'secret1' } });
-      fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'secret1' } });
+      fireEvent.change(screen.getByLabelText(/^password/i), { target: { value: 'secret12' } });
+      fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'secret12' } });
       fireEvent.click(screen.getByRole('button', { name: /^save$/i }));
     };
     await add('Arun', '9000000002');

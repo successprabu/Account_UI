@@ -1345,5 +1345,8 @@
   "Become a partner": "പങ്കാളിയാകുക",
   "Apply": "അപേക്ഷിക്കുക",
   "Share": "പങ്കിടുക",
-  "1 function to attend in the next 7 days.": "അടുത്ത 7 ദിവസത്തിനുള്ളിൽ 1 ചടങ്ങിൽ പങ്കെടുക്കണം."
+  "1 function to attend in the next 7 days.": "അടുത്ത 7 ദിവസത്തിനുള്ളിൽ 1 ചടങ്ങിൽ പങ്കെടുക്കണം.",
+  "The password needs at least 8 characters.": "പാസ്‌വേഡിൽ കുറഞ്ഞത് 8 അക്ഷരങ്ങൾ വേണം.",
+  "This password is too easy to guess. Choose a different one.": "ഈ പാസ്‌വേഡ് എളുപ്പം ഊഹിക്കാം. മറ്റൊന്ന് തിരഞ്ഞെടുക്കുക.",
+  "Do not use your mobile number as the password.": "നിങ്ങളുടെ മൊബൈൽ നമ്പർ പാസ്‌വേഡായി ഉപയോഗിക്കരുത്."
 }

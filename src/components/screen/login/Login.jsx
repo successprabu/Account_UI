@@ -30,6 +30,7 @@ import { loginSchema } from "../../../validations/ValidationSchema";
 import { LOGIN_API, LOGIN_USER_ACCOUNT_CHECK_API } from "../../common/CommonApiURL";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { currentUser } from "../../../utils/session";
 import AppHeader from "../../common/AppHeader";
 import SignUpChooser from "../../common/SignUpChooser";
 
@@ -54,12 +55,9 @@ const Login = () => {
 
   useEffect(() => {
     // Check if user is already logged in
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const decodedToken = jwtDecode(user.token);
-      const currentTime = Date.now() / 1000;
-
-      if (decodedToken.exp < currentTime) {
+    const stored = JSON.parse(localStorage.getItem("user"));
+    if (stored) {
+      if (!currentUser()) {
         localStorage.removeItem("user");
         navigate("/login");
       } else {
@@ -161,11 +159,9 @@ const Login = () => {
     try {
       const isValid = await loginSchema.isValid(formData);
       if (isValid) {
-        console.log("API input:", formData);
         const response = await axios.post(LOGIN_API, formData);
         const data = response.data;
 
-        console.log("API Response:", data);
         if (data.result) {
           const decodedToken = jwtDecode(data.data.token);
           const currentTime = Date.now() / 1000;

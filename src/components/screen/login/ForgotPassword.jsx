@@ -63,7 +63,7 @@ const ForgotPassword = () => {
   const reset = async () => {
     const er = {};
     if (!/^\d{6}$/.test(otp)) er.otp = 'Enter the 6 digit OTP';
-    if (password.length < 6) er.password = 'At least 6 characters';
+    if (password.length < 8) er.password = 'At least 8 characters';
     if (password !== confirm) er.confirm = 'The passwords do not match';
     setErrors(er);
     if (Object.keys(er).length) return;
@@ -143,7 +143,7 @@ const ForgotPassword = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   error={!!errors.password}
-                  helperText={errors.password || 'At least 6 characters'}
+                  helperText={errors.password || 'At least 8 characters'}
                   autoComplete="new-password"
                   InputProps={{ startAdornment: <InputAdornment position="start"><LockOutlinedIcon fontSize="small" /></InputAdornment>, endAdornment: pwAdornment }}
                 />

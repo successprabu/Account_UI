@@ -44,7 +44,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import ChangePasswordDialog from './ChangePasswordDialog';
-import { endSession, msUntilExpiry } from '../../utils/session';
+import { endSession, msUntilExpiry, signOut } from '../../utils/session';
 import HistoryIcon from '@mui/icons-material/History';
 import RedeemOutlinedIcon from '@mui/icons-material/RedeemOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -299,7 +299,7 @@ const AppShell = ({ children }) => {
   useEffect(() => setMobileOpen(false), [pathname]);
 
   const logout = () => {
-    localStorage.removeItem('user');
+    signOut();
     setConfirmLogout(false);
     navigate('/login');
   };

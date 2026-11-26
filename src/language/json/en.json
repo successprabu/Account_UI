@@ -306,5 +306,6 @@
   "moiBook": "Moi book",
   "oldNotebooks": "Old moi notebooks",
   "partners": "Partners",
-  "partnerDashboard": "Partner dashboard"
+  "partnerDashboard": "Partner dashboard",
+  "passwordMin8": "At least 8 characters"
 }

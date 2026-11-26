@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { signOut } from "../../utils/session";
 
 const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    signOut();
     navigate('/login');  // Redirect to the login page
   };
 

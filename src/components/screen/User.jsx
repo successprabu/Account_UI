@@ -94,7 +94,7 @@ const User = () => {
   const schema = yup.object().shape({
     name: yup.string().required(t("required")),
     primary_phone: yup.string().required(t("required")).matches(/^\d{10}$/, t("validation_phone")),
-    password: yup.string().required(t("required")),
+    password: yup.string().required(t("required")).min(8, t("passwordMin8", { defaultValue: "At least 8 characters" })),
     conpassword: yup.string().oneOf([yup.ref("password"), null], t("passwordMatch")).required(t("required")),
     email: yup.string().email(t("invalidEmail")).nullable(),
   });

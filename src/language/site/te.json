@@ -1345,5 +1345,8 @@
   "Become a partner": "భాగస్వామి అవ్వండి",
   "Apply": "దరఖాస్తు",
   "Share": "షేర్",
-  "1 function to attend in the next 7 days.": "రాబోయే 7 రోజుల్లో 1 వేడుకకు వెళ్లాలి."
+  "1 function to attend in the next 7 days.": "రాబోయే 7 రోజుల్లో 1 వేడుకకు వెళ్లాలి.",
+  "The password needs at least 8 characters.": "పాస్‌వర్డ్‌లో కనీసం 8 అక్షరాలు ఉండాలి.",
+  "This password is too easy to guess. Choose a different one.": "ఈ పాస్‌వర్డ్ సులభంగా ఊహించవచ్చు. వేరొకటి ఎంచుకోండి.",
+  "Do not use your mobile number as the password.": "మీ మొబైల్ నంబర్‌ను పాస్‌వర్డ్‌గా వాడవద్దు."
 }

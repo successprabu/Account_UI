@@ -99,7 +99,7 @@ const RegisterClient = () => {
     const er = {};
     if (form.name.trim().length < 2) er.name = 'Enter the client name';
     if (!/^[6-9]\d{9}$/.test(form.phone)) er.phone = 'Enter a 10 digit mobile number';
-    if (form.password.length < 6) er.password = 'At least 6 characters';
+    if (form.password.length < 8) er.password = 'At least 8 characters';
     setErrors(er);
     return Object.keys(er).length === 0;
   };
