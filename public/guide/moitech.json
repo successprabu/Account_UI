@@ -93,7 +93,7 @@
             "Works in Tamil, English, Hindi, Telugu, Kannada and Malayalam.",
             "If something is missing, DigiMoi tells you which field to fill."
           ],
-          "pendingImg": "20-voice-entry.jpg"
+          "img": "20-voice-entry.jpg"
         },
         {
           "title": "Import a written moi list",
@@ -147,7 +147,7 @@
           "points": [
             "Only the owner sees New QR. A new QR stops the old one and its printed copies."
           ],
-          "pendingImg": "21-guest-qr.jpg"
+          "img": "21-guest-qr.jpg"
         },
         {
           "title": "What the guest sees",
@@ -155,7 +155,7 @@
           "points": [
             "For UPI the page shows the family's UPI QR with the amount filled in. After paying, the guest can type the UPI reference."
           ],
-          "pendingImg": "22-guest-page.jpg"
+          "img": "22-guest-page.jpg"
         },
         {
           "title": "Accept guest entries",
@@ -164,7 +164,7 @@
             "For UPI, accept only after the money shows in the family's bank or UPI app. If unsure, ask the account owner.",
             "The list refreshes every 10 seconds."
           ],
-          "pendingImg": "23-guest-entries.jpg"
+          "img": "23-guest-entries.jpg"
         }
       ]
     },
@@ -177,12 +177,12 @@
           "points": [
             "Change the PIN or turn the link off at any time."
           ],
-          "pendingImg": "27-live-link.jpg"
+          "img": "27-live-link.jpg"
         },
         {
           "title": "Invitations and RSVP",
           "text": "Open Transactions → Invitations. Share the invitation on WhatsApp or print its QR. Guests reply coming or not, with how many people, so you know how many to cook for.",
-          "pendingImg": "28-invitations.jpg"
+          "img": "28-invitations.jpg"
         }
       ]
     },
@@ -214,17 +214,17 @@
             "Choose Tamil or English and edit the message once; it is used for everyone.",
             "Only givers with a mobile number are listed."
           ],
-          "pendingImg": "24-thank.jpg"
+          "img": "24-thank.jpg"
         },
         {
           "title": "Print the moi book and thank-you cards",
           "text": "Open Transactions → Moi book. Print the list village by village with old and new moi and totals, like the family notebook. Print thank-you cards for every giver, with or without the amount.",
-          "pendingImg": "25-moi-book.jpg"
+          "img": "25-moi-book.jpg"
         },
         {
           "title": "Gold value",
           "text": "On the dashboard tap Gold value and enter today's gold rate per gram. Gold gifts with a weight are valued and added to the moi total; switch between grams and pavun.",
-          "pendingImg": "26-gold.jpg"
+          "img": "26-gold.jpg"
         }
       ]
     },
@@ -238,7 +238,7 @@
             "Tap Remind me to add the date to your Google Calendar.",
             "After the function tap Mark given; it is added to Moi we gave."
           ],
-          "pendingImg": "29-moi-return.jpg"
+          "img": "29-moi-return.jpg"
         },
         {
           "title": "Import old moi notebooks",
@@ -247,7 +247,7 @@
             "Comes with the Standard and Premium plans.",
             "These entries do not count toward the free plan's 100 entries."
           ],
-          "pendingImg": "30-old-notebooks.jpg"
+          "img": "30-old-notebooks.jpg"
         }
       ]
     },
@@ -289,7 +289,7 @@
         {
           "title": "Earn as a DigiMoi partner",
           "text": "Printers, function organisers, halls and shops can open Partner dashboard and apply. Once approved you get a code, a link and a QR. Families who sign up from it are counted for you, and you earn a share of what they pay.",
-          "pendingImg": "31-partner.jpg"
+          "img": "31-partner.jpg"
         }
       ]
     }

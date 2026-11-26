@@ -140,7 +140,7 @@ const MoitechScene = () => {
         <rect x="124" y="66" width="120" height="184" rx="13" fill="#fff" />
         <rect x="124" y="66" width="120" height="30" rx="13" fill="#6366F1" />
         <rect x="124" y="83" width="120" height="13" fill="#6366F1" />
-        <text x="134" y="86" fontSize="10.5" fontWeight="800" fill="#fff">DigiMoi · மொய் புத்தகம்</text>
+        <text x="134" y="86" fontSize="10.5" fontWeight="800" fill="#fff">DigiMoi</text>
         {ENTRIES.slice(0, shown).map(([n, amt], k) => (
           <motion.g key={n} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35 }}>
             <rect x="130" y={102 + k * 23} width="108" height="19" rx="5" fill={k === shown - 1 ? '#FEF3C7' : '#F8FAFC'} />
