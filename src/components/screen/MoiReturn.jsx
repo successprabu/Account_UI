@@ -172,7 +172,7 @@ const MoiReturn = () => {
       </Stack>
 
       {data?.dueWeek > 0 && tab === 'Planned' && (
-        <Alert severity="warning" sx={{ mb: 2 }}>{tx('{{n}} functions to attend in the next 7 days.', { n: data.dueWeek })}</Alert>
+        <Alert severity="warning" sx={{ mb: 2 }}>{(data.dueWeek === 1 ? tx('1 function to attend in the next 7 days.') : tx('{{n}} functions to attend in the next 7 days.', { n: data.dueWeek }))}</Alert>
       )}
       {error && <Alert severity="warning" sx={{ mb: 2 }}>{error}</Alert>}
 

@@ -3,6 +3,7 @@ import { Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogCont
 import { getGold, setGoldRate } from '../../api/moiPlus';
 import { rupees } from './shared';
 import { notify } from '../ui';
+import { useTranslation } from 'react-i18next';
 import { useTx } from '../../language/site';
 
 const readUser = () => {
@@ -17,6 +18,7 @@ const PAVUN = 8; // grams in one sovereign (pavun)
 /** Gold gifts (Others) valued at today's gold rate, added to the moi total. Weights are read as grams. */
 const GoldValueDialog = ({ open, onClose }) => {
   const tx = useTx();
+  const { t } = useTranslation();
   const user = readUser();
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -75,7 +77,7 @@ const GoldValueDialog = ({ open, onClose }) => {
             )}
             {data.items.length === 0 ? <Typography color="text.secondary">{tx('No gold or other gifts recorded yet.')}</Typography> : data.items.map((i) => (
               <Stack key={i.type || '-'} direction="row" spacing={1} alignItems="center">
-                <Typography sx={{ flex: 1 }}>{tx(i.type || 'others')} <Typography component="span" variant="body2" color="text.secondary">× {i.count}</Typography></Typography>
+                <Typography sx={{ flex: 1 }}>{t(i.type || 'others')} <Typography component="span" variant="body2" color="text.secondary">× {i.count}</Typography></Typography>
                 <Typography variant="body2">{i.gold && i.weight > 0 ? w(i.weight) : ''}</Typography>
                 <Typography fontWeight={700} sx={{ minWidth: 90, textAlign: 'right' }}>{i.gold ? (data.rate ? rupees(i.value) : '—') : ''}</Typography>
               </Stack>

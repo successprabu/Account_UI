@@ -29,7 +29,7 @@ const FamilyStrip = ({ role }) => {
       {due > 0 && (
         <Alert severity="warning" icon={<EventOutlinedIcon />} sx={{ mb: 2 }}
           action={<Button color="inherit" size="small" component={RouterLink} to="/moi-return">{tx('Open')}</Button>}>
-          {tx('{{n}} functions to attend in the next 7 days.', { n: due })}
+          {(due === 1 ? tx('1 function to attend in the next 7 days.') : tx('{{n}} functions to attend in the next 7 days.', { n: due }))}
         </Alert>
       )}
       <Stack direction="row" spacing={1} sx={{ mb: 3 }} flexWrap="wrap" useFlexGap>
