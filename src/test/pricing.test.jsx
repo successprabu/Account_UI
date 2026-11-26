@@ -33,7 +33,7 @@ describe('Demo and pricing per product', () => {
     await renderAt('/services');
     const buttons = await screen.findAllByRole('button', { name: /try demo/i }, { timeout: 5000 });
     fireEvent.click(buttons[0]);
-    expect(await screen.findByRole('menuitem', { name: /moitech/i })).toHaveAttribute('href', '/purchase');
+    expect(await screen.findByRole('menuitem', { name: /digimoi/i })).toHaveAttribute('href', '/purchase');
     expect(screen.getByRole('menuitem', { name: /mahal management/i })).toHaveAttribute('href', '/mahal-reg');
     const school = screen.getByRole('menuitem', { name: /school website/i });
     expect(school.tagName).toBe('A');
@@ -86,11 +86,11 @@ describe('Demo and pricing per product', () => {
     await renderAt('/about');
     const footer = await screen.findByRole('contentinfo', {}, { timeout: 5000 });
     const { within } = await import('@testing-library/react');
-    fireEvent.click(within(footer).getByRole('button', { name: /^moitech$/i }));
-    expect(await screen.findByRole('heading', { name: /want to try moitech/i })).toBeInTheDocument();
+    fireEvent.click(within(footer).getByRole('button', { name: /^digimoi$/i }));
+    expect(await screen.findByRole('heading', { name: /want to try digimoi/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /register for free/i })).toHaveAttribute('href', '/purchase');
     fireEvent.click(screen.getByRole('button', { name: /close/i }));
-    await waitFor(() => expect(screen.queryByRole('heading', { name: /want to try moitech/i })).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByRole('heading', { name: /want to try digimoi/i })).not.toBeInTheDocument());
 
     fireEvent.click(await within(footer).findByRole('button', { name: /^mahal management$/i }));
     expect(await screen.findByRole('link', { name: /register your mahal/i })).toHaveAttribute('href', '/mahal-reg');

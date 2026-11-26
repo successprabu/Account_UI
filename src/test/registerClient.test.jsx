@@ -69,8 +69,8 @@ describe('Register client', () => {
     await renderAt('/register-client');
     fireEvent.change(await screen.findByLabelText(/client name/i, {}, { timeout: 5000 }), { target: { value: 'Ravi' } });
     fireEvent.change(screen.getByLabelText(/mobile number/i), { target: { value: '9876543210' } });
-    fireEvent.click(screen.getByRole('button', { name: /register moitech client/i }));
-    expect(await screen.findByText(/already has a moitech account/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /register digimoi client/i }));
+    expect(await screen.findByText(/already has a digimoi account/i)).toBeInTheDocument();
     expect(postMock.mock.calls[0][1]).toMatchObject({ userType: 'AU', customerId: 0 });
   });
 });
