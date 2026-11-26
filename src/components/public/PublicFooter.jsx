@@ -75,6 +75,7 @@ const PublicFooter = () => {
               <FooterLink to="/pricing">{tx("Pricing")}</FooterLink>
               <FooterLink to="/contactus">{t('contact_us', { defaultValue: 'Contact' })}</FooterLink>
               <FooterLink to="/user-guide">{t('userGuides', { defaultValue: 'User guides' })}</FooterLink>
+              <FooterLink to="/privacy">Privacy policy</FooterLink>
               <FooterLink to="/download-app">{t('getAndroidApp', { defaultValue: 'Get the Android app' })}</FooterLink>
               {currentUser() ? (
                 <FooterLink to="/dashboard">{t('myDashboard', { defaultValue: 'My dashboard' })}</FooterLink>

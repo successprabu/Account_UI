@@ -49,6 +49,7 @@ const Unauthorized = lazy(() =>
   import("./components/common/UnauthorizedAccess")
 );
 const AboutUs = lazy(() => import("./components/screen/AboutUs"));
+const PrivacyPolicy = lazy(() => import("./components/screen/PrivacyPolicy"));
 const PageNotFound = lazy(() =>
   import("./components/screen/PageNotFound")
 );
@@ -175,6 +176,7 @@ const Router = () => {
         <Route index element={<Home />} />
         <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="about" element={<AboutUs />} />
+        <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="design-system" element={<DesignSystem />} />
         <Route path="*" element={<PageNotFound />} />
 
