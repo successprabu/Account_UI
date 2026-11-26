@@ -17,7 +17,7 @@ const TEMPLATES = {
   ta: 'வணக்கம் {name}, {function} விழாவில் நீங்கள் வழங்கிய ₹{amount} மொய்க்கு மனமார்ந்த நன்றி. உங்கள் வருகையும் வாழ்த்தும் எங்களுக்கு பெரும் மகிழ்ச்சி.\n- {family}',
   en: 'Dear {name}, thank you for your moi of ₹{amount} at {function}. Your presence and blessings meant a lot to us.\n- {family}',
 };
-const FOOTER = `\n\nRecorded with Moitech: ${SITE}`;
+const FOOTER = `\n\nRecorded with DigiMoi: ${SITE}`;
 const KEY = 'moitech.thanksTemplate';
 
 const readUser = () => {

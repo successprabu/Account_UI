@@ -209,7 +209,7 @@ const Login = () => {
               </Typography>
               <Typography sx={{ mt: 2, opacity: 0.9, fontSize: 17 }}>{t("login_illustration_text")}</Typography>
               <Stack spacing={1.5} sx={{ mt: 4 }}>
-                {["Moitech", "Mahal Management", "Reports in PDF and Excel"].map((x) => (
+                {["DigiMoi", "Mahal Management", "Reports in PDF and Excel"].map((x) => (
                   <Stack key={x} direction="row" spacing={1.25} alignItems="center">
                     <CheckCircleIcon sx={{ fontSize: 20, opacity: 0.9 }} />
                     <Typography>{x}</Typography>

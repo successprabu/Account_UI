@@ -38,7 +38,7 @@ beforeEach(() => {
 
 describe('built-in answers', () => {
   it('matches each product', () => {
-    expect(faqAnswer('How much is Moitech?')).toMatch(/₹99\/month/);
+    expect(faqAnswer('How much is DigiMoi?')).toMatch(/₹99\/month/);
     expect(faqAnswer('மண்டபம் booking software')).toMatch(/₹4,999/);
     expect(faqAnswer('school erp price')).toMatch(/₹29,999/);
     expect(faqAnswer('clinic software')).toMatch(/coming soon/);
@@ -60,15 +60,15 @@ describe('SupportChat', () => {
   });
 
   it('sends the question with history and page to the AI', async () => {
-    axiosMock.mockImplementation((cfg) => aiOn(true)(cfg) || ok({ reply: 'Moitech starts at ₹99/month. See https://mysuccess.azurewebsites.net/pricing' }));
+    axiosMock.mockImplementation((cfg) => aiOn(true)(cfg) || ok({ reply: 'DigiMoi starts at ₹99/month. See https://mysuccess.azurewebsites.net/pricing' }));
     renderAt('/services');
     fireEvent.click(screen.getByLabelText('Chat with us'));
     await screen.findByText(/replies in seconds/);
-    ask('Moitech price?');
+    ask('DigiMoi price?');
     expect(await screen.findByText(/starts at ₹99/)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '/pricing' })).toHaveAttribute('href', '/pricing');
     const chat = axiosMock.mock.calls.map((c) => c[0]).find((c) => c.url === 'SupportAi/Chat');
-    expect(chat.data).toEqual({ message: 'Moitech price?', history: [], page: '/services' });
+    expect(chat.data).toEqual({ message: 'DigiMoi price?', history: [], page: '/services' });
   });
 
   it('falls back to the FAQ when the AI call fails', async () => {

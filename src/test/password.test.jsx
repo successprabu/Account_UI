@@ -61,11 +61,11 @@ describe('Passwords and sign-up', () => {
     expect(await screen.findByText(/No active account uses this mobile number/)).toBeInTheDocument();
   });
 
-  it('sign up offers Moitech, Mahal Management and School', async () => {
+  it('sign up offers DigiMoi, Mahal Management and School', async () => {
     await renderAt('/login');
     fireEvent.click(await screen.findByRole('button', { name: /sign up/i }, { timeout: 5000 }));
     const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByRole('link', { name: /Moitech/ })).toHaveAttribute('href', '/purchase');
+    expect(within(dialog).getByRole('link', { name: /DigiMoi/ })).toHaveAttribute('href', '/purchase');
     expect(within(dialog).getByRole('link', { name: /Mahal Management/ })).toHaveAttribute('href', '/mahal-reg');
     expect(within(dialog).getByRole('link', { name: /School Website/ }).getAttribute('href')).toMatch(/register-school$/);
   });

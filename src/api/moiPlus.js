@@ -35,7 +35,7 @@ export const buyFunctionPass = async (functionId) => {
       order_id: o.data.orderId,
       amount: o.data.amount,
       currency: o.data.currency,
-      name: 'Moitech',
+      name: 'DigiMoi',
       description: `Function pass: ${o.data.functionName}`,
       prefill: { name: o.data.name, contact: o.data.phone },
       theme: { color: '#6366F1' },

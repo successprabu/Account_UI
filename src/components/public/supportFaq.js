@@ -15,7 +15,7 @@ export const FAQ = [
     id: 'moitech',
     keys: ['moitech', 'moi', 'மொய்', 'function', 'wedding', 'marriage function', 'virunthu', 'விருந்து', 'gift', 'receipt', 'handover', 'கல்யாண'],
     answer:
-      'Moitech records moi (gift money) at your functions on your phone: helpers enter from their own phones, voice input, Tamil spelling help, read a handwritten list from a photo, expenses, gold gifts, hand-over per helper, and Tamil PDF/Excel reports.\n' +
+      'DigiMoi records moi (gift money) at your functions on your phone: helpers enter from their own phones, voice input, Tamil spelling help, read a handwritten list from a photo, expenses, gold gifts, hand-over per helper, and Tamil PDF/Excel reports.\n' +
       `- Free trial for 7 days. Plans: Free ₹0 (100 entries), Standard ₹99/month, Premium ₹199/month.\n- Start: ${SITE}/purchase\n- Prices: ${SITE}/pricing?product=moitech\n- Guide: ${SITE}/user-guide/moitech`,
   },
   {
@@ -52,7 +52,7 @@ export const FAQ = [
     keys: ['price', 'pricing', 'cost', 'plan', 'how much', 'rate', 'charges', 'விலை', 'கட்டணம்', 'free', 'trial', 'payment', 'upi'],
     answer:
       'You can start free on every product:\n' +
-      '- Moitech: 7-day trial; Free ₹0, ₹99/month or ₹199/month\n- Mahal Management: 1 month free; ₹4,999/month or ₹49,999/year\n' +
+      '- DigiMoi: 7-day trial; Free ₹0, ₹99/month or ₹199/month\n- Mahal Management: 1 month free; ₹4,999/month or ₹49,999/year\n' +
       '- School Website: 1 month free; ₹9,999/year (website) or ₹29,999/year (website + ERP)\n' +
       `Pay by UPI, card or net banking. All prices: ${SITE}/pricing`,
   },
@@ -69,7 +69,7 @@ export const FAQ = [
   {
     id: 'guide',
     keys: ['guide', 'how to', 'help', 'tutorial', 'steps', 'manual', 'pdf'],
-    answer: `Step-by-step guides (also as PDF): ${SITE}/user-guide\n- Moitech: ${SITE}/user-guide/moitech\n- Mahal: ${SITE}/user-guide/mahal\n- School: ${SITE}/user-guide/school`,
+    answer: `Step-by-step guides (also as PDF): ${SITE}/user-guide\n- DigiMoi: ${SITE}/user-guide/moitech\n- Mahal: ${SITE}/user-guide/mahal\n- School: ${SITE}/user-guide/school`,
   },
   {
     id: 'language',
@@ -84,8 +84,8 @@ export const FAQ = [
 ];
 
 export const FALLBACK =
-  'I can help with Moitech (moi accounting), Mahal Management (hall bookings), School Website with ERP, custom software and prices. ' +
-  `Try asking "How much is Moitech?" or "School ERP features". ${CONTACT}`;
+  'I can help with DigiMoi (moi accounting), Mahal Management (hall bookings), School Website with ERP, custom software and prices. ' +
+  `Try asking "How much is DigiMoi?" or "School ERP features". ${CONTACT}`;
 
 const norm = (s) => (s || '').toLowerCase();
 

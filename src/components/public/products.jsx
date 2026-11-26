@@ -22,7 +22,7 @@ export const PRODUCTS = [
   {
     id: 'moitech',
     titleKey: 'moitech',
-    title: 'Moitech',
+    title: 'DigiMoi',
     descriptionKey: 'moitechDescription',
     tagline: 'Moi and function accounting, done in minutes',
     summary:
@@ -36,12 +36,12 @@ export const PRODUCTS = [
       'Income, expense and village-wise reports as PDF or Excel',
       'Handover summary for the family at the end',
     ],
-    cta: { label: 'Try Moitech free', to: '/purchase' },
+    cta: { label: 'Try DigiMoi free', to: '/purchase' },
     demo: { label: 'Start the free trial', to: '/purchase' },
     pricing: { to: '/pricing?product=moitech' },
     // Shown when someone picks Moitech from the footer.
     start: {
-      title: 'Want to try Moitech?',
+      title: 'Want to try DigiMoi?',
       steps: [
         'Register with your mobile number. The first 7 days are free.',
         'Sign in with your mobile number and password.',

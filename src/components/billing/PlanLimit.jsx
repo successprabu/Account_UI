@@ -89,7 +89,7 @@ export const MoitechPlanBanner = () => {
   let text;
   if (blocked) text = s.reason === 'receipt_limit' ? tx('Free receipts used up') : tx(s.reason === 'plan_ended' ? 'Your plan has ended' : 'Your free trial has ended');
   else if (s.paid) text = tx('Your plan ends in {{n}} days.', { n: s.daysLeft });
-  else if (s.grace) text = tx('Free until {{date}}. Choose a plan to keep using Moitech after that.', { date: new Date(s.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) });
+  else if (s.grace) text = tx('Free until {{date}}. Choose a plan to keep using DigiMoi after that.', { date: new Date(s.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) });
   else text = tx('Free trial: {{n}} days left · {{used}} of {{limit}} receipts used', { n: s.daysLeft, used: s.receipts, limit: s.receiptLimit });
 
   return (

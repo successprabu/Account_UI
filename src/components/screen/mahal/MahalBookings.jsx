@@ -569,7 +569,7 @@ const BookingDrawer = ({ id, reloadKey, onClose, onChanged, onEdit }) => {
               )}
               {b.status === 'Confirmed' && s !== 'Completed' && (
                 <Button sx={{ mt: 1 }} fullWidth size="small" color="secondary" startIcon={<VolunteerActivismOutlinedIcon />} onClick={offerMoitech}>
-                  {tx('Offer Moitech free to this family')}
+                  {tx('Offer DigiMoi free to this family')}
                 </Button>
               )}
             </Box>

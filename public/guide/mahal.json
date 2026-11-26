@@ -159,7 +159,7 @@
         {
           "title": "Send today on WhatsApp",
           "img": "25-send-today.jpg",
-          "text": "The Send today card on your dashboard lists the messages due today: event tomorrow, balance due within a week, a thank-you after the event, and a free Moitech offer for families with an upcoming function. Choose English or Tamil and tap Send: WhatsApp opens with the message ready, and the card marks it sent.",
+          "text": "The Send today card on your dashboard lists the messages due today: event tomorrow, balance due within a week, a thank-you after the event, and a free DigiMoi offer for families with an upcoming function. Choose English or Tamil and tap Send: WhatsApp opens with the message ready, and the card marks it sent.",
           "points": [
             "The thank-you message has a link where the family can review your hall."
           ]
@@ -226,9 +226,9 @@
       "title": "More",
       "steps": [
         {
-          "title": "Give families Moitech for their function",
+          "title": "Give families DigiMoi for their function",
           "img": "14-moitech-reg.jpg",
-          "text": "Open Moitech Reg to create a Moitech account for a family booking your hall. Enter their name, mobile number and a password and tap Save. They can then record the moi (gifts) at their function on their own phone."
+          "text": "Open DigiMoi Reg to create a DigiMoi account for a family booking your hall. Enter their name, mobile number and a password and tap Save. They can then record the moi (gifts) at their function on their own phone."
         },
         {
           "title": "Choose a plan",

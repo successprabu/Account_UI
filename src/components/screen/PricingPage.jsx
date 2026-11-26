@@ -48,7 +48,7 @@ import { notify } from '../ui';
 
 /** Products with their own price list. School ERP keeps its price list on the School ERP site. */
 const PRODUCT_TABS = [
-  { id: 'moitech', label: 'Moitech', icon: <VolunteerActivismOutlinedIcon /> },
+  { id: 'moitech', label: 'DigiMoi', icon: <VolunteerActivismOutlinedIcon /> },
   { id: 'mahal', label: 'Mahal Management', icon: <ApartmentOutlinedIcon /> },
   { id: 'school', label: 'School ERP', icon: <SchoolOutlinedIcon />, href: SCHOOL_PRICING_URL },
 ];
@@ -369,7 +369,7 @@ const PricingPage = () => {
         amount: amountFromResponse,
         currency: 'INR',
         name: 'MySuccess.Com',
-        description: `${product === 'mahal' ? 'Mahal Management' : 'Moitech'} ${plan.name} - ${cycle === 'monthly' ? 'Monthly' : 'Yearly'}`,
+        description: `${product === 'mahal' ? 'Mahal Management' : 'DigiMoi'} ${plan.name} - ${cycle === 'monthly' ? 'Monthly' : 'Yearly'}`,
         image: 'logo.png',
         order_id: orderId,
         handler: async function (response) {

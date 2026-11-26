@@ -23,7 +23,7 @@ const call = async (config) => {
     let message = err?.response?.data?.message;
     if (!message) {
       if (status === 401) message = 'Your session has ended. Please sign in again.';
-      else if (status === 403) message = 'Only the Moitech admin can use this.';
+      else if (status === 403) message = 'Only the DigiMoi admin can use this.';
       else if (!err?.response) message = 'Could not reach the server. Check your connection and try again.';
       else message = 'Something went wrong. Please try again.';
     }

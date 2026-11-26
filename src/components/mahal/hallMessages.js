@@ -19,14 +19,14 @@ const TEXT = {
     balance: (r) => `Hello ${r.customerName}, a reminder from ${r.mahalName}: your ${r.eventType || 'event'} is on ${fmtRange(r.fromDate, r.toDate)}. Balance due: ${rupees(r.balance)}. Please pay before the event. Ref ${r.bookingRef || ''}. Pay or check: ${STATUS_LINK}?ref=${r.bookingRef || ''}`,
     tomorrow: (r) => `Hello ${r.customerName}, your ${r.eventType || 'event'} at ${r.mahalName} is tomorrow (${fmtRange(r.fromDate, r.toDate)}). We are ready for you. For anything, call ${r.hallPhone || 'the hall'}.`,
     thanks: (r) => `Thank you ${r.customerName} for celebrating at ${r.mahalName}! We hope everything went well. Please rate us here: ${REVIEW_LINK}?ref=${r.bookingRef || ''} and remember us for your next function.`,
-    moitech: (r) => `Hello ${r.customerName}, congratulations on your ${r.eventType || 'function'} at ${r.mahalName}! Record every moi gift on your phone with Moitech, free for 7 days. Helpers can write from their own phones and you get totals the same evening: ${MOITECH_LINK}`,
+    moitech: (r) => `Hello ${r.customerName}, congratulations on your ${r.eventType || 'function'} at ${r.mahalName}! Record every moi gift on your phone with DigiMoi, free for 7 days. Helpers can write from their own phones and you get totals the same evening: ${MOITECH_LINK}`,
     invoice: (inv) => `Hello ${inv.booking.customerName}, invoice ${inv.invoiceNumber} from ${inv.hall.mahalName} for ${fmtRange(inv.booking.fromDate, inv.booking.toDate)}. Total ${rupees(inv.amounts.total)}, paid ${rupees(inv.amounts.paid)}, balance ${rupees(inv.amounts.balance)}. Thank you!`,
   },
   ta: {
     balance: (r) => `வணக்கம் ${r.customerName}, ${r.mahalName} நினைவூட்டல்: உங்கள் ${r.eventType || 'நிகழ்வு'} ${fmtRange(r.fromDate, r.toDate)} அன்று. மீதித் தொகை: ${rupees(r.balance)}. நிகழ்வுக்கு முன் செலுத்தவும். எண் ${r.bookingRef || ''}. செலுத்த / பார்க்க: ${STATUS_LINK}?ref=${r.bookingRef || ''}`,
     tomorrow: (r) => `வணக்கம் ${r.customerName}, ${r.mahalName}-இல் உங்கள் ${r.eventType || 'நிகழ்வு'} நாளை (${fmtRange(r.fromDate, r.toDate)}). நாங்கள் தயாராக உள்ளோம். ஏதேனும் தேவைக்கு ${r.hallPhone || 'மண்டபத்தை'} அழைக்கவும்.`,
     thanks: (r) => `${r.mahalName}-இல் கொண்டாடியதற்கு நன்றி ${r.customerName}! எல்லாம் சிறப்பாக நடந்திருக்கும் என நம்புகிறோம். உங்கள் மதிப்பீட்டை இங்கே தாருங்கள்: ${REVIEW_LINK}?ref=${r.bookingRef || ''} — அடுத்த விழாவுக்கும் எங்களை நினைவில் கொள்ளுங்கள்.`,
-    moitech: (r) => `வணக்கம் ${r.customerName}, ${r.mahalName}-இல் உங்கள் ${r.eventType || 'விழா'}க்கு வாழ்த்துகள்! ஒவ்வொரு மொய்யையும் Moitech மூலம் கைபேசியில் பதிவு செய்யுங்கள் — 7 நாட்கள் இலவசம். உதவியாளர்கள் தங்கள் கைபேசியிலேயே எழுதலாம், அன்று மாலையே மொத்தம் கிடைக்கும்: ${MOITECH_LINK}`,
+    moitech: (r) => `வணக்கம் ${r.customerName}, ${r.mahalName}-இல் உங்கள் ${r.eventType || 'விழா'}க்கு வாழ்த்துகள்! ஒவ்வொரு மொய்யையும் DigiMoi மூலம் கைபேசியில் பதிவு செய்யுங்கள் — 7 நாட்கள் இலவசம். உதவியாளர்கள் தங்கள் கைபேசியிலேயே எழுதலாம், அன்று மாலையே மொத்தம் கிடைக்கும்: ${MOITECH_LINK}`,
     invoice: (inv) => `வணக்கம் ${inv.booking.customerName}, ${inv.hall.mahalName} விலைப்பட்டியல் ${inv.invoiceNumber} — ${fmtRange(inv.booking.fromDate, inv.booking.toDate)}. மொத்தம் ${rupees(inv.amounts.total)}, செலுத்தியது ${rupees(inv.amounts.paid)}, மீதி ${rupees(inv.amounts.balance)}. நன்றி!`,
   },
 };

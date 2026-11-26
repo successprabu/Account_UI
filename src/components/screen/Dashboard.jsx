@@ -40,8 +40,8 @@ const Dashboard = () => {
 
   const actions = [
     { to: '/enquiries', label: t('enquiries', { defaultValue: 'Enquiries' }), description: t('enquiriesHint', { defaultValue: 'Messages from the website' }), icon: <MarkEmailUnreadOutlinedIcon />, color: '#ef4444' },
-    { to: '/client-list', label: t('Clients'), description: t('clientsHint', { defaultValue: 'All Moitech customers' }), icon: <PeopleAltOutlinedIcon /> },
-    { to: '/register-client?type=moitech', label: t('registerMoitechClient', { defaultValue: 'Register Moitech client' }), description: t('registerMoitechClientHint', { defaultValue: 'New Moitech account, 7 days free' }), icon: <PersonAddAltOutlinedIcon />, color: '#10b981' },
+    { to: '/client-list', label: t('Clients'), description: t('clientsHint', { defaultValue: 'All DigiMoi customers' }), icon: <PeopleAltOutlinedIcon /> },
+    { to: '/register-client?type=moitech', label: t('registerMoitechClient', { defaultValue: 'Register DigiMoi client' }), description: t('registerMoitechClientHint', { defaultValue: 'New DigiMoi account, 7 days free' }), icon: <PersonAddAltOutlinedIcon />, color: '#10b981' },
     { to: '/register-client?type=mahal', label: t('registerMahalOwner', { defaultValue: 'Register mahal owner' }), description: t('registerMahalOwnerHint', { defaultValue: 'New Mahal Management account, 1 month free' }), icon: <ApartmentOutlinedIcon />, color: '#f59e0b' },
     { to: '/mahal-bookings', label: t('mahalBookings', { defaultValue: 'Mahal bookings' }), description: t('mahalBookingListHint', { defaultValue: 'Requests, upcoming and past bookings' }), icon: <EventAvailableOutlinedIcon />, color: '#8b5cf6' },
     { to: '/my-mahals', label: t('myMahals', { defaultValue: 'All mahals' }), description: t('allMahalsHint', { defaultValue: 'Every hall and its online booking' }), icon: <EventNoteOutlinedIcon />, color: '#0ea5e9' },

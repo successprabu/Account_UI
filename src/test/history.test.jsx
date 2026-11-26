@@ -35,7 +35,7 @@ const renderAt = async (path) => {
   return render(<App />);
 };
 
-describe('Moitech history', () => {
+describe('DigiMoi history', () => {
   beforeEach(() => {
     axiosMock.mockReset();
     localStorage.clear();

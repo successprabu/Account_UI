@@ -1,8 +1,8 @@
 {
   "id": "moitech",
-  "title": "Moitech",
-  "heading": "Moitech user guide",
-  "summary": "Record every moi (gift) at your function, let helpers record from their own phones, track expenses, and close the day with a clear handover and reports.",
+  "title": "DigiMoi",
+  "heading": "DigiMoi user guide",
+  "summary": "Record every moi (gift) at your function: helpers record from their own phones or guests write their own by QR, thank every giver on WhatsApp, share live totals with family, and keep track of the moi you have to return.",
   "color": "#6366f1",
   "sections": [
     {
@@ -11,7 +11,7 @@
         {
           "title": "Create your account",
           "img": "01-register.jpg",
-          "text": "Open the website, click Try Demo and choose Moitech. Your account is free for 7 days.",
+          "text": "Open the website, click Try Demo and choose DigiMoi. Your account is free for 7 days.",
           "points": [
             "Fill in your name and mobile number, tap Send OTP and enter the code you receive. Choose a password and tap Register."
           ]
@@ -87,6 +87,15 @@
           ]
         },
         {
+          "title": "Say the whole entry in one go",
+          "img": "20-voice-entry.jpg",
+          "text": "On New Receipt tap Speak whole entry and say the place, name and amount together, for example \"காரைக்குடி முருகன் ஐயாயிரத்து ஒன்று\". DigiMoi fills in the fields for you to check, then tap Save.",
+          "points": [
+            "Works in Tamil, English, Hindi, Telugu, Kannada and Malayalam.",
+            "If something is missing, DigiMoi tells you which field to fill."
+          ]
+        },
+        {
           "title": "Import a written moi list",
           "img": "11-import.jpg",
           "text": "Have the moi written in a notebook? Tap Import on the New Receipt screen and choose From a photo. Upload a clear photo (JPEG or PNG) of the list and the app reads the entries for you. Check them, correct anything that was misread, then save. You can also choose Type entries to add several at once.",
@@ -123,8 +132,57 @@
           "text": "Open Transactions → Add Others for gifts that are not cash, such as rings, chains, coins and anklets.",
           "points": [
             "Choose the type of gift.",
-            "Enter how many. Add the weight or details in Others Remarks."
+            "Enter how many. Add the weight or details in Others Remarks.",
+            "Type the weight in grams too, so the gold value can be worked out."
           ]
+        }
+      ]
+    },
+    {
+      "title": "Guests write their own moi",
+      "steps": [
+        {
+          "title": "Show the guest QR",
+          "img": "21-guest-qr.jpg",
+          "text": "On New Receipt tap Guest QR. Print the poster and keep it at the moi counter, or show it on a phone.",
+          "points": [
+            "Only the owner sees New QR. A new QR stops the old one and its printed copies."
+          ]
+        },
+        {
+          "title": "What the guest sees",
+          "img": "22-guest-page.jpg",
+          "text": "The guest scans the QR, picks a language, and types or speaks their place, name and amount. They choose Cash at the counter or UPI.",
+          "points": [
+            "For UPI the page shows the family's UPI QR with the amount filled in. After paying, the guest can type the UPI reference."
+          ]
+        },
+        {
+          "title": "Accept guest entries",
+          "img": "23-guest-entries.jpg",
+          "text": "Open Transactions → Guest entries. Check each entry, fix spelling if needed, and tap Accept to add it as a receipt, or Reject.",
+          "points": [
+            "For UPI, accept only after the money shows in the family's bank or UPI app. If unsure, ask the account owner.",
+            "The list refreshes every 10 seconds."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Family and guests",
+      "steps": [
+        {
+          "title": "Family live link",
+          "img": "27-live-link.jpg",
+          "text": "On the dashboard tap Family live link and set a 4 to 6 digit PIN. Share the link on WhatsApp and send the PIN separately. Family abroad or elders at home see the total, the count and the latest gifts, live.",
+          "points": [
+            "Change the PIN or turn the link off at any time."
+          ]
+        },
+        {
+          "title": "Invitations and RSVP",
+          "img": "28-invitations.jpg",
+          "text": "Open Transactions → Invitations. Share the invitation on WhatsApp or print its QR. Guests reply coming or not, with how many people, so you know how many to cook for."
         }
       ]
     },
@@ -143,6 +201,53 @@
           "title": "Record the handover",
           "img": "15-handover-dialog.jpg",
           "text": "Enter the amount handed over and who received it. If the amount is less than expected, the difference is shown so you can sort it out on the spot. Tap Save."
+        }
+      ]
+    },
+    {
+      "title": "After the function",
+      "steps": [
+        {
+          "title": "Thank every giver on WhatsApp",
+          "img": "24-thank.jpg",
+          "text": "Open Transactions → Thank givers. Tap Send next: WhatsApp opens with the giver's name and amount filled in. Send, come back, and tap Send next again.",
+          "points": [
+            "Choose Tamil or English and edit the message once; it is used for everyone.",
+            "Only givers with a mobile number are listed."
+          ]
+        },
+        {
+          "title": "Print the moi book and thank-you cards",
+          "img": "25-moi-book.jpg",
+          "text": "Open Transactions → Moi book. Print the list village by village with old and new moi and totals, like the family notebook. Print thank-you cards for every giver, with or without the amount."
+        },
+        {
+          "title": "Gold value",
+          "img": "26-gold.jpg",
+          "text": "On the dashboard tap Gold value and enter today's gold rate per gram. Gold gifts with a weight are valued and added to the moi total; switch between grams and pavun."
+        }
+      ]
+    },
+    {
+      "title": "Moi to return",
+      "steps": [
+        {
+          "title": "Plan the moi you will give",
+          "img": "29-moi-return.jpg",
+          "text": "When you get an invitation, open Moi to return and tap Add invitation. As you type the name, DigiMoi shows what that person gave at your functions and what you gave them before.",
+          "points": [
+            "Tap Remind me to add the date to your Google Calendar.",
+            "After the function tap Mark given; it is added to Moi we gave."
+          ]
+        },
+        {
+          "title": "Import old moi notebooks",
+          "img": "30-old-notebooks.jpg",
+          "text": "Open Old moi notebooks, add a past function, then add photos of its notebook pages. AI reads the entries; check them and tap Save entries. Moi to return then knows who gave what, even years ago.",
+          "points": [
+            "Comes with the Standard and Premium plans.",
+            "These entries do not count toward the free plan's 100 entries."
+          ]
         }
       ]
     },
@@ -176,7 +281,15 @@
         {
           "title": "Choose a plan",
           "img": "19-pricing.jpg",
-          "text": "Open Pricing and choose the Moitech tab. Pick a monthly or yearly plan and pay online. Sign in first so the plan is added to your account."
+          "text": "The first 7 days are free with up to 100 entries. Then choose Standard (₹99 a month) or Premium (₹199 a month) on the Pricing page, DigiMoi tab. Pay once, or use AutoPay.",
+          "points": [
+            "Only one function this year? When the free limit is reached you can pay ₹299 once for that function instead: unlimited entries until 60 days after the function."
+          ]
+        },
+        {
+          "title": "Earn as a DigiMoi partner",
+          "img": "31-partner.jpg",
+          "text": "Printers, function organisers, halls and shops can open Partner dashboard and apply. Once approved you get a code, a link and a QR. Families who sign up from it are counted for you, and you earn a share of what they pay."
         }
       ]
     }

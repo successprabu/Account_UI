@@ -33,7 +33,7 @@ describe('Register client', () => {
     localStorage.clear();
   });
 
-  it('Moitech admin dashboard has no Add New Client link', async () => {
+  it('DigiMoi admin dashboard has no Add New Client link', async () => {
     localStorage.setItem('user', JSON.stringify(moitechAdmin));
     await renderAt('/dashboard');
     expect(await screen.findByRole('heading', { level: 1 }, { timeout: 5000 })).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe('Register client', () => {
     expect(screen.queryByRole('link', { name: /register client/i })).not.toBeInTheDocument();
   });
 
-  it('Moitech admin cannot open the register client screen', async () => {
+  it('DigiMoi admin cannot open the register client screen', async () => {
     localStorage.setItem('user', JSON.stringify(moitechAdmin));
     await renderAt('/register-client');
     await waitFor(() => expect(window.location.pathname).toBe('/unauthorized'), { timeout: 5000 });

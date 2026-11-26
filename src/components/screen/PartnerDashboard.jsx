@@ -52,12 +52,12 @@ const PartnerDashboard = () => {
   };
 
   const p = data?.partner;
-  const share = p ? `${tx('Record moi on your phone with Moitech. Free trial:')} ${p.moitechLink}` : '';
+  const share = p ? `${tx('Record moi on your phone with DigiMoi. Free trial:')} ${p.moitechLink}` : '';
 
   const formCard = (
     <Card sx={{ p: 2.5 }}>
       <Typography fontWeight={800} sx={{ mb: 1 }}>{tx(p ? 'Your details' : 'Become a partner')}</Typography>
-      {!p && <Typography color="text.secondary" sx={{ mb: 2 }}>{tx('Printers, function organisers, halls and shops: sign families up for Moitech and Mahal Management, and earn a share of every payment they make.')}</Typography>}
+      {!p && <Typography color="text.secondary" sx={{ mb: 2 }}>{tx('Printers, function organisers, halls and shops: sign families up for DigiMoi and Mahal Management, and earn a share of every payment they make.')}</Typography>}
       <Grid container spacing={1.5}>
         <Grid item xs={12} sm={4}>
           <TextField select fullWidth size="small" label={tx('You are a')} value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value })}>
@@ -95,7 +95,7 @@ const PartnerDashboard = () => {
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography fontWeight={800}>{tx('Your code')}: <Chip label={p.code} color="primary" sx={{ fontWeight: 800 }} /></Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>{tx('Families who sign up from your link or QR within 60 days are counted for you.')}</Typography>
-                    {[['Moitech', p.moitechLink], ['Mahal Management', p.mahalLink]].map(([label, url]) => (
+                    {[['DigiMoi', p.moitechLink], ['Mahal Management', p.mahalLink]].map(([label, url]) => (
                       <Stack key={label} direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
                         <Typography variant="body2" sx={{ minWidth: 130 }}>{label}</Typography>
                         <Typography variant="body2" sx={{ flex: 1, wordBreak: 'break-all' }}>{url}</Typography>

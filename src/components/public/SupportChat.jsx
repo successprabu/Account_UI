@@ -19,10 +19,10 @@ const HISTORY = 12;
 const GREETING = {
   from: 'ai',
   greet: true,
-  text: 'Vanakkam! 👋 I am the MySuccess assistant. Ask me about Moitech, Mahal Management, School Website & ERP, custom software, prices or demos. You can write in English or தமிழ்.',
+  text: 'Vanakkam! 👋 I am the MySuccess assistant. Ask me about DigiMoi, Mahal Management, School Website & ERP, custom software, prices or demos. You can write in English or தமிழ்.',
 };
 
-const CHIPS = ['What is Moitech?', 'Mahal booking software', 'School ERP price', 'Custom software', 'Talk to a person'];
+const CHIPS = ['What is DigiMoi?', 'Mahal booking software', 'School ERP price', 'Custom software', 'Talk to a person'];
 
 /** Pages that have their own chat (hall booking assistant) or where a chat box would get in the way. */
 const HIDDEN = [/^\/mahals(\/|$)/, /^\/login/, /^\/forgot-password/, /^\/antony-resume/, /^\/design-system/];

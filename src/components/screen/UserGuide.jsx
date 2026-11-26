@@ -22,7 +22,7 @@ import { CONTACT } from '../public/products';
  * in public/guide/<id>.pdf. ?print=1 renders the print layout the PDFs are made from.
  */
 export const GUIDES = [
-  { id: 'moitech', title: 'Moitech', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1', who: 'For families recording moi (gifts) at their function' },
+  { id: 'moitech', title: 'DigiMoi', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1', who: 'For families recording moi (gifts) at their function' },
   { id: 'mahal', title: 'Mahal Management', icon: <ApartmentOutlinedIcon />, color: '#f59e0b', who: 'For marriage hall and party hall owners' },
   { id: 'school', title: 'School Website & ERP', icon: <SchoolOutlinedIcon />, color: '#10b981', who: 'For school admins, staff and parents' },
 ];

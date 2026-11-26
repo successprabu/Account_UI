@@ -68,7 +68,7 @@ const GuestQrDialog = ({ open, onClose }) => {
       .big{font-size:26px;font-weight:800;margin-top:6px} .ta{font-size:22px;margin-top:6px} .foot{margin-top:28px;color:#64748b;font-size:13px}
     </style></head><body><h1>${esc(data.functionName)}</h1><div class="names">${esc(data.funPersionNames || '')}</div>${svg}
       <div class="big">Scan to write your moi</div><div class="ta">மொய் எழுத ஸ்கேன் செய்யுங்கள்</div>
-      <div class="foot">Moitech · mysuccess.azurewebsites.net</div><script>window.onload=()=>setTimeout(()=>window.print(),300)</script></body></html>`);
+      <div class="foot">DigiMoi · mysuccess.azurewebsites.net</div><script>window.onload=()=>setTimeout(()=>window.print(),300)</script></body></html>`);
     w.document.close();
   };
 

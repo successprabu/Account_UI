@@ -36,8 +36,8 @@ import { BASE_URL } from '../../common/CommonApiURL';
 /** The kinds of client a super admin can register. userType is what the API stores. */
 const KINDS = {
   moitech: {
-    label: 'Moitech client',
-    product: 'Moitech',
+    label: 'DigiMoi client',
+    product: 'DigiMoi',
     userType: 'AU',
     role: 'Admin',
     trialDays: 7,
@@ -192,7 +192,7 @@ const RegisterClient = () => {
     <Box sx={{ py: { xs: 2.5, md: 3 }, maxWidth: 760 }}>
       <PageHeader
         title="Register a client"
-        subtitle="Create a Moitech or Mahal Management account for a client and send them their login."
+        subtitle="Create a DigiMoi or Mahal Management account for a client and send them their login."
         breadcrumbs={[{ label: 'Dashboard', to: '/dashboard' }, { label: 'Clients', to: '/client-list' }, { label: 'Register a client' }]}
       />
 

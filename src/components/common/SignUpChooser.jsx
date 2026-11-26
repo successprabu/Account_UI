@@ -11,7 +11,7 @@ import { SCHOOL_ERP_URL } from '../public/products';
 
 /** Sign-up choices: each product has its own registration. */
 export const SIGN_UPS = [
-  { id: 'moitech', title: 'Moitech', text: 'Record moi (gifts) at your function. 7 days free.', to: '/purchase', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1' },
+  { id: 'moitech', title: 'DigiMoi', text: 'Record moi (gifts) at your function. 7 days free.', to: '/purchase', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1' },
   { id: 'mahal', title: 'Mahal Management', text: 'For hall owners: take bookings online. 1 month free.', to: '/mahal-reg', icon: <ApartmentOutlinedIcon />, color: '#f59e0b' },
   { id: 'school', title: 'School Website & ERP', text: 'Register your school: website and ERP. 1 month free.', href: `${SCHOOL_ERP_URL}register-school`, icon: <SchoolOutlinedIcon />, color: '#10b981' },
 ];

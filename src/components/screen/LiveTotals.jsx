@@ -150,7 +150,7 @@ const LiveTotals = () => {
               </Grid>
             </Grid>
             <Typography variant="caption" color="text.secondary" display="block" textAlign="center" sx={{ mt: 3 }}>
-              {tx('Updates every 30 seconds. Recorded with Moitech.')}
+              {tx('Updates every 30 seconds. Recorded with DigiMoi.')}
             </Typography>
           </>
         )}

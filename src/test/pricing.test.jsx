@@ -29,7 +29,7 @@ describe('Demo and pricing per product', () => {
     localStorage.clear();
   });
 
-  it('Try Demo lets the visitor pick Moitech, Mahal or School ERP', async () => {
+  it('Try Demo lets the visitor pick DigiMoi, Mahal or School ERP', async () => {
     await renderAt('/services');
     const buttons = await screen.findAllByRole('button', { name: /try demo/i }, { timeout: 5000 });
     fireEvent.click(buttons[0]);

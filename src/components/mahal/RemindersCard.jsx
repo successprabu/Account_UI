@@ -18,7 +18,7 @@ const KIND = {
   tomorrow: { label: 'Event tomorrow', icon: <EventOutlinedIcon />, color: '#0ea5e9' },
   balance: { label: 'Balance due', icon: <CurrencyRupeeIcon />, color: '#f59e0b' },
   thanks: { label: 'Say thank you', icon: <FavoriteBorderIcon />, color: '#e11d48' },
-  moitech: { label: 'Offer Moitech free', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1' },
+  moitech: { label: 'Offer DigiMoi free', icon: <VolunteerActivismOutlinedIcon />, color: '#6366f1' },
 };
 
 /**
